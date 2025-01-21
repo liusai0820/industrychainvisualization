@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>产业链图谱</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="title">手机产业链全景图谱</div>
+        <div id="chart-container"></div>
+    </div>
+    
+    <script>
+        const chart = echarts.init(document.getElementById('chart-container'));
+        
+        // 更柔和的配色方案
+        const colorScheme = {
+            root: {
+                bg: '#516B91',
+                text: '#FFFFFF'
+            },
+            upstream: {
+                bg: '#89A7C9',
+                text: '#FFFFFF'
+            },
+            midstream: {
+                bg: '#C3A5BE',
+                text: '#FFFFFF'
+            },
+            downstream: {
+                bg: '#9BC4B5',
+                text: '#FFFFFF'
+            },
+            subnode: {
+                bg: '#F0F2F5',
+                text: '#2C3E50'
+            },
+            company: {
+                text: '#5E6D82'
+            }
+        };
+
+        fetch('/get_graph_data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => response.json())
+        .then(data => {
+            // 判断是否是叶子节点（末端企业节点）
+            const isLeafNode = (node) => {
+                return !node.children || node.children.length === 0;
+            };
+
+            // 动态计算节点尺寸
+            const getNodeSize = (node, level) => {
+                const name = node.name;
+                const isLeaf = isLeafNode(node);
+                const textLength = name.length;
+                
+                if (level === 0) {
+                    return [Math.max(160, textLength * 22), 40];
+                } else if (level === 1) {
+                    return [Math.max(140, textLength * 20), 36];
+                } else if (level === 2) {
+                    return [Math.max(120, textLength * 16), 34];
+                } else if (isLeaf) {
+                    // 叶子节点不需要边框，可以适当缩小尺寸
+                    return [textLength * 14, 24];
+                }
+                return [Math.max(100, textLength * 14), 32];
+            };
+
+            // 处理节点样式
+            const processNode = (node, level = 0) => {
+                if (!node) return;
+
+                const isLeaf = isLeafNode(node);
+                let style;
+
+                if (level === 0) {
+                    style = colorScheme.root;
+                } else if (node.name.includes('上游')) {
+                    style = colorScheme.upstream;
+                } else if (node.name.includes('中游')) {
+                    style = colorScheme.midstream;
+                } else if (node.name.includes('下游')) {
+                    style = colorScheme.downstream;
+                } else if (level === 2) {
+                    style = colorScheme.subnode;
+                } else {
+                    style = colorScheme.company;
+                }
+
+                const nodeSize = getNodeSize(node, level);
+                
+                // 设置节点样式
+                if (isLeaf) {
+                    // 叶子节点只显示文字，没有边框和背景
+                    node.symbol = 'none';  // 移除节点形状
+                    node.label = {
+                        show: true,
+                        position: 'right',
+                        distance: 5,
+                        color: style.text,
+                        fontSize: 13,
+                        fontWeight: 400,
+                        align: 'left',
+                        verticalAlign: 'middle'
+                    };
+                } else {
+                    // 非叶子节点使用圆角矩形
+                    node.symbolSize = nodeSize;
+                    node.symbol = 'roundRect';
+                    node.itemStyle = {
+                        color: style.bg || 'transparent',
+                        borderColor: 'transparent',
+                        borderWidth: 0,
+                        borderRadius: 16
+                    };
+                    node.label = {
+                        show: true,
+                        position: 'inside',
+                        distance: 0,
+                        color: style.text,
+                        fontSize: level <= 1 ? 15 : 14,
+                        fontWeight: level <= 2 ? 500 : 400,
+                        align: 'center',
+                        verticalAlign: 'middle'
+                    };
+                }
+
+                if (node.children && Array.isArray(node.children)) {
+                    node.children.forEach(child => processNode(child, level + 1));
+                }
+            };
+
+            // 处理数据中的所有节点样式
+            processNode(data);
+
+            const option = {
+                backgroundColor: '#FFFFFF',
+                tooltip: {
+                    show: false
+                },
+                series: [{
+                    type: 'tree',
+                    data: [data],
+                    top: '5%',
+                    left: '5%',
+                    bottom: '5%',
+                    right: '15%',
+                    orient: 'LR',
+                    layout: 'orthogonal',
+                    initialTreeDepth: -1,
+                    roam: true,
+                    scaleLimit: {
+                        min: 0.4,
+                        max: 2
+                    },
+                    lineStyle: {
+                        color: '#DCE2E8',
+                        width: 1.5,
+                        curveness: 0.3
+                    },
+                    emphasis: {
+                        focus: 'descendant'
+                    },
+                    expandAndCollapse: true,
+                    animationDuration: 400,
+                    animationDurationUpdate: 300,
+                    edgeShape: 'polyline',
+                    orthogonalLoop: false,
+                    nodeGap: 24,
+                    layerPadding: 140,
+                    leaves: {
+                        lineStyle: {
+                            width: 1,
+                            curveness: 0.1
+                        }
+                    }
+                }]
+            };
+            
+            chart.setOption(option);
+            
+            // 响应式调整
+            window.addEventListener('resize', () => {
+                chart.resize();
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    </script>
+</body>
+</html>
