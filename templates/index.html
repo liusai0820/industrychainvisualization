@@ -3,201 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>产业链图谱</title>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>产业链全景图谱分析系统</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <div class="container">
-        <div class="title">手机产业链全景图谱</div>
-        <div id="chart-container"></div>
-    </div>
-    
-    <script>
-        const chart = echarts.init(document.getElementById('chart-container'));
+        <header class="header">
+            <h1 class="main-title">产业链全景图谱分析系统</h1>
+            <p class="sub-title">输入产业链名称，快速生成完整产业链图谱</p>
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    id="industry-input" 
+                    placeholder="请输入产业链名称，如：AI芯片、新能源汽车等" />
+                <button id="search-btn">生成图谱</button>
+            </div>
+        </header>
         
-        // 更柔和的配色方案
-        const colorScheme = {
-            root: {
-                bg: '#516B91',
-                text: '#FFFFFF'
-            },
-            upstream: {
-                bg: '#89A7C9',
-                text: '#FFFFFF'
-            },
-            midstream: {
-                bg: '#C3A5BE',
-                text: '#FFFFFF'
-            },
-            downstream: {
-                bg: '#9BC4B5',
-                text: '#FFFFFF'
-            },
-            subnode: {
-                bg: '#F0F2F5',
-                text: '#2C3E50'
-            },
-            company: {
-                text: '#5E6D82'
+        <main id="chart-container">
+            <div class="chart-wrapper"></div>
+        </main>
+    </div>
+
+    <script>
+        // 初始化图表
+        const chartContainer = document.querySelector('.chart-wrapper');
+        const chart = echarts.init(chartContainer);
+
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            document.body.appendChild(errorDiv);
+            setTimeout(() => errorDiv.remove(), 3000);
+        }
+
+        async function fetchGraphData(industryName = '') {
+            try {
+                chart.showLoading({
+                    text: '数据加载中...',
+                    color: '#516B91',
+                    textColor: '#516B91',
+                    maskColor: 'rgba(255, 255, 255, 0.9)'
+                });
+
+                const response = await fetch('/get_graph_data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ industry_name: industryName })
+                });
+
+                const data = await response.json();
+                chart.hideLoading();
+
+                if (!response.ok || data.error) {
+                    showError(data.error || '获取数据失败');
+                    return;
+                }
+
+                updateChart(data);
+            } catch (error) {
+                console.error('Error:', error);
+                chart.hideLoading();
+                showError('获取数据失败，请稍后重试');
             }
-        };
+        }
 
-        fetch('/get_graph_data', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({})
-        })
-        .then(response => response.json())
-        .then(data => {
-            // 判断是否是叶子节点（末端企业节点）
-            const isLeafNode = (node) => {
-                return !node.children || node.children.length === 0;
-            };
-
-            // 动态计算节点尺寸
-            const getNodeSize = (node, level) => {
-                const name = node.name;
-                const isLeaf = isLeafNode(node);
-                const textLength = name.length;
-                
-                if (level === 0) {
-                    return [Math.max(160, textLength * 22), 40];
-                } else if (level === 1) {
-                    return [Math.max(140, textLength * 20), 36];
-                } else if (level === 2) {
-                    return [Math.max(120, textLength * 16), 34];
-                } else if (isLeaf) {
-                    // 叶子节点不需要边框，可以适当缩小尺寸
-                    return [textLength * 14, 24];
-                }
-                return [Math.max(100, textLength * 14), 32];
-            };
-
-            // 处理节点样式
-            const processNode = (node, level = 0) => {
-                if (!node) return;
-
-                const isLeaf = isLeafNode(node);
-                let style;
-
-                if (level === 0) {
-                    style = colorScheme.root;
-                } else if (node.name.includes('上游')) {
-                    style = colorScheme.upstream;
-                } else if (node.name.includes('中游')) {
-                    style = colorScheme.midstream;
-                } else if (node.name.includes('下游')) {
-                    style = colorScheme.downstream;
-                } else if (level === 2) {
-                    style = colorScheme.subnode;
-                } else {
-                    style = colorScheme.company;
-                }
-
-                const nodeSize = getNodeSize(node, level);
-                
-                // 设置节点样式
-                if (isLeaf) {
-                    // 叶子节点只显示文字，没有边框和背景
-                    node.symbol = 'none';  // 移除节点形状
-                    node.label = {
-                        show: true,
-                        position: 'right',
-                        distance: 5,
-                        color: style.text,
-                        fontSize: 13,
-                        fontWeight: 400,
-                        align: 'left',
-                        verticalAlign: 'middle'
-                    };
-                } else {
-                    // 非叶子节点使用圆角矩形
-                    node.symbolSize = nodeSize;
-                    node.symbol = 'roundRect';
-                    node.itemStyle = {
-                        color: style.bg || 'transparent',
-                        borderColor: 'transparent',
-                        borderWidth: 0,
-                        borderRadius: 16
-                    };
-                    node.label = {
-                        show: true,
-                        position: 'inside',
-                        distance: 0,
-                        color: style.text,
-                        fontSize: level <= 1 ? 15 : 14,
-                        fontWeight: level <= 2 ? 500 : 400,
-                        align: 'center',
-                        verticalAlign: 'middle'
-                    };
-                }
-
-                if (node.children && Array.isArray(node.children)) {
-                    node.children.forEach(child => processNode(child, level + 1));
-                }
-            };
-
-            // 处理数据中的所有节点样式
-            processNode(data);
-
+        function updateChart(data) {
             const option = {
                 backgroundColor: '#FFFFFF',
                 tooltip: {
-                    show: false
+                    trigger: 'item',
+                    formatter: '{b}',
+                    backgroundColor: 'rgba(50,50,50,0.9)',
+                    padding: [5, 10],
+                    textStyle: {
+                        color: '#fff'
+                    }
                 },
                 series: [{
                     type: 'tree',
                     data: [data],
+                    left: '10%',
+                    right: '35%',
                     top: '5%',
-                    left: '5%',
                     bottom: '5%',
-                    right: '15%',
+                    symbol: 'emptyCircle',
+                    symbolSize: 0,
+                    initialTreeDepth: -1,
                     orient: 'LR',
                     layout: 'orthogonal',
-                    initialTreeDepth: -1,
-                    roam: true,
-                    scaleLimit: {
-                        min: 0.4,
-                        max: 2
-                    },
+                    
+                    // 关键：增加节点间的间距
+                    nodeGap: 40,
+                    layerPadding: 280,  // 显著增加层级间距
+                    
+                    // 优化连接线
                     lineStyle: {
-                        color: '#DCE2E8',
+                        color: '#c0c4cc',
                         width: 1.5,
-                        curveness: 0.3
+                        curveness: 0,  // 使用直线
                     },
-                    emphasis: {
-                        focus: 'descendant'
+                    
+                    // 节点样式
+                    itemStyle: {
+                        borderWidth: 0
                     },
-                    expandAndCollapse: true,
-                    animationDuration: 400,
-                    animationDurationUpdate: 300,
-                    edgeShape: 'polyline',
-                    orthogonalLoop: false,
-                    nodeGap: 24,
-                    layerPadding: 140,
-                    leaves: {
-                        lineStyle: {
-                            width: 1,
-                            curveness: 0.1
+                    
+                    label: {
+                        position: 'inside',
+                        distance: 0,
+                        verticalAlign: 'middle',
+                        align: 'center',
+                        fontSize: 14,
+                        padding: [8, 12],
+                        color: '#fff',
+                        borderRadius: 4,
+                        backgroundColor: {
+                            type: 'linear',
+                            x: 0,
+                            y: 0,
+                            x2: 1,
+                            y2: 1,
+                            colorStops: [{
+                                offset: 0,
+                                color: '#8ab6f5'
+                            }, {
+                                offset: 1,
+                                color: '#7a9fe6'
+                            }]
                         }
+                    },
+                    
+                    leaves: {
+                        label: {
+                            backgroundColor: {
+                                type: 'linear',
+                                x: 0,
+                                y: 0,
+                                x2: 1,
+                                y2: 1,
+                                colorStops: [{
+                                    offset: 0,
+                                    color: '#89c3bc'
+                                }, {
+                                    offset: 1,
+                                    color: '#76ada7'
+                                }]
+                            }
+                        }
+                    },
+                    
+                    // 优化布局参数
+                    roam: true,
+                    expandAndCollapse: true,
+                    animationDuration: 500,
+                    animationDurationUpdate: 500,
+                    
+                    // 设置最大宽度比例
+                    width: '80%',
+                    height: '90%',
+                    
+                    // 优化节点对齐
+                    nodeAlign: 'left',
+                    
+                    // 禁用力导向布局的参数
+                    force: {
+                        layoutAnimation: false,
+                        repulsion: 0,
+                        gravity: 0
                     }
                 }]
             };
+
+            // 设置容器样式
+            const container = document.querySelector('.chart-wrapper');
+            container.style.height = '1800px';  // 增加容器高度
+            container.style.minHeight = '1200px';
             
+            // 应用配置
             chart.setOption(option);
             
-            // 响应式调整
-            window.addEventListener('resize', () => {
-                chart.resize();
-            });
-        })
-        .catch(error => {
-            console.error('Error:', error);
+            // 延迟执行自动布局调整
+            setTimeout(() => {
+                adjustChartSize();
+            }, 200);
+        }
+
+        function adjustChartSize() {
+            const container = document.getElementById('chart-container');
+            const wrapper = document.querySelector('.chart-wrapper');
+            
+            // 设置更大的容器高度以适应内容
+            const minHeight = 1200;
+            const height = Math.max(container.scrollHeight, minHeight);
+            wrapper.style.height = height + 'px';
+            
+            // 重新渲染图表
+            chart.resize();
+        }
+
+        // 监听窗口大小变化
+        window.addEventListener('resize', () => {
+            chart.resize();
+            adjustChartSize();
         });
+
+        const style = document.createElement('style');
+        style.textContent = `
+            .chart-wrapper {
+                position: relative;
+                width: 100%;
+                overflow: auto;
+            }
+            #chart-container {
+                padding: 20px;
+                overflow: auto;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // 监听搜索按钮点击
+        document.getElementById('search-btn').addEventListener('click', () => {
+            const industryName = document.getElementById('industry-input').value.trim();
+            if (industryName) {
+                fetchGraphData(industryName);
+            } else {
+                showError('请输入产业链名称');
+            }
+        });
+
+        // 监听回车键
+        document.getElementById('industry-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const industryName = e.target.value.trim();
+                if (industryName) {
+                    fetchGraphData(industryName);
+                } else {
+                    showError('请输入产业链名称');
+                }
+            }
+        });
+
+        // 初始化图表大小
+        adjustChartSize();
     </script>
 </body>
 </html>
