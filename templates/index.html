@@ -5,49 +5,196 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>产业链全景图谱分析系统</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
-    <div class="container">
-        <header class="header">
-            <h1 class="main-title">产业链全景图谱分析系统</h1>
-            <p class="sub-title">输入产业链名称，快速生成完整产业链图谱</p>
-            <div class="search-container">
-                <input 
-                    type="text" 
-                    id="industry-input" 
-                    placeholder="请输入产业链名称，如：AI芯片、新能源汽车等" />
-                <button id="search-btn">生成图谱</button>
-            </div>
-        </header>
-        
-        <main id="chart-container">
-            <div class="chart-wrapper"></div>
-        </main>
-    </div>
-
-    <script>
-        // 初始化图表
-        const chartContainer = document.querySelector('.chart-wrapper');
-        const chart = echarts.init(chartContainer);
-
-        function showError(message) {
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'error-message';
-            errorDiv.textContent = message;
-            document.body.appendChild(errorDiv);
-            setTimeout(() => errorDiv.remove(), 3000);
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --background-color: #f8fafc;
+            --text-color: #1e293b;
         }
 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        }
+
+        .search-input {
+            transition: all 0.3s ease;
+            border: 2px solid #e2e8f0;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+
+        .search-button {
+            transition: all 0.3s ease;
+        }
+
+        .search-button:hover {
+            transform: translateY(-1px);
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .loading-overlay {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(4px);
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            pointer-events: none;
+            z-index: 1000;
+            display: none;
+        }
+
+        .controls {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .control-button {
+            width: 40px;
+            height: 40px;
+            margin: 5px;
+            border-radius: 8px;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .control-button:hover {
+            background: #e5e7eb;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="gradient-bg text-white py-8 px-4 sm:px-6 lg:px-8 mb-8">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-4xl font-bold text-center mb-4">产业链全景图谱分析系统</h1>
+            <p class="text-xl text-center mb-8 opacity-90">智能分析产业链结构，快速生成完整产业链图谱</p>
+            
+            <div class="max-w-3xl mx-auto flex gap-4">
+                <input 
+                    type="text" 
+                    id="industry-input"
+                    class="search-input flex-1 px-6 py-4 rounded-lg text-gray-800 text-lg placeholder-gray-400 focus:outline-none"
+                    placeholder="请输入产业链名称，如：AI芯片、新能源汽车等"
+                />
+                <button 
+                    id="search-btn"
+                    class="search-button bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                    生成图谱
+                </button>
+                <button 
+                    id="download-btn"
+                    class="search-button bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                    style="display: none;"
+                >
+                    下载图谱
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div id="chart-container" class="chart-container relative min-h-[800px] p-6">
+            <div class="chart-wrapper w-full h-full"></div>
+            
+            <!-- 加载动画 -->
+            <div id="loading" class="loading-overlay hidden absolute inset-0 flex items-center justify-center">
+                <div class="text-center">
+                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent"></div>
+                    <p class="mt-4 text-lg text-gray-600">正在生成图谱...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 控制按钮 -->
+    <div class="controls">
+        <div class="control-button" id="zoomIn" title="放大">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+            </svg>
+        </div>
+        <div class="control-button" id="zoomOut" title="缩小">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
+            </svg>
+        </div>
+        <div class="control-button" id="reset" title="重置视图">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+        </div>
+    </div>
+
+    <div id="tooltip" class="tooltip"></div>
+
+    <script>
+        // 初始化变量
+        const chartContainer = document.querySelector('.chart-wrapper');
+        const chart = echarts.init(chartContainer);
+        const loading = document.getElementById('loading');
+        const tooltip = document.getElementById('tooltip');
+        let currentZoomLevel = 1;
+
+        // 错误提示函数
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-500 ease-in-out';
+            errorDiv.textContent = message;
+            document.body.appendChild(errorDiv);
+            
+            // 添加动画
+            setTimeout(() => errorDiv.style.transform = 'translateX(120%)', 3000);
+            setTimeout(() => errorDiv.remove(), 3500);
+        }
+
+        // 获取图谱数据
         async function fetchGraphData(industryName = '') {
             try {
-                chart.showLoading({
-                    text: '数据加载中...',
-                    color: '#516B91',
-                    textColor: '#516B91',
-                    maskColor: 'rgba(255, 255, 255, 0.9)'
-                });
-
+                loading.classList.remove('hidden');
+                
                 const response = await fetch('/get_graph_data', {
                     method: 'POST',
                     headers: {
@@ -58,176 +205,290 @@
                 });
 
                 const data = await response.json();
-                chart.hideLoading();
-
+                
                 if (!response.ok || data.error) {
                     showError(data.error || '获取数据失败');
                     return;
                 }
 
                 updateChart(data);
+                showDownloadButton();  // 显示下载按钮
             } catch (error) {
                 console.error('Error:', error);
-                chart.hideLoading();
                 showError('获取数据失败，请稍后重试');
+            } finally {
+                loading.classList.add('hidden');
             }
         }
 
+        // 更新图表
         function updateChart(data) {
             const option = {
-                backgroundColor: '#FFFFFF',
+                backgroundColor: '#ffffff',
                 tooltip: {
-                    trigger: 'item',
-                    formatter: '{b}',
-                    backgroundColor: 'rgba(50,50,50,0.9)',
-                    padding: [5, 10],
-                    textStyle: {
-                        color: '#fff'
-                    }
+                    show: false
                 },
                 series: [{
                     type: 'tree',
                     data: [data],
-                    left: '10%',
-                    right: '35%',
-                    top: '5%',
-                    bottom: '5%',
-                    symbol: 'emptyCircle',
-                    symbolSize: 0,
+                    left: '10%',  // 增加左侧边距
+                    right: '15%',
+                    top: '20',
+                    bottom: '20',
+                    symbol: function(value, params) {
+                        // 末端节点不显示背景框
+                        return params.data.children ? 'rect' : 'none';
+                    },
+                    
+                    symbolSize: function(value, params) {
+                        const level = params.data.depth || 0;
+                        // 末端节点不需要设置大小
+                        if (!params.data.children) {
+                            return [0, 0];
+                        }
+                        // 增加节点宽度以适应更长的文本
+                        const baseWidth = level === 0 ? 300 : 
+                                        level === 1 ? 260 :
+                                        level === 2 ? 220 : 200;
+                        const baseHeight = level === 0 ? 80 :
+                                         level === 1 ? 70 :
+                                         level === 2 ? 60 : 50;
+                        return [baseWidth, baseHeight];
+                    },
+
+                    itemStyle: {
+                        borderRadius: 8,
+                        shadowColor: 'rgba(0, 0, 0, 0.1)',
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowOffsetY: 4
+                    },
+
+                    label: {
+                        position: function(params) {
+                            // 末端节点的文字位置调整
+                            return params.data.children ? 'inside' : 'right';
+                        },
+                        formatter: function(params) {
+                            return params.data.name;
+                        },
+                        fontSize: function(params) {
+                            const level = params.data.depth || 0;
+                            // 末端节点字体稍小
+                            return level === 0 ? 18 :
+                                   level === 1 ? 16 :
+                                   level === 2 ? 14 :
+                                   !params.data.children ? 12 : 13;
+                        },
+                        fontWeight: function(params) {
+                            // 末端节点不加粗
+                            return params.data.children && params.data.depth <= 2 ? 'bold' : 'normal';
+                        },
+                        color: function(params) {
+                            // 末端节点使用深色文字
+                            return params.data.children ? '#ffffff' : '#1e293b';
+                        },
+                        padding: [8, 12]
+                    },
+
+                    lineStyle: {
+                        color: '#94a3b8',
+                        width: 1.5,
+                        curveness: 0.1
+                    },
+
+                    emphasis: {
+                        focus: 'descendant'
+                    },
+
+                    expandAndCollapse: true,
+                    animationDuration: 500,
+                    animationEasing: 'cubicOut',
                     initialTreeDepth: -1,
                     orient: 'LR',
                     layout: 'orthogonal',
-                    
-                    // 关键：增加节点间的间距
-                    nodeGap: 40,
-                    layerPadding: 280,  // 显著增加层级间距
-                    
-                    // 优化连接线
-                    lineStyle: {
-                        color: '#c0c4cc',
-                        width: 1.5,
-                        curveness: 0,  // 使用直线
-                    },
-                    
-                    // 节点样式
-                    itemStyle: {
-                        borderWidth: 0
-                    },
-                    
-                    label: {
-                        position: 'inside',
-                        distance: 0,
-                        verticalAlign: 'middle',
-                        align: 'center',
-                        fontSize: 14,
-                        padding: [8, 12],
-                        color: '#fff',
-                        borderRadius: 4,
-                        backgroundColor: {
-                            type: 'linear',
-                            x: 0,
-                            y: 0,
-                            x2: 1,
-                            y2: 1,
-                            colorStops: [{
-                                offset: 0,
-                                color: '#8ab6f5'
-                            }, {
-                                offset: 1,
-                                color: '#7a9fe6'
-                            }]
-                        }
-                    },
-                    
-                    leaves: {
-                        label: {
-                            backgroundColor: {
-                                type: 'linear',
-                                x: 0,
-                                y: 0,
-                                x2: 1,
-                                y2: 1,
-                                colorStops: [{
-                                    offset: 0,
-                                    color: '#89c3bc'
-                                }, {
-                                    offset: 1,
-                                    color: '#76ada7'
-                                }]
-                            }
-                        }
-                    },
+                    edgeShape: 'polyline',
+                    edgeForkPosition: '50%',
+                    roam: false,
                     
                     // 优化布局参数
-                    roam: true,
-                    expandAndCollapse: true,
-                    animationDuration: 500,
-                    animationDurationUpdate: 500,
-                    
-                    // 设置最大宽度比例
-                    width: '80%',
-                    height: '90%',
-                    
-                    // 优化节点对齐
-                    nodeAlign: 'left',
-                    
-                    // 禁用力导向布局的参数
-                    force: {
-                        layoutAnimation: false,
-                        repulsion: 0,
-                        gravity: 0
-                    }
+                    layerPadding: 200,      // 增加层级之间的间距
+                    nodeGap: 25,            // 调整同层节点之间的间距
                 }]
             };
 
-            // 设置容器样式
-            const container = document.querySelector('.chart-wrapper');
-            container.style.height = '1800px';  // 增加容器高度
-            container.style.minHeight = '1200px';
+            // 设置节点样式
+            function setNodeStyle(node, level = 0, parentStyle = null) {
+                if (!node) return;
+                
+                // 定义每个层级的颜色
+                const levelColors = {
+                    root: { bg: '#1e40af', text: '#ffffff' },     // 根节点：深蓝色
+                    upstream: { bg: '#0891b2', text: '#ffffff' },  // 上游：青色
+                    midstream: { bg: '#059669', text: '#ffffff' }, // 中游：绿色
+                    downstream: { bg: '#7c3aed', text: '#ffffff' } // 下游：紫色
+                };
+
+                // 根据节点层级和内容确定颜色
+                let style;
+                if (level === 0) {
+                    style = levelColors.root;
+                } else if (parentStyle) {
+                    // 继承父节点的颜色
+                    style = parentStyle;
+                } else if (node.name.includes('上游') || node.name.includes('IP')) {
+                    style = levelColors.upstream;
+                } else if (node.name.includes('中游') || node.name.includes('设计') || node.name.includes('制造')) {
+                    style = levelColors.midstream;
+                } else if (node.name.includes('下游') || node.name.includes('应用')) {
+                    style = levelColors.downstream;
+                } else {
+                    style = levelColors.root;
+                }
+
+                // 设置节点样式
+                if (node.children) {
+                    node.itemStyle = {
+                        color: style.bg,
+                        borderRadius: 8,
+                        borderWidth: 0
+                    };
+                    node.label = {
+                        color: style.text,
+                        position: 'inside',
+                        fontSize: level === 0 ? 18 :
+                                 level === 1 ? 16 :
+                                 level === 2 ? 14 : 13,
+                        fontWeight: level <= 2 ? 'bold' : 'normal'
+                    };
+                } else {
+                    // 末端节点样式
+                    node.label = {
+                        color: '#1e293b',
+                        position: 'right',
+                        fontSize: 12,
+                        fontWeight: 'normal'
+                    };
+                }
+
+                node.depth = level;
+
+                // 处理子节点
+                if (node.children) {
+                    for (let i = 0; i < node.children.length; i++) {
+                        setNodeStyle(node.children[i], level + 1, style);
+                    }
+                }
+            }
+
+            // 初始化根节点样式
+            setNodeStyle(option.series[0].data[0]);
             
-            // 应用配置
-            chart.setOption(option);
+            // 设置图表选项
+            chart.setOption({
+                ...option,
+                series: [{
+                    ...option.series[0],
+                    data: [option.series[0].data[0]]
+                }]
+            });
             
-            // 延迟执行自动布局调整
-            setTimeout(() => {
-                adjustChartSize();
-            }, 200);
+            // 自定义提示框优化
+            chart.on('mouseover', function(params) {
+                if (params.dataType === 'node') {
+                    tooltip.style.display = 'block';
+                    tooltip.innerHTML = params.data.name;
+                    
+                    const pos = chart.convertToPixel({seriesIndex: 0}, params.data.position);
+                    const chartOffset = chart.getDom().getBoundingClientRect();
+                    
+                    tooltip.style.left = (chartOffset.left + pos[0] + 20) + 'px';
+                    tooltip.style.top = (chartOffset.top + pos[1]) + 'px';
+                }
+            });
+
+            chart.on('mouseout', function() {
+                tooltip.style.display = 'none';
+            });
         }
 
+        // 添加下载功能
+        function downloadChart() {
+            const url = chart.getDataURL({
+                type: 'png',
+                pixelRatio: 2,
+                backgroundColor: '#fff'
+            });
+            
+            const link = document.createElement('a');
+            link.download = '产业链图谱.png';
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // 显示下载按钮
+        function showDownloadButton() {
+            const downloadBtn = document.getElementById('download-btn');
+            downloadBtn.style.display = 'block';
+        }
+
+        // 事件监听
+        document.getElementById('download-btn').addEventListener('click', downloadChart);
+
+        // 调整图表尺寸
         function adjustChartSize() {
             const container = document.getElementById('chart-container');
             const wrapper = document.querySelector('.chart-wrapper');
             
-            // 设置更大的容器高度以适应内容
-            const minHeight = 1200;
-            const height = Math.max(container.scrollHeight, minHeight);
+            // 设置更大的固定高度，允许滚动
+            const height = 2000;
             wrapper.style.height = height + 'px';
+            wrapper.style.overflowY = 'auto';
+            wrapper.style.overflowX = 'auto';  // 允许水平滚动
+            wrapper.style.minWidth = '100%';   // 确保最小宽度
             
-            // 重新渲染图表
             chart.resize();
         }
 
-        // 监听窗口大小变化
-        window.addEventListener('resize', () => {
-            chart.resize();
-            adjustChartSize();
-        });
+        // 移除缩放相关的事件监听器
+        chart.off('mousewheel');
+        chart.off('globalout');
 
+        // 移除控制按钮
+        const controls = document.querySelector('.controls');
+        if (controls) {
+            controls.remove();
+        }
+
+        // 添加滚动条样式
         const style = document.createElement('style');
         style.textContent = `
-            .chart-wrapper {
-                position: relative;
-                width: 100%;
-                overflow: auto;
+            .chart-wrapper::-webkit-scrollbar {
+                width: 12px;
             }
-            #chart-container {
-                padding: 20px;
-                overflow: auto;
+            
+            .chart-wrapper::-webkit-scrollbar-track {
+                background: #f1f5f9;
+                border-radius: 6px;
+            }
+            
+            .chart-wrapper::-webkit-scrollbar-thumb {
+                background: #94a3b8;
+                border-radius: 6px;
+                border: 3px solid #f1f5f9;
+            }
+            
+            .chart-wrapper::-webkit-scrollbar-thumb:hover {
+                background: #64748b;
             }
         `;
         document.head.appendChild(style);
 
-        // 监听搜索按钮点击
+        // 事件监听
+        window.addEventListener('resize', adjustChartSize);
+
         document.getElementById('search-btn').addEventListener('click', () => {
             const industryName = document.getElementById('industry-input').value.trim();
             if (industryName) {
@@ -237,7 +498,6 @@
             }
         });
 
-        // 监听回车键
         document.getElementById('industry-input').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 const industryName = e.target.value.trim();
@@ -249,7 +509,7 @@
             }
         });
 
-        // 初始化图表大小
+        // 初始化
         adjustChartSize();
     </script>
 </body>
