@@ -669,32 +669,42 @@
             };
 
             // 设置节点样式
-            function setNodeStyle(node, level = 0, parentStyle = null) {
+            function setNodeStyle(node, level = 0) {
                 if (!node) return;
                 
                 // 定义每个层级的颜色
                 const levelColors = {
-                    root: { bg: '#1e40af', text: '#ffffff' },     // 根节点：深蓝色
-                    upstream: { bg: '#0891b2', text: '#ffffff' },  // 上游：青色
-                    midstream: { bg: '#059669', text: '#ffffff' }, // 中游：绿色
-                    downstream: { bg: '#7c3aed', text: '#ffffff' } // 下游：紫色
+                    root: { bg: '#4F46E5', text: '#ffffff' },     // 根节点：优雅的靛蓝色
+                    upstream: { bg: '#0EA5E9', text: '#ffffff' },  // 上游：清新的天蓝色
+                    midstream: { bg: '#10B981', text: '#ffffff' }, // 中游：柔和的翡翠绿
+                    downstream: { bg: '#8B5CF6', text: '#ffffff' } // 下游：淡雅的紫罗兰
                 };
 
-                // 根据节点层级和内容确定颜色
+                // 根据节点名称和层级确定颜色
                 let style;
                 if (level === 0) {
                     style = levelColors.root;
-                } else if (parentStyle) {
-                    // 继承父节点的颜色
-                    style = parentStyle;
-                } else if (node.name.includes('上游') || node.name.includes('IP')) {
+                } else if (node.name.includes('上游')) {
                     style = levelColors.upstream;
-                } else if (node.name.includes('中游') || node.name.includes('设计') || node.name.includes('制造')) {
+                } else if (node.name.includes('中游')) {
                     style = levelColors.midstream;
-                } else if (node.name.includes('下游') || node.name.includes('应用')) {
+                } else if (node.name.includes('下游')) {
                     style = levelColors.downstream;
                 } else {
-                    style = levelColors.root;
+                    // 根据父节点的类型继承颜色
+                    if (node.parent && node.parent.name) {
+                        if (node.parent.name.includes('上游')) {
+                            style = levelColors.upstream;
+                        } else if (node.parent.name.includes('中游')) {
+                            style = levelColors.midstream;
+                        } else if (node.parent.name.includes('下游')) {
+                            style = levelColors.downstream;
+                        } else {
+                            style = levelColors.root;
+                        }
+                    } else {
+                        style = levelColors.root;
+                    }
                 }
 
                 // 设置节点样式
@@ -722,13 +732,18 @@
                     };
                 }
 
+                // 记录层级信息
                 node.depth = level;
 
-                // 处理子节点
+                // 递归处理子节点
                 if (node.children) {
-                    for (let i = 0; i < node.children.length; i++) {
-                        setNodeStyle(node.children[i], level + 1, style);
-                    }
+                    node.children.forEach(child => {
+                        // 将父节点信息传递给子节点
+                        child.parent = {
+                            name: node.name
+                        };
+                        setNodeStyle(child, level + 1);
+                    });
                 }
             }
 

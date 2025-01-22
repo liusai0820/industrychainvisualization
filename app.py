@@ -92,7 +92,7 @@ def call_dify_api(industry_name):
             f"{DIFY_BASE_URL}/workflows/run", 
             headers=headers,
             json=payload,
-            timeout=30
+            timeout=60
         )
         
         logger.debug(f"API Response Status Code: {response.status_code}")
@@ -231,7 +231,7 @@ def call_company_analysis_api(company_name):
     
     payload = {
         "inputs": {
-            "company_name": company_name  # 使用与产业链分析相同的参数名
+            "company_name": company_name  
         },
         "response_mode": "blocking",
         "user": "default"
@@ -463,19 +463,13 @@ def download_report(company_name):
         # 生成下载文件内容
         download_content = []
         for section in processed_text:
-            # 移除HTML标签
-            title = re.sub(r'<[^>]+>', '', section['title'])
-            content = re.sub(r'<[^>]+>', '', section['content'])
-            download_content.append(f"# {title}\n\n")
-            download_content.append(f"{content}\n\n")
+            download_content.append(f"# {section['title']}\n\n")
+            download_content.append(f"{section['content']}\n\n")
         
         # 创建响应
         response = make_response('\n'.join(download_content))
-        response.headers['Content-Type'] = 'text/markdown; charset=utf-8'
-        
-        # URL编码文件名
-        encoded_filename = company_name.encode('utf-8').decode('latin1')
-        response.headers['Content-Disposition'] = f"attachment; filename*=UTF-8''{encoded_filename}_analysis_report.md"
+        response.headers['Content-Type'] = 'text/markdown'
+        response.headers['Content-Disposition'] = f'attachment; filename="{company_name}_分析报告.md"'
         
         return response
         
