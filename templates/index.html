@@ -103,6 +103,140 @@
         .pulse {
             animation: pulse 2s infinite;
         }
+
+        /* 自定义滚动条样式 */
+        .overflow-y-auto::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .overflow-y-auto::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        
+        .overflow-y-auto::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        
+        .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* 分析报告样式 */
+        .analysis-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .analysis-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .analysis-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .analysis-text {
+            color: #334155;
+            white-space: pre-line;
+            padding-left: 1rem;
+        }
+
+        /* 企业分析报告样式优化 */
+        .analysis-content {
+            padding: 2rem;
+            color: #1e293b;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .section-title::before {
+            content: "";
+            display: block;
+            width: 4px;
+            height: 1.25rem;
+            background: linear-gradient(to bottom, #2563eb, #1e40af);
+            border-radius: 2px;
+        }
+        
+        .section-content {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #475569;
+            padding: 0.5rem 0;
+        }
+        
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+        
+        .highlight {
+            color: #2563eb;
+            font-weight: 500;
+        }
+        
+        .secondary-text {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+        
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .data-item {
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 0.5rem;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .data-label {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+        
+        .data-value {
+            font-size: 1.125rem;
+            color: #1e293b;
+            font-weight: 500;
+        }
+        
+        /* 添加动画效果 */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .analysis-section {
+            animation: slideIn 0.3s ease-out forwards;
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -169,6 +303,34 @@
     </div>
 
     <div id="tooltip" class="tooltip"></div>
+
+    <!-- 企业分析弹窗 -->
+    <div id="company-modal" class="fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl mx-4 flex flex-col" style="height: 85vh;">
+            <!-- 模态框头部 -->
+            <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200">
+                <h2 class="text-xl font-bold text-gray-900" id="modal-title">企业分析</h2>
+                <button id="close-modal" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- 模态框内容区 -->
+            <div class="flex-1 overflow-y-auto" style="height: calc(85vh - 60px);">
+                <div id="modal-content">
+                    <!-- 内容将通过JavaScript动态插入 -->
+                </div>
+                <div id="loading-spinner" class="hidden py-12">
+                    <div class="flex flex-col items-center justify-center space-y-4">
+                        <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
+                        <p class="text-gray-500">正在分析企业数据...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         // 初始化变量
@@ -393,6 +555,15 @@
                 }]
             });
             
+            // 添加点击事件处理
+            chart.off('click');  // 移除之前的点击事件
+            chart.on('click', function(params) {
+                // 只处理叶子节点（公司节点）的点击
+                if (params.data && !params.data.children) {
+                    showCompanyAnalysis(params.data.name);
+                }
+            });
+            
             // 自定义提示框优化
             chart.on('mouseover', function(params) {
                 if (params.dataType === 'node') {
@@ -511,6 +682,88 @@
 
         // 初始化
         adjustChartSize();
+
+        // 更新展示内容的函数
+        function showCompanyAnalysis(companyName) {
+            const modal = document.getElementById('company-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalContent = document.getElementById('modal-content');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            
+            modalTitle.textContent = `${companyName} - 企业分析`;
+            modalContent.innerHTML = '';
+            modal.classList.remove('hidden');
+            loadingSpinner.classList.remove('hidden');
+            
+            fetch('/get_company_analysis', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ company_name: companyName })
+            })
+            .then(response => response.json())
+            .then(result => {
+                loadingSpinner.classList.add('hidden');
+                if (result.error) {
+                    modalContent.innerHTML = `
+                        <div class="text-center py-8">
+                            <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                            <p class="text-lg text-gray-600 mb-2">获取数据失败</p>
+                            <p class="text-sm text-gray-500">${result.error}</p>
+                        </div>
+                    `;
+                } else {
+                    const sections = result.data;
+                    let formattedContent = '<div class="analysis-content">';
+                    
+                    sections.forEach(section => {
+                        formattedContent += `
+                            <div class="analysis-section">
+                                <div class="analysis-title">${section.title}</div>
+                                <div class="analysis-text">${section.content}</div>
+                            </div>
+                        `;
+                    });
+                    
+                    formattedContent += '</div>';
+                    modalContent.innerHTML = formattedContent;
+                }
+            })
+            .catch(error => {
+                loadingSpinner.classList.add('hidden');
+                modalContent.innerHTML = `
+                    <div class="text-center py-8">
+                        <svg class="w-16 h-16 mx-auto text-red-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <p class="text-lg text-gray-600 mb-2">发生错误</p>
+                        <p class="text-sm text-gray-500">${error.message}</p>
+                    </div>
+                `;
+            });
+        }
+        
+        // 关闭弹窗
+        document.getElementById('close-modal').addEventListener('click', function() {
+            document.getElementById('company-modal').classList.add('hidden');
+        });
+        
+        // 点击弹窗外部关闭
+        document.getElementById('company-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+        
+        // ESC键关闭弹窗
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.getElementById('company-modal').classList.add('hidden');
+            }
+        });
     </script>
 </body>
 </html>

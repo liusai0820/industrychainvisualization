@@ -3,6 +3,7 @@ import json
 import os
 import requests
 import logging
+import re
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -10,8 +11,9 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 # Dify API配置
-DIFY_API_KEY = "app-VsZqtUHY2piGHBH7iqgXQ1uz"
 DIFY_BASE_URL = "https://api.dify.ai/v1"
+INDUSTRY_CHAIN_API_KEY = "app-VsZqtUHY2piGHBH7iqgXQ1uz"  # 产业链分析应用的API Key
+COMPANY_ANALYSIS_API_KEY = "app-3NxlGN8GQFPH8ud5L9e9GTUY"  # 企业分析应用的API Key
 
 def extract_json_from_markdown(text):
     """从Markdown代码块中提取JSON字符串"""
@@ -69,7 +71,7 @@ def sanitize_json_string(s):
 def call_dify_api(industry_name):
     """调用Dify API获取产业链数据"""
     headers = {
-        "Authorization": f"Bearer {DIFY_API_KEY}",
+        "Authorization": f"Bearer {INDUSTRY_CHAIN_API_KEY}",
         "Content-Type": "application/json"
     }
     
@@ -191,6 +193,94 @@ def transform_to_tree(data):
         logger.exception(e)
         return None
 
+def call_company_analysis_api(company_name):
+    """调用Dify API获取企业分析数据"""
+    headers = {
+        "Authorization": f"Bearer {COMPANY_ANALYSIS_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    
+    payload = {
+        "inputs": {
+            "company_name": company_name  # 使用相同的参数名
+        },
+        "response_mode": "blocking",
+        "user": "default"
+    }
+    
+    try:
+        response = requests.post(
+            f"{DIFY_BASE_URL}/workflows/run",
+            headers=headers,
+            json=payload,
+            timeout=30
+        )
+        
+        logger.debug(f"Company Analysis API Response Status Code: {response.status_code}")
+        
+        if response.status_code != 200:
+            logger.error(f"Company Analysis API request failed with status code: {response.status_code}")
+            return None
+            
+        result = response.json()
+        logger.debug(f"Company Analysis Parsed response: {json.dumps(result, ensure_ascii=False)}")
+        
+        # 获取并处理数据
+        if 'data' in result and isinstance(result['data'], dict):
+            outputs = result['data'].get('outputs', {})
+            if isinstance(outputs, dict) and 'text' in outputs:
+                return outputs['text']
+                    
+        logger.error("Company Analysis Data structure validation failed")
+        return None
+            
+    except Exception as e:
+        logger.error(f"Error in call_company_analysis_api: {str(e)}")
+        logger.exception(e)
+        return None
+
+def process_company_analysis(text):
+    """处理企业分析文本，将markdown格式转换为结构化文本"""
+    # 移除多余的星号和空行
+    text = re.sub(r'\*+', '', text)
+    
+    # 处理段落
+    paragraphs = []
+    current_section = None
+    current_content = []
+    
+    for line in text.split('\n'):
+        line = line.strip()
+        if not line:
+            continue
+            
+        # 检查是否是标题行（数字开头）
+        if re.match(r'^\d+\.', line):
+            # 如果有之前的段落，保存它
+            if current_section and current_content:
+                paragraphs.append({
+                    'title': current_section,
+                    'content': '\n'.join(current_content)
+                })
+            current_section = line
+            current_content = []
+        else:
+            # 移除markdown标记
+            line = re.sub(r'\[(.*?)\]', r'\1', line)  # 移除方括号
+            line = re.sub(r'\*\*(.*?)\*\*', r'\1', line)  # 移除加粗
+            line = re.sub(r'\|(.*?)\|', r'\1', line)  # 移除表格标记
+            line = re.sub(r'-{3,}', '', line)  # 移除分隔线
+            current_content.append(line)
+    
+    # 添加最后一个段落
+    if current_section and current_content:
+        paragraphs.append({
+            'title': current_section,
+            'content': '\n'.join(current_content)
+        })
+    
+    return paragraphs
+
 # 静态文件路由
 @app.route('/static/<path:filename>')
 def serve_static(filename):
@@ -247,6 +337,33 @@ def get_graph_data():
         logger.exception(e)
         return jsonify({"error": str(e)}), 500
 
+@app.route('/get_company_analysis', methods=['POST'])
+def get_company_analysis():
+    try:
+        data = request.get_json()
+        company_name = data.get('company_name')
+        
+        if not company_name:
+            return jsonify({'error': '公司名称不能为空'}), 400
+            
+        # 调用企业分析API获取分析结果
+        response = call_company_analysis_api(company_name)
+        
+        if not response:
+            return jsonify({'error': '获取企业分析数据失败'}), 500
+            
+        # 处理markdown格式
+        processed_text = process_company_analysis(response)
+        
+        return jsonify({
+            'success': True,
+            'data': processed_text
+        })
+        
+    except Exception as e:
+        logger.error(f"Error in get_company_analysis: {str(e)}")
+        return jsonify({'error': '获取企业分析数据失败'}), 500
+
 # 添加CORS支持
 @app.after_request
 def after_request(response):
@@ -256,4 +373,4 @@ def after_request(response):
     return response
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
