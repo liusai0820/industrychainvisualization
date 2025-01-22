@@ -1,9 +1,10 @@
-from flask import Flask, render_template, jsonify, request, send_from_directory
+from flask import Flask, render_template, jsonify, request, send_from_directory, make_response
 import json
 import os
 import requests
 import logging
 import re
+from datetime import datetime
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -14,6 +15,9 @@ app = Flask(__name__)
 DIFY_BASE_URL = "https://api.dify.ai/v1"
 INDUSTRY_CHAIN_API_KEY = "app-VsZqtUHY2piGHBH7iqgXQ1uz"  # 产业链分析应用的API Key
 COMPANY_ANALYSIS_API_KEY = "app-3NxlGN8GQFPH8ud5L9e9GTUY"  # 企业分析应用的API Key
+
+# 添加缓存字典
+company_analysis_cache = {}
 
 def extract_json_from_markdown(text):
     """从Markdown代码块中提取JSON字符串"""
@@ -193,8 +197,33 @@ def transform_to_tree(data):
         logger.exception(e)
         return None
 
+def clean_html_content(text):
+    """清理和转义HTML内容"""
+    # 基本HTML转义
+    text = text.replace('&', '&amp;')
+    text = text.replace('<', '&lt;')
+    text = text.replace('>', '&gt;')
+    text = text.replace('"', '&quot;')
+    text = text.replace("'", '&#39;')
+    
+    # 移除可能导致问题的特殊字符
+    text = text.replace('\u2028', ' ')  # 行分隔符
+    text = text.replace('\u2029', ' ')  # 段落分隔符
+    text = text.replace('\u200b', '')   # 零宽空格
+    text = text.replace('\ufeff', '')   # 零宽不换行空格
+    
+    # 统一换行符
+    text = text.replace('\r\n', '\n').replace('\r', '\n')
+    
+    return text
+
 def call_company_analysis_api(company_name):
     """调用Dify API获取企业分析数据"""
+    # 检查缓存
+    if company_name in company_analysis_cache:
+        logger.info(f"Using cached analysis for company: {company_name}")
+        return company_analysis_cache[company_name]
+    
     headers = {
         "Authorization": f"Bearer {COMPANY_ANALYSIS_API_KEY}",
         "Content-Type": "application/json"
@@ -208,9 +237,8 @@ def call_company_analysis_api(company_name):
         "user": "default"
     }
     
-    # 设置重试策略
     retry_count = 3
-    timeout_seconds = 60  # 增加超时时间到60秒
+    timeout_seconds = 60
     
     for attempt in range(retry_count):
         try:
@@ -225,26 +253,29 @@ def call_company_analysis_api(company_name):
             
             if response.status_code != 200:
                 logger.error(f"Company Analysis API request failed with status code: {response.status_code}")
-                if attempt < retry_count - 1:  # 如果还有重试机会
+                if attempt < retry_count - 1:
                     logger.info(f"Retrying... Attempt {attempt + 2} of {retry_count}")
                     continue
                 return None
-                
+            
             result = response.json()
             logger.debug(f"Company Analysis Parsed response: {json.dumps(result, ensure_ascii=False)}")
             
-            # 获取并处理数据
             if 'data' in result and isinstance(result['data'], dict):
                 outputs = result['data'].get('outputs', {})
                 if isinstance(outputs, dict) and 'text' in outputs:
-                    return outputs['text']
-                        
+                    # 清理和处理文本
+                    text = clean_html_content(outputs['text'])
+                    # 存入缓存
+                    company_analysis_cache[company_name] = text
+                    return text
+            
             logger.error("Company Analysis Data structure validation failed")
             return None
-                
+            
         except requests.exceptions.Timeout:
             logger.warning(f"Timeout occurred on attempt {attempt + 1} of {retry_count}")
-            if attempt < retry_count - 1:  # 如果还有重试机会
+            if attempt < retry_count - 1:
                 continue
             logger.error("All retry attempts failed due to timeout")
             return None
@@ -257,48 +288,55 @@ def call_company_analysis_api(company_name):
 
 def process_company_analysis(text):
     """处理企业分析文本，将markdown格式转换为结构化文本"""
-    # 移除多余的空行
-    lines = [line.strip() for line in text.split('\n') if line.strip()]
-    
-    # 处理段落
-    paragraphs = []
-    current_section = None
-    current_content = []
-    
-    for line in lines:
-        # 检查是否是标题行（数字开头）
-        if re.match(r'^\d+\.', line) or re.match(r'^\*\*\d+\.', line):
-            # 如果有之前的段落，保存它
-            if current_section and current_content:
-                paragraphs.append({
-                    'title': current_section.replace('*', ''),
-                    'content': '\n'.join(current_content)
-                })
-            current_section = line.replace('*', '')
-            current_content = []
-        else:
-            # 处理markdown格式
-            # 处理加粗
-            line = re.sub(r'\*\*([^*]+)\*\*', r'<strong>\1</strong>', line)
-            # 处理列表项
-            if line.startswith('*   '):
-                line = '• ' + line[4:]
-            elif line.startswith('    *   '):
-                line = '  • ' + line[8:]
-            # 处理其他格式
-            line = line.replace('【', '<strong>').replace('】', '</strong>')
-            line = line.replace('（', '<span class="text-gray-500">（').replace('）', '）</span>')
-            
-            current_content.append(line)
-    
-    # 添加最后一个段落
-    if current_section and current_content:
-        paragraphs.append({
-            'title': current_section.replace('*', ''),
-            'content': '\n'.join(current_content)
-        })
-    
-    return paragraphs
+    try:
+        # 移除多余的空行
+        lines = [line.strip() for line in text.split('\n') if line.strip()]
+        
+        # 处理段落
+        paragraphs = []
+        current_section = None
+        current_content = []
+        
+        for line in lines:
+            # 检查是否是标题行（数字开头）
+            if re.match(r'^\d+\.', line) or re.match(r'^\*\*\d+\.', line):
+                # 如果有之前的段落，保存它
+                if current_section and current_content:
+                    paragraphs.append({
+                        'title': current_section.replace('*', '').strip(),
+                        'content': '\n'.join(current_content)
+                    })
+                current_section = line.replace('*', '').strip()
+                current_content = []
+            else:
+                # 处理markdown格式
+                # 处理加粗
+                line = re.sub(r'\*\*([^*]+)\*\*', r'<strong>\1</strong>', line)
+                # 处理列表项
+                if line.startswith('*   '):
+                    line = '• ' + line[4:]
+                elif line.startswith('    *   '):
+                    line = '  • ' + line[8:]
+                # 处理其他格式
+                line = line.replace('【', '<strong>').replace('】', '</strong>')
+                line = line.replace('（', '<span class="text-gray-500">（').replace('）', '）</span>')
+                
+                if line.strip():  # 只添加非空行
+                    current_content.append(line)
+        
+        # 添加最后一个段落
+        if current_section and current_content:
+            paragraphs.append({
+                'title': current_section.replace('*', '').strip(),
+                'content': '\n'.join(current_content)
+            })
+        
+        return paragraphs
+        
+    except Exception as e:
+        logger.error(f"Error processing company analysis text: {str(e)}")
+        logger.exception(e)
+        return []
 
 def convert_table_to_html(table_lines):
     """将Markdown表格转换为HTML表格"""
@@ -393,13 +431,13 @@ def get_company_analysis():
         
         if not company_name:
             return jsonify({'error': '公司名称不能为空'}), 400
-            
+        
         # 调用企业分析API获取分析结果
         response = call_company_analysis_api(company_name)
         
         if not response:
             return jsonify({'error': '获取企业分析数据失败'}), 500
-            
+        
         # 处理markdown格式
         processed_text = process_company_analysis(response)
         
@@ -411,6 +449,39 @@ def get_company_analysis():
     except Exception as e:
         logger.error(f"Error in get_company_analysis: {str(e)}")
         return jsonify({'error': '获取企业分析数据失败'}), 500
+
+@app.route('/download_report/<company_name>', methods=['GET'])
+def download_report(company_name):
+    try:
+        if company_name not in company_analysis_cache:
+            return jsonify({'error': '报告不存在'}), 404
+        
+        # 获取缓存的报告内容
+        report_content = company_analysis_cache[company_name]
+        processed_text = process_company_analysis(report_content)
+        
+        # 生成下载文件内容
+        download_content = []
+        for section in processed_text:
+            # 移除HTML标签
+            title = re.sub(r'<[^>]+>', '', section['title'])
+            content = re.sub(r'<[^>]+>', '', section['content'])
+            download_content.append(f"# {title}\n\n")
+            download_content.append(f"{content}\n\n")
+        
+        # 创建响应
+        response = make_response('\n'.join(download_content))
+        response.headers['Content-Type'] = 'text/markdown; charset=utf-8'
+        
+        # URL编码文件名
+        encoded_filename = company_name.encode('utf-8').decode('latin1')
+        response.headers['Content-Disposition'] = f"attachment; filename*=UTF-8''{encoded_filename}_analysis_report.md"
+        
+        return response
+        
+    except Exception as e:
+        logger.error(f"Error generating report: {str(e)}")
+        return jsonify({'error': '生成报告失败'}), 500
 
 # 添加CORS支持
 @app.after_request

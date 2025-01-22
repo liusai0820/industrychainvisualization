@@ -345,6 +345,79 @@
         .analysis-section {
             animation: slideIn 0.3s ease-out forwards;
         }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .download-btn {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .download-btn:hover {
+            background-color: #2563eb;
+        }
+
+        .download-btn svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 0.5rem;
+        }
+
+        .close-btn {
+            font-size: 1.5rem;
+            color: #64748b;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            color: #475569;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .loading-spinner {
+            display: none;
+            margin: 2rem auto;
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -418,11 +491,19 @@
             <!-- 模态框头部 -->
             <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200">
                 <h2 class="text-xl font-bold text-gray-900" id="modal-title">分析报告</h2>
-                <button id="close-modal" class="text-gray-400 hover:text-gray-600 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
+                <div class="flex items-center gap-4">
+                    <button id="download-report-btn" class="hidden flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                        </svg>
+                        下载报告
+                    </button>
+                    <button id="close-modal" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
             
             <!-- 模态框内容区 -->
@@ -792,80 +873,67 @@
         adjustChartSize();
 
         // 更新展示内容的函数
-        function showCompanyAnalysis(companyName) {
+        async function showCompanyAnalysis(companyName) {
             const modal = document.getElementById('company-modal');
             const modalTitle = document.getElementById('modal-title');
             const modalContent = document.getElementById('modal-content');
             const loadingSpinner = document.getElementById('loading-spinner');
+            const downloadBtn = document.getElementById('download-report-btn');
             
+            modal.classList.remove('hidden');
             modalTitle.textContent = `${companyName} - 企业分析`;
             modalContent.innerHTML = '';
-            modal.classList.remove('hidden');
             loadingSpinner.classList.remove('hidden');
+            downloadBtn.classList.add('hidden');
             
-            fetch('/get_company_analysis', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ company_name: companyName })
-            })
-            .then(response => response.json())
-            .then(result => {
-                loadingSpinner.classList.add('hidden');
-                console.log('API Response:', result); // 添加调试日志
+            try {
+                const response = await fetch('/get_company_analysis', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ company_name: companyName })
+                });
                 
-                if (result.error) {
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    let formattedContent = '<div class="analysis-content p-8">';
+                    
+                    result.data.forEach(section => {
+                        formattedContent += `
+                            <div class="analysis-section mb-8 bg-white rounded-lg shadow-sm">
+                                <div class="section-title text-lg font-semibold mb-3 pb-2 border-b">
+                                    ${section.title}
+                                </div>
+                                <div class="section-content space-y-3 text-gray-700">
+                                    ${section.content}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    formattedContent += '</div>';
+                    modalContent.innerHTML = formattedContent;
+                    
+                    // 显示下载按钮
+                    downloadBtn.classList.remove('hidden');
+                    downloadBtn.onclick = () => {
+                        window.open(`/download_report/${encodeURIComponent(companyName)}`, '_blank');
+                    };
+                } else {
                     modalContent.innerHTML = `
                         <div class="text-center py-8">
                             <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                             </svg>
                             <p class="text-lg text-gray-600 mb-2">获取数据失败</p>
-                            <p class="text-sm text-gray-500">${result.error}</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                let formattedContent = '<div class="analysis-content p-8">';
-                
-                if (result.data && Array.isArray(result.data)) {
-                    result.data.forEach(section => {
-                        if (section.title && section.content) {
-                            formattedContent += `
-                                <div class="analysis-section mb-8">
-                                    <div class="section-title">
-                                        ${section.title}
-                                    </div>
-                                    <div class="section-content">
-                                        ${section.content.split('\n').map(line => {
-                                            line = line.trim();
-                                            if (line.startsWith('•')) {
-                                                return `<div class="pl-4 py-1 border-l-2 border-blue-100">${line}</div>`;
-                                            }
-                                            return `<div class="py-1">${line}</div>`;
-                                        }).join('')}
-                                    </div>
-                                </div>
-                            `;
-                        }
-                    });
-                } else {
-                    console.error('Invalid data format:', result); // 添加错误日志
-                    formattedContent += `
-                        <div class="text-center py-8">
-                            <p class="text-lg text-gray-600">暂无分析数据</p>
+                            <p class="text-sm text-gray-500">${result.error || '未知错误'}</p>
                         </div>
                     `;
                 }
-                
-                formattedContent += '</div>';
-                modalContent.innerHTML = formattedContent;
-            })
-            .catch(error => {
-                console.error('API Error:', error); // 添加错误日志
-                loadingSpinner.classList.add('hidden');
+            } catch (error) {
+                console.error('Error:', error);
                 modalContent.innerHTML = `
                     <div class="text-center py-8">
                         <svg class="w-16 h-16 mx-auto text-red-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -875,7 +943,9 @@
                         <p class="text-sm text-gray-500">${error.message}</p>
                     </div>
                 `;
-            });
+            } finally {
+                loadingSpinner.classList.add('hidden');
+            }
         }
         
         // 关闭弹窗

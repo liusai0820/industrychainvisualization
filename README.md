@@ -1,71 +1,137 @@
 # 产业链全景图谱分析系统
 
-一个基于 Python 和 ECharts 的产业链可视化工具，能够自动生成和展示完整的产业链图谱。本系统利用 AI 技术，帮助用户快速理解和分析不同行业的产业链结构。
+一个基于AI技术的产业链分析工具，能够智能生成完整的产业链图谱，并提供深度的企业分析报告。
 
 ## 功能特点
 
-- 🔍 智能分析产业链结构
-- 📊 自动生成交互式图谱
-- 🎨 美观的可视化效果
-- 📱 响应式设计，支持多设备访问
-- 💾 支持图谱导出为PNG格式
-- 🖱️ 支持图谱缩放和平移
-- 🤖 基于AI的智能分析
-- 🔄 实时数据更新
+- **智能产业链分析**：自动生成完整的产业链图谱，包括上中下游各环节及其代表企业
+- **交互式可视化**：采用树状图展示产业链结构，支持缩放、平移等交互操作
+- **企业深度分析**：点击企业节点即可获取AI生成的详细分析报告，包括：
+  - 投资亮点分析
+  - 核心技术优势
+  - 市场竞争格局
+  - 风险提示分析
+  - 发展前景展望
+- **报告导出功能**：
+  - 支持导出产业链图谱为高清PNG图片
+  - 支持导出企业分析报告为Markdown格式
+- **智能缓存机制**：
+  - 自动缓存已生成的企业分析报告
+  - 二次查看无需重新生成，响应更快
+- **响应式设计**：完美适配各种屏幕尺寸，提供最佳的用户体验
 
 ## 在线演示
 
-[在线体验地址](#) (即将上线)
+访问 [产业链图谱分析系统](https://your-demo-url.com) 体验完整功能。
 
 ## 快速开始
 
-### 环境要求
-
-- Python 3.8+
-- pip
-- 现代浏览器（Chrome, Firefox, Safari, Edge 等）
-
-### 安装步骤
-
-1. 克隆仓库
+1. 克隆项目到本地：
 ```bash
 git clone https://github.com/liusai0820/industrychainvisualization.git
 cd industrychainvisualization
 ```
 
-2. 安装依赖
+2. 安装依赖：
 ```bash
 pip install -r requirements.txt
 ```
 
-3. 设置环境变量（可选）
-```bash
-export DIFY_API_KEY="your_api_key"  # Linux/macOS
-set DIFY_API_KEY=your_api_key       # Windows
-```
-
-4. 运行应用
+3. 运行应用：
 ```bash
 python app.py
 ```
 
-5. 打开浏览器访问
-```
-http://localhost:5000
-```
+4. 打开浏览器访问：`http://localhost:5001`
 
 ## 使用说明
 
-1. 在输入框中输入想要分析的产业链名称（如：AI芯片、新能源汽车等）
-2. 点击"生成图谱"按钮
-3. 等待系统生成产业链图谱（通常需要 5-10 秒）
-4. 可以使用鼠标滚轮或触控板进行上下滚动查看完整图谱
-5. 点击"下载图谱"按钮可以将图谱保存为PNG格式
+1. **生成产业链图谱**：
+   - 在搜索框中输入产业链名称（如：AI芯片、新能源汽车等）
+   - 点击"生成图谱"按钮或按回车键
+   - 等待几秒钟，系统将自动生成完整的产业链图谱
 
-### 最佳实践
-- 输入具体的产业链名称会得到更好的结果
-- 建议使用全屏模式查看大型产业链图谱
-- 可以使用浏览器的缩放功能调整整体视图
+2. **查看企业分析**：
+   - 在产业链图谱中点击任意企业节点
+   - 系统将弹出该企业的详细分析报告
+   - 首次生成可能需要等待几秒钟
+
+3. **导出功能**：
+   - 点击"下载图谱"按钮可导出当前产业链图谱为PNG图片
+   - 在企业分析报告中点击"下载报告"可将分析内容导出为Markdown文件
+
+## 技术栈
+
+- 后端：Python + Flask
+- 前端：HTML + JavaScript + Tailwind CSS
+- 可视化：ECharts
+- AI接口：Dify API
+
+## 项目结构
+
+```
+industrychainvisualization/
+├── app.py                 # 主应用程序
+├── requirements.txt       # 项目依赖
+├── README.md             # 项目文档
+├── LICENSE               # 开源协议
+└── templates/            # 前端模板
+    └── index.html        # 主页面
+```
+
+## 本地开发
+
+1. 确保已安装Python 3.8+
+2. 安装项目依赖：`pip install -r requirements.txt`
+3. 设置环境变量（可选）：
+   ```bash
+   export FLASK_ENV=development
+   export FLASK_DEBUG=1
+   ```
+4. 运行开发服务器：`python app.py`
+
+## 部署
+
+支持多种部署方式：
+- Docker容器化部署
+- 云服务器直接部署
+- Serverless部署
+
+## 贡献指南
+
+欢迎提交Issue和Pull Request。
+
+## 开源协议
+
+本项目采用 MIT 许可证，查看 [LICENSE](LICENSE) 了解更多信息。
+
+## 联系方式
+
+- 作者：liusai
+- 邮箱：liusai64@gmail.com
+- GitHub：[github.com/liusai0820](https://github.com/liusai0820)
+
+## 更新日志
+
+### v1.1.0 (2024-01-22)
+- 新增企业分析报告功能
+- 新增报告导出功能
+- 优化图谱显示效果
+- 增加智能缓存机制
+- 改进用户界面交互
+
+### v1.0.0 (2024-01-21)
+- 首次发布
+- 实现产业链图谱生成
+- 实现图谱可视化展示
+- 支持图谱导出功能
+
+## 致谢
+
+感谢以下开源项目：
+- [Flask](https://flask.palletsprojects.com/)
+- [ECharts](https://echarts.apache.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
 
 ## 示例产业链
 
@@ -77,63 +143,6 @@ http://localhost:5000
 - 新能源电池产业链
 - 智能手机产业链
 - 云计算产业链
-
-## 技术栈
-
-- 后端：Python + Flask
-- 前端：HTML + JavaScript + ECharts
-- UI：Tailwind CSS
-- API：Dify.AI
-- 数据处理：JSON
-- 版本控制：Git
-
-## 项目结构
-
-```
-industrychainvisualization/
-├── app.py              # 主应用文件
-├── requirements.txt    # 项目依赖
-├── templates/         
-│   └── index.html     # 主页面模板
-├── static/            
-│   └── style.css      # 样式文件
-├── README.md          # 项目文档
-└── LICENSE            # MIT许可证
-```
-
-## 本地开发
-
-1. 克隆项目到本地
-2. 创建并激活虚拟环境（推荐）
-```bash
-python -m venv venv
-source venv/bin/activate  # Unix/macOS
-venv\Scripts\activate     # Windows
-```
-3. 安装开发依赖
-```bash
-pip install -r requirements.txt
-```
-4. 运行开发服务器
-```bash
-python app.py
-```
-
-## 部署
-
-支持多种部署方式：
-
-- 传统服务器
-- Docker 容器
-- 云平台 (AWS, GCP, Azure 等)
-
-详细部署文档请参考 [部署指南](#) (即将添加)
-
-### 注意事项
-- 确保服务器有足够的内存（建议至少 1GB）
-- 需要配置正确的 CORS 策略
-- 建议使用 HTTPS 协议
-- 注意 API 密钥的安全存储
 
 ## 常见问题
 
@@ -174,6 +183,12 @@ MIT License - 详见 [LICENSE](LICENSE) 文件
 - 所有贡献者和用户
 
 ## 更新日志
+
+### v1.1.0 (2024-01-22)
+- 新增企业分析功能
+- 优化图谱展示效果
+- 添加图谱导出功能
+- 改进用户界面交互
 
 ### v1.0.0 (2024-01-21)
 - 🎉 首次发布
