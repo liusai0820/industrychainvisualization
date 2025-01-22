@@ -202,84 +202,132 @@ def call_company_analysis_api(company_name):
     
     payload = {
         "inputs": {
-            "company_name": company_name  # 使用相同的参数名
+            "company_name": company_name  # 使用与产业链分析相同的参数名
         },
         "response_mode": "blocking",
         "user": "default"
     }
     
-    try:
-        response = requests.post(
-            f"{DIFY_BASE_URL}/workflows/run",
-            headers=headers,
-            json=payload,
-            timeout=30
-        )
-        
-        logger.debug(f"Company Analysis API Response Status Code: {response.status_code}")
-        
-        if response.status_code != 200:
-            logger.error(f"Company Analysis API request failed with status code: {response.status_code}")
+    # 设置重试策略
+    retry_count = 3
+    timeout_seconds = 60  # 增加超时时间到60秒
+    
+    for attempt in range(retry_count):
+        try:
+            response = requests.post(
+                f"{DIFY_BASE_URL}/workflows/run",
+                headers=headers,
+                json=payload,
+                timeout=timeout_seconds
+            )
+            
+            logger.debug(f"Company Analysis API Response Status Code: {response.status_code}")
+            
+            if response.status_code != 200:
+                logger.error(f"Company Analysis API request failed with status code: {response.status_code}")
+                if attempt < retry_count - 1:  # 如果还有重试机会
+                    logger.info(f"Retrying... Attempt {attempt + 2} of {retry_count}")
+                    continue
+                return None
+                
+            result = response.json()
+            logger.debug(f"Company Analysis Parsed response: {json.dumps(result, ensure_ascii=False)}")
+            
+            # 获取并处理数据
+            if 'data' in result and isinstance(result['data'], dict):
+                outputs = result['data'].get('outputs', {})
+                if isinstance(outputs, dict) and 'text' in outputs:
+                    return outputs['text']
+                        
+            logger.error("Company Analysis Data structure validation failed")
             return None
-            
-        result = response.json()
-        logger.debug(f"Company Analysis Parsed response: {json.dumps(result, ensure_ascii=False)}")
-        
-        # 获取并处理数据
-        if 'data' in result and isinstance(result['data'], dict):
-            outputs = result['data'].get('outputs', {})
-            if isinstance(outputs, dict) and 'text' in outputs:
-                return outputs['text']
-                    
-        logger.error("Company Analysis Data structure validation failed")
-        return None
-            
-    except Exception as e:
-        logger.error(f"Error in call_company_analysis_api: {str(e)}")
-        logger.exception(e)
-        return None
+                
+        except requests.exceptions.Timeout:
+            logger.warning(f"Timeout occurred on attempt {attempt + 1} of {retry_count}")
+            if attempt < retry_count - 1:  # 如果还有重试机会
+                continue
+            logger.error("All retry attempts failed due to timeout")
+            return None
+        except Exception as e:
+            logger.error(f"Error in call_company_analysis_api: {str(e)}")
+            logger.exception(e)
+            return None
+    
+    return None
 
 def process_company_analysis(text):
     """处理企业分析文本，将markdown格式转换为结构化文本"""
-    # 移除多余的星号和空行
-    text = re.sub(r'\*+', '', text)
+    # 移除多余的空行
+    lines = [line.strip() for line in text.split('\n') if line.strip()]
     
     # 处理段落
     paragraphs = []
     current_section = None
     current_content = []
     
-    for line in text.split('\n'):
-        line = line.strip()
-        if not line:
-            continue
-            
+    for line in lines:
         # 检查是否是标题行（数字开头）
-        if re.match(r'^\d+\.', line):
+        if re.match(r'^\d+\.', line) or re.match(r'^\*\*\d+\.', line):
             # 如果有之前的段落，保存它
             if current_section and current_content:
                 paragraphs.append({
-                    'title': current_section,
+                    'title': current_section.replace('*', ''),
                     'content': '\n'.join(current_content)
                 })
-            current_section = line
+            current_section = line.replace('*', '')
             current_content = []
         else:
-            # 移除markdown标记
-            line = re.sub(r'\[(.*?)\]', r'\1', line)  # 移除方括号
-            line = re.sub(r'\*\*(.*?)\*\*', r'\1', line)  # 移除加粗
-            line = re.sub(r'\|(.*?)\|', r'\1', line)  # 移除表格标记
-            line = re.sub(r'-{3,}', '', line)  # 移除分隔线
+            # 处理markdown格式
+            # 处理加粗
+            line = re.sub(r'\*\*([^*]+)\*\*', r'<strong>\1</strong>', line)
+            # 处理列表项
+            if line.startswith('*   '):
+                line = '• ' + line[4:]
+            elif line.startswith('    *   '):
+                line = '  • ' + line[8:]
+            # 处理其他格式
+            line = line.replace('【', '<strong>').replace('】', '</strong>')
+            line = line.replace('（', '<span class="text-gray-500">（').replace('）', '）</span>')
+            
             current_content.append(line)
     
     # 添加最后一个段落
     if current_section and current_content:
         paragraphs.append({
-            'title': current_section,
+            'title': current_section.replace('*', ''),
             'content': '\n'.join(current_content)
         })
     
     return paragraphs
+
+def convert_table_to_html(table_lines):
+    """将Markdown表格转换为HTML表格"""
+    if len(table_lines) < 3:  # 至少需要表头、分隔线和一行数据
+        return '\n'.join(table_lines)
+        
+    html_lines = ['<div class="table-container"><table>']
+    
+    # 处理表头
+    headers = [cell.strip() for cell in table_lines[0].split('|')[1:-1]]
+    html_lines.append('<thead><tr>')
+    for header in headers:
+        html_lines.append(f'<th>{header}</th>')
+    html_lines.append('</tr></thead>')
+    
+    # 处理数据行
+    html_lines.append('<tbody>')
+    for line in table_lines[2:]:
+        if not line.strip():
+            continue
+        cells = [cell.strip() for cell in line.split('|')[1:-1]]
+        html_lines.append('<tr>')
+        for cell in cells:
+            html_lines.append(f'<td>{cell}</td>')
+        html_lines.append('</tr>')
+    html_lines.append('</tbody>')
+    
+    html_lines.append('</table></div>')
+    return '\n'.join(html_lines)
 
 # 静态文件路由
 @app.route('/static/<path:filename>')

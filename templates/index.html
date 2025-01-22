@@ -124,26 +124,110 @@
 
         /* 分析报告样式 */
         .analysis-section {
-            margin-bottom: 2.5rem;
-        }
-        
-        .analysis-section:last-child {
-            margin-bottom: 0;
+            margin-bottom: 2rem;
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
         
         .analysis-title {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 600;
             color: #1e40af;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #e2e8f0;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(to right, #f8fafc, #fff);
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .analysis-title::before {
+            content: "";
+            display: block;
+            width: 4px;
+            height: 1.25rem;
+            background: linear-gradient(to bottom, #2563eb, #1e40af);
+            border-radius: 2px;
         }
         
         .analysis-text {
+            padding: 1.5rem;
             color: #334155;
             white-space: pre-line;
-            padding-left: 1rem;
+        }
+        
+        /* 列表样式 */
+        .list-item {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .list-item::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 1rem;
+            width: 6px;
+            height: 6px;
+            background: #2563eb;
+            border-radius: 50%;
+        }
+        
+        /* 表格样式 */
+        .table-container {
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        
+        .table-container table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .table-container th {
+            background: #f1f5f9;
+            color: #1e40af;
+            font-weight: 600;
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .table-container td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            color: #475569;
+        }
+        
+        .table-container tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* 强调文本样式 */
+        .analysis-text strong {
+            color: #1e40af;
+            font-weight: 600;
+        }
+        
+        /* 缩进的序号列表 */
+        .analysis-text .list-item {
+            margin: 0.5rem 0;
+        }
+        
+        /* 段落间距 */
+        .analysis-text p {
+            margin-bottom: 1rem;
+        }
+        
+        .analysis-text p:last-child {
+            margin-bottom: 0;
         }
 
         /* 企业分析报告样式优化 */
@@ -155,15 +239,14 @@
         }
         
         .section-title {
-            font-size: 1.25rem;
+            font-size: 1.125rem;
             font-weight: 600;
             color: #1e40af;
-            margin-bottom: 1rem;
-            padding-bottom: 0.75rem;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(to right, #f8fafc, #fff);
             border-bottom: 2px solid #e2e8f0;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
         }
         
         .section-title::before {
@@ -173,19 +256,44 @@
             height: 1.25rem;
             background: linear-gradient(to bottom, #2563eb, #1e40af);
             border-radius: 2px;
+            margin-right: 0.75rem;
         }
         
         .section-content {
-            font-size: 1rem;
-            line-height: 1.8;
+            padding: 1.5rem;
             color: #475569;
-            padding: 0.5rem 0;
         }
         
-        .section-content p {
-            margin-bottom: 1rem;
+        .section-content strong {
+            color: #1e40af;
+            font-weight: 600;
         }
         
+        .section-content > div {
+            margin-bottom: 0.5rem;
+        }
+        
+        .section-content > div:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 列表样式 */
+        .section-content .pl-4 {
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .section-content .pl-4::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.8rem;
+            width: 6px;
+            height: 6px;
+            background: #2563eb;
+            border-radius: 50%;
+        }
+
         .highlight {
             color: #2563eb;
             font-weight: 500;
@@ -309,7 +417,7 @@
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl mx-4 flex flex-col" style="height: 85vh;">
             <!-- 模态框头部 -->
             <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200">
-                <h2 class="text-xl font-bold text-gray-900" id="modal-title">企业分析</h2>
+                <h2 class="text-xl font-bold text-gray-900" id="modal-title">分析报告</h2>
                 <button id="close-modal" class="text-gray-400 hover:text-gray-600 transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -705,6 +813,8 @@
             .then(response => response.json())
             .then(result => {
                 loadingSpinner.classList.add('hidden');
+                console.log('API Response:', result); // 添加调试日志
+                
                 if (result.error) {
                     modalContent.innerHTML = `
                         <div class="text-center py-8">
@@ -715,24 +825,46 @@
                             <p class="text-sm text-gray-500">${result.error}</p>
                         </div>
                     `;
-                } else {
-                    const sections = result.data;
-                    let formattedContent = '<div class="analysis-content">';
-                    
-                    sections.forEach(section => {
-                        formattedContent += `
-                            <div class="analysis-section">
-                                <div class="analysis-title">${section.title}</div>
-                                <div class="analysis-text">${section.content}</div>
-                            </div>
-                        `;
-                    });
-                    
-                    formattedContent += '</div>';
-                    modalContent.innerHTML = formattedContent;
+                    return;
                 }
+
+                let formattedContent = '<div class="analysis-content p-8">';
+                
+                if (result.data && Array.isArray(result.data)) {
+                    result.data.forEach(section => {
+                        if (section.title && section.content) {
+                            formattedContent += `
+                                <div class="analysis-section mb-8">
+                                    <div class="section-title">
+                                        ${section.title}
+                                    </div>
+                                    <div class="section-content">
+                                        ${section.content.split('\n').map(line => {
+                                            line = line.trim();
+                                            if (line.startsWith('•')) {
+                                                return `<div class="pl-4 py-1 border-l-2 border-blue-100">${line}</div>`;
+                                            }
+                                            return `<div class="py-1">${line}</div>`;
+                                        }).join('')}
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                } else {
+                    console.error('Invalid data format:', result); // 添加错误日志
+                    formattedContent += `
+                        <div class="text-center py-8">
+                            <p class="text-lg text-gray-600">暂无分析数据</p>
+                        </div>
+                    `;
+                }
+                
+                formattedContent += '</div>';
+                modalContent.innerHTML = formattedContent;
             })
             .catch(error => {
+                console.error('API Error:', error); // 添加错误日志
                 loadingSpinner.classList.add('hidden');
                 modalContent.innerHTML = `
                     <div class="text-center py-8">
