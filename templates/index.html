@@ -236,32 +236,39 @@
             color: #1e293b;
             font-size: 15px;
             line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
         }
         
         .section-title {
-            font-size: 1.125rem;
+            font-size: 1.25rem;
             font-weight: 600;
             color: #1e40af;
-            padding: 1rem 1.5rem;
+            padding: 1.25rem 1.75rem;
             background: linear-gradient(to right, #f8fafc, #fff);
             border-bottom: 2px solid #e2e8f0;
             display: flex;
             align-items: center;
+            margin-top: 2rem;
+            border-radius: 8px 8px 0 0;
         }
         
         .section-title::before {
             content: "";
             display: block;
             width: 4px;
-            height: 1.25rem;
+            height: 1.5rem;
             background: linear-gradient(to bottom, #2563eb, #1e40af);
             border-radius: 2px;
-            margin-right: 0.75rem;
+            margin-right: 1rem;
         }
         
         .section-content {
-            padding: 1.5rem;
+            padding: 2rem;
             color: #475569;
+            background: white;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
         
         .section-content strong {
@@ -269,8 +276,70 @@
             font-weight: 600;
         }
         
-        .section-content > div {
-            margin-bottom: 0.5rem;
+        .section-content p {
+            margin-bottom: 1.25rem;
+            line-height: 1.8;
+        }
+        
+        .section-content ul {
+            margin: 1.5rem 0;
+        }
+        
+        .section-content li {
+            margin-bottom: 0.75rem;
+        }
+        
+        /* 表格样式优化 */
+        .table-container {
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+        
+        .table-container table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .table-container th {
+            background: #f1f5f9;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #1e40af;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .table-container td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .table-container tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* 链接样式 */
+        .section-content a {
+            color: #2563eb;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        
+        .section-content a:hover {
+            color: #1e40af;
+            text-decoration: underline;
+        }
+        
+        /* 代码块样式 */
+        .section-content code {
+            background: #f1f5f9;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #1e40af;
         }
         
         .section-content > div:last-child {
@@ -514,7 +583,7 @@
                 <div id="loading-spinner" class="hidden py-12">
                     <div class="flex flex-col items-center justify-center space-y-4">
                         <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
-                        <p class="text-gray-500">正在分析企业数据...</p>
+                        <p class="text-gray-500">正在生成企业报告，请耐心等候...</p>
                     </div>
                 </div>
             </div>
@@ -916,13 +985,20 @@
                     let formattedContent = '<div class="analysis-content p-8">';
                     
                     result.data.forEach(section => {
+                        const processedContent = section.content.replace(/^(\d+)\.(\d+)\.(\d+)\./gm, '<li class="level-3" data-index="$1.$2.$3.">')
+                            .replace(/^(\d+)\.(\d+)\./gm, '<li class="level-2" data-index="$1.$2.">')
+                            .replace(/^(\d+)\./gm, '<li class="level-1" data-index="$1.">')
+                            .replace(/<\/li>\s*<li/g, '</li><li');
+                        
                         formattedContent += `
                             <div class="analysis-section mb-8 bg-white rounded-lg shadow-sm">
                                 <div class="section-title text-lg font-semibold mb-3 pb-2 border-b">
                                     ${section.title}
                                 </div>
                                 <div class="section-content space-y-3 text-gray-700">
-                                    ${section.content}
+                                    <ul>
+                                        ${processedContent}
+                                    </ul>
                                 </div>
                             </div>
                         `;
@@ -931,7 +1007,7 @@
                     formattedContent += '</div>';
                     modalContent.innerHTML = formattedContent;
                     
-                    // 显示下载按钮
+                    // 显示下载按钮并设置点击事件
                     downloadBtn.classList.remove('hidden');
                     downloadBtn.onclick = () => {
                         window.open(`/download_report/${encodeURIComponent(companyName)}`, '_blank');

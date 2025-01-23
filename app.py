@@ -4,6 +4,7 @@ import os
 import requests
 import logging
 import re
+import time
 from datetime import datetime
 
 logging.basicConfig(level=logging.DEBUG)
@@ -87,47 +88,70 @@ def call_dify_api(industry_name):
         "user": "default"
     }
     
-    try:
-        response = requests.post(
-            f"{DIFY_BASE_URL}/workflows/run", 
-            headers=headers,
-            json=payload,
-            timeout=60
-        )
-        
-        logger.debug(f"API Response Status Code: {response.status_code}")
-        
-        if response.status_code != 200:
-            logger.error(f"API request failed with status code: {response.status_code}")
+    retry_count = 3
+    base_delay = 2
+    max_timeout = 180
+    
+    for attempt in range(retry_count):
+        try:
+            if attempt > 0:
+                delay = base_delay * (2 ** (attempt - 1))
+                logger.info(f"等待 {delay} 秒后进行第 {attempt + 1} 次重试")
+                time.sleep(delay)
+            
+            response = requests.post(
+                f"{DIFY_BASE_URL}/workflows/run", 
+                headers=headers,
+                json=payload,
+                timeout=max_timeout
+            )
+            
+            logger.debug(f"API Response Status Code: {response.status_code}")
+            
+            if response.status_code != 200:
+                error_msg = f"API request failed with status code: {response.status_code}"
+                if response.status_code == 500:
+                    error_msg += " (服务器内部错误)"
+                elif response.status_code == 429:
+                    error_msg += " (请求频率限制)"
+                
+                logger.error(error_msg)
+                if attempt < retry_count - 1:
+                    logger.info(f"准备进行第 {attempt + 2} 次重试 (共 {retry_count} 次)")
+                    continue
+                return None
+            
+            result = response.json()
+            logger.debug(f"Parsed response: {json.dumps(result, ensure_ascii=False)}")
+            
+            # 获取并处理数据
+            if 'data' in result and isinstance(result['data'], dict):
+                outputs = result['data'].get('outputs', {})
+                if isinstance(outputs, dict) and 'text' in outputs:
+                    text_data = outputs['text']
+                    # 清理并解析text数据
+                    clean_data = sanitize_json_string(text_data)
+                    logger.debug(f"Cleaned data: {json.dumps(clean_data, ensure_ascii=False)}")
+                    
+                    if clean_data and isinstance(clean_data, dict):
+                        if '产业链' in clean_data and '环节' in clean_data:
+                            return clean_data
+                        
+                logger.error("Data structure validation failed")
+                logger.debug(f"Outputs structure: {outputs}")
+            else:
+                logger.error("Invalid response structure")
+            
+            return None
+                
+        except Exception as e:
+            logger.error(f"Error in call_dify_api: {str(e)}")
+            logger.exception(e)
+            if attempt < retry_count - 1:
+                continue
             return None
             
-        result = response.json()
-        logger.debug(f"Parsed response: {json.dumps(result, ensure_ascii=False)}")
-        
-        # 获取并处理数据
-        if 'data' in result and isinstance(result['data'], dict):
-            outputs = result['data'].get('outputs', {})
-            if isinstance(outputs, dict) and 'text' in outputs:
-                text_data = outputs['text']
-                # 清理并解析text数据
-                clean_data = sanitize_json_string(text_data)
-                logger.debug(f"Cleaned data: {json.dumps(clean_data, ensure_ascii=False)}")
-                
-                if clean_data and isinstance(clean_data, dict):
-                    if '产业链' in clean_data and '环节' in clean_data:
-                        return clean_data
-                    
-            logger.error("Data structure validation failed")
-            logger.debug(f"Outputs structure: {outputs}")
-        else:
-            logger.error("Invalid response structure")
-        
-        return None
-            
-    except Exception as e:
-        logger.error(f"Error in call_dify_api: {str(e)}")
-        logger.exception(e)
-        return None
+    return None
 
 def transform_to_tree(data):
     """将原始数据转换为树形结构"""
@@ -237,11 +261,18 @@ def call_company_analysis_api(company_name):
         "user": "default"
     }
     
-    retry_count = 3
-    timeout_seconds = 60
+    retry_count = 5  # 增加重试次数
+    timeout_seconds = 180  # 增加超时时间
+    base_delay = 1  # 基础延迟时间（秒）
     
     for attempt in range(retry_count):
         try:
+            # 使用指数退避策略计算延迟时间
+            if attempt > 0:
+                delay = base_delay * (2 ** (attempt - 1))  # 2, 4, 8, 16...
+                logger.info(f"Waiting {delay} seconds before retry {attempt + 1}")
+                time.sleep(delay)
+            
             response = requests.post(
                 f"{DIFY_BASE_URL}/workflows/run",
                 headers=headers,
@@ -252,7 +283,13 @@ def call_company_analysis_api(company_name):
             logger.debug(f"Company Analysis API Response Status Code: {response.status_code}")
             
             if response.status_code != 200:
-                logger.error(f"Company Analysis API request failed with status code: {response.status_code}")
+                error_msg = f"Company Analysis API request failed with status code: {response.status_code}"
+                if response.status_code == 429:  # Rate limit
+                    error_msg += " (Rate limit exceeded)"
+                elif response.status_code >= 500:  # Server error
+                    error_msg += " (Server error)"
+                
+                logger.error(error_msg)
                 if attempt < retry_count - 1:
                     logger.info(f"Retrying... Attempt {attempt + 2} of {retry_count}")
                     continue
@@ -289,40 +326,95 @@ def call_company_analysis_api(company_name):
 def process_company_analysis(text):
     """处理企业分析文本，将markdown格式转换为结构化文本"""
     try:
-        # 移除多余的空行
-        lines = [line.strip() for line in text.split('\n') if line.strip()]
+        # 移除多余的空行但保留段落结构
+        lines = []
+        prev_empty = False
+        for line in text.split('\n'):
+            if line.strip():
+                lines.append(line)
+                prev_empty = False
+            elif not prev_empty:  # 保留一个空行作为段落分隔
+                lines.append('')
+                prev_empty = True
         
         # 处理段落
         paragraphs = []
         current_section = None
         current_content = []
+        in_table = False
+        table_lines = []
+        in_list = False
+        list_items = []
         
         for line in lines:
-            # 检查是否是标题行（数字开头）
-            if re.match(r'^\d+\.', line) or re.match(r'^\*\*\d+\.', line):
-                # 如果有之前的段落，保存它
+            # 处理表格
+            if line.startswith('|') or (line.strip() and all(c == '-' or c == '|' for c in line.strip())):
+                if not in_table:
+                    if list_items:  # 如果之前有列表，先处理列表
+                        current_content.append('<ul class="list-disc pl-6 space-y-2">')
+                        current_content.extend(list_items)
+                        current_content.append('</ul>')
+                        list_items = []
+                        in_list = False
+                    in_table = True
+                table_lines.append(line)
+                continue
+            elif in_table:
+                # 表格结束，处理表格内容
+                if table_lines:
+                    current_content.append(convert_table_to_html(table_lines))
+                table_lines = []
+                in_table = False
+            
+            # 检查是否是标题行
+            if re.match(r'^\d+\.', line) or re.match(r'^\*\*\d+\.', line) or re.match(r'^#+ ', line):
+                # 处理未完成的列表
+                if list_items:
+                    current_content.append('<ul class="list-disc pl-6 space-y-2">')
+                    current_content.extend(list_items)
+                    current_content.append('</ul>')
+                    list_items = []
+                    in_list = False
+                
+                # 保存之前的段落
                 if current_section and current_content:
                     paragraphs.append({
                         'title': current_section.replace('*', '').strip(),
                         'content': '\n'.join(current_content)
                     })
-                current_section = line.replace('*', '').strip()
+                current_section = re.sub(r'^#+\s*', '', line).replace('*', '').strip()
                 current_content = []
             else:
-                # 处理markdown格式
-                # 处理加粗
-                line = re.sub(r'\*\*([^*]+)\*\*', r'<strong>\1</strong>', line)
                 # 处理列表项
-                if line.startswith('*   '):
-                    line = '• ' + line[4:]
-                elif line.startswith('    *   '):
-                    line = '  • ' + line[8:]
-                # 处理其他格式
-                line = line.replace('【', '<strong>').replace('】', '</strong>')
-                line = line.replace('（', '<span class="text-gray-500">（').replace('）', '）</span>')
-                
-                if line.strip():  # 只添加非空行
-                    current_content.append(line)
+                if line.lstrip().startswith('* ') or line.lstrip().startswith('- ') or \
+                   line.lstrip().startswith('•') or re.match(r'^\s*\d+\.\s', line):
+                    processed_line = re.sub(r'^\s*(?:[*\-•]|\d+\.)\s*', '', line)
+                    processed_line = process_inline_markdown(processed_line)
+                    list_items.append(f'<li class="mb-2">{processed_line}</li>')
+                    in_list = True
+                    continue
+                elif in_list and line.strip() == '':
+                    # 列表结束
+                    if list_items:
+                        current_content.append('<ul class="list-disc pl-6 space-y-2">')
+                        current_content.extend(list_items)
+                        current_content.append('</ul>')
+                        list_items = []
+                        in_list = False
+                    current_content.append('<div class="my-4"></div>')
+                else:
+                    # 处理普通段落
+                    if line.strip():
+                        processed_line = process_inline_markdown(line)
+                        current_content.append(f'<p class="mb-4">{processed_line}</p>')
+                    elif current_content and not current_content[-1].endswith('</ul>'):
+                        current_content.append('<div class="my-4"></div>')
+        
+        # 处理最后的未完成列表
+        if list_items:
+            current_content.append('<ul class="list-disc pl-6 space-y-2">')
+            current_content.extend(list_items)
+            current_content.append('</ul>')
         
         # 添加最后一个段落
         if current_section and current_content:
@@ -337,6 +429,28 @@ def process_company_analysis(text):
         logger.error(f"Error processing company analysis text: {str(e)}")
         logger.exception(e)
         return []
+
+def process_inline_markdown(text):
+    """处理行内markdown格式"""
+    # 处理加粗
+    text = re.sub(r'\*\*([^*]+)\*\*', r'<strong>\1</strong>', text)
+    text = re.sub(r'__([^_]+)__', r'<strong>\1</strong>', text)
+    
+    # 处理斜体
+    text = re.sub(r'\*([^*]+)\*', r'<em>\1</em>', text)
+    text = re.sub(r'_([^_]+)_', r'<em>\1</em>', text)
+    
+    # 处理行内代码
+    text = re.sub(r'`([^`]+)`', r'<code>\1</code>', text)
+    
+    # 处理链接
+    text = re.sub(r'\[([^\]]+)\]\(([^\)]+)\)', r'<a href="\2" class="text-blue-600 hover:underline">\1</a>', text)
+    
+    # 处理其他自定义格式
+    text = text.replace('【', '<strong>').replace('】', '</strong>')
+    text = text.replace('（', '<span class="text-gray-500">（').replace('）', '）</span>')
+    
+    return text
 
 def convert_table_to_html(table_lines):
     """将Markdown表格转换为HTML表格"""
@@ -456,18 +570,11 @@ def download_report(company_name):
         if company_name not in company_analysis_cache:
             return jsonify({'error': '报告不存在'}), 404
         
-        # 获取缓存的报告内容
+        # 直接获取缓存的原始报告内容
         report_content = company_analysis_cache[company_name]
-        processed_text = process_company_analysis(report_content)
-        
-        # 生成下载文件内容
-        download_content = []
-        for section in processed_text:
-            download_content.append(f"# {section['title']}\n\n")
-            download_content.append(f"{section['content']}\n\n")
         
         # 创建响应
-        response = make_response('\n'.join(download_content))
+        response = make_response(report_content)
         response.headers['Content-Type'] = 'text/markdown'
         response.headers['Content-Disposition'] = f'attachment; filename="{company_name}_分析报告.md"'
         
