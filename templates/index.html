@@ -1058,5 +1058,235 @@
             }
         });
     </script>
+<!-- 聊天助手图标按钮 -->
+<div id="chat-button" class="fixed bottom-6 right-6 w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-blue-700 transition-all z-50">
+    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-4l-4 4-4-4z"/>
+    </svg>
+</div>
+
+<!-- 聊天对话框 -->
+<div id="chat-modal" class="fixed bottom-24 right-6 w-96 bg-white rounded-lg shadow-xl z-50 hidden">
+    <div class="flex items-center justify-between p-4 border-b">
+        <h3 class="text-lg font-semibold text-gray-800">智能助手</h3>
+        <button id="close-chat" class="text-gray-500 hover:text-gray-700">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+    </div>
+    <div id="chat-messages" class="p-4 h-96 overflow-y-auto space-y-4">
+        <!-- 消息将在这里动态添加 -->
+        <div class="flex items-start space-x-2">
+            <div class="flex-shrink-0">
+                <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
+                <p class="text-sm text-gray-800">您好！我是智能助手，有什么可以帮您的吗？</p>
+            </div>
+        </div>
+    </div>
+    <div class="border-t p-4">
+        <div class="flex space-x-2">
+            <input type="text" id="chat-input" class="flex-1 border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="请输入您的问题...">
+            <button id="send-message" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                发送
+            </button>
+        </div>
+    </div>
+</div>
+<script>
+    // 聊天助手相关的JavaScript代码
+    const chatButton = document.getElementById('chat-button');
+    const chatModal = document.getElementById('chat-modal');
+    const closeChat = document.getElementById('close-chat');
+    const chatInput = document.getElementById('chat-input');
+    const sendMessage = document.getElementById('send-message');
+    const chatMessages = document.getElementById('chat-messages');
+    let currentConversationId = null;
+
+    // 显示/隐藏聊天窗口
+    chatButton.addEventListener('click', () => {
+        chatModal.classList.toggle('hidden');
+        if (!chatModal.classList.contains('hidden')) {
+            chatInput.focus();
+        }
+    });
+
+    // 关闭聊天窗口
+    closeChat.addEventListener('click', () => {
+        chatModal.classList.add('hidden');
+    });
+
+    // 发送消息函数
+    async function sendChatMessage() {
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        // 添加用户消息到聊天界面
+        const userMessageHtml = `
+            <div class="flex items-start space-x-2 justify-end">
+                <div class="bg-blue-100 rounded-lg p-3 max-w-xs">
+                    <p class="text-sm text-gray-800">${message}</p>
+                </div>
+            </div>
+        `;
+        chatMessages.insertAdjacentHTML('beforeend', userMessageHtml);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        chatInput.value = '';
+
+        try {
+            // 显示加载状态
+            const loadingHtml = `
+                <div class="flex items-start space-x-2 loading-message">
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
+                        <p class="text-sm text-gray-500">正在思考...</p>
+                    </div>
+                </div>
+            `;
+            chatMessages.insertAdjacentHTML('beforeend', loadingHtml);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // 创建markdown渲染函数
+            function renderMarkdown(text) {
+                // 处理标题
+                text = text.replace(/^# (.+)$/gm, '<h1 class="text-2xl font-bold mb-4">$1</h1>');
+                text = text.replace(/^## (.+)$/gm, '<h2 class="text-xl font-bold mb-3">$1</h2>');
+                text = text.replace(/^### (.+)$/gm, '<h3 class="text-lg font-bold mb-2">$1</h3>');
+
+                // 处理加粗
+                text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+                // 处理斜体
+                text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+                // 处理序号列表
+                text = text.replace(/^\d+\. (.+)$/gm, '<div class="ml-4 mb-2">• $1</div>');
+
+                // 处理无序列表
+                text = text.replace(/^- (.+)$/gm, '<div class="ml-4 mb-2">• $1</div>');
+
+                // 处理段落
+                text = text.replace(/^(?!<[h|d]).+$/gm, '<p class="mb-4">$&</p>');
+
+                // 处理空行
+                text = text.replace(/^\s*$/gm, '<div class="h-4"></div>');
+
+                return text;
+            }
+
+            // 创建AI回复的消息容器
+            const aiMessageContainer = document.createElement('div');
+            aiMessageContainer.className = 'flex items-start space-x-2';
+            aiMessageContainer.innerHTML = `
+                <div class="flex-shrink-0">
+                    <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
+                    <p class="text-sm text-gray-800"></p>
+                </div>
+            `;
+
+            // 发送请求到后端并处理SSE
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: message,
+                    conversation_id: currentConversationId
+                })
+            });
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let aiMessageContent = '';
+
+            // 移除加载状态
+            const loadingMessage = chatMessages.querySelector('.loading-message');
+            if (loadingMessage) {
+                loadingMessage.remove();
+            }
+
+            // 添加AI消息容器到聊天界面
+            chatMessages.appendChild(aiMessageContainer);
+            const aiMessageText = aiMessageContainer.querySelector('p');
+
+            while (true) {
+                const {value, done} = await reader.read();
+                if (done) break;
+
+                const chunk = decoder.decode(value);
+                const lines = chunk.split('\n');
+
+                for (const line of lines) {
+                    if (line.startsWith('data: ')) {
+                        try {
+                            const data = JSON.parse(line.slice(6));
+                            
+                            if (data.error) {
+                                aiMessageText.textContent = `错误: ${data.error}`;
+                                break;
+                            }
+
+                            if (data.event === 'message') {
+                                aiMessageContent += data.answer || '';
+                                aiMessageText.innerHTML = renderMarkdown(aiMessageContent);
+                                currentConversationId = data.conversation_id;
+                            } else if (data.event === 'message_end') {
+                                // 消息结束，不需要特殊处理
+                                break;
+                            }
+                        } catch (e) {
+                            console.error('Error parsing SSE data:', e);
+                        }
+                    }
+                }
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+            const errorHtml = `
+                <div class="flex items-start space-x-2">
+                    <div class="bg-red-100 rounded-lg p-3 max-w-xs">
+                        <p class="text-sm text-red-800">发生错误，请稍后重试</p>
+                    </div>
+                </div>
+            `;
+            chatMessages.insertAdjacentHTML('beforeend', errorHtml);
+        }
+
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // 发送消息事件监听
+    sendMessage.addEventListener('click', sendChatMessage);
+
+    // 回车发送消息
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendChatMessage();
+        }
+    });
+</script>
 </body>
 </html>

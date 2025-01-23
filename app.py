@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request, send_from_directory, make_response
+from flask import Flask, render_template, jsonify, request, send_from_directory, make_response, Response
 import json
 import os
 import requests
@@ -14,8 +14,9 @@ app = Flask(__name__)
 
 # Dify API配置
 DIFY_BASE_URL = "https://api.dify.ai/v1"
-INDUSTRY_CHAIN_API_KEY = "app-VsZqtUHY2piGHBH7iqgXQ1uz"  # 产业链分析应用的API Key
-COMPANY_ANALYSIS_API_KEY = "app-3NxlGN8GQFPH8ud5L9e9GTUY"  # 企业分析应用的API Key
+INDUSTRY_CHAIN_API_KEY = "app-VsZqtUHY2piGHBH7iqgXQ1uz"  # 产业链图谱生成应用的API Key
+COMPANY_ANALYSIS_API_KEY = "app-3NxlGN8GQFPH8ud5L9e9GTUY"  # 企业分析报告生成应用的API Key
+CHATBOT_API_KEY = "app-BFaUrbQ4mLHDxvwaOfhgs4wM"  # 聊天助手应用的API Key
 
 # 添加缓存字典
 company_analysis_cache = {}
@@ -47,26 +48,51 @@ def sanitize_json_string(s):
         if isinstance(s, bytes):
             s = s.decode('utf-8')
         
+        # 记录原始输入
+        logger.debug(f"Original input string: {s[:200]}..." if len(s) > 200 else s)
+        
         # 处理markdown代码块
         s = extract_json_from_markdown(s)
+        logger.debug(f"After markdown extraction: {s[:200]}..." if len(s) > 200 else s)
+        
+        # 预处理：移除BOM标记
+        if s.startswith('\ufeff'):
+            s = s[1:]
+            
+        # 预处理：规范化换行符
+        s = s.replace('\r\n', '\n').replace('\r', '\n')
         
         # 如果字符串以引号开始和结束，去掉外层引号
         if (s.startswith('"') and s.endswith('"')) or (s.startswith("'") and s.endswith("'")):
             s = s[1:-1]
+            logger.debug("Removed outer quotes")
             
         # 尝试直接解析
         try:
             return json.loads(s)
         except json.JSONDecodeError as e:
-            logger.debug(f"First JSON parse attempt failed: {e}")
+            logger.debug(f"First JSON parse attempt failed: {str(e)}")
+            logger.debug(f"Error position: {e.pos}, line: {e.lineno}, column: {e.colno}")
             
         # 处理转义字符
         s = s.replace('\\\\', '\\')
         s = s.replace('\\"', '"')
-        s = s.encode('utf-8').decode('unicode_escape')
+        
+        # 处理特殊Unicode字符
+        s = re.sub(r'\\u([0-9a-fA-F]{4})', lambda m: chr(int(m.group(1), 16)), s)
+        
+        # 移除可能导致问题的不可见字符
+        s = ''.join(char for char in s if char.isprintable() or char in '\n\t')
+        
+        logger.debug(f"After cleaning: {s[:200]}..." if len(s) > 200 else s)
         
         # 再次尝试解析
-        return json.loads(s)
+        try:
+            return json.loads(s)
+        except json.JSONDecodeError as e:
+            logger.error(f"JSON parsing failed after cleaning: {str(e)}")
+            logger.error(f"Problematic string: {s}")
+            return None
             
     except Exception as e:
         logger.error(f"Error sanitizing JSON string: {e}")
@@ -591,6 +617,78 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     return response
+
+# 聊天助手API
+@app.route('/chat', methods=['POST'])
+def chat():
+    try:
+        data = request.get_json()
+        message = data.get('message')
+        conversation_id = data.get('conversation_id')
+        
+        if not message:
+            return jsonify({'error': '消息不能为空'}), 400
+            
+        headers = {
+            "Authorization": f"Bearer {CHATBOT_API_KEY}",
+            "Content-Type": "application/json"
+        }
+        
+        # 构建符合Dify API要求的参数格式
+        payload = {
+            "query": message,
+            "response_mode": "streaming",
+            "conversation_id": conversation_id,
+            "user": "abc-123",
+            "inputs": {}
+        }
+        
+        def generate():
+            try:
+                # 使用正确的API端点
+                response = requests.post(
+                    f"{DIFY_BASE_URL}/chat-messages",
+                    headers=headers,
+                    json=payload,
+                    stream=True,
+                    timeout=30  # 添加超时设置
+                )
+                
+                if response.status_code != 200:
+                    error_message = "获取回复失败"
+                    if response.status_code == 429:
+                        error_message = "请求过于频繁，请稍后再试"
+                    elif response.status_code >= 500:
+                        error_message = "服务器内部错误，请稍后再试"
+                    yield f"data: {{\"error\": \"{error_message}\", \"status\": {response.status_code}}}\n\n"
+                    return
+                
+                for line in response.iter_lines():
+                    if line:
+                        try:
+                            decoded_line = line.decode('utf-8')
+                            # 确保只处理SSE数据行
+                            if decoded_line.startswith('data: '):
+                                yield f"{decoded_line}\n\n"
+                        except UnicodeDecodeError as e:
+                            logger.error(f"Error decoding response: {str(e)}")
+                            continue
+                        
+            except requests.Timeout:
+                logger.error("Request timeout in chat streaming")
+                yield f"data: {{\"error\": \"请求超时，请稍后重试\"}}\n\n"
+            except requests.RequestException as e:
+                logger.error(f"Request error in chat streaming: {str(e)}")
+                yield f"data: {{\"error\": \"网络请求失败，请检查网络连接\"}}\n\n"
+            except Exception as e:
+                logger.error(f"Error in chat streaming: {str(e)}")
+                yield f"data: {{\"error\": \"处理请求失败\"}}\n\n"
+        
+        return Response(generate(), mimetype='text/event-stream')
+        
+    except Exception as e:
+        logger.error(f"Error in chat endpoint: {str(e)}")
+        return jsonify({'error': '处理请求失败'}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
