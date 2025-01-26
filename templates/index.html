@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>产业链全景图谱分析系统</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -46,6 +46,7 @@
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            -webkit-overflow-scrolling: touch;
         }
 
         .loading-overlay {
@@ -75,6 +76,7 @@
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             z-index: 100;
+            touch-action: manipulation;
         }
 
         .control-button {
@@ -583,7 +585,7 @@
                 <div id="loading-spinner" class="hidden py-12">
                     <div class="flex flex-col items-center justify-center space-y-4">
                         <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
-                        <p class="text-gray-500">正在生成企业报告，请耐心等候...</p>
+                        <p class="text-gray-500">正在生成企业研究报告，请耐心等候...</p>
                     </div>
                 </div>
             </div>
@@ -651,28 +653,28 @@
                 series: [{
                     type: 'tree',
                     data: [data],
-                    left: '10%',  // 增加左侧边距
+                    left: '10%',
                     right: '15%',
-                    top: '20',
-                    bottom: '20',
+                    top: '40',  // 增加顶部边距
+                    bottom: '40',  // 增加底部边距
                     symbol: function(value, params) {
-                        // 末端节点不显示背景框
                         return params.data.children ? 'rect' : 'none';
                     },
-                    
+                    layout: 'orthogonal',
+                    orient: 'LR',
+                    initialTreeDepth: -1,
+                    nodeGap: 80,  // 进一步增加节点间距
                     symbolSize: function(value, params) {
                         const level = params.data.depth || 0;
-                        // 末端节点不需要设置大小
                         if (!params.data.children) {
                             return [0, 0];
                         }
-                        // 增加节点宽度以适应更长的文本
-                        const baseWidth = level === 0 ? 300 : 
-                                        level === 1 ? 260 :
-                                        level === 2 ? 220 : 200;
-                        const baseHeight = level === 0 ? 80 :
-                                         level === 1 ? 70 :
-                                         level === 2 ? 60 : 50;
+                        const baseWidth = level === 0 ? 320 : 
+                                        level === 1 ? 280 :
+                                        level === 2 ? 240 : 220;
+                        const baseHeight = level === 0 ? 90 :
+                                         level === 1 ? 80 :
+                                         level === 2 ? 70 : 60;
                         return [baseWidth, baseHeight];
                     },
 
@@ -865,7 +867,8 @@
             });
             
             const link = document.createElement('a');
-            link.download = '产业链图谱.png';
+            const industryName = document.querySelector('.search-input').value || '产业链';
+            link.download = `${industryName}产业链图谱.png`;
             link.href = url;
             document.body.appendChild(link);
             link.click();
@@ -965,7 +968,7 @@
             const downloadBtn = document.getElementById('download-report-btn');
             
             modal.classList.remove('hidden');
-            modalTitle.textContent = `${companyName} - 企业分析`;
+            modalTitle.textContent = `${companyName} 研究报告`;
             modalContent.innerHTML = '';
             loadingSpinner.classList.remove('hidden');
             downloadBtn.classList.add('hidden');
@@ -1068,7 +1071,7 @@
 <!-- 聊天对话框 -->
 <div id="chat-modal" class="fixed bottom-24 right-6 w-96 bg-white rounded-lg shadow-xl z-50 hidden">
     <div class="flex items-center justify-between p-4 border-b">
-        <h3 class="text-lg font-semibold text-gray-800">智能助手</h3>
+        <h3 class="text-lg font-semibold text-gray-800">产业研究小助手</h3>
         <button id="close-chat" class="text-gray-500 hover:text-gray-700">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -1086,7 +1089,7 @@
                 </div>
             </div>
             <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
-                <p class="text-sm text-gray-800">您好！我是智能助手，有什么可以帮您的吗？</p>
+                <p class="text-sm text-gray-800">您好！我是产业研究小助理，有什么可以帮您的吗？</p>
             </div>
         </div>
     </div>

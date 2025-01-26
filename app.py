@@ -6,6 +6,7 @@ import logging
 import re
 import time
 from datetime import datetime
+from urllib.parse import quote
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -596,13 +597,27 @@ def download_report(company_name):
         if company_name not in company_analysis_cache:
             return jsonify({'error': '报告不存在'}), 404
         
-        # 直接获取缓存的原始报告内容
+        # 获取缓存的报告内容
         report_content = company_analysis_cache[company_name]
         
+        # 生成HTML报告
+        report_data = process_company_analysis(report_content)
+        generated_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        
+        # 使用模板渲染HTML报告
+        html_content = render_template('report_template.html',
+                                     company_name=company_name,
+                                     generated_time=generated_time,
+                                     report_data=report_data)
+        
         # 创建响应
-        response = make_response(report_content)
-        response.headers['Content-Type'] = 'text/markdown'
-        response.headers['Content-Disposition'] = f'attachment; filename="{company_name}_分析报告.md"'
+        response = make_response(html_content)
+        response.headers['Content-Type'] = 'text/html; charset=utf-8'
+        
+        # 使用 urllib.parse.quote 对文件名进行编码
+        filename = f'{company_name}公司研究报告.html'
+        encoded_filename = quote(filename)
+        response.headers['Content-Disposition'] = f'attachment; filename*=UTF-8\'\'{encoded_filename}'
         
         return response
         
