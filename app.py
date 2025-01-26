@@ -7,11 +7,19 @@ import re
 import time
 from datetime import datetime
 from urllib.parse import quote
+from flask_cors import CORS
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+CORS(app)
+
+# 添加favicon.ico路由
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                             'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 # Dify API配置
 DIFY_BASE_URL = "https://api.dify.ai/v1"
@@ -41,6 +49,8 @@ def extract_json_from_markdown(text):
 
 def sanitize_json_string(s):
     """清理和修复JSON字符串"""
+    if not s:
+        return None
     try:
         if isinstance(s, dict):
             return s
@@ -104,7 +114,8 @@ def call_dify_api(industry_name):
     """调用Dify API获取产业链数据"""
     headers = {
         "Authorization": f"Bearer {INDUSTRY_CHAIN_API_KEY}",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Accept": "application/json"
     }
     
     payload = {
@@ -133,24 +144,15 @@ def call_dify_api(industry_name):
                 timeout=max_timeout
             )
             
-            logger.debug(f"API Response Status Code: {response.status_code}")
-            
-            if response.status_code != 200:
-                error_msg = f"API request failed with status code: {response.status_code}"
-                if response.status_code == 500:
-                    error_msg += " (服务器内部错误)"
-                elif response.status_code == 429:
-                    error_msg += " (请求频率限制)"
-                
-                logger.error(error_msg)
-                if attempt < retry_count - 1:
-                    logger.info(f"准备进行第 {attempt + 2} 次重试 (共 {retry_count} 次)")
-                    continue
-                return None
+            response.raise_for_status()  # 抛出非200状态码的异常
             
             result = response.json()
-            logger.debug(f"Parsed response: {json.dumps(result, ensure_ascii=False)}")
+            logger.debug(f"API Response: {json.dumps(result, ensure_ascii=False)}")
             
+            if not result:
+                logger.error("Empty response from API")
+                return None
+                
             # 获取并处理数据
             if 'data' in result and isinstance(result['data'], dict):
                 outputs = result['data'].get('outputs', {})
@@ -270,6 +272,79 @@ def clean_html_content(text):
 
 def call_company_analysis_api(company_name):
     """调用Dify API获取企业分析数据"""
+    # 检查缓存
+    if company_name in company_analysis_cache:
+        logger.info(f"Using cached analysis for company: {company_name}")
+        return company_analysis_cache[company_name]
+
+    headers = {
+        "Authorization": f"Bearer {COMPANY_ANALYSIS_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    
+    payload = {
+        "inputs": {
+            "company_name": company_name
+        },
+        "response_mode": "blocking",
+        "user": "default"
+    }
+    
+    retry_count = 5  # 增加重试次数
+    timeout_seconds = 180  # 增加超时时间
+    base_delay = 1  # 基础延迟时间（秒）
+    
+    for attempt in range(retry_count):
+        try:
+            # 使用指数退避策略计算延迟时间
+            if attempt > 0:
+                delay = base_delay * (2 ** (attempt - 1))  # 2, 4, 8, 16...
+                logger.info(f"Waiting {delay} seconds before retry {attempt + 1}")
+                time.sleep(delay)
+            
+            response = requests.post(
+                f"{DIFY_BASE_URL}/workflows/run",
+                headers=headers,
+                json=payload,
+                timeout=timeout_seconds
+            )
+            
+            if response.status_code != 200:
+                error_msg = f"Company Analysis API request failed with status code: {response.status_code}"
+                if response.status_code == 429:  # Rate limit
+                    error_msg += " (Rate limit exceeded)"
+                elif response.status_code >= 500:  # Server error
+                    error_msg += " (Server error)"
+                
+                logger.error(error_msg)
+                if attempt < retry_count - 1:
+                    continue
+                return None
+            
+            result = response.json()
+            
+            if 'data' in result and isinstance(result['data'], dict):
+                outputs = result['data'].get('outputs', {})
+                if isinstance(outputs, dict) and 'text' in outputs:
+                    text = clean_html_content(outputs['text'])
+                    company_analysis_cache[company_name] = text
+                    return text
+            
+            logger.error("Company Analysis Data structure validation failed")
+            return None
+            
+        except requests.exceptions.Timeout:
+            logger.warning(f"Timeout occurred on attempt {attempt + 1} of {retry_count}")
+            if attempt < retry_count - 1:
+                continue
+            logger.error("All retry attempts failed due to timeout")
+            return None
+        except Exception as e:
+            logger.error(f"Error in call_company_analysis_api: {str(e)}")
+            logger.exception(e)
+            if attempt < retry_count - 1:
+                continue
+            return None
     # 检查缓存
     if company_name in company_analysis_cache:
         logger.info(f"Using cached analysis for company: {company_name}")

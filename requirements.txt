@@ -1,3 +1,4 @@
 streamlit==1.31.0
 requests==2.31.0
 flask==2.3.3
+flask-cors==5.0.0
