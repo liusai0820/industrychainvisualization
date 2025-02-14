@@ -487,50 +487,179 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* 进度步骤样式 */
+        .progress-step {
+            flex: 1;
+            position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .progress-step.active .progress-icon {
+            color: #2563eb;
+        }
+
+        .progress-step.active .w-10 {
+            border-color: #2563eb;
+        }
+
+        .progress-line {
+            transition: width 1s ease-in-out;
+        }
+
+        /* 粒子动画 */
+        #particles-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* 搜索框动画 */
+        #search-container:focus-within {
+            transform: scale(1.02);
+        }
+
+        /* Logo动画 */
+        #logo-container {
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 进度条动画 */
+        .progress-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
     </style>
 </head>
-<body class="min-h-screen">
-    <div class="gradient-bg text-white py-8 px-4 sm:px-6 lg:px-8 mb-8">
-        <div class="max-w-7xl mx-auto">
-            <h1 class="text-4xl font-bold text-center mb-4">产业链全景图谱分析系统</h1>
-            <p class="text-xl text-center mb-8 opacity-90">智能分析产业链结构，快速生成完整产业链图谱</p>
-            
-            <div class="max-w-3xl mx-auto flex gap-4">
+<body class="min-h-screen bg-gray-50">
+    <!-- 搜索页面 -->
+    <div id="search-page" class="min-h-screen flex flex-col items-center justify-center px-4">
+        <div class="text-center mb-12 transform transition-all duration-500" id="logo-container">
+            <h1 class="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
+                产业链图谱
+            </h1>
+            <p class="text-gray-600 text-xl">智能分析产业链结构，快速生成完整产业链图谱</p>
+        </div>
+        
+        <div class="w-full max-w-2xl mx-auto relative transform transition-all duration-500" id="search-container">
+            <div class="relative">
                 <input 
                     type="text" 
                     id="industry-input"
-                    class="search-input flex-1 px-6 py-4 rounded-lg text-gray-800 text-lg placeholder-gray-400 focus:outline-none"
+                    class="w-full px-6 py-4 text-lg border-2 border-gray-200 rounded-full shadow-md focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all pl-12"
                     placeholder="请输入产业链名称，如：AI芯片、新能源汽车等"
                 />
+                <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
                 <button 
                     id="search-btn"
-                    class="search-button bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all"
                 >
                     生成图谱
                 </button>
-                <button 
-                    id="download-btn"
-                    class="search-button bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                    style="display: none;"
-                >
-                    下载图谱
-                </button>
+            </div>
+        </div>
+
+        <!-- 进度动画容器 -->
+        <div id="progress-container" class="w-full max-w-3xl mx-auto mt-12 hidden">
+            <!-- 进度步骤 -->
+            <div class="relative">
+                <!-- 进度线 -->
+                <div class="absolute top-1/2 left-0 w-full h-1 bg-gray-200 transform -translate-y-1/2">
+                    <div class="progress-line h-full w-0 bg-blue-600 transition-all duration-1000"></div>
+                </div>
+                
+                <!-- 进度步骤点 -->
+                <div class="relative flex justify-between">
+                    <div class="progress-step">
+                        <div class="w-10 h-10 bg-white border-2 border-gray-300 rounded-full flex items-center justify-center relative z-10 transition-all duration-500">
+                            <div class="progress-icon w-6 h-6 text-gray-400">
+                                <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="absolute top-12 left-1/2 transform -translate-x-1/2 whitespace-nowrap text-sm font-medium text-gray-500">
+                            数据收集
+                        </div>
+                    </div>
+                    
+                    <div class="progress-step">
+                        <div class="w-10 h-10 bg-white border-2 border-gray-300 rounded-full flex items-center justify-center relative z-10 transition-all duration-500">
+                            <div class="progress-icon w-6 h-6 text-gray-400">
+                                <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="absolute top-12 left-1/2 transform -translate-x-1/2 whitespace-nowrap text-sm font-medium text-gray-500">
+                            结构分析
+                        </div>
+                    </div>
+                    
+                    <div class="progress-step">
+                        <div class="w-10 h-10 bg-white border-2 border-gray-300 rounded-full flex items-center justify-center relative z-10 transition-all duration-500">
+                            <div class="progress-icon w-6 h-6 text-gray-400">
+                                <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="absolute top-12 left-1/2 transform -translate-x-1/2 whitespace-nowrap text-sm font-medium text-gray-500">
+                            图谱生成
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 动态粒子效果 -->
+            <div id="particles-container" class="absolute inset-0 pointer-events-none">
+                <canvas id="particles-canvas"></canvas>
+            </div>
+
+            <!-- 进度提示 -->
+            <div class="text-center mt-20">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-600 border-t-transparent"></div>
+                <p class="mt-4 text-lg text-gray-600" id="progress-text">正在收集产业链数据...</p>
             </div>
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div id="chart-container" class="chart-container relative min-h-[800px] p-6">
-            <div class="chart-wrapper w-full h-full"></div>
-            
-            <!-- 加载动画 -->
-            <div id="loading" class="loading-overlay hidden absolute inset-0 flex items-center justify-center">
-                <div class="text-center">
-                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent"></div>
-                    <p class="mt-4 text-lg text-gray-600">正在生成图谱...</p>
-                </div>
-            </div>
-        </div>
+    <!-- 图谱展示容器 -->
+    <div id="chart-container" class="hidden">
+        <div class="chart-wrapper w-full h-full"></div>
     </div>
 
     <!-- 控制按钮 -->
@@ -591,6 +720,93 @@
     </div>
 
     <script>
+        // 粒子动画
+        function initParticles() {
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            const particles = [];
+            const particleCount = 50;
+
+            // 设置画布尺寸
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            // 创建粒子
+            function createParticle() {
+                return {
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 3 + 1,
+                    speedX: Math.random() * 2 - 1,
+                    speedY: Math.random() * 2 - 1,
+                    opacity: Math.random() * 0.5 + 0.2
+                };
+            }
+
+            // 更新粒子
+            function updateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                particles.forEach(particle => {
+                    particle.x += particle.speedX;
+                    particle.y += particle.speedY;
+
+                    // 边界检查
+                    if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
+                    if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
+
+                    // 绘制粒子
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(37, 99, 235, ${particle.opacity})`;
+                    ctx.fill();
+                });
+
+                requestAnimationFrame(updateParticles);
+            }
+
+            // 初始化
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            // 创建初始粒子
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(createParticle());
+            }
+
+            // 开始动画
+            updateParticles();
+        }
+
+        // 更新进度动画
+        function updateProgress(step, text) {
+            const steps = document.querySelectorAll('.progress-step');
+            const progressLine = document.querySelector('.progress-line');
+            const progressText = document.getElementById('progress-text');
+
+            // 更新进度文本
+            progressText.textContent = text;
+
+            // 更新进度条
+            progressLine.style.width = `${(step / (steps.length - 1)) * 100}%`;
+
+            // 更新步骤状态
+            steps.forEach((stepEl, index) => {
+                if (index <= step) {
+                    stepEl.classList.add('active');
+                    stepEl.style.opacity = '1';
+                    stepEl.style.transform = 'translateY(0)';
+                }
+            });
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initParticles();
+        });
+
         // 初始化变量
         const chartContainer = document.querySelector('.chart-wrapper');
         const chart = echarts.init(chartContainer);

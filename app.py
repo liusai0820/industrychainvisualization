@@ -539,11 +539,11 @@ def get_graph_data():
             
         industry_name = data.get('industry_name', '').strip()
         logger.debug(f"Extracted industry_name: {industry_name}")
-
+        
         if not industry_name:
             logger.error("Missing or empty industry_name")
             return jsonify({"error": "请输入产业链名称"}), 400
-        
+            
         logger.debug(f"Processing request for industry: {industry_name}")
         
         chain_data = call_dify_api(industry_name)
