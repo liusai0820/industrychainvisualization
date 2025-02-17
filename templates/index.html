@@ -562,12 +562,14 @@
         }
     </style>
 </head>
+
+
 <body class="min-h-screen bg-gray-50">
     <!-- 搜索页面 -->
     <div id="search-page" class="min-h-screen flex flex-col items-center justify-center px-4">
         <div class="text-center mb-12 transform transition-all duration-500" id="logo-container">
             <h1 class="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
-                产业链图谱
+                产业链全景图谱生成系统
             </h1>
             <p class="text-gray-600 text-xl">智能分析产业链结构，快速生成完整产业链图谱</p>
         </div>
@@ -598,12 +600,12 @@
             <div class="relative">
                 <!-- 进度线 -->
                 <div class="absolute top-1/2 left-0 w-full h-1 bg-gray-200 transform -translate-y-1/2">
-                    <div class="progress-line h-full w-0 bg-blue-600 transition-all duration-1000"></div>
+                    <div id="progress-line" class="progress-line h-full w-0 bg-blue-600 transition-all duration-1000"></div>
                 </div>
                 
                 <!-- 进度步骤点 -->
                 <div class="relative flex justify-between">
-                    <div class="progress-step">
+                    <div class="progress-step flex flex-col items-center">
                         <div class="w-10 h-10 bg-white border-2 border-gray-300 rounded-full flex items-center justify-center relative z-10 transition-all duration-500">
                             <div class="progress-icon w-6 h-6 text-gray-400">
                                 <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -611,12 +613,12 @@
                                 </svg>
                             </div>
                         </div>
-                        <div class="absolute top-12 left-1/2 transform -translate-x-1/2 whitespace-nowrap text-sm font-medium text-gray-500">
+                        <div class="mt-2 text-sm font-medium text-gray-500">
                             数据收集
                         </div>
                     </div>
                     
-                    <div class="progress-step">
+                    <div class="progress-step flex flex-col items-center">
                         <div class="w-10 h-10 bg-white border-2 border-gray-300 rounded-full flex items-center justify-center relative z-10 transition-all duration-500">
                             <div class="progress-icon w-6 h-6 text-gray-400">
                                 <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -624,12 +626,12 @@
                                 </svg>
                             </div>
                         </div>
-                        <div class="absolute top-12 left-1/2 transform -translate-x-1/2 whitespace-nowrap text-sm font-medium text-gray-500">
+                        <div class="mt-2 text-sm font-medium text-gray-500">
                             结构分析
                         </div>
                     </div>
                     
-                    <div class="progress-step">
+                    <div class="progress-step flex flex-col items-center">
                         <div class="w-10 h-10 bg-white border-2 border-gray-300 rounded-full flex items-center justify-center relative z-10 transition-all duration-500">
                             <div class="progress-icon w-6 h-6 text-gray-400">
                                 <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -719,790 +721,53 @@
         </div>
     </div>
 
-    <script>
-        // 粒子动画
-        function initParticles() {
-            const canvas = document.getElementById('particles-canvas');
-            const ctx = canvas.getContext('2d');
-            const particles = [];
-            const particleCount = 50;
+    <!-- 聊天按钮 -->
+    <button id="chat-button" class="fixed bottom-6 right-6 bg-blue-600 text-white rounded-full p-4 shadow-lg hover:bg-blue-700 transition-colors z-50">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+        </svg>
+    </button>
 
-            // 设置画布尺寸
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-
-            // 创建粒子
-            function createParticle() {
-                return {
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 3 + 1,
-                    speedX: Math.random() * 2 - 1,
-                    speedY: Math.random() * 2 - 1,
-                    opacity: Math.random() * 0.5 + 0.2
-                };
-            }
-
-            // 更新粒子
-            function updateParticles() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                particles.forEach(particle => {
-                    particle.x += particle.speedX;
-                    particle.y += particle.speedY;
-
-                    // 边界检查
-                    if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
-                    if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
-
-                    // 绘制粒子
-                    ctx.beginPath();
-                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(37, 99, 235, ${particle.opacity})`;
-                    ctx.fill();
-                });
-
-                requestAnimationFrame(updateParticles);
-            }
-
-            // 初始化
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-
-            // 创建初始粒子
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(createParticle());
-            }
-
-            // 开始动画
-            updateParticles();
-        }
-
-        // 更新进度动画
-        function updateProgress(step, text) {
-            const steps = document.querySelectorAll('.progress-step');
-            const progressLine = document.querySelector('.progress-line');
-            const progressText = document.getElementById('progress-text');
-
-            // 更新进度文本
-            progressText.textContent = text;
-
-            // 更新进度条
-            progressLine.style.width = `${(step / (steps.length - 1)) * 100}%`;
-
-            // 更新步骤状态
-            steps.forEach((stepEl, index) => {
-                if (index <= step) {
-                    stepEl.classList.add('active');
-                    stepEl.style.opacity = '1';
-                    stepEl.style.transform = 'translateY(0)';
-                }
-            });
-        }
-
-        // 初始化
-        document.addEventListener('DOMContentLoaded', () => {
-            initParticles();
-        });
-
-        // 初始化变量
-        const chartContainer = document.querySelector('.chart-wrapper');
-        const chart = echarts.init(chartContainer);
-        const loading = document.getElementById('loading');
-        const tooltip = document.getElementById('tooltip');
-        let currentZoomLevel = 1;
-
-        // 错误提示函数
-        function showError(message) {
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-500 ease-in-out';
-            errorDiv.textContent = message;
-            document.body.appendChild(errorDiv);
-            
-            // 添加动画
-            setTimeout(() => errorDiv.style.transform = 'translateX(120%)', 3000);
-            setTimeout(() => errorDiv.remove(), 3500);
-        }
-
-        // 获取图谱数据
-        async function fetchGraphData(industryName = '') {
-            try {
-                loading.classList.remove('hidden');
-                
-                const response = await fetch('/get_graph_data', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({ industry_name: industryName })
-                });
-
-                const data = await response.json();
-                
-                if (!response.ok || data.error) {
-                    showError(data.error || '获取数据失败');
-                    return;
-                }
-
-                updateChart(data);
-                showDownloadButton();  // 显示下载按钮
-            } catch (error) {
-                console.error('Error:', error);
-                showError('获取数据失败，请稍后重试');
-            } finally {
-                loading.classList.add('hidden');
-            }
-        }
-
-        // 更新图表
-        function updateChart(data) {
-            const option = {
-                backgroundColor: '#ffffff',
-                tooltip: {
-                    show: false
-                },
-                series: [{
-                    type: 'tree',
-                    data: [data],
-                    left: '10%',  // 增加左侧边距
-                    right: '15%',
-                    top: '20',
-                    bottom: '20',
-                    symbol: function(value, params) {
-                        // 末端节点不显示背景框
-                        return params.data.children ? 'rect' : 'none';
-                    },
-                    
-                    symbolSize: function(value, params) {
-                        const level = params.data.depth || 0;
-                        // 末端节点不需要设置大小
-                        if (!params.data.children) {
-                            return [0, 0];
-                        }
-                        // 增加节点宽度以适应更长的文本
-                        const baseWidth = level === 0 ? 300 : 
-                                        level === 1 ? 260 :
-                                        level === 2 ? 220 : 200;
-                        const baseHeight = level === 0 ? 80 :
-                                         level === 1 ? 70 :
-                                         level === 2 ? 60 : 50;
-                        return [baseWidth, baseHeight];
-                    },
-
-                    itemStyle: {
-                        borderRadius: 8,
-                        shadowColor: 'rgba(0, 0, 0, 0.1)',
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowOffsetY: 4
-                    },
-
-                    label: {
-                        position: function(params) {
-                            // 末端节点的文字位置调整
-                            return params.data.children ? 'inside' : 'right';
-                        },
-                        formatter: function(params) {
-                            return params.data.name;
-                        },
-                        fontSize: function(params) {
-                            const level = params.data.depth || 0;
-                            // 末端节点字体稍小
-                            return level === 0 ? 18 :
-                                   level === 1 ? 16 :
-                                   level === 2 ? 14 :
-                                   !params.data.children ? 12 : 13;
-                        },
-                        fontWeight: function(params) {
-                            // 末端节点不加粗
-                            return params.data.children && params.data.depth <= 2 ? 'bold' : 'normal';
-                        },
-                        color: function(params) {
-                            // 末端节点使用深色文字
-                            return params.data.children ? '#ffffff' : '#1e293b';
-                        },
-                        padding: [8, 12]
-                    },
-
-                    lineStyle: {
-                        color: '#94a3b8',
-                        width: 1.5,
-                        curveness: 0.1
-                    },
-
-                    emphasis: {
-                        focus: 'descendant'
-                    },
-
-                    expandAndCollapse: true,
-                    animationDuration: 500,
-                    animationEasing: 'cubicOut',
-                    initialTreeDepth: -1,
-                    orient: 'LR',
-                    layout: 'orthogonal',
-                    edgeShape: 'polyline',
-                    edgeForkPosition: '50%',
-                    roam: false,
-                    
-                    // 优化布局参数
-                    layerPadding: 200,      // 增加层级之间的间距
-                    nodeGap: 25,            // 调整同层节点之间的间距
-                }]
-            };
-
-            // 设置节点样式
-            function setNodeStyle(node, level = 0) {
-                if (!node) return;
-                
-                // 定义每个层级的颜色
-                const levelColors = {
-                    root: { bg: '#4F46E5', text: '#ffffff' },     // 根节点：优雅的靛蓝色
-                    upstream: { bg: '#0EA5E9', text: '#ffffff' },  // 上游：清新的天蓝色
-                    midstream: { bg: '#10B981', text: '#ffffff' }, // 中游：柔和的翡翠绿
-                    downstream: { bg: '#8B5CF6', text: '#ffffff' } // 下游：淡雅的紫罗兰
-                };
-
-                // 根据节点名称和层级确定颜色
-                let style;
-                if (level === 0) {
-                    style = levelColors.root;
-                } else if (node.name.includes('上游')) {
-                    style = levelColors.upstream;
-                } else if (node.name.includes('中游')) {
-                    style = levelColors.midstream;
-                } else if (node.name.includes('下游')) {
-                    style = levelColors.downstream;
-                } else {
-                    // 根据父节点的类型继承颜色
-                    if (node.parent && node.parent.name) {
-                        if (node.parent.name.includes('上游')) {
-                            style = levelColors.upstream;
-                        } else if (node.parent.name.includes('中游')) {
-                            style = levelColors.midstream;
-                        } else if (node.parent.name.includes('下游')) {
-                            style = levelColors.downstream;
-                        } else {
-                            style = levelColors.root;
-                        }
-                    } else {
-                        style = levelColors.root;
-                    }
-                }
-
-                // 设置节点样式
-                if (node.children) {
-                    node.itemStyle = {
-                        color: style.bg,
-                        borderRadius: 8,
-                        borderWidth: 0
-                    };
-                    node.label = {
-                        color: style.text,
-                        position: 'inside',
-                        fontSize: level === 0 ? 18 :
-                                 level === 1 ? 16 :
-                                 level === 2 ? 14 : 13,
-                        fontWeight: level <= 2 ? 'bold' : 'normal'
-                    };
-                } else {
-                    // 末端节点样式
-                    node.label = {
-                        color: '#1e293b',
-                        position: 'right',
-                        fontSize: 12,
-                        fontWeight: 'normal'
-                    };
-                }
-
-                // 记录层级信息
-                node.depth = level;
-
-                // 递归处理子节点
-                if (node.children) {
-                    node.children.forEach(child => {
-                        // 将父节点信息传递给子节点
-                        child.parent = {
-                            name: node.name
-                        };
-                        setNodeStyle(child, level + 1);
-                    });
-                }
-            }
-
-            // 初始化根节点样式
-            setNodeStyle(option.series[0].data[0]);
-            
-            // 设置图表选项
-            chart.setOption({
-                ...option,
-                series: [{
-                    ...option.series[0],
-                    data: [option.series[0].data[0]]
-                }]
-            });
-            
-            // 添加点击事件处理
-            chart.off('click');  // 移除之前的点击事件
-            chart.on('click', function(params) {
-                // 只处理叶子节点（公司节点）的点击
-                if (params.data && !params.data.children) {
-                    showCompanyAnalysis(params.data.name);
-                }
-            });
-            
-            // 自定义提示框优化
-            chart.on('mouseover', function(params) {
-                if (params.dataType === 'node') {
-                    tooltip.style.display = 'block';
-                    tooltip.innerHTML = params.data.name;
-                    
-                    const pos = chart.convertToPixel({seriesIndex: 0}, params.data.position);
-                    const chartOffset = chart.getDom().getBoundingClientRect();
-                    
-                    tooltip.style.left = (chartOffset.left + pos[0] + 20) + 'px';
-                    tooltip.style.top = (chartOffset.top + pos[1]) + 'px';
-                }
-            });
-
-            chart.on('mouseout', function() {
-                tooltip.style.display = 'none';
-            });
-        }
-
-        // 添加下载功能
-        function downloadChart() {
-            const url = chart.getDataURL({
-                type: 'png',
-                pixelRatio: 2,
-                backgroundColor: '#fff'
-            });
-            
-            const link = document.createElement('a');
-            link.download = '产业链图谱.png';
-            link.href = url;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        // 显示下载按钮
-        function showDownloadButton() {
-            const downloadBtn = document.getElementById('download-btn');
-            downloadBtn.style.display = 'block';
-        }
-
-        // 事件监听
-        document.getElementById('download-btn').addEventListener('click', downloadChart);
-
-        // 调整图表尺寸
-        function adjustChartSize() {
-            const container = document.getElementById('chart-container');
-            const wrapper = document.querySelector('.chart-wrapper');
-            
-            // 设置更大的固定高度，允许滚动
-            const height = 2000;
-            wrapper.style.height = height + 'px';
-            wrapper.style.overflowY = 'auto';
-            wrapper.style.overflowX = 'auto';  // 允许水平滚动
-            wrapper.style.minWidth = '100%';   // 确保最小宽度
-            
-            chart.resize();
-        }
-
-        // 移除缩放相关的事件监听器
-        chart.off('mousewheel');
-        chart.off('globalout');
-
-        // 移除控制按钮
-        const controls = document.querySelector('.controls');
-        if (controls) {
-            controls.remove();
-        }
-
-        // 添加滚动条样式
-        const style = document.createElement('style');
-        style.textContent = `
-            .chart-wrapper::-webkit-scrollbar {
-                width: 12px;
-            }
-            
-            .chart-wrapper::-webkit-scrollbar-track {
-                background: #f1f5f9;
-                border-radius: 6px;
-            }
-            
-            .chart-wrapper::-webkit-scrollbar-thumb {
-                background: #94a3b8;
-                border-radius: 6px;
-                border: 3px solid #f1f5f9;
-            }
-            
-            .chart-wrapper::-webkit-scrollbar-thumb:hover {
-                background: #64748b;
-            }
-        `;
-        document.head.appendChild(style);
-
-        // 事件监听
-        window.addEventListener('resize', adjustChartSize);
-
-        document.getElementById('search-btn').addEventListener('click', () => {
-            const industryName = document.getElementById('industry-input').value.trim();
-            if (industryName) {
-                fetchGraphData(industryName);
-            } else {
-                showError('请输入产业链名称');
-            }
-        });
-
-        document.getElementById('industry-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                const industryName = e.target.value.trim();
-                if (industryName) {
-                    fetchGraphData(industryName);
-                } else {
-                    showError('请输入产业链名称');
-                }
-            }
-        });
-
-        // 初始化
-        adjustChartSize();
-
-        // 更新展示内容的函数
-        async function showCompanyAnalysis(companyName) {
-            const modal = document.getElementById('company-modal');
-            const modalTitle = document.getElementById('modal-title');
-            const modalContent = document.getElementById('modal-content');
-            const loadingSpinner = document.getElementById('loading-spinner');
-            const downloadBtn = document.getElementById('download-report-btn');
-            
-            modal.classList.remove('hidden');
-            modalTitle.textContent = `${companyName} - 企业分析`;
-            modalContent.innerHTML = '';
-            loadingSpinner.classList.remove('hidden');
-            downloadBtn.classList.add('hidden');
-            
-            try {
-                const response = await fetch('/get_company_analysis', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ company_name: companyName })
-                });
-                
-                const result = await response.json();
-                
-                if (result.success && result.data) {
-                    let formattedContent = '<div class="analysis-content p-8">';
-                    
-                    result.data.forEach(section => {
-                        const processedContent = section.content.replace(/^(\d+)\.(\d+)\.(\d+)\./gm, '<li class="level-3" data-index="$1.$2.$3.">')
-                            .replace(/^(\d+)\.(\d+)\./gm, '<li class="level-2" data-index="$1.$2.">')
-                            .replace(/^(\d+)\./gm, '<li class="level-1" data-index="$1.">')
-                            .replace(/<\/li>\s*<li/g, '</li><li');
-                        
-                        formattedContent += `
-                            <div class="analysis-section mb-8 bg-white rounded-lg shadow-sm">
-                                <div class="section-title text-lg font-semibold mb-3 pb-2 border-b">
-                                    ${section.title}
-                                </div>
-                                <div class="section-content space-y-3 text-gray-700">
-                                    <ul>
-                                        ${processedContent}
-                                    </ul>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    
-                    formattedContent += '</div>';
-                    modalContent.innerHTML = formattedContent;
-                    
-                    // 显示下载按钮并设置点击事件
-                    downloadBtn.classList.remove('hidden');
-                    downloadBtn.onclick = () => {
-                        window.open(`/download_report/${encodeURIComponent(companyName)}`, '_blank');
-                    };
-                } else {
-                    modalContent.innerHTML = `
-                        <div class="text-center py-8">
-                            <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                            </svg>
-                            <p class="text-lg text-gray-600 mb-2">获取数据失败</p>
-                            <p class="text-sm text-gray-500">${result.error || '未知错误'}</p>
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                modalContent.innerHTML = `
-                    <div class="text-center py-8">
-                        <svg class="w-16 h-16 mx-auto text-red-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        <p class="text-lg text-gray-600 mb-2">发生错误</p>
-                        <p class="text-sm text-gray-500">${error.message}</p>
-                    </div>
-                `;
-            } finally {
-                loadingSpinner.classList.add('hidden');
-            }
-        }
-        
-        // 关闭弹窗
-        document.getElementById('close-modal').addEventListener('click', function() {
-            document.getElementById('company-modal').classList.add('hidden');
-        });
-        
-        // 点击弹窗外部关闭
-        document.getElementById('company-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.classList.add('hidden');
-            }
-        });
-        
-        // ESC键关闭弹窗
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                document.getElementById('company-modal').classList.add('hidden');
-            }
-        });
-    </script>
-<!-- 聊天助手图标按钮 -->
-<div id="chat-button" class="fixed bottom-6 right-6 w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-blue-700 transition-all z-50">
-    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-4l-4 4-4-4z"/>
-    </svg>
-</div>
-
-<!-- 聊天对话框 -->
-<div id="chat-modal" class="fixed bottom-24 right-6 w-96 bg-white rounded-lg shadow-xl z-50 hidden">
-    <div class="flex items-center justify-between p-4 border-b">
-        <h3 class="text-lg font-semibold text-gray-800">智能助手</h3>
-        <button id="close-chat" class="text-gray-500 hover:text-gray-700">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-        </button>
-    </div>
-    <div id="chat-messages" class="p-4 h-96 overflow-y-auto space-y-4">
-        <!-- 消息将在这里动态添加 -->
-        <div class="flex items-start space-x-2">
-            <div class="flex-shrink-0">
-                <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                </div>
-            </div>
-            <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
-                <p class="text-sm text-gray-800">您好！我是智能助手，有什么可以帮您的吗？</p>
-            </div>
-        </div>
-    </div>
-    <div class="border-t p-4">
-        <div class="flex space-x-2">
-            <input type="text" id="chat-input" class="flex-1 border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="请输入您的问题...">
-            <button id="send-message" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                发送
+    <!-- 聊天窗口 -->
+    <div id="chat-modal" class="fixed bottom-24 right-6 w-96 bg-white rounded-lg shadow-xl z-50 hidden">
+        <!-- 聊天头部 -->
+        <div class="flex items-center justify-between p-4 border-b">
+            <h3 class="text-lg font-semibold text-gray-800">AI 助手</h3>
+            <button id="close-chat" class="text-gray-500 hover:text-gray-700">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
             </button>
         </div>
-    </div>
-</div>
-<script>
-    // 聊天助手相关的JavaScript代码
-    const chatButton = document.getElementById('chat-button');
-    const chatModal = document.getElementById('chat-modal');
-    const closeChat = document.getElementById('close-chat');
-    const chatInput = document.getElementById('chat-input');
-    const sendMessage = document.getElementById('send-message');
-    const chatMessages = document.getElementById('chat-messages');
-    let currentConversationId = null;
-
-    // 显示/隐藏聊天窗口
-    chatButton.addEventListener('click', () => {
-        chatModal.classList.toggle('hidden');
-        if (!chatModal.classList.contains('hidden')) {
-            chatInput.focus();
-        }
-    });
-
-    // 关闭聊天窗口
-    closeChat.addEventListener('click', () => {
-        chatModal.classList.add('hidden');
-    });
-
-    // 发送消息函数
-    async function sendChatMessage() {
-        const message = chatInput.value.trim();
-        if (!message) return;
-
-        // 添加用户消息到聊天界面
-        const userMessageHtml = `
-            <div class="flex items-start space-x-2 justify-end">
-                <div class="bg-blue-100 rounded-lg p-3 max-w-xs">
-                    <p class="text-sm text-gray-800">${message}</p>
-                </div>
+        
+        <!-- 聊天消息区域 -->
+        <div id="chat-messages" class="h-96 overflow-y-auto p-4 space-y-4">
+            <!-- 消息将在这里动态添加 -->
+        </div>
+        
+        <!-- 聊天输入区域 -->
+        <div class="border-t p-4">
+            <div class="flex space-x-2">
+                <textarea
+                    id="chat-input"
+                    class="flex-1 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                    placeholder="输入您的问题..."
+                    rows="2"
+                ></textarea>
+                <button
+                    id="send-message"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                    </svg>
+                </button>
             </div>
-        `;
-        chatMessages.insertAdjacentHTML('beforeend', userMessageHtml);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-        chatInput.value = '';
+        </div>
+    </div>
 
-        try {
-            // 显示加载状态
-            const loadingHtml = `
-                <div class="flex items-start space-x-2 loading-message">
-                    <div class="flex-shrink-0">
-                        <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
-                            <svg class="w-5 h-5 text-white animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
-                        <p class="text-sm text-gray-500">正在思考...</p>
-                    </div>
-                </div>
-            `;
-            chatMessages.insertAdjacentHTML('beforeend', loadingHtml);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-
-            // 创建markdown渲染函数
-            function renderMarkdown(text) {
-                // 处理标题
-                text = text.replace(/^# (.+)$/gm, '<h1 class="text-2xl font-bold mb-4">$1</h1>');
-                text = text.replace(/^## (.+)$/gm, '<h2 class="text-xl font-bold mb-3">$1</h2>');
-                text = text.replace(/^### (.+)$/gm, '<h3 class="text-lg font-bold mb-2">$1</h3>');
-
-                // 处理加粗
-                text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-
-                // 处理斜体
-                text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
-
-                // 处理序号列表
-                text = text.replace(/^\d+\. (.+)$/gm, '<div class="ml-4 mb-2">• $1</div>');
-
-                // 处理无序列表
-                text = text.replace(/^- (.+)$/gm, '<div class="ml-4 mb-2">• $1</div>');
-
-                // 处理段落
-                text = text.replace(/^(?!<[h|d]).+$/gm, '<p class="mb-4">$&</p>');
-
-                // 处理空行
-                text = text.replace(/^\s*$/gm, '<div class="h-4"></div>');
-
-                return text;
-            }
-
-            // 创建AI回复的消息容器
-            const aiMessageContainer = document.createElement('div');
-            aiMessageContainer.className = 'flex items-start space-x-2';
-            aiMessageContainer.innerHTML = `
-                <div class="flex-shrink-0">
-                    <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                </div>
-                <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
-                    <p class="text-sm text-gray-800"></p>
-                </div>
-            `;
-
-            // 发送请求到后端并处理SSE
-            const response = await fetch('/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    message: message,
-                    conversation_id: currentConversationId
-                })
-            });
-
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let aiMessageContent = '';
-
-            // 移除加载状态
-            const loadingMessage = chatMessages.querySelector('.loading-message');
-            if (loadingMessage) {
-                loadingMessage.remove();
-            }
-
-            // 添加AI消息容器到聊天界面
-            chatMessages.appendChild(aiMessageContainer);
-            const aiMessageText = aiMessageContainer.querySelector('p');
-
-            while (true) {
-                const {value, done} = await reader.read();
-                if (done) break;
-
-                const chunk = decoder.decode(value);
-                const lines = chunk.split('\n');
-
-                for (const line of lines) {
-                    if (line.startsWith('data: ')) {
-                        try {
-                            const data = JSON.parse(line.slice(6));
-                            
-                            if (data.error) {
-                                aiMessageText.textContent = `错误: ${data.error}`;
-                                break;
-                            }
-
-                            if (data.event === 'message') {
-                                aiMessageContent += data.answer || '';
-                                aiMessageText.innerHTML = renderMarkdown(aiMessageContent);
-                                currentConversationId = data.conversation_id;
-                            } else if (data.event === 'message_end') {
-                                // 消息结束，不需要特殊处理
-                                break;
-                            }
-                        } catch (e) {
-                            console.error('Error parsing SSE data:', e);
-                        }
-                    }
-                }
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-
-        } catch (error) {
-            console.error('Error:', error);
-            const errorHtml = `
-                <div class="flex items-start space-x-2">
-                    <div class="bg-red-100 rounded-lg p-3 max-w-xs">
-                        <p class="text-sm text-red-800">发生错误，请稍后重试</p>
-                    </div>
-                </div>
-            `;
-            chatMessages.insertAdjacentHTML('beforeend', errorHtml);
-        }
-
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    // 发送消息事件监听
-    sendMessage.addEventListener('click', sendChatMessage);
-
-    // 回车发送消息
-    chatInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendChatMessage();
-        }
-    });
-</script>
+    <!-- 引入必要的脚本 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

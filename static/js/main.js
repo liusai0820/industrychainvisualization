@@ -1,592 +1,870 @@
-// 全局变量
+// DOM元素
+const domElements = {
+    searchBtn: null,
+    industryInput: null,
+    searchPage: null,
+    chartContainer: null,
+    logoContainer: null,
+    searchContainer: null,
+    particlesCanvas: null,
+    modal: null,
+    modalTitle: null,
+    modalContent: null,
+    loadingSpinner: null,
+    downloadBtn: null,
+    progressContainer: null,
+    progressText: null,
+    progressSteps: null,
+    progressLine: null,
+    chatButton: null,
+    chatModal: null,
+    closeChat: null,
+    chatInput: null,
+    sendMessage: null,
+    chatMessages: null
+};
+
+// 初始化DOM元素
+function initializeDOMElements() {
+    console.log('Initializing DOM elements...');
+    
+    domElements.searchBtn = document.getElementById('search-btn');
+    domElements.industryInput = document.getElementById('industry-input');
+    domElements.searchPage = document.getElementById('search-page');
+    domElements.chartContainer = document.getElementById('chart-container');
+    domElements.logoContainer = document.getElementById('logo-container');
+    domElements.searchContainer = document.getElementById('search-container');
+    domElements.particlesCanvas = document.getElementById('particles-canvas');
+    domElements.modal = document.getElementById('company-modal');
+    domElements.modalTitle = document.getElementById('modal-title');
+    domElements.modalContent = document.getElementById('modal-content');
+    domElements.loadingSpinner = document.getElementById('loading-spinner');
+    domElements.downloadBtn = document.getElementById('download-report-btn');
+    domElements.progressContainer = document.getElementById('progress-container');
+    domElements.progressText = document.getElementById('progress-text');
+    domElements.progressSteps = document.getElementsByClassName('progress-step');
+    domElements.progressLine = document.getElementById('progress-line');
+    domElements.chatButton = document.getElementById('chat-button');
+    domElements.chatModal = document.getElementById('chat-modal');
+    domElements.closeChat = document.getElementById('close-chat');
+    domElements.chatInput = document.getElementById('chat-input');
+    domElements.sendMessage = document.getElementById('send-message');
+    domElements.chatMessages = document.getElementById('chat-messages');
+    
+    // 验证必要的DOM元素
+    const requiredElements = ['searchBtn', 'industryInput', 'searchPage', 'chartContainer'];
+    requiredElements.forEach(elementName => {
+        if (!domElements[elementName]) {
+            console.error(`Required DOM element not found: ${elementName}`);
+        }
+    });
+    
+    console.log('DOM elements initialized');
+}
+
+// 全局变量和DOM元素缓存
 let chart = null;
 
-// 初始化函数
-function initializeApp() {
-    console.log('Initializing app...');
-    
-    // 初始化图表
-    initializeChart();
-}
+// 粒子动画系统
+const ParticleSystem = {
+    particles: [],
+    particleCount: 50,
+    ctx: null,
 
-// 处理搜索事件
-async function handleSearch() {
-    console.log('handleSearch called');
-    const industryInput = document.getElementById('industry-input');
-    const industryName = industryInput.value.trim();
-    
-    if (!industryName) {
-        showError('请输入产业链名称');
-        return;
-    }
-    
-    console.log('Fetching data for industry:', industryName);
-    startProgress();
-    await fetchGraphData(industryName);
-}
-
-// 获取图谱数据
-async function fetchGraphData(industryName) {
-    console.log('fetchGraphData called with:', industryName);
-    const searchPage = document.getElementById('search-page');
-    const chartContainer = document.getElementById('chart-container');
-    
-    try {
-        // 第一步：数据收集
-        updateProgress(0, '正在收集产业链数据...');
-        await new Promise(resolve => setTimeout(resolve, 1000));
+    initialize() {
+        if (!domElements.particlesCanvas) return;
         
-        // 发送请求
-        const response = await fetch('/get_graph_data', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({ industry_name: industryName })
+        this.ctx = domElements.particlesCanvas.getContext('2d');
+        this.resizeCanvas();
+        this.createParticles();
+        this.startAnimation();
+        
+        window.addEventListener('resize', () => this.resizeCanvas());
+    },
+
+    resizeCanvas() {
+        if (!domElements.particlesCanvas) return;
+        domElements.particlesCanvas.width = window.innerWidth;
+        domElements.particlesCanvas.height = window.innerHeight;
+    },
+
+    createParticles() {
+        this.particles = Array.from({ length: this.particleCount }, () => ({
+            x: Math.random() * domElements.particlesCanvas.width,
+            y: Math.random() * domElements.particlesCanvas.height,
+            size: Math.random() * 3 + 1,
+            speedX: Math.random() * 2 - 1,
+            speedY: Math.random() * 2 - 1,
+            opacity: Math.random() * 0.5 + 0.2
+        }));
+    },
+
+    updateParticles() {
+        if (!this.ctx) return;
+        
+        this.ctx.clearRect(0, 0, domElements.particlesCanvas.width, domElements.particlesCanvas.height);
+        
+        this.particles.forEach(particle => {
+            particle.x += particle.speedX;
+            particle.y += particle.speedY;
+
+            if (particle.x < 0 || particle.x > domElements.particlesCanvas.width) particle.speedX *= -1;
+            if (particle.y < 0 || particle.y > domElements.particlesCanvas.height) particle.speedY *= -1;
+
+            this.ctx.beginPath();
+            this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            this.ctx.fillStyle = `rgba(37, 99, 235, ${particle.opacity})`;
+            this.ctx.fill();
         });
 
-        // 第二步：结构分析
-        updateProgress(1, '正在分析产业链结构...');
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        requestAnimationFrame(() => this.updateParticles());
+    },
 
-        const data = await response.json();
-        
-        if (!response.ok || data.error) {
-            throw new Error(data.error || '获取数据失败');
+    startAnimation() {
+        this.updateParticles();
+    }
+};
+
+// 进度系统
+const ProgressSystem = {
+    currentStep: 0,
+    totalSteps: 3,
+    
+    async start() {
+        console.log('Starting progress system...');
+        this.currentStep = 0;
+        this.show();
+        this.moveUIForProgress();
+        await this.updateProgress(0, '正在收集产业链数据...');
+    },
+
+    show() {
+        console.log('Showing progress container');
+        const progressContainer = document.getElementById('progress-container');
+        if (progressContainer) {
+            progressContainer.classList.remove('hidden');
+        } else {
+            console.error('Progress container not found');
         }
+    },
 
-        // 第三步：图谱生成
-        updateProgress(2, '正在生成产业链图谱...');
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        // 更新图表
-        updateChart(data);
-        
-        // 显示完成状态
-        updateProgress(2, '图谱生成完成！');
-        
-        // 等待一会儿再显示图表
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // 隐藏搜索页面，显示图表
-        if (searchPage && chartContainer) {
-            searchPage.classList.add('hidden');
-            chartContainer.classList.remove('hidden');
-        }
-        
-        // 显示下载按钮
-        showDownloadButton();
-    } catch (error) {
-        console.error('Error in fetchGraphData:', error);
-        showError(error.message || '获取数据失败，请稍后重试');
-        
-        // 重置进度条
+    hide() {
         const progressContainer = document.getElementById('progress-container');
         if (progressContainer) {
             progressContainer.classList.add('hidden');
         }
-    }
-}
+    },
 
-// 初始化图表
-function initializeChart() {
-    const chartContainer = document.querySelector('.chart-wrapper');
-    if (chartContainer && !chart) {
-        chart = echarts.init(chartContainer);
+    moveUIForProgress() {
+        console.log('Moving UI elements for progress');
+        const logoContainer = document.getElementById('logo-container');
+        const searchContainer = document.getElementById('search-container');
+
+        if (logoContainer) {
+            logoContainer.style.transform = 'translateY(-200px)';
+        }
+        if (searchContainer) {
+            searchContainer.style.transform = 'translateY(-180px)';
+        }
+    },
+
+    async updateProgress(step, text) {
+        console.log('Updating progress:', step, text);
+        this.currentStep = step;
+
+        // 更新进度文本
+        const progressText = document.getElementById('progress-text');
+        if (progressText) {
+            progressText.textContent = text;
+        }
+
+        // 更新进度线
+        const progressLine = document.getElementById('progress-line');
+        if (progressLine) {
+            const percentage = (step / (this.totalSteps - 1)) * 100;
+            progressLine.style.width = `${percentage}%`;
+            console.log('Progress line width set to:', `${percentage}%`);
+        } else {
+            console.error('Progress line element not found');
+        }
+
+        // 更新进度步骤
+        const steps = document.getElementsByClassName('progress-step');
+        if (steps && steps.length > 0) {
+            Array.from(steps).forEach((stepEl, index) => {
+                if (index <= step) {
+                    stepEl.classList.add('active');
+                    stepEl.style.opacity = '1';
+                    stepEl.style.transform = 'translateY(0)';
+                }
+            });
+        } else {
+            console.error('Progress steps not found');
+        }
+
+        // 添加延迟以显示进度动画
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    },
+
+    reset() {
+        console.log('Resetting progress system');
+        this.currentStep = 0;
+        this.hide();
+        
+        const steps = document.getElementsByClassName('progress-step');
+        if (steps) {
+            Array.from(steps).forEach(step => {
+                step.classList.remove('active');
+                step.style.opacity = '0';
+                step.style.transform = 'translateY(20px)';
+            });
+        }
+        
+        const progressLine = document.getElementById('progress-line');
+        if (progressLine) {
+            progressLine.style.width = '0';
+        }
+    }
+};
+
+// 图表系统
+const ChartSystem = {
+    chart: null,
+    
+    initialize() {
+        console.log('Initializing chart system...');
+        if (!domElements.chartContainer) {
+            console.error('Chart container not found');
+            return;
+        }
+        
+        // 初始化ECharts实例
+        this.chart = echarts.init(domElements.chartContainer.querySelector('.chart-wrapper'));
+        console.log('Chart initialized');
+        
+        // 监听窗口大小变化
         window.addEventListener('resize', () => {
-            if (chart) {
-                chart.resize();
+            if (this.chart) {
+                this.chart.resize();
             }
         });
-    }
-}
+    },
 
-// 处理数据结构
-function processData(data) {
-    try {
-        if (!data) {
-            throw new Error('数据不能为空');
+    async show(data) {
+        console.log('Showing chart with data:', data);
+        if (!this.chart) {
+            console.error('Chart not initialized');
+            return;
         }
 
-        // 处理API直接返回的错误信息
-        if (data.error) {
-            throw new Error(data.error);
-        }
+        try {
+            // 隐藏搜索页面
+            if (domElements.searchPage) {
+                domElements.searchPage.style.display = 'none';
+            }
 
-        // 获取产业链名称
-        const chainName = data.产业链 || data.name || '未知产业链';
-        
-        // 创建三个主要环节（上中下游）
-        const mainSections = ['上游', '中游', '下游'];
-        const processedData = {
-            name: chainName,
-            children: mainSections.map(section => ({
-                name: section,
-                children: []
-            }))
-        };
+            // 显示图表容器
+            if (domElements.chartContainer) {
+                domElements.chartContainer.classList.remove('hidden');
+                // 确保图表容器有正确的尺寸
+                domElements.chartContainer.style.height = '100vh';
+                domElements.chartContainer.style.width = '100vw';
+                this.chart.resize();
+            }
 
-        // 处理环节数据
-        const levels = data.环节 || data.children || [];
-        levels.forEach(level => {
-            const levelName = level.环节名称 || level.name;
-            const sectionIndex = mainSections.findIndex(section => levelName.includes(section));
+            // 生成并设置图表配置
+            const option = this.generateChartOption(data);
+            console.log('Chart option generated:', option);
             
-            if (sectionIndex !== -1) {
-                const subLevels = level.子环节 || level.children || [];
-                processedData.children[sectionIndex].children = subLevels.map(subLevel => {
-                    const subLevelName = subLevel.子环节名称 || subLevel.name;
-                    let companies = [];
+            // 设置图表配置
+            this.chart.setOption(option, true);
+            console.log('Chart option set successfully');
+            
+        } catch (error) {
+            console.error('Error showing chart:', error);
+            UISystem.showError('图表显示失败：' + error.message);
+        }
+    },
 
-                    if (subLevel.代表公司) {
-                        if (typeof subLevel.代表公司 === 'string') {
-                            companies = subLevel.代表公司.split(/[,、；;]/).map(c => c.trim()).filter(Boolean);
-                        } else if (Array.isArray(subLevel.代表公司)) {
-                            companies = subLevel.代表公司;
-                        }
-                    } else if (subLevel.children) {
-                        companies = subLevel.children.map(c => c.name || '未知公司').filter(Boolean);
+    generateChartOption(data) {
+        console.log('Generating chart option with data:', data);
+        
+        // 确保数据有效性
+        if (!data || !data.children || !Array.isArray(data.children)) {
+            console.error('Invalid data structure:', data);
+            throw new Error('数据结构无效');
+        }
+
+        // 处理数据
+        const { nodes, links } = this.processData(data);
+        console.log('Processed nodes:', nodes);
+        console.log('Processed links:', links);
+
+        return {
+            backgroundColor: '#061831',
+            tooltip: {
+                show: true,
+                formatter: '{b}'
+            },
+            series: [{
+                type: 'graph',
+                layout: 'force',
+                force: {
+                    repulsion: 200,
+                    gravity: 0.1,
+                    edgeLength: 100,
+                    layoutAnimation: true
+                },
+                data: nodes,
+                links: links,
+                roam: true,
+                draggable: true,
+                symbolSize: 30,
+                itemStyle: {
+                    color: '#4b7bec',
+                    borderColor: '#fff',
+                    borderWidth: 2
+                },
+                lineStyle: {
+                    color: '#4b7bec',
+                    width: 1,
+                    opacity: 0.6
+                },
+                label: {
+                    show: true,
+                    position: 'right',
+                    formatter: '{b}',
+                    fontSize: 12,
+                    color: '#fff',
+                    backgroundColor: 'transparent'
+                },
+                emphasis: {
+                    focus: 'adjacency',
+                    lineStyle: {
+                        width: 2
                     }
+                }
+            }]
+        };
+    },
 
-                    return {
-                        name: subLevelName,
-                        children: companies.map(company => ({
-                            name: typeof company === 'string' ? company : company.name || '未知公司'
-                        }))
-                    };
+    processData(data) {
+        const nodes = [];
+        const links = [];
+        const nodeMap = new Map();
+
+        // 处理每个部分
+        data.children.forEach((section, sectionIndex) => {
+            if (!section.children) return;
+
+            section.children.forEach((category, categoryIndex) => {
+                if (!category.name) return;
+
+                // 添加类别节点
+                const categoryId = `category_${sectionIndex}_${categoryIndex}`;
+                nodes.push({
+                    id: categoryId,
+                    name: category.name,
+                    value: category.name,
+                    category: 0
+                });
+                nodeMap.set(category.name, categoryId);
+
+                // 处理公司节点
+                if (category.children && Array.isArray(category.children)) {
+                    category.children.forEach((company, companyIndex) => {
+                        if (!company.name) return;
+
+                        const companyId = `company_${sectionIndex}_${categoryIndex}_${companyIndex}`;
+                        nodes.push({
+                            id: companyId,
+                            name: company.name,
+                            value: company.name,
+                            category: 1
+                        });
+                        nodeMap.set(company.name, companyId);
+
+                        // 添加连接
+                        links.push({
+                            source: categoryId,
+                            target: companyId
+                        });
+                    });
+                }
+            });
+        });
+
+        return { nodes, links };
+    }
+};
+
+// UI系统
+const UISystem = {
+    showError(message) {
+        console.log('Showing error:', message);
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-500 ease-in-out';
+        errorDiv.textContent = message;
+        document.body.appendChild(errorDiv);
+        
+        setTimeout(() => errorDiv.style.transform = 'translateX(120%)', 3000);
+        setTimeout(() => errorDiv.remove(), 3500);
+    },
+
+    showDownloadButton() {
+        console.log('Showing download button');
+        if (domElements.downloadBtn) {
+            domElements.downloadBtn.classList.remove('hidden');
+        }
+    },
+
+    resetUI() {
+        if (domElements.searchPage) {
+            domElements.searchPage.style.display = 'flex';
+            domElements.searchPage.style.opacity = '1';
+            domElements.searchPage.style.transform = 'none';
+        }
+
+        if (domElements.chartContainer) {
+            domElements.chartContainer.classList.add('hidden');
+        }
+
+        if (domElements.logoContainer) {
+            domElements.logoContainer.style.transform = 'none';
+        }
+
+        if (domElements.searchContainer) {
+            domElements.searchContainer.style.transform = 'none';
+        }
+
+        ProgressSystem.reset();
+    }
+};
+
+// 数据处理系统
+const DataSystem = {
+    async fetchGraphData(industryName) {
+        try {
+            console.log('开始获取产业链数据:', industryName);
+            
+            await ProgressSystem.updateProgress(0, '正在收集产业链数据...');
+            
+            console.log('发送请求到后端...');
+            const response = await fetch('/get_graph_data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ industry_name: industryName })
+            });
+
+            console.log('收到后端响应:', response.status, response.statusText);
+            
+            // 检查响应状态
+            if (!response.ok) {
+                let errorMessage = `请求失败 (${response.status})`;
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.error || errorMessage;
+                } catch (e) {
+                    console.error('解析错误响应失败:', e);
+                }
+                throw new Error(errorMessage);
+            }
+            
+            await ProgressSystem.updateProgress(1, '正在分析产业链结构...');
+            
+            console.log('开始解析响应数据...');
+            const data = await response.json();
+            console.log('解析后的数据:', data);
+            
+            // 验证数据结构
+            if (!data || typeof data !== 'object') {
+                throw new Error('返回的数据格式无效');
+            }
+
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            await ProgressSystem.updateProgress(2, '正在生成产业链图谱...');
+            
+            console.log('开始生成图表...');
+            await ChartSystem.show(data);
+            
+            console.log('图表生成完成');
+            await ProgressSystem.updateProgress(2, '图谱生成完成！');
+            
+        } catch (error) {
+            console.error('获取产业链数据失败:', error);
+            let errorMessage = error.message || '获取数据失败，请稍后重试';
+            
+            // 根据错误类型提供更具体的错误信息
+            if (error instanceof TypeError && error.message.includes('fetch')) {
+                errorMessage = '网络连接失败，请检查网络连接';
+            } else if (error.message.includes('timeout')) {
+                errorMessage = '请求超时，请稍后重试';
+            } else if (error.message.includes('JSON')) {
+                errorMessage = '数据格式错误，请联系管理员';
+            }
+            
+            UISystem.showError(errorMessage);
+            ProgressSystem.reset();
+        }
+    },
+
+    async fetchCompanyAnalysis(companyName) {
+        try {
+            const response = await fetch('/get_company_analysis', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ company_name: companyName })
+            });
+            
+            const result = await response.json();
+            return result;
+            
+        } catch (error) {
+            console.error('Error in fetchCompanyAnalysis:', error);
+            throw error;
+        }
+    }
+};
+
+// 事件处理系统
+const EventSystem = {
+    initialize() {
+        console.log('Initializing event system...');
+        
+        // 搜索相关事件
+        if (!domElements.searchBtn || !domElements.industryInput) {
+            console.error('Search elements not found');
+            return;
+        }
+
+        console.log('Adding search event listeners...');
+        
+        // 搜索按钮点击事件
+        domElements.searchBtn.addEventListener('click', async () => {
+            console.log('Search button clicked');
+            await this.handleSearch();
+        });
+
+        // 输入框回车事件
+        domElements.industryInput.addEventListener('keypress', async (e) => {
+            if (e.key === 'Enter') {
+                console.log('Enter key pressed');
+                await this.handleSearch();
+            }
+        });
+
+        // 图表点击事件
+        if (ChartSystem.chart) {
+            ChartSystem.chart.on('click', async (params) => {
+                if (params.data && !params.data.children) {
+                    await this.handleCompanyClick(params.data.name);
+                }
+            });
+        }
+
+        console.log('Event listeners added successfully');
+    },
+
+    async handleSearch() {
+        try {
+            const value = domElements.industryInput.value.trim();
+            if (!value) {
+                UISystem.showError('请输入产业链名称');
+                return;
+            }
+
+            console.log('Starting search for:', value);
+            await ProgressSystem.start();
+            await DataSystem.fetchGraphData(value);
+        } catch (error) {
+            console.error('Search error:', error);
+            UISystem.showError(error.message || '搜索过程中发生错误');
+            ProgressSystem.reset();
+        }
+    },
+
+    async handleCompanyClick(companyName) {
+        try {
+            if (!companyName) {
+                throw new Error('公司名称不能为空');
+            }
+            
+            // 显示加载动画
+            if (domElements.loadingSpinner) {
+                domElements.loadingSpinner.classList.remove('hidden');
+            }
+            
+            const result = await DataSystem.fetchCompanyAnalysis(companyName);
+            
+            if (result.error) {
+                throw new Error(result.error);
+            }
+            
+            // 更新模态框内容
+            if (domElements.modalTitle) {
+                domElements.modalTitle.textContent = `${companyName} - 企业分析报告`;
+            }
+            
+            if (domElements.modalContent) {
+                domElements.modalContent.innerHTML = '';
+                result.data.forEach(section => {
+                    const sectionDiv = document.createElement('div');
+                    sectionDiv.className = 'analysis-section mb-6';
+                    sectionDiv.innerHTML = `
+                        <h3 class="section-title">${section.title}</h3>
+                        <div class="section-content">${section.content}</div>
+                    `;
+                    domElements.modalContent.appendChild(sectionDiv);
                 });
             }
-        });
-
-        return processedData;
-    } catch (error) {
-        console.error('数据处理错误:', error);
-        showError(error.message || '数据格式无效');
-        return {
-            name: '数据处理错误',
-            children: []
-        };
-    }
-}
-
-// 更新图表
-function updateChart(data) {
-    if (!chart) {
-        initializeChart();
-    }
-
-    const processedData = processData(data);
-
-    const option = {
-        backgroundColor: '#ffffff',
-        title: {
-            text: processedData.name,
-            left: 'center',
-            top: 20,
-            textStyle: {
-                fontSize: 24,
-                fontWeight: 'bold',
-                color: '#333'
+            
+            // 显示模态框
+            if (domElements.modal) {
+                domElements.modal.classList.remove('hidden');
             }
-        },
-        graphic: []
-    };
-
-    // 定义三列的基本配置
-    const columns = [
-        { name: '上游', color: '#4477ee', left: '5%', width: '26%', title: '上游：基础设施与软件' },
-        { name: '中游', color: '#44aa44', left: '37%', width: '26%', title: '中游：设备制造与集成' },
-        { name: '下游', color: '#ee7744', left: '69%', width: '26%', title: '下游：应用服务' }
-    ];
-
-    // 计算每列的最大高度
-    let maxHeight = 120;
-
-    // 渲染每一列
-    processedData.children.forEach((stream, columnIndex) => {
-        const column = columns[columnIndex];
-        let currentY = 120;
-
-        // 添加列标题
-        option.graphic.push({
-            type: 'group',
-            left: column.left,
-            top: 70,
-            children: [
-                {
-                    type: 'rect',
-                    shape: {
-                        width: column.width,
-                        height: 40,
-                        r: 4
-                    },
-                    style: {
-                        fill: column.color,
-                        opacity: 0.1
-                    }
-                },
-                {
-                    type: 'text',
-                    style: {
-                        text: column.title,
-                        font: 'bold 16px sans-serif',
-                        fill: column.color,
-                        textAlign: 'left',
-                        textVerticalAlign: 'middle'
-                    },
-                    left: 15,
-                    top: 20
-                }
-            ]
-        });
-
-        // 渲染每个分类卡片
-        stream.children.forEach((segment) => {
-            const companyCount = segment.children.length;
-            const cardHeight = 40 + (companyCount * 30) + 20;
-
-            option.graphic.push({
-                type: 'group',
-                left: column.left,
-                top: currentY,
-                children: [
-                    {
-                        type: 'rect',
-                        shape: {
-                            width: column.width,
-                            height: cardHeight,
-                            r: 8
-                        },
-                        style: {
-                            fill: '#ffffff',
-                            stroke: column.color,
-                            lineWidth: 1,
-                            shadowBlur: 4,
-                            shadowColor: 'rgba(0,0,0,0.1)',
-                            shadowOffsetX: 0,
-                            shadowOffsetY: 2
-                        }
-                    },
-                    {
-                        type: 'text',
-                        left: 15,
-                        top: 15,
-                        style: {
-                            text: segment.name,
-                            font: 'bold 14px sans-serif',
-                            fill: column.color,
-                            textAlign: 'left'
-                        }
-                    },
-                    ...segment.children.map((company, index) => ({
-                        type: 'text',
-                        left: 20,
-                        top: 45 + (index * 30),
-                        style: {
-                            text: company.name,
-                            font: '13px sans-serif',
-                            fill: '#333333',
-                            textAlign: 'left'
-                        },
-                        onclick: function() {
-                            showCompanyAnalysis(company.name);
-                        }
-                    }))
-                ]
-            });
-
-            currentY += cardHeight + 20;
-        });
-
-        maxHeight = Math.max(maxHeight, currentY);
-    });
-
-    // 添加顶部横条
-    option.graphic.push({
-        type: 'group',
-        top: 70,
-        left: '5%',
-        children: [
-            {
-                type: 'rect',
-                shape: {
-                    width: '90%',
-                    height: 40,
-                    r: 0
-                },
-                style: {
-                    fill: '#f0f2f5'
-                }
+            
+        } catch (error) {
+            console.error('Company analysis error:', error);
+            UISystem.showError(error.message || '获取公司分析失败');
+        } finally {
+            // 隐藏加载动画
+            if (domElements.loadingSpinner) {
+                domElements.loadingSpinner.classList.add('hidden');
             }
-        ]
-    });
-
-    const chartContainer = document.querySelector('.chart-wrapper');
-    chartContainer.style.height = `${maxHeight + 50}px`;
-
-    chart.setOption(option);
-    chart.resize();
-}
-
-// 错误提示函数
-function showError(message) {
-    console.log('Showing error:', message);
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-500 ease-in-out';
-    errorDiv.textContent = message;
-    document.body.appendChild(errorDiv);
-    
-    // 添加动画
-    setTimeout(() => errorDiv.style.transform = 'translateX(120%)', 3000);
-    setTimeout(() => errorDiv.remove(), 3500);
-}
-
-// 显示下载按钮
-function showDownloadButton() {
-    console.log('Showing download button');
-    const downloadBtn = document.getElementById('download-report-btn');
-    if (downloadBtn) {
-        downloadBtn.classList.remove('hidden');
-    }
-}
-
-// 开始进度动画
-function startProgress() {
-    const searchPage = document.getElementById('search-page');
-    const progressContainer = document.getElementById('progress-container');
-    const logoContainer = document.getElementById('logo-container');
-    const searchContainer = document.getElementById('search-container');
-    
-    // 显示进度容器
-    progressContainer.classList.remove('hidden');
-    
-    // 移动搜索框和Logo到顶部
-    logoContainer.style.transform = 'translateY(-200px)';
-    searchContainer.style.transform = 'translateY(-180px)';
-    
-    // 初始化进度
-    let currentStep = 0;
-    const steps = [
-        '正在收集产业链数据...',
-        '正在分析产业链结构...',
-        '正在生成产业链图谱...'
-    ];
-    
-    // 更新第一步
-    updateProgress(0, steps[0]);
-    
-    // 模拟进度更新
-    const interval = setInterval(() => {
-        currentStep++;
-        if (currentStep < steps.length) {
-            updateProgress(currentStep, steps[currentStep]);
-        } else {
-            clearInterval(interval);
         }
-    }, 3000);
-    
-    return interval;
-}
+    }
+};
 
-// 显示图表
-function showChart(data) {
-    const searchPage = document.getElementById('search-page');
-    const chartContainer = document.getElementById('chart-container');
-    const progressContainer = document.getElementById('progress-container');
-    
-    // 淡出搜索页面
-    searchPage.style.opacity = '0';
-    searchPage.style.transform = 'scale(0.95)';
-    
-    setTimeout(() => {
-        // 隐藏搜索页面和进度条
-        searchPage.style.display = 'none';
-        progressContainer.style.display = 'none';
-        
-        // 显示图表容器
-        chartContainer.classList.remove('hidden');
-        chartContainer.style.opacity = '0';
-        
-        setTimeout(() => {
-            // 淡入图表
-            chartContainer.style.opacity = '1';
-            chartContainer.style.transform = 'none';
-            
-            // 确保图表正确渲染
-            if (chart) {
-                chart.resize();
+// 聊天系统
+const ChatSystem = {
+    currentConversationId: null,
+
+    initialize() {
+        if (!domElements.chatButton || !domElements.chatModal) return;
+
+        // 绑定事件监听器
+        domElements.chatButton.addEventListener('click', () => this.toggleChat());
+        domElements.closeChat.addEventListener('click', () => this.hideChat());
+        domElements.sendMessage.addEventListener('click', () => this.sendMessage());
+        domElements.chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                this.sendMessage();
             }
-        }, 50);
-    }, 500);
-}
-
-// 重置UI
-function resetUI() {
-    const searchPage = document.getElementById('search-page');
-    const chartContainer = document.getElementById('chart-container');
-    const progressContainer = document.getElementById('progress-container');
-    const logoContainer = document.getElementById('logo-container');
-    const searchContainer = document.getElementById('search-container');
-    
-    // 重置所有状态
-    searchPage.style.display = 'flex';
-    searchPage.style.opacity = '1';
-    searchPage.style.transform = 'none';
-    
-    chartContainer.classList.add('hidden');
-    progressContainer.classList.add('hidden');
-    
-    logoContainer.style.transform = 'none';
-    searchContainer.style.transform = 'none';
-    
-    // 重置进度条
-    const steps = document.querySelectorAll('.progress-step');
-    const progressLine = document.querySelector('.progress-line');
-    
-    steps.forEach(step => {
-        step.classList.remove('active');
-        step.style.opacity = '0';
-        step.style.transform = 'translateY(20px)';
-    });
-    
-    progressLine.style.width = '0';
-}
-
-// 显示企业分析
-async function showCompanyAnalysis(companyName) {
-    const modal = document.getElementById('company-modal');
-    const modalTitle = document.getElementById('modal-title');
-    const modalContent = document.getElementById('modal-content');
-    const loadingSpinner = document.getElementById('loading-spinner');
-    const downloadBtn = document.getElementById('download-report-btn');
-    
-    modal.classList.remove('hidden');
-    modalTitle.textContent = `${companyName} - 企业分析`;
-    modalContent.innerHTML = '';
-    loadingSpinner.classList.remove('hidden');
-    downloadBtn.classList.add('hidden');
-    
-    try {
-        const response = await fetch('/get_company_analysis', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ company_name: companyName })
         });
-        
-        const result = await response.json();
-        
-        if (result.success && result.data) {
-            let formattedContent = '<div class="analysis-content p-8">';
-            
-            result.data.forEach(section => {
-                formattedContent += `
-                    <div class="analysis-section mb-8 bg-white rounded-lg shadow-sm">
-                        <div class="section-title text-lg font-semibold mb-3 pb-2 border-b">
-                            ${section.title}
-                        </div>
-                        <div class="section-content space-y-3 text-gray-700">
-                            ${section.content}
+
+        console.log('Chat system initialized');
+    },
+
+    toggleChat() {
+        domElements.chatModal.classList.toggle('hidden');
+        if (!domElements.chatModal.classList.contains('hidden')) {
+            domElements.chatInput.focus();
+        }
+    },
+
+    hideChat() {
+        domElements.chatModal.classList.add('hidden');
+    },
+
+    renderMarkdown(text) {
+        // 处理标题
+        text = text.replace(/^# (.+)$/gm, '<h1 class="text-2xl font-bold mb-4">$1</h1>');
+        text = text.replace(/^## (.+)$/gm, '<h2 class="text-xl font-bold mb-3">$1</h2>');
+        text = text.replace(/^### (.+)$/gm, '<h3 class="text-lg font-bold mb-2">$1</h3>');
+
+        // 处理加粗
+        text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+        // 处理斜体
+        text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+        // 处理序号列表
+        text = text.replace(/^\d+\. (.+)$/gm, '<div class="ml-4 mb-2">• $1</div>');
+
+        // 处理无序列表
+        text = text.replace(/^- (.+)$/gm, '<div class="ml-4 mb-2">• $1</div>');
+
+        // 处理段落
+        text = text.replace(/^(?!<[h|d]).+$/gm, '<p class="mb-4">$&</p>');
+
+        // 处理空行
+        text = text.replace(/^\s*$/gm, '<div class="h-4"></div>');
+
+        return text;
+    },
+
+    addMessage(content, isUser = false) {
+        const messageHtml = `
+            <div class="flex items-start space-x-2 ${isUser ? 'justify-end' : ''}">
+                ${!isUser ? `
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
                         </div>
                     </div>
-                `;
-            });
-            
-            formattedContent += '</div>';
-            modalContent.innerHTML = formattedContent;
-            
-            downloadBtn.classList.remove('hidden');
-            downloadBtn.onclick = () => {
-                window.open(`/download_report/${encodeURIComponent(companyName)}`, '_blank');
-            };
-        } else {
-            throw new Error(result.error || '获取数据失败');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        modalContent.innerHTML = `
-            <div class="text-center py-8">
-                <svg class="w-16 h-16 mx-auto text-red-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                <p class="text-lg text-gray-600 mb-2">发生错误</p>
-                <p class="text-sm text-gray-500">${error.message}</p>
+                ` : ''}
+                <div class="bg-${isUser ? 'blue' : 'gray'}-100 rounded-lg p-3 max-w-xs">
+                    <p class="text-sm text-gray-800">${content}</p>
+                </div>
             </div>
         `;
-    } finally {
-        loadingSpinner.classList.add('hidden');
-    }
-}
+        domElements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
+        this.scrollToBottom();
+    },
 
-// 更新进度动画
-function updateProgress(step, text) {
-    console.log('Updating progress:', step, text);
-    const steps = document.querySelectorAll('.progress-step');
-    const progressLine = document.querySelector('.progress-line');
-    const progressText = document.getElementById('progress-text');
-    const progressContainer = document.getElementById('progress-container');
+    showLoading() {
+        const loadingHtml = `
+            <div class="flex items-start space-x-2 loading-message">
+                <div class="flex-shrink-0">
+                    <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
+                    <p class="text-sm text-gray-500">正在思考...</p>
+                </div>
+            </div>
+        `;
+        domElements.chatMessages.insertAdjacentHTML('beforeend', loadingHtml);
+        this.scrollToBottom();
+    },
 
-    // 显示进度容器
-    if (progressContainer) {
-        progressContainer.classList.remove('hidden');
-    }
-
-    // 更新进度文本
-    if (progressText) {
-        progressText.textContent = text;
-    }
-
-    // 更新进度条
-    if (progressLine) {
-        progressLine.style.width = `${(step / (steps.length - 1)) * 100}%`;
-    }
-
-    // 更新步骤状态
-    steps.forEach((stepEl, index) => {
-        if (index <= step) {
-            stepEl.classList.add('active');
-            stepEl.style.opacity = '1';
-            stepEl.style.transform = 'translateY(0)';
+    removeLoading() {
+        const loadingMessage = domElements.chatMessages.querySelector('.loading-message');
+        if (loadingMessage) {
+            loadingMessage.remove();
         }
-    });
-}
+    },
 
-// 初始化应用
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM Content Loaded');
-    
-    const searchBtn = document.getElementById('search-btn');
-    const industryInput = document.getElementById('industry-input');
-    
-    console.log('Search button:', searchBtn);
-    console.log('Industry input:', industryInput);
-    
-    if (searchBtn && industryInput) {
-        searchBtn.addEventListener('click', handleSearch);
-        industryInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                handleSearch();
+    scrollToBottom() {
+        domElements.chatMessages.scrollTop = domElements.chatMessages.scrollHeight;
+    },
+
+    async sendMessage() {
+        const message = domElements.chatInput.value.trim();
+        if (!message) return;
+
+        // 清空输入框
+        domElements.chatInput.value = '';
+
+        // 添加用户消息
+        this.addMessage(message, true);
+        
+        try {
+            // 显示加载状态
+            this.showLoading();
+
+            // 创建AI回复的消息容器
+            const aiMessageContainer = document.createElement('div');
+            aiMessageContainer.className = 'flex items-start space-x-2';
+            aiMessageContainer.innerHTML = `
+                <div class="flex-shrink-0">
+                    <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
+                    <p class="text-sm text-gray-800"></p>
+                </div>
+            `;
+
+            // 发送请求到后端
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: message,
+                    conversation_id: this.currentConversationId
+                })
+            });
+
+            // 移除加载状态
+            this.removeLoading();
+
+            if (!response.ok) {
+                throw new Error('网络请求失败');
             }
-        });
-        console.log('Event listeners added successfully');
-    } else {
-        console.error('Could not find search button or industry input');
-    }
-});
 
-function handleSearch() {
-    console.log('handleSearch called');
-    const industryInput = document.getElementById('industry-input');
-    const industryName = industryInput.value.trim();
-    
-    if (!industryName) {
-        showError('请输入产业链名称');
-        return;
+            // 处理流式响应
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let aiMessageContent = '';
+
+            // 添加AI消息容器到聊天界面
+            domElements.chatMessages.appendChild(aiMessageContainer);
+            const aiMessageText = aiMessageContainer.querySelector('p');
+
+            while (true) {
+                const {value, done} = await reader.read();
+                if (done) break;
+
+                const chunk = decoder.decode(value);
+                const lines = chunk.split('\n');
+
+                for (const line of lines) {
+                    if (line.startsWith('data: ')) {
+                        try {
+                            const data = JSON.parse(line.slice(6));
+                            
+                            if (data.error) {
+                                aiMessageText.textContent = `错误: ${data.error}`;
+                                break;
+                            }
+
+                            if (data.event === 'message') {
+                                aiMessageContent += data.answer || '';
+                                aiMessageText.innerHTML = this.renderMarkdown(aiMessageContent);
+                                this.currentConversationId = data.conversation_id;
+                            }
+                        } catch (e) {
+                            console.error('Error parsing SSE data:', e);
+                        }
+                    }
+                }
+                this.scrollToBottom();
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+            this.removeLoading();
+            this.addMessage('发生错误，请稍后重试');
+        }
     }
+};
+
+// 应用初始化
+function initializeApp() {
+    console.log('Initializing app...');
     
-    console.log('Fetching data for industry:', industryName);
-    startProgress();
-    fetchGraphData(industryName);
+    // 初始化DOM元素
+    initializeDOMElements();
+    
+    // 初始化各个系统
+    ParticleSystem.initialize();
+    ChartSystem.initialize();
+    EventSystem.initialize();
+    ChatSystem.initialize();
+    
+    console.log('App initialization completed');
 }
+
+// 确保DOM加载完成后再初始化应用
+document.addEventListener('DOMContentLoaded', initializeApp);
