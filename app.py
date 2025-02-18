@@ -206,65 +206,126 @@ def call_dify_api(industry_name):
 
 def transform_to_tree(data):
     """将原始数据转换为树形结构"""
-    if not isinstance(data, dict):
-        logger.error(f"Invalid data type: {type(data)}")
-        return None
-
     try:
+        if not isinstance(data, dict):
+            logger.error(f"Invalid data type: {type(data)}")
+            return None
+
+        # 创建根节点
+        industry_name = data.get('产业链', '')
+        if not industry_name:
+            logger.error("Missing industry name")
+            return None
+
+        logger.debug(f"Processing industry chain: {industry_name}")
+        
         root = {
-            "name": f"{data['产业链']}产业链图谱",
+            "name": industry_name + '产业链图谱',
             "children": []
         }
         
-        for link in data.get('环节', []):
+        # 处理环节数据
+        links = data.get('环节', [])
+        if not isinstance(links, list):
+            logger.error(f"Invalid links type: {type(links)}")
+            return None
+            
+        logger.debug(f"Found {len(links)} main sections")
+
+        # 处理每个主环节（上中下游）
+        for i, link in enumerate(links):
             if not isinstance(link, dict):
+                logger.warning(f"Skipping invalid link at index {i}")
                 continue
                 
-            link_node = {
-                "name": link.get('环节名称', ''),
+            link_name = link.get('环节名称', '')
+            if not link_name:
+                logger.warning(f"Skipping link with no name at index {i}")
+                continue
+
+            logger.debug(f"Processing main section {i}: {link_name}")
+            
+            # 创建主环节节点
+            main_section = {
+                "name": link_name,
                 "children": []
             }
             
-            for sub_link in link.get('子环节', []):
+            # 处理子环节
+            sub_links = link.get('子环节', [])
+            if not isinstance(sub_links, list):
+                logger.warning(f"Invalid sub_links type for {link_name}")
+                continue
+
+            logger.debug(f"Found {len(sub_links)} sub-sections in {link_name}")
+
+            # 处理每个子环节
+            for sub_link in sub_links:
                 if not isinstance(sub_link, dict):
                     continue
                     
-                sub_node = {
-                    "name": sub_link.get('子环节名称', ''),
+                sub_name = sub_link.get('子环节名称', '')
+                if not sub_name:
+                    continue
+
+                logger.debug(f"Processing sub-section: {sub_name}")
+
+                # 创建子环节节点
+                sub_section = {
+                    "name": sub_name,
                     "children": []
                 }
-                
-                companies = sub_link.get('代表公司', [])
-                
-                # 统一处理公司列表
-                if isinstance(companies, str):
-                    # 处理可能的分隔符
-                    for sep in [',', '、', ';', '；']:
-                        if sep in companies:
-                            companies = [c.strip() for c in companies.split(sep) if c.strip()]
-                            break
-                    else:
-                        companies = [companies]
-                elif not isinstance(companies, list):
-                    companies = []
-                
-                # 添加公司节点
-                for company in companies:
-                    if company and isinstance(company, str):
-                        sub_node["children"].append({
-                            "name": company.strip()
-                        })
-                
-                if sub_node["children"]:  # 只添加有公司的子环节
-                    link_node["children"].append(sub_node)
-            
-            if link_node["children"]:  # 只添加有子环节的环节
-                root["children"].append(link_node)
-        
+
+                # 处理子-子环节
+                sub_sub_links = sub_link.get('子-子环节', [])
+                if isinstance(sub_sub_links, list):
+                    for sub_sub_link in sub_sub_links:
+                        if not isinstance(sub_sub_link, dict):
+                            continue
+
+                        sub_sub_name = sub_sub_link.get('子-子环节名称', '')
+                        if not sub_sub_name:
+                            continue
+
+                        # 处理公司列表
+                        companies = sub_sub_link.get('代表公司', [])
+                        if not isinstance(companies, list):
+                            companies = []
+
+                        # 创建子-子环节节点
+                        sub_sub_section = {
+                            "name": sub_sub_name,
+                            "children": []
+                        }
+
+                        # 添加公司节点
+                        for company in companies:
+                            if company and isinstance(company, str):
+                                sub_sub_section["children"].append({
+                                    "name": company.strip()
+                                })
+
+                        # 只添加有公司的子-子环节
+                        if sub_sub_section["children"]:
+                            sub_section["children"].append(sub_sub_section)
+
+                # 只添加有子-子环节的子环节
+                if sub_section["children"]:
+                    main_section["children"].append(sub_section)
+
+            # 只添加有子环节的主环节
+            if main_section["children"]:
+                root["children"].append(main_section)
+
+        # 验证数据完整性
         if not root["children"]:
-            logger.error("No valid data in tree")
+            logger.error("No valid data in tree after processing")
+            logger.error(f"Original data structure: {json.dumps(data, ensure_ascii=False)}")
             return None
             
+        # 打印转换后的数据结构（用于调试）
+        logger.debug(f"Transformed tree structure: {json.dumps(root, ensure_ascii=False)}")
+        
         return root
         
     except Exception as e:

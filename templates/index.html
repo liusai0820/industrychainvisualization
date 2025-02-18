@@ -3,658 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>产业链全景图谱分析系统</title>
+    <title>产业链图谱</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #2563eb;
-            --secondary-color: #1e40af;
-            --background-color: #f8fafc;
-            --text-color: #1e293b;
-        }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-        }
-
-        .gradient-bg {
-            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            background-color: #ffffff;
+            color: #1a1a1a;
         }
 
         .search-input {
             transition: all 0.3s ease;
-            border: 2px solid #e2e8f0;
+            border: 1px solid #e5e5e5;
+            background: #f8f8f8;
         }
 
         .search-input:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+            background: #ffffff;
+            border-color: #000000;
+            box-shadow: none;
         }
 
         .search-button {
+            background-color: #000000;
             transition: all 0.3s ease;
         }
 
         .search-button:hover {
-            transform: translateY(-1px);
+            background-color: #333333;
         }
 
-        .chart-container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-
-        .loading-overlay {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(4px);
-        }
-
-        .tooltip {
-            position: absolute;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 14px;
-            pointer-events: none;
-            z-index: 1000;
-            display: none;
-        }
-
-        .controls {
-            position: fixed;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: white;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            z-index: 100;
-        }
-
-        .control-button {
-            width: 40px;
-            height: 40px;
-            margin: 5px;
-            border-radius: 8px;
-            background: #f3f4f6;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .control-button:hover {
-            background: #e5e7eb;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-
-        /* 自定义滚动条样式 */
-        .overflow-y-auto::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .overflow-y-auto::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        
-        .overflow-y-auto::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        
-        .overflow-y-auto::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        /* 分析报告样式 */
-        .analysis-section {
-            margin-bottom: 2rem;
-            background: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-        
-        .analysis-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1e40af;
-            padding: 1rem 1.5rem;
-            background: linear-gradient(to right, #f8fafc, #fff);
-            border-bottom: 2px solid #e2e8f0;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        
-        .analysis-title::before {
-            content: "";
-            display: block;
-            width: 4px;
-            height: 1.25rem;
-            background: linear-gradient(to bottom, #2563eb, #1e40af);
-            border-radius: 2px;
-        }
-        
-        .analysis-text {
-            padding: 1.5rem;
-            color: #334155;
-            white-space: pre-line;
-        }
-        
-        /* 列表样式 */
-        .list-item {
-            padding: 0.5rem 0;
-            padding-left: 1.5rem;
+        .progress-container {
             position: relative;
-        }
-        
-        .list-item::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 1rem;
-            width: 6px;
-            height: 6px;
-            background: #2563eb;
-            border-radius: 50%;
-        }
-        
-        /* 表格样式 */
-        .table-container {
-            margin: 1rem 0;
-            overflow-x: auto;
-        }
-        
-        .table-container table {
             width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        
-        .table-container th {
-            background: #f1f5f9;
-            color: #1e40af;
-            font-weight: 600;
-            text-align: left;
-            padding: 1rem;
-            border-bottom: 2px solid #e2e8f0;
-        }
-        
-        .table-container td {
-            padding: 0.875rem 1rem;
-            border-bottom: 1px solid #e2e8f0;
-            color: #475569;
-        }
-        
-        .table-container tr:last-child td {
-            border-bottom: none;
-        }
-        
-        /* 强调文本样式 */
-        .analysis-text strong {
-            color: #1e40af;
-            font-weight: 600;
-        }
-        
-        /* 缩进的序号列表 */
-        .analysis-text .list-item {
-            margin: 0.5rem 0;
-        }
-        
-        /* 段落间距 */
-        .analysis-text p {
-            margin-bottom: 1rem;
-        }
-        
-        .analysis-text p:last-child {
-            margin-bottom: 0;
-        }
-
-        /* 企业分析报告样式优化 */
-        .analysis-content {
-            padding: 2rem;
-            color: #1e293b;
-            font-size: 15px;
-            line-height: 1.8;
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
-        }
-        
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #1e40af;
-            padding: 1.25rem 1.75rem;
-            background: linear-gradient(to right, #f8fafc, #fff);
-            border-bottom: 2px solid #e2e8f0;
-            display: flex;
-            align-items: center;
-            margin-top: 2rem;
-            border-radius: 8px 8px 0 0;
-        }
-        
-        .section-title::before {
-            content: "";
-            display: block;
-            width: 4px;
-            height: 1.5rem;
-            background: linear-gradient(to bottom, #2563eb, #1e40af);
-            border-radius: 2px;
-            margin-right: 1rem;
-        }
-        
-        .section-content {
-            padding: 2rem;
-            color: #475569;
-            background: white;
-            border-radius: 0 0 8px 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-        
-        .section-content strong {
-            color: #1e40af;
-            font-weight: 600;
-        }
-        
-        .section-content p {
-            margin-bottom: 1.25rem;
-            line-height: 1.8;
-        }
-        
-        .section-content ul {
-            margin: 1.5rem 0;
-        }
-        
-        .section-content li {
-            margin-bottom: 0.75rem;
-        }
-        
-        /* 表格样式优化 */
-        .table-container {
-            margin: 1.5rem 0;
-            overflow-x: auto;
-        }
-        
-        .table-container table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .table-container th {
-            background: #f1f5f9;
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            color: #1e40af;
-            border-bottom: 2px solid #e2e8f0;
-        }
-        
-        .table-container td {
-            padding: 1rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .table-container tr:last-child td {
-            border-bottom: none;
-        }
-        
-        /* 链接样式 */
-        .section-content a {
-            color: #2563eb;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-        
-        .section-content a:hover {
-            color: #1e40af;
-            text-decoration: underline;
-        }
-        
-        /* 代码块样式 */
-        .section-content code {
-            background: #f1f5f9;
-            padding: 0.2em 0.4em;
-            border-radius: 4px;
-            font-size: 0.9em;
-            color: #1e40af;
-        }
-        
-        .section-content > div:last-child {
-            margin-bottom: 0;
+            padding-top: 40px;
         }
 
-        /* 列表样式 */
-        .section-content .pl-4 {
-            position: relative;
-            padding-left: 1.5rem;
-        }
-        
-        .section-content .pl-4::before {
-            content: "";
+        .progress-percentage {
             position: absolute;
-            left: 0;
-            top: 0.8rem;
-            width: 6px;
-            height: 6px;
-            background: #2563eb;
-            border-radius: 50%;
+            right: 0;
+            top: 0;
+            font-size: 14px;
+            color: #000;
         }
 
-        .highlight {
-            color: #2563eb;
-            font-weight: 500;
-        }
-        
-        .secondary-text {
-            color: #64748b;
-            font-size: 0.95rem;
-        }
-        
-        .data-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-        
-        .data-item {
-            padding: 1rem;
-            background: #f8fafc;
-            border-radius: 0.5rem;
-            border: 1px solid #e2e8f0;
-        }
-        
-        .data-label {
-            font-size: 0.875rem;
-            color: #64748b;
-            margin-bottom: 0.25rem;
-        }
-        
-        .data-value {
-            font-size: 1.125rem;
-            color: #1e293b;
-            font-weight: 500;
-        }
-        
-        /* 添加动画效果 */
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .analysis-section {
-            animation: slideIn 0.3s ease-out forwards;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .download-btn {
-            display: flex;
-            align-items: center;
-            padding: 0.5rem 1rem;
-            background-color: #3b82f6;
-            color: white;
-            border: none;
-            border-radius: 0.375rem;
-            cursor: pointer;
-            font-size: 0.875rem;
-            transition: background-color 0.2s;
-        }
-
-        .download-btn:hover {
-            background-color: #2563eb;
-        }
-
-        .download-btn svg {
-            width: 1.25rem;
-            height: 1.25rem;
-            margin-right: 0.5rem;
-        }
-
-        .close-btn {
-            font-size: 1.5rem;
-            color: #64748b;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0.25rem;
-            line-height: 1;
-        }
-
-        .close-btn:hover {
-            color: #475569;
-        }
-
-        .modal-body {
-            padding: 1.5rem;
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-
-        .loading-spinner {
-            display: none;
-            margin: 2rem auto;
-            width: 40px;
-            height: 40px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #3b82f6;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* 进度步骤样式 */
-        .progress-step {
-            flex: 1;
+        .progress-line-container {
             position: relative;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease;
-        }
-
-        .progress-step.active .progress-icon {
-            color: #2563eb;
-        }
-
-        .progress-step.active .w-10 {
-            border-color: #2563eb;
+            width: 100%;
+            height: 1px;
+            background: #E5E5E5;
+            margin: 40px 0;
         }
 
         .progress-line {
-            transition: width 1s ease-in-out;
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: #000;
+            transition: width 0.5s ease-in-out;
         }
 
-        /* 粒子动画 */
-        #particles-canvas {
+        .progress-stages {
             position: absolute;
-            top: 0;
+            top: 50%;
             left: 0;
             width: 100%;
-            height: 100%;
-            pointer-events: none;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
         }
 
-        /* 搜索框动画 */
-        #search-container:focus-within {
-            transform: scale(1.02);
+        .progress-stage {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* Logo动画 */
-        #logo-container {
-            animation: fadeInDown 1s ease-out;
+        .progress-stage-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #fff;
+            border: 1px solid #E5E5E5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
         }
 
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .progress-stage.active .progress-stage-number {
+            background: #000;
+            border-color: #000;
+            color: #fff;
         }
 
-        /* 进度条动画 */
-        .progress-line::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            animation: shimmer 2s infinite;
+        .progress-stage-text {
+            font-size: 14px;
+            color: #666;
+            transition: color 0.3s ease;
+            white-space: nowrap;
         }
 
-        @keyframes shimmer {
-            0% {
-                transform: translateX(-100%);
-            }
-            100% {
-                transform: translateX(100%);
-            }
+        .progress-stage.active .progress-stage-text {
+            color: #000;
+        }
+
+        .progress-detail {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .progress-detail-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
         }
     </style>
 </head>
 
-
-<body class="min-h-screen bg-gray-50">
+<body class="min-h-screen bg-white">
     <!-- 搜索页面 -->
-    <div id="search-page" class="min-h-screen flex flex-col items-center justify-center px-4">
-        <div class="text-center mb-12 transform transition-all duration-500" id="logo-container">
-            <h1 class="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
-                产业链全景图谱生成系统
-            </h1>
-            <p class="text-gray-600 text-xl">智能分析产业链结构，快速生成完整产业链图谱</p>
+    <div id="search-page" class="min-h-screen flex flex-col items-center justify-start px-4 pt-20">
+        <div class="text-center mb-16">
+            <h1 class="text-4xl font-bold text-black mb-4">产业链图谱</h1>
+            <p class="text-gray-600">基于智能算法的产业链结构分析与可视化系统</p>
         </div>
         
-        <div class="w-full max-w-2xl mx-auto relative transform transition-all duration-500" id="search-container">
+        <div class="w-full max-w-2xl mx-auto relative mb-12">
             <div class="relative">
                 <input 
                     type="text" 
                     id="industry-input"
-                    class="w-full px-6 py-4 text-lg border-2 border-gray-200 rounded-full shadow-md focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all pl-12"
-                    placeholder="请输入产业链名称，如：AI芯片、新能源汽车等"
+                    class="w-full px-6 py-4 text-lg rounded-lg search-input"
+                    placeholder="输入关键词，例如：智能手机"
                 />
-                <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                </svg>
                 <button 
                     id="search-btn"
-                    class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all"
+                    class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black text-white px-8 py-2 rounded-lg search-button"
                 >
                     生成图谱
                 </button>
             </div>
         </div>
 
-        <!-- 进度动画容器 -->
-        <div id="progress-container" class="w-full max-w-3xl mx-auto mt-12 hidden">
-            <!-- 进度步骤 -->
-            <div class="relative">
-                <!-- 进度线 -->
-                <div class="absolute top-1/2 left-0 w-full h-1 bg-gray-200 transform -translate-y-1/2">
-                    <div id="progress-line" class="progress-line h-full w-0 bg-blue-600 transition-all duration-1000"></div>
-                </div>
-                
-                <!-- 进度步骤点 -->
-                <div class="relative flex justify-between">
-                    <div class="progress-step flex flex-col items-center">
-                        <div class="w-10 h-10 bg-white border-2 border-gray-300 rounded-full flex items-center justify-center relative z-10 transition-all duration-500">
-                            <div class="progress-icon w-6 h-6 text-gray-400">
-                                <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="mt-2 text-sm font-medium text-gray-500">
-                            数据收集
-                        </div>
-                    </div>
+        <!-- 进度指示器 -->
+        <div id="progress-container" class="w-full max-w-2xl mx-auto mt-8 hidden">
+            <div class="progress-container">
+                <!-- 进度百分比 -->
+                <div class="progress-percentage">66%</div>
+
+                <!-- 进度条 -->
+                <div class="progress-line-container">
+                    <div id="progress-line" class="progress-line" style="width: 66%"></div>
                     
-                    <div class="progress-step flex flex-col items-center">
-                        <div class="w-10 h-10 bg-white border-2 border-gray-300 rounded-full flex items-center justify-center relative z-10 transition-all duration-500">
-                            <div class="progress-icon w-6 h-6 text-gray-400">
-                                <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                                </svg>
-                            </div>
+                    <!-- 进度阶段 -->
+                    <div class="progress-stages">
+                        <div class="progress-stage active" data-progress="30">
+                            <div class="progress-stage-number">1</div>
+                            <div class="progress-stage-text">数据采集</div>
                         </div>
-                        <div class="mt-2 text-sm font-medium text-gray-500">
-                            结构分析
+                        
+                        <div class="progress-stage active" data-progress="60">
+                            <div class="progress-stage-number">2</div>
+                            <div class="progress-stage-text">分析处理</div>
                         </div>
-                    </div>
-                    
-                    <div class="progress-step flex flex-col items-center">
-                        <div class="w-10 h-10 bg-white border-2 border-gray-300 rounded-full flex items-center justify-center relative z-10 transition-all duration-500">
-                            <div class="progress-icon w-6 h-6 text-gray-400">
-                                <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="absolute top-12 left-1/2 transform -translate-x-1/2 whitespace-nowrap text-sm font-medium text-gray-500">
-                            图谱生成
+                        
+                        <div class="progress-stage" data-progress="100">
+                            <div class="progress-stage-number">3</div>
+                            <div class="progress-stage-text">图谱构建</div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- 动态粒子效果 -->
-            <div id="particles-container" class="absolute inset-0 pointer-events-none">
-                <canvas id="particles-canvas"></canvas>
-            </div>
-
-            <!-- 进度提示 -->
-            <div class="text-center mt-20">
-                <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-600 border-t-transparent"></div>
-                <p class="mt-4 text-lg text-gray-600" id="progress-text">正在收集产业链数据...</p>
+                <!-- 进度详情 -->
+                <div class="progress-detail">
+                    <p id="progress-text" class="progress-detail-text">正在智能采集产业链数据</p>
+                    <p id="progress-detail" class="progress-detail-text text-sm">正在深度分析产业关联</p>
+                </div>
             </div>
         </div>
     </div>
@@ -664,107 +198,13 @@
         <div class="chart-wrapper w-full h-full"></div>
     </div>
 
-    <!-- 控制按钮 -->
-    <div class="controls">
-        <div class="control-button" id="zoomIn" title="放大">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-            </svg>
-        </div>
-        <div class="control-button" id="zoomOut" title="缩小">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
-            </svg>
-        </div>
-        <div class="control-button" id="reset" title="重置视图">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-            </svg>
-        </div>
-    </div>
-
-    <div id="tooltip" class="tooltip"></div>
-
-    <!-- 企业分析弹窗 -->
-    <div id="company-modal" class="fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm hidden flex items-center justify-center z-50">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl mx-4 flex flex-col" style="height: 85vh;">
-            <!-- 模态框头部 -->
-            <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200">
-                <h2 class="text-xl font-bold text-gray-900" id="modal-title">分析报告</h2>
-                <div class="flex items-center gap-4">
-                    <button id="download-report-btn" class="hidden flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                        </svg>
-                        下载报告
-                    </button>
-                    <button id="close-modal" class="text-gray-400 hover:text-gray-600 transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- 模态框内容区 -->
-            <div class="flex-1 overflow-y-auto" style="height: calc(85vh - 60px);">
-                <div id="modal-content">
-                    <!-- 内容将通过JavaScript动态插入 -->
-                </div>
-                <div id="loading-spinner" class="hidden py-12">
-                    <div class="flex flex-col items-center justify-center space-y-4">
-                        <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
-                        <p class="text-gray-500">正在生成企业报告，请耐心等候...</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 聊天按钮 -->
-    <button id="chat-button" class="fixed bottom-6 right-6 bg-blue-600 text-white rounded-full p-4 shadow-lg hover:bg-blue-700 transition-colors z-50">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+    <!-- 下载按钮 -->
+    <button id="download-chart-btn" class="fixed top-4 right-4 bg-black text-white px-4 py-2 rounded-lg shadow-sm hover:bg-gray-800 transition-colors z-50 hidden flex items-center space-x-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
         </svg>
+        <span>下载图谱</span>
     </button>
-
-    <!-- 聊天窗口 -->
-    <div id="chat-modal" class="fixed bottom-24 right-6 w-96 bg-white rounded-lg shadow-xl z-50 hidden">
-        <!-- 聊天头部 -->
-        <div class="flex items-center justify-between p-4 border-b">
-            <h3 class="text-lg font-semibold text-gray-800">AI 助手</h3>
-            <button id="close-chat" class="text-gray-500 hover:text-gray-700">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-            </button>
-        </div>
-        
-        <!-- 聊天消息区域 -->
-        <div id="chat-messages" class="h-96 overflow-y-auto p-4 space-y-4">
-            <!-- 消息将在这里动态添加 -->
-        </div>
-        
-        <!-- 聊天输入区域 -->
-        <div class="border-t p-4">
-            <div class="flex space-x-2">
-                <textarea
-                    id="chat-input"
-                    class="flex-1 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                    placeholder="输入您的问题..."
-                    rows="2"
-                ></textarea>
-                <button
-                    id="send-message"
-                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </div>
 
     <!-- 引入必要的脚本 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
