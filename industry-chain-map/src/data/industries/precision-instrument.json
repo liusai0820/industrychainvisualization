@@ -1,0 +1,295 @@
+{
+  "产业链": "精密仪器设备",
+  "环节": [
+    {
+      "环节名称": "上游：核心零部件与原材料供应",
+      "子环节": [
+        {
+          "子环节名称": "光学元件",
+          "子-子环节": [
+            {
+              "子-子环节名称": "精密光学镜片",
+              "代表公司": ["蔡司（Carl Zeiss）", "徕卡（Leica）", "尼康（Nikon）", "佳能（Canon）", "肖特（Schott）", "豪雅（HOYA）", "爱特蒙特光学（Edmund Optics）", "Thorlabs"]
+            },
+            {
+              "子-子环节名称": "光学镀膜",
+              "代表公司": ["蔡司（Carl Zeiss）", "巴尔查斯（Balzers）", "昭和真空（Showa Shinku）", "光驰科技（Optorun）", "布勒莱宝光学（Buhler Leybold Optics）", "爱发科（Ulvac）", "Materion"]
+            },
+            {
+              "子-子环节名称": "激光器",
+              "代表公司": ["相干（Coherent）", "通快（Trumpf）", "IPG Photonics", "恩耐（nLIGHT）", "理波（Lumentum）", "MKS Instruments", "大族激光（Han's Laser）", "锐科激光（Raycus）"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "精密机械与运动控制",
+          "子-子环节": [
+            {
+              "子-子环节名称": "精密轴承",
+              "代表公司": ["斯凯孚（SKF）", "舍弗勒（Schaeffler）", "恩斯克（NSK）", "捷太格特（JTEKT）", "铁姆肯（Timken）", "NTN Corporation", "ZWZ"]
+            },
+            {
+              "子-子环节名称": "精密导轨/滑台",
+              "代表公司": ["THK", "上银科技（HIWIN）", "博世力士乐（Bosch Rexroth）", "米思米（MISUMI）", "IKO", "施耐博格（Schneeberger）", "PMI"]
+            },
+            {
+              "子-子环节名称": "伺服电机/驱动器",
+              "代表公司": ["西门子（Siemens）", "发那科（FANUC）", "三菱电机（Mitsubishi Electric）", "安川电机（Yaskawa）", "松下（Panasonic）", "施耐德电气（Schneider Electric）", "汇川技术（Inovance Technology）"]
+            },
+            {
+              "子-子环节名称": "精密减速器",
+              "代表公司": ["哈默纳科（Harmonic Drive）", "纳博特斯克（Nabtesco）", "住友重机械（Sumitomo Heavy Industries）", "SPINEA", "Leaderdrive"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "传感器与探测器",
+          "子-子环节": [
+            {
+              "子-子环节名称": "图像传感器",
+              "代表公司": ["索尼（Sony）", "三星（Samsung）", "豪威科技（OmniVision）", "安森美半导体（ON Semiconductor）", "佳能（Canon）", "松下（Panasonic）", "格科微（GalaxyCore）"]
+            },
+            {
+              "子-子环节名称": "位置传感器",
+              "代表公司": ["海德汉（Heidenhain）", "雷尼绍（Renishaw）", "三丰（Mitutoyo）", "基恩士（Keyence）", "西克（SICK）", "倍加福（Pepperl+Fuchs）", "TE Connectivity"]
+            },
+            {
+              "子-子环节名称": "压力/流量/温度传感器",
+              "代表公司": ["霍尼韦尔（Honeywell）", "艾默生（Emerson）", "西门子（Siemens）", "ABB", "横河电机（Yokogawa）", "罗斯蒙特（Rosemount）", "Endress+Hauser"]
+            },
+            {
+              "子-子环节名称": "光谱传感器",
+              "代表公司": ["滨松光子（Hamamatsu Photonics）", "海洋光学（Ocean Insight）", "艾万提斯（Avantes）", "PerkinElmer", "布鲁克（Bruker）", "赛默飞世尔科技（Thermo Fisher Scientific）"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "电子元器件",
+          "子-子环节": [
+            {
+              "子-子环节名称": "高性能处理器/FPGA",
+              "代表公司": ["英特尔（Intel）", "英伟达（NVIDIA）", "超微半导体（AMD）", "赛灵思（Xilinx）", "德州仪器（Texas Instruments）", "亚德诺半导体（Analog Devices）", "微芯科技（Microchip）"]
+            },
+            {
+              "子-子环节名称": "高精度ADC/DAC",
+              "代表公司": ["德州仪器（Texas Instruments）", "亚德诺半导体（Analog Devices）", "美信集成（Maxim Integrated）", "微芯科技（Microchip）"]
+            },
+            {
+              "子-子环节名称": "存储芯片",
+              "代表公司": ["三星（Samsung）", "SK海力士（SK Hynix）", "美光（Micron）", "铠侠（Kioxia）", "西部数据（Western Digital）"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "特种材料",
+          "子-子环节": [
+            {
+              "子-子环节名称": "光学玻璃",
+              "代表公司": ["肖特（Schott）", "豪雅（HOYA）", "康宁（Corning）", "蔡司（Carl Zeiss）", "尼康（Nikon）"]
+            },
+            {
+              "子-子环节名称": "工程塑料",
+              "代表公司": ["巴斯夫（BASF）", "杜邦（DuPont）", "沙特基础工业（SABIC）", "帝人（Teijin）", "东丽（Toray）", "赢创（Evonik）", "索尔维（Solvay）"]
+            },
+            {
+              "子-子环节名称": "金属合金",
+              "代表公司": ["阿塞洛米塔尔（ArcelorMittal）", "日本制铁（Nippon Steel）", "宝武钢铁（Baowu Steel）", "浦项制铁（POSCO）", "美国铝业（Alcoa）", "肯纳金属（Kennametal）", "山特维克（Sandvik）"]
+            },
+            {
+              "子-子环节名称": "陶瓷材料",
+              "代表公司": ["京瓷（Kyocera）", "村田制作所（Murata）", "TDK", "CoorsTek", "Morgan Advanced Materials"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "中游：精密仪器设备制造",
+      "子环节": [
+        {
+          "子环节名称": "分析仪器",
+          "子-子环节": [
+            {
+              "子-子环节名称": "光谱仪",
+              "代表公司": ["赛默飞世尔科技（Thermo Fisher Scientific）", "安捷伦科技（Agilent Technologies）", "珀金埃尔默（PerkinElmer）", "布鲁克（Bruker）", "岛津制作所（Shimadzu）", "耶拿分析仪器（Analytik Jena）", "堀场（HORIBA）"]
+            },
+            {
+              "子-子环节名称": "色谱仪",
+              "代表公司": ["安捷伦科技（Agilent Technologies）", "赛默飞世尔科技（Thermo Fisher Scientific）", "沃特世（Waters）", "岛津制作所（Shimadzu）", "珀金埃尔默（PerkinElmer）"]
+            },
+            {
+              "子-子环节名称": "质谱仪",
+              "代表公司": ["赛默飞世尔科技（Thermo Fisher Scientific）", "安捷伦科技（Agilent Technologies）", "布鲁克（Bruker）", "沃特世（Waters）", "岛津制作所（Shimadzu）", "SCIEX"]
+            },
+            {
+              "子-子环节名称": "电子显微镜",
+              "代表公司": ["赛默飞世尔科技（Thermo Fisher Scientific）", "日本电子（JEOL）", "日立高新（Hitachi High-Tech）", "蔡司（Carl Zeiss）", "FEI"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "计量仪器",
+          "子-子环节": [
+            {
+              "子-子环节名称": "三坐标测量机",
+              "代表公司": ["海克斯康（Hexagon）", "蔡司（Carl Zeiss）", "三丰（Mitutoyo）", "法如（Faro）", "东京精密（Tokyo Seimitsu）", "温泽（Wenzel）", "雷尼绍（Renishaw）"]
+            },
+            {
+              "子-子环节名称": "光学测量仪",
+              "代表公司": ["基恩士（Keyence）", "三丰（Mitutoyo）", "尼康（Nikon）", "Zygo", "Taylor Hobson", "Mahr"]
+            },
+            {
+              "子-子环节名称": "长度/角度测量仪",
+              "代表公司": ["海德汉（Heidenhain）", "雷尼绍（Renishaw）", "三丰（Mitutoyo）", "马波斯（Marposs）", "TESA"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "医疗设备",
+          "子-子环节": [
+            {
+              "子-子环节名称": "医学影像设备",
+              "代表公司": ["通用电气医疗（GE Healthcare）", "飞利浦医疗（Philips Healthcare）", "西门子医疗（Siemens Healthineers）", "佳能医疗系统（Canon Medical Systems）", "日立医疗（Hitachi Healthcare）", "岛津制作所（Shimadzu）", "锐珂医疗（Carestream）"]
+            },
+            {
+              "子-子环节名称": "体外诊断设备",
+              "代表公司": ["罗氏诊断（Roche Diagnostics）", "雅培诊断（Abbott Diagnostics）", "西门子医疗（Siemens Healthineers）", "丹纳赫（Danaher）", "贝克曼库尔特（Beckman Coulter）", "生物梅里埃（bioMérieux）", "希森美康（Sysmex）"]
+            },
+            {
+              "子-子环节名称": "生命科学仪器",
+              "代表公司": ["赛默飞世尔科技（Thermo Fisher Scientific）", "丹纳赫（Danaher）", "安捷伦科技（Agilent Technologies）", "Illumina", "10x Genomics", "Bio-Rad"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "工业自动化设备",
+          "子-子环节": [
+            {
+              "子-子环节名称": "工业机器人",
+              "代表公司": ["发那科（FANUC）", "ABB", "库卡（KUKA）", "安川电机（Yaskawa）", "爱普生（Epson）", "川崎重工（Kawasaki）", "史陶比尔（Staubli）"]
+            },
+            {
+              "子-子环节名称": "机器视觉系统",
+              "代表公司": ["康耐视（Cognex）", "基恩士（Keyence）", "邦纳（Banner）", "欧姆龙（Omron）", "National Instruments", "Teledyne DALSA", "Basler"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "半导体设备",
+          "子-子环节": [
+            {
+              "子-子环节名称": "光刻机",
+              "代表公司": ["阿斯麦（ASML）", "尼康（Nikon）", "佳能（Canon）"]
+            },
+            {
+              "子-子环节名称": "刻蚀设备",
+              "代表公司": ["应用材料（Applied Materials）", "泛林集团（Lam Research）", "东京电子（Tokyo Electron）", "中微公司（AMEC）"]
+            },
+            {
+              "子-子环节名称": "薄膜沉积设备",
+              "代表公司": ["应用材料（Applied Materials）", "东京电子（Tokyo Electron）", "泛林集团（Lam Research）", "先晶半导体（ASM International）"]
+            },
+            {
+              "子-子环节名称": "检测设备",
+              "代表公司": ["科磊（KLA）", "应用材料（Applied Materials）", "日立高新（Hitachi High-Tech）", "Lasertec"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "下游：应用领域",
+      "子环节": [
+        {
+          "子环节名称": "科学研究",
+          "子-子环节": [
+            {
+              "子-子环节名称": "材料科学",
+              "代表公司": ["高校及科研院所", "国家实验室", "企业研发中心"]
+            },
+            {
+              "子-子环节名称": "生命科学",
+              "代表公司": ["高校及科研院所", "制药公司", "生物技术公司", "医院"]
+            },
+            {
+              "子-子环节名称": "环境科学",
+              "代表公司": ["环境监测机构", "高校及科研院所", "环保企业"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "工业制造",
+          "子-子环节": [
+            {
+              "子-子环节名称": "半导体制造",
+              "代表公司": ["台积电（TSMC）", "三星（Samsung）", "英特尔（Intel）", "格罗方德（GlobalFoundries）", "中芯国际（SMIC）"]
+            },
+            {
+              "子-子环节名称": "汽车制造",
+              "代表公司": ["大众汽车（Volkswagen）", "丰田汽车（Toyota）", "通用汽车（General Motors）", "戴姆勒（Daimler）", "宝马（BMW）"]
+            },
+            {
+              "子-子环节名称": "航空航天",
+              "代表公司": ["波音（Boeing）", "空中客车（Airbus）", "洛克希德·马丁（Lockheed Martin）", "诺斯罗普·格鲁曼（Northrop Grumman）", "中国商飞（COMAC）"]
+            },
+            {
+              "子-子环节名称": "电子产品制造",
+              "代表公司": ["富士康（Foxconn）", "和硕（Pegatron）", "纬创（Wistron）", "广达电脑（Quanta Computer）", "仁宝电脑（Compal Electronics）"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "医疗健康",
+          "子-子环节": [
+            {
+              "子-子环节名称": "医院",
+              "代表公司": ["大型综合医院", "专科医院", "私立医院"]
+            },
+            {
+              "子-子环节名称": "制药公司",
+              "代表公司": ["辉瑞（Pfizer）", "罗氏（Roche）", "诺华（Novartis）", "强生（Johnson & Johnson）", "默沙东（Merck）"]
+            },
+            {
+              "子-子环节名称": "医疗器械公司",
+              "代表公司": ["美敦力（Medtronic）", "强生（Johnson & Johnson）", "雅培（Abbott）", "史赛克（Stryker）", "波士顿科学（Boston Scientific）"]
+            },
+            {
+              "子-子环节名称": "体检中心",
+              "代表公司": ["美年大健康", "爱康国宾", "慈铭体检"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "能源与环境",
+          "子-子环节": [
+            {
+              "子-子环节名称": "石油化工",
+              "代表公司": ["中国石化（Sinopec）", "中国石油（PetroChina）", "埃克森美孚（ExxonMobil）", "壳牌（Shell）", "英国石油（BP）"]
+            },
+            {
+              "子-子环节名称": "新能源",
+              "代表公司": ["宁德时代（CATL）", "比亚迪（BYD）", "特斯拉（Tesla）", "隆基股份（LONGi）", "金风科技（Goldwind）"]
+            },
+            {
+              "子-子环节名称": "环保",
+              "代表公司": ["桑德环境（Sound Environment）", "碧水源（OriginWater）", "启迪环境（Tus-Sound）", "高能环境（High-Energy Environment）"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "食品与农业",
+          "子-子环节": [
+            {
+              "子-子环节名称": "食品安全检测",
+              "代表公司": ["食品生产企业", "第三方检测机构", "政府监管部门"]
+            },
+            {
+              "子-子环节名称": "农业生产",
+              "代表公司": ["农业企业", "农场", "农业合作社"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

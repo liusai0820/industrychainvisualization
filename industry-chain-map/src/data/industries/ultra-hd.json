@@ -1,0 +1,132 @@
+{
+    "产业链": "超高清视频显示",
+    "环节": [
+      {
+        "环节名称": "上游：核心元器件",
+        "子环节": [
+          {
+            "子环节名称": "显示面板",
+            "子-子环节": [
+              {
+                "子-子环节名称": "LCD面板",
+                "代表公司": ["京东方 (BOE)", "TCL华星光电 (CSOT)", "友达光电 (AUO)", "群创光电 (Innolux)", "夏普 (Sharp)"]
+              },
+              {
+                "子-子环节名称": "OLED面板",
+                "代表公司": ["三星显示 (Samsung Display)", "LG Display", "京东方 (BOE)", "维信诺 (Visionox)", "天马微电子 (Tianma)"]
+              },
+              {
+                "子-子环节名称": "Mini/Micro LED",
+                "代表公司": ["三星电子 (Samsung Electronics)", "LG电子 (LG Electronics)", "TCL", "利亚德 (Leyard)", "洲明科技 (Unilumin)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "图像处理芯片",
+            "子-子环节": [
+              {
+                "子-子环节名称": "显示驱动IC",
+                "代表公司": ["联咏科技 (Novatek)", "奇景光电 (Himax)", "瑞鼎科技 (Raydium)", "矽创电子 (Sitronix)", "敦泰电子 (FocalTech)"]
+              },
+              {
+                "子-子环节名称": "视频处理芯片",
+                "代表公司": ["联发科 (MediaTek)", "晶晨半导体 (Amlogic)", "海思半导体 (HiSilicon)", "瑞昱半导体 (Realtek)", "展讯通信 (UNISOC)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "光学器件",
+            "子-子环节": [
+              {
+                "子-子环节名称": "光学镜头",
+                "代表公司": ["大立光电 (Largan Precision)", "玉晶光电 (Genius Electronic)", "舜宇光学 (Sunny Optical)", "联创光电 (LCTC)", "五方光电 (O-Film)"]
+              },
+              {
+                "子-子环节名称": "光学膜材",
+                "代表公司": ["3M", "住友化学 (Sumitomo Chemical)", "LG化学 (LG Chem)", "SKC", "三菱化学 (Mitsubishi Chemical)"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "中游：整机制造与系统集成",
+        "子环节": [
+          {
+            "子环节名称": "消费电子显示",
+            "子-子环节": [
+              {
+                "子-子环节名称": "电视机",
+                "代表公司": ["三星电子 (Samsung Electronics)", "LG电子 (LG Electronics)", "索尼 (Sony)", "TCL", "海信 (Hisense)"]
+              },
+              {
+                "子-子环节名称": "显示器",
+                "代表公司": ["戴尔 (Dell)", "惠普 (HP)", "华硕 (ASUS)", "明基 (BenQ)", "优派 (ViewSonic)"]
+              },
+              {
+                "子-子环节名称": "投影仪",
+                "代表公司": ["爱普生 (Epson)", "明基 (BenQ)", "索尼 (Sony)", "NEC", "奥图码 (Optoma)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "商用显示",
+            "子-子环节": [
+              {
+                "子-子环节名称": "LED显示屏",
+                "代表公司": ["利亚德 (Leyard)", "洲明科技 (Unilumin)", "艾比森 (Absen)", "强力巨彩 (Qiangli)", "雷曼光电 (Ledman)"]
+              },
+              {
+                "子-子环节名称": "数字标牌",
+                "代表公司": ["三星电子 (Samsung Electronics)", "LG电子 (LG Electronics)", "NEC", "飞利浦 (Philips)", "夏普 (Sharp)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "专业显示",
+            "子-子环节": [
+              {
+                "子-子环节名称": "医疗显示",
+                "代表公司": ["巴可 (Barco)", "飞利浦 (Philips)", "索尼 (Sony)", "京东方 (BOE)", "双威医疗 (Double Medical)"]
+              },
+              {
+                "子-子环节名称": "安防显示",
+                "代表公司": ["海康威视 (Hikvision)", "大华股份 (Dahua Technology)", "宇视科技 (Uniview)", "浩云科技 (Haoyun)", "英飞拓 (Infinova)"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "下游：内容制作与应用",
+        "子环节": [
+          {
+            "子环节名称": "内容制作",
+            "子-子环节": [
+              {
+                "子-子环节名称": "影视制作",
+                "代表公司": ["华纳兄弟 (Warner Bros.)", "迪士尼 (Disney)", "环球影业 (Universal Pictures)", "索尼影业 (Sony Pictures)", "派拉蒙 (Paramount Pictures)"]
+              },
+              {
+                "子-子环节名称": "广播电视",
+                "代表公司": ["中央广播电视总台 (CCTV)", "BBC", "NHK", "Discovery", "Netflix"]
+              },
+              {
+                "子-子环节名称": "游戏开发",
+                "代表公司": ["动视暴雪 (Activision Blizzard)", "艺电 (Electronic Arts)", "育碧 (Ubisoft)", "腾讯 (Tencent)", "网易 (NetEase)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "虚拟现实/增强现实",
+            "子-子环节": [
+              {
+                "子-子环节名称": "VR/AR内容制作",
+                "代表公司": ["Unity Technologies", "Epic Games", "Valve", "Within", "Jaunt VR"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

@@ -1,0 +1,264 @@
+{
+    "产业链": "半导体与集成电路",
+    "环节": [
+      {
+        "环节名称": "上游：支撑产业",
+        "子环节": [
+          {
+            "子环节名称": "半导体材料",
+            "子-子环节": [
+              {
+                "子-子环节名称": "硅片",
+                "代表公司": ["信越化学（Shin-Etsu Chemical）", "胜高（SUMCO）", "环球晶圆（GlobalWafers）", "Siltronic", "SK Siltron"]
+              },
+              {
+                "子-子环节名称": "光刻胶",
+                "代表公司": ["东京应化（Tokyo Ohka Kogyo）", "JSR Corporation", "陶氏杜邦（DowDuPont）", "信越化学（Shin-Etsu Chemical）", "富士胶片（Fujifilm）"]
+              },
+              {
+                "子-子环节名称": "高纯度气体",
+                "代表公司": ["液化空气集团（Air Liquide）", "林德集团（Linde）", "大阳日酸（Taiyo Nippon Sanso）", "空气化工产品（Air Products）", "昭和电工（Showa Denko）"]
+              },
+              {
+                "子-子环节名称": "CMP抛光材料",
+                "代表公司": ["陶氏杜邦（DowDuPont）", "卡博特微电子（Cabot Microelectronics）", "富士美（Fujimi Incorporated）", "日立化成（Hitachi Chemical）", "3M"]
+              },
+              {
+                "子-子环节名称": "溅射靶材",
+                "代表公司": ["日矿金属（JX Nippon Mining & Metals）", "霍尼韦尔（Honeywell）", "东曹（Tosoh）", "普莱克斯（Praxair）", "住友化学（Sumitomo Chemical）"]
+              },
+              {
+                "子-子环节名称": "湿电子化学品",
+                "代表公司": ["巴斯夫（BASF）", "霍尼韦尔（Honeywell）", "三菱化学（Mitsubishi Chemical）", "关东化学（Kanto Chemical）", "江化微（Jianghua Microelectronics Materials）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "半导体设备",
+            "子-子环节": [
+              {
+                "子-子环节名称": "光刻机",
+                "代表公司": ["阿斯麦（ASML）", "尼康（Nikon）", "佳能（Canon）"]
+              },
+              {
+                "子-子环节名称": "刻蚀设备",
+                "代表公司": ["应用材料（Applied Materials）", "泛林集团（Lam Research）", "东京电子（Tokyo Electron）", "日立高新（Hitachi High-Tech）", "中微公司（AMEC）"]
+              },
+              {
+                "子-子环节名称": "薄膜沉积设备（CVD、PVD）",
+                "代表公司": ["应用材料（Applied Materials）", "泛林集团（Lam Research）", "东京电子（Tokyo Electron）", "爱思强（Aixtron）", "北方华创（NAURA）"]
+              },
+              {
+                "子-子环节名称": "离子注入设备",
+                "代表公司": ["应用材料（Applied Materials）", "Axcelis Technologies", "Varian Semiconductor Equipment (Applied Materials)", "中微公司（AMEC）", "凯世通（Kingstone）"]
+              },
+              {
+                "子-子环节名称": "CMP设备",
+                "代表公司": ["应用材料（Applied Materials）", "Ebara Corporation", "东京精密（Tokyo Seimitsu）"]
+              },
+              {
+                "子-子环节名称": "晶圆检测设备",
+                "代表公司": ["科磊（KLA）", "应用材料（Applied Materials）", "日立高新（Hitachi High-Tech）", "东京精密（Tokyo Seimitsu）", "Lasertec"]
+              },
+              {
+                "子-子环节名称": "测试设备",
+                "代表公司": ["泰瑞达（Teradyne）", "爱德万测试（Advantest）", "科休半导体（Cohu）", "长川科技（Changchuan Technology）", "华峰测控（AccoTEST）"]
+              },
+              {
+                "子-子环节名称": "封装设备",
+                "代表公司": ["ASM Pacific Technology", "库力索法（Kulicke and Soffa）", "Besi", "东京精密（Tokyo Seimitsu）", "新川（Shinkawa）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "EDA/IP",
+            "子-子环节": [
+              {
+                "子-子环节名称": "EDA软件",
+                "代表公司": ["楷登电子（Cadence）", "新思科技（Synopsys）", "西门子EDA（Siemens EDA）", "华大九天（Empyrean Technology）", "概伦电子（ProPlus Design Solutions）"]
+              },
+              {
+                "子-子环节名称": "IP核",
+                "代表公司": ["ARM", "新思科技（Synopsys）", "楷登电子（Cadence）", "Imagination Technologies", "CEVA"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "中游：集成电路制造",
+        "子环节": [
+          {
+            "子环节名称": "集成电路设计",
+            "子-子环节": [
+              {
+                "子-子环节名称": "数字芯片设计",
+                "代表公司": ["高通（Qualcomm）", "英伟达（NVIDIA）", "博通（Broadcom）", "联发科（MediaTek）", "超威半导体（AMD）", "海思半导体（HiSilicon）"]
+              },
+              {
+                "子-子环节名称": "模拟芯片设计",
+                "代表公司": ["德州仪器（Texas Instruments）", "亚德诺半导体（Analog Devices）", "英飞凌（Infineon）", "意法半导体（STMicroelectronics）", "恩智浦（NXP）", "思佳讯（Skyworks）"]
+              },
+              {
+                "子-子环节名称": "存储芯片设计",
+                "代表公司": ["三星电子（Samsung Electronics）", "SK海力士（SK Hynix）", "美光科技（Micron Technology）", "西部数据（Western Digital）", "长江存储（YMTC）"]
+              },
+              {
+                "子-子环节名称": "射频芯片设计",
+                "代表公司": ["高通（Qualcomm）", "思佳讯（Skyworks）", "科沃（Qorvo）", "博通（Broadcom）", "村田制作所（Murata）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "晶圆制造",
+            "子-子环节": [
+              {
+                "子-子环节名称": "先进制程（≤7nm）",
+                "代表公司": ["台积电（TSMC）", "三星电子（Samsung Electronics）", "英特尔（Intel）"]
+              },
+              {
+                "子-子环节名称": "成熟制程（≥14nm）",
+                "代表公司": ["台积电（TSMC）", "联华电子（UMC）", "格罗方德（GlobalFoundries）", "中芯国际（SMIC）", "华虹集团（Hua Hong Group）"]
+              },
+              {
+                "子-子环节名称": "特色工艺",
+                "代表公司": ["台积电（TSMC）", "格罗方德（GlobalFoundries）", "Tower Semiconductor", "华虹集团（Hua Hong Group）", "中芯国际（SMIC）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "封装测试",
+            "子-子环节": [
+              {
+                "子-子环节名称": "传统封装",
+                "代表公司": ["日月光（ASE）", "安靠（Amkor）", "长电科技（JCET）", "力成科技（Powertech）", "华天科技（Hua Tian Technology）"]
+              },
+              {
+                "子-子环节名称": "先进封装（SiP、WLP、FCBGA等）",
+                "代表公司": ["台积电（TSMC）", "日月光（ASE）", "安靠（Amkor）", "英特尔（Intel）", "三星电子（Samsung Electronics）"]
+              },
+              {
+                "子-子环节名称": "芯片测试",
+                "代表公司": ["日月光（ASE）", "安靠（Amkor）", "长电科技（JCET）", "京元电子（KYEC）", "矽品精密（SPIL）"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "下游：应用领域",
+        "子环节": [
+          {
+            "子环节名称": "消费电子",
+            "子-子环节": [
+              {
+                "子-子环节名称": "智能手机",
+                "代表公司": ["苹果（Apple）", "三星电子（Samsung Electronics）", "华为（Huawei）", "小米（Xiaomi）", "OPPO"]
+              },
+              {
+                "子-子环节名称": "个人电脑",
+                "代表公司": ["苹果（Apple）", "联想（Lenovo）", "惠普（HP）", "戴尔（Dell）", "华硕（ASUS）"]
+              },
+              {
+                "子-子环节名称": "可穿戴设备",
+                "代表公司": ["苹果（Apple）", "三星电子（Samsung Electronics）", "Fitbit", "Garmin", "小米（Xiaomi）"]
+              },
+              {
+                "子-子环节名称": "智能家居",
+                "代表公司": ["亚马逊（Amazon）", "谷歌（Google）", "苹果（Apple）", "小米（Xiaomi）", "三星电子（Samsung Electronics）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "通信",
+            "子-子环节": [
+              {
+                "子-子环节名称": "移动通信基站",
+                "代表公司": ["华为（Huawei）", "爱立信（Ericsson）", "诺基亚（Nokia）", "中兴通讯（ZTE）", "三星电子（Samsung Electronics）"]
+              },
+              {
+                "子-子环节名称": "光通信设备",
+                "代表公司": ["华为（Huawei）", "中兴通讯（ZTE）", "诺基亚（Nokia）", "思科（Cisco）", "烽火通信（Fiberhome）"]
+              },
+              {
+                "子-子环节名称": "网络设备（路由器、交换机等）",
+                "代表公司": ["思科（Cisco）", "华为（Huawei）", "瞻博网络（Juniper Networks）", "Arista Networks", "新华三（H3C）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "工业控制",
+            "子-子环节": [
+              {
+                "子-子环节名称": "工业自动化",
+                "代表公司": ["西门子（Siemens）", "ABB", "施耐德电气（Schneider Electric）", "三菱电机（Mitsubishi Electric）", "罗克韦尔自动化（Rockwell Automation）"]
+              },
+              {
+                "子-子环节名称": "工业机器人",
+                "代表公司": ["发那科（FANUC）", "ABB", "库卡（KUKA）", "安川电机（Yaskawa）", "新松机器人（SIASUN）"]
+              },
+              {
+                "子-子环节名称": "电力电子",
+                "代表公司": ["英飞凌（Infineon）", "三菱电机（Mitsubishi Electric）", "富士电机（Fuji Electric）", "安森美半导体（ON Semiconductor）", "意法半导体（STMicroelectronics）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "汽车电子",
+            "子-子环节": [
+              {
+                "子-子环节名称": "自动驾驶芯片",
+                "代表公司": ["英伟达（NVIDIA）", "英特尔（Intel）- Mobileye", "高通（Qualcomm）", "特斯拉（Tesla）", "华为（Huawei）"]
+              },
+              {
+                "子-子环节名称": "MCU（微控制器）",
+                "代表公司": ["恩智浦（NXP）", "瑞萨电子（Renesas）", "英飞凌（Infineon）", "意法半导体（STMicroelectronics）", "德州仪器（Texas Instruments）"]
+              },
+              {
+                "子-子环节名称": "功率半导体（IGBT、MOSFET等）",
+                "代表公司": ["英飞凌（Infineon）", "三菱电机（Mitsubishi Electric）", "富士电机（Fuji Electric）", "安森美半导体（ON Semiconductor）", "斯达半导体（StarPower）"]
+              },
+              {
+                "子-子环节名称": "车载传感器",
+                "代表公司": ["博世（Bosch）", "大陆集团（Continental）", "电装（Denso）", "安森美半导体（ON Semiconductor）", "Velodyne LiDAR"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "高性能计算",
+            "子-子环节": [
+              {
+                "子-子环节名称": "数据中心",
+                "代表公司": ["亚马逊AWS（Amazon Web Services）", "微软Azure（Microsoft Azure）", "谷歌云（Google Cloud）", "阿里云（Alibaba Cloud）", "腾讯云（Tencent Cloud）"]
+              },
+              {
+                "子-子环节名称": "人工智能",
+                "代表公司": ["英伟达（NVIDIA）", "英特尔（Intel）", "谷歌（Google）", "AMD", "寒武纪（Cambricon）"]
+              },
+              {
+                "子-子环节名称": "超级计算机",
+                "代表公司": ["IBM", "HPE", "Cray (HPE)", "Fujitsu", "NEC"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "物联网",
+            "子-子环节": [
+              {
+                "子-子环节名称": "物联网芯片",
+                "代表公司": ["高通（Qualcomm）", "联发科（MediaTek）", "乐鑫科技（Espressif Systems）", "华为（Huawei）", "紫光展锐（UNISOC）"]
+              },
+              {
+                "子-子环节名称": "传感器",
+                "代表公司": ["博世（Bosch）", "意法半导体（STMicroelectronics）", "霍尼韦尔（Honeywell）", "德州仪器（Texas Instruments）", "TE Connectivity"]
+              },
+              {
+                "子-子环节名称": "无线通信模组",
+                "代表公司": ["Sierra Wireless", "Telit", "u-blox", "移远通信（Quectel）", "广和通（Fibocom）"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

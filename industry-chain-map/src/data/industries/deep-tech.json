@@ -1,0 +1,203 @@
+{
+    "产业链": "深地深海技术",
+    "环节": [
+      {
+        "环节名称": "上游：基础研究、材料与关键部件",
+        "子环节": [
+          {
+            "子环节名称": "基础研究",
+            "子-子环节": [
+              {
+                "子-子环节名称": "地球物理学",
+                "代表公司": ["中国科学院地质与地球物理研究所", "美国地质调查局 (USGS)", "德国亥姆霍兹地球科学研究中心 (GFZ)", "法国国家科学研究中心 (CNRS)", "日本海洋研究开发机构 (JAMSTEC)"]
+              },
+              {
+                "子-子环节名称": "海洋科学",
+                "代表公司": ["伍兹霍尔海洋研究所 (WHOI)", "斯克里普斯海洋研究所 (SIO)", "中国科学院海洋研究所", "英国国家海洋学中心 (NOC)", "德国基尔亥姆霍兹海洋研究中心 (GEOMAR)"]
+              },
+              {
+                "子-子环节名称": "材料科学",
+                "代表公司": ["美国海军研究实验室 (NRL)", "中国科学院金属研究所", "德国弗劳恩霍夫协会 (Fraunhofer)", "日本物质材料研究机构 (NIMS)", "英国国家物理实验室 (NPL)"]
+              },
+              {
+                "子-子环节名称": "深海生物学",
+                "代表公司": ["蒙特雷湾水族馆研究所 (MBARI)", "伍兹霍尔海洋研究所 (WHOI)", "斯克里普斯海洋研究所 (SIO)", "日本海洋研究开发机构 (JAMSTEC)", "中国科学院深海科学与工程研究所"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "特种材料",
+            "子-子环节": [
+              {
+                "子-子环节名称": "高强度合金",
+                "代表公司": ["ATI (Allegheny Technologies Incorporated)", "Carpenter Technology Corporation", "VSMPO-AVISMA", "宝钢特钢 (Baosteel Special Steel)", "中信特钢 (CITIC Special Steel)"]
+              },
+              {
+                "子-子环节名称": "耐压材料",
+                "代表公司": ["Haynes International", "Special Metals Corporation", "蒂森克虏伯 (Thyssenkrupp)", "住友金属 (Sumitomo Metal)", "JFE Steel"]
+              },
+              {
+                "子-子环节名称": "耐腐蚀材料",
+                "代表公司": ["Outokumpu", "Aperam", "Sandvik", "VDM Metals", "Nippon Steel"]
+              },
+              {
+                "子-子环节名称": "浮力材料",
+                "代表公司": ["Trelleborg", "Matrix Composites & Engineering", "Engineered Syntactic Systems", "Balmoral Group", "Flotation Technologies"]
+              },
+              {
+                "子-子环节名称": "密封材料",
+                "代表公司": ["Parker Hannifin", "Trelleborg Sealing Solutions", "Freudenberg Sealing Technologies", "Greene Tweed", "Technetics Group"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "关键部件",
+            "子-子环节": [
+              {
+                "子-子环节名称": "深海/深地传感器",
+                "代表公司": ["Honeywell", "Teledyne Marine", "Kongsberg Maritime", "Schlumberger", "Baker Hughes"]
+              },
+              {
+                "子-子环节名称": "深海/深地通信设备",
+                "代表公司": ["Sonardyne", "Kongsberg Maritime", "Teledyne Marine", "EvoLogics", "Subnero"]
+              },
+              {
+                "子-子环节名称": "深海/深地能源系统",
+                "代表公司": ["Saft", "Exide Technologies", "GS Yuasa", "Enersys", "A123 Systems"]
+              },
+              {
+                "子-子环节名称": "深海/深地推进系统",
+                "代表公司": ["Schottel", "Rolls-Royce Marine", "ABB", "Wärtsilä", "Brunvoll"]
+              },
+              {
+                "子-子环节名称": "深海/深地光学设备",
+                "代表公司": ["DeepSea Power & Light", "SubC Imaging", "Bowtech Products", "Imenco", "Kongsberg Maritime"]
+              },
+              {
+                "子-子环节名称": "深海/深地机械臂",
+                "代表公司": ["Schilling Robotics (TechnipFMC)", "Saab Seaeye", "ECA Group", "Oceaneering", "Forum Energy Technologies"]
+              },
+              {
+                "子-子环节名称": "深地钻探工具",
+                "代表公司": ["Schlumberger", "Halliburton", "Baker Hughes", "National Oilwell Varco", "Weatherford"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "中游：装备研发与制造",
+        "子环节": [
+          {
+            "子环节名称": "深海装备",
+            "子-子环节": [
+              {
+                "子-子环节名称": "载人潜水器 (HOV)",
+                "代表公司": ["Triton Submarines", "DeepFlight", "SEAmagine", "中国船舶重工集团公司 (CSIC)", "U-Boat Worx"]
+              },
+              {
+                "子-子环节名称": "无人潜水器 (AUV/ROV)",
+                "代表公司": ["Kongsberg Maritime", "Teledyne Marine", "Saab Seaeye", "Oceaneering", "ECA Group"]
+              },
+              {
+                "子-子环节名称": "水下机器人",
+                "代表公司": ["Schilling Robotics (TechnipFMC)", "Saab Seaeye", "ECA Group", "Oceaneering", "Forum Energy Technologies"]
+              },
+              {
+                "子-子环节名称": "深海空间站",
+                "代表公司": ["中国船舶重工集团公司 (CSIC)", "俄罗斯鲁宾设计局 (Rubin Design Bureau)"]
+              },
+              {
+                "子-子环节名称": "深海作业支持船",
+                "代表公司": ["TechnipFMC", "Subsea 7", "Oceaneering", "DOF Subsea", "Helix Energy Solutions"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "深地装备",
+            "子-子环节": [
+              {
+                "子-子环节名称": "深地钻机",
+                "代表公司": ["National Oilwell Varco", "Schlumberger", "Baker Hughes", "Herrenknecht", "宝鸡石油机械有限责任公司 (BOMCO)"]
+              },
+              {
+                "子-子环节名称": "深地探测设备",
+                "代表公司": ["Schlumberger", "Halliburton", "Baker Hughes", "CGG", "Sinopec Geophysical Corporation"]
+              },
+              {
+                "子-子环节名称": "深地实验平台",
+                "代表公司": ["中国科学院深地科学卓越创新中心", "美国桑迪亚国家实验室 (Sandia National Laboratories)", "德国亥姆霍兹地球科学研究中心 (GFZ)", "日本地球深部探测中心 (CDEX)", "加拿大萨德伯里中微子观测站实验室 (SNOLAB)"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "下游：应用与服务",
+        "子环节": [
+          {
+            "子环节名称": "深海应用",
+            "子-子环节": [
+              {
+                "子-子环节名称": "海洋油气勘探开发",
+                "代表公司": ["中海油 (CNOOC)", "中石油 (CNPC)", "中石化 (Sinopec)", "埃克森美孚 (ExxonMobil)", "壳牌 (Shell)"]
+              },
+              {
+                "子-子环节名称": "深海矿产资源开发",
+                "代表公司": ["Nautilus Minerals", "DeepGreen Metals", "Keppel Corporation", "Lockheed Martin", "中国五矿集团 (China Minmetals)"]
+              },
+              {
+                "子-子环节名称": "深海生物资源开发",
+                "代表公司": ["Maruha Nichiro", "Nippon Suisan Kaisha", "Thai Union Group", "Trident Seafoods", "Kyokuyo"]
+              },
+              {
+                "子-子环节名称": "深海科学考察",
+                "代表公司": ["伍兹霍尔海洋研究所 (WHOI)", "斯克里普斯海洋研究所 (SIO)", "中国科学院海洋研究所", "日本海洋研究开发机构 (JAMSTEC)", "德国基尔亥姆霍兹海洋研究中心 (GEOMAR)"]
+              },
+              {
+                "子-子环节名称": "深海环境监测",
+                "代表公司": ["Ocean Networks Canada", "European Multidisciplinary Seafloor and Water Column Observatory (EMSO)", "美国国家海洋和大气管理局 (NOAA)", "英国国家海洋学中心 (NOC)", "法国海洋开发研究院 (Ifremer)"]
+              },
+              {
+                "子-子环节名称": "海底通信电缆铺设与维护",
+                "代表公司": ["Alcatel Submarine Networks", "SubCom", "NEC", "Prysmian Group", "华为海洋 (Huawei Marine)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "深地应用",
+            "子-子环节": [
+              {
+                "子-子环节名称": "地热资源开发",
+                "代表公司": ["Ormat Technologies", "Enel Green Power", "Calpine Corporation", "Pertamina Geothermal Energy", "中国石化 (Sinopec)"]
+              },
+              {
+                "子-子环节名称": "深部矿产资源勘探开发",
+                "代表公司": ["必和必拓 (BHP)", "力拓 (Rio Tinto)", "淡水河谷 (Vale)", "嘉能可 (Glencore)", "英美资源 (Anglo American)"]
+              },
+              {
+                "子-子环节名称": "页岩油气勘探开发",
+                "代表公司": ["EOG Resources", "Pioneer Natural Resources", "Devon Energy", "ConocoPhillips", "Chevron"]
+              },
+              {
+                "子-子环节名称": "深部科学钻探",
+                "代表公司": ["国际大陆科学钻探计划 (ICDP)", "国际大洋发现计划 (IODP)", "中国大陆科学钻探工程 (CCSD)"]
+              },
+              {
+                "子-子环节名称": "地下空间利用",
+                "代表公司": ["中国铁建 (CRCC)", "中国中铁 (CREC)", "上海隧道工程股份有限公司 (STEC)", "Bouygues Construction", "Skanska"]
+              },
+              {
+                "子-子环节名称": "核废料处置",
+                "代表公司": ["Posiva", "SKB", "Nagra", "Andra", "NWMO"]
+              },
+              {
+                "子-子环节名称": "二氧化碳捕集与封存 (CCS)",
+                "代表公司": ["Schlumberger", "Halliburton", "Equinor", "Shell", "ExxonMobil"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

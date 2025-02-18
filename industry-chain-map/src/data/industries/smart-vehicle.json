@@ -1,0 +1,281 @@
+{
+    "产业链": "智能网联汽车",
+    "环节": [
+      {
+        "环节名称": "上游：基础元器件与技术支持",
+        "子环节": [
+          {
+            "子环节名称": "核心芯片",
+            "子-子环节": [
+              {
+                "子-子环节名称": "计算芯片 (CPU/GPU/AI芯片)",
+                "代表公司": ["英伟达 (Nvidia)", "高通 (Qualcomm)", "英特尔 (Intel) & Mobileye", "华为 (Huawei)", "地平线 (Horizon Robotics)", "安霸 (Ambarella)", "瑞萨电子 (Renesas)"]
+              },
+              {
+                "子-子环节名称": "通信芯片 (5G/V2X)",
+                "代表公司": ["高通 (Qualcomm)", "华为 (Huawei)", "大唐电信 (Datang Telecom)", "联发科 (MediaTek)", "三星 (Samsung)"]
+              },
+              {
+                "子-子环节名称": "存储芯片 (DRAM/NAND/NOR)",
+                "代表公司": ["三星 (Samsung)", "美光 (Micron)", "SK海力士 (SK Hynix)", "西部数据 (Western Digital)", "铠侠 (Kioxia)"]
+              },
+              {
+                "子-子环节名称": "功率芯片 (IGBT/MOSFET/SiC)",
+                "代表公司": ["英飞凌 (Infineon)", "安森美 (ON Semiconductor)", "意法半导体 (STMicroelectronics)", "三菱电机 (Mitsubishi Electric)", "富士电机 (Fuji Electric)", "比亚迪半导体 (BYD Semiconductor)"]
+              },
+              {
+                "子-子环节名称": "模拟芯片 (电源管理/信号链)",
+                "代表公司": ["德州仪器 (Texas Instruments)", "亚德诺半导体 (Analog Devices)", "英飞凌 (Infineon)", "意法半导体 (STMicroelectronics)", "恩智浦 (NXP)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "传感器",
+            "子-子环节": [
+              {
+                "子-子环节名称": "摄像头 (CIS)",
+                "代表公司": ["索尼 (Sony)", "三星 (Samsung)", "豪威科技 (OmniVision)", "安森美 (ON Semiconductor)", "格科微 (GalaxyCore)"]
+              },
+              {
+                "子-子环节名称": "激光雷达 (LiDAR)",
+                "代表公司": ["Velodyne Lidar", "Luminar", "Innoviz", "Ouster", "禾赛科技 (Hesai Technology)", "速腾聚创 (RoboSense)", "华为 (Huawei)"]
+              },
+              {
+                "子-子环节名称": "毫米波雷达 (mmWave Radar)",
+                "代表公司": ["博世 (Bosch)", "大陆集团 (Continental)", "德尔福 (Aptiv)", "海拉 (Hella)", "采埃孚 (ZF)", "安波福 (Aptiv)", "森思泰克 (Sensortech)"]
+              },
+              {
+                "子-子环节名称": "超声波雷达 (Ultrasonic Radar)",
+                "代表公司": ["博世 (Bosch)", "法雷奥 (Valeo)", "TDK", "村田制作所 (Murata Manufacturing)", "尼塞拉 (Nicera)"]
+              },
+              {
+                "子-子环节名称": "惯性测量单元 (IMU)",
+                "代表公司": ["博世 (Bosch)", "意法半导体 (STMicroelectronics)", "TDK InvenSense", "ADI", "Honeywell"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "汽车电子电气架构",
+            "子-子环节": [
+              {
+                "子-子环节名称": "域控制器 (Domain Controller)",
+                "代表公司": ["德尔福 (Aptiv)", "大陆集团 (Continental)", "博世 (Bosch)", "伟世通 (Visteon)", "安波福 (Aptiv)", "华为 (Huawei)", "经纬恒润 (Hirain)"]
+              },
+              {
+                "子-子环节名称": "车载以太网 (Automotive Ethernet)",
+                "代表公司": ["博通 (Broadcom)", "Marvell", "NXP", "瑞昱半导体 (Realtek)", "Microchip"]
+              },
+              {
+                "子-子环节名称": "线束/连接器 (Harness/Connector)",
+                "代表公司": ["矢崎 (Yazaki)", "住友电工 (Sumitomo Electric)", "莱尼 (Leoni)", "安波福 (Aptiv)", "泰科电子 (TE Connectivity)"]
+              },
+              {
+                "子-子环节名称": "PCB/FPC",
+                "代表公司": ["TTM Technologies", "欣兴电子 (Unimicron)", "健鼎科技 (Tripod Technology)", "揖斐电 (Ibiden)", "深南电路 (SCC)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "基础软件与开发工具",
+            "子-子环节": [
+              {
+                "子-子环节名称": "操作系统 (OS)",
+                "代表公司": ["BlackBerry QNX", "Wind River", "Green Hills Software", "Linux Foundation (AGL)", "华为 (HarmonyOS)"]
+              },
+              {
+                "子-子环节名称": "中间件 (Middleware)",
+                "代表公司": ["Elektrobit", "Vector Informatik", "ETAS (Bosch)", "dSPACE", "TTTech Auto"]
+              },
+              {
+                "子-子环节名称": "虚拟化 (Hypervisor)",
+                "代表公司": ["BlackBerry QNX", "Green Hills Software", "Wind River", "SYSGO", "Mentor Graphics (Siemens)"]
+              },
+              {
+                "子-子环节名称": "AUTOSAR",
+                "代表公司": ["Vector Informatik", "Elektrobit", "ETAS (Bosch)", "Mentor Graphics (Siemens)", "KPIT"]
+              },
+              {
+                "子-子环节名称": "仿真测试工具",
+                "代表公司": ["dSPACE", "Vector Informatik", "NI (National Instruments)", "Ansys", "Synopsys"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "高精度地图与定位",
+            "子-子环节": [
+              {
+                "子-子环节名称": "高精度地图",
+                "代表公司": ["Here Technologies", "TomTom", "百度 (Baidu)", "高德地图 (AutoNavi)", "四维图新 (NavInfo)"]
+              },
+              {
+                "子-子环节名称": "高精度定位",
+                "代表公司": ["U-blox", "Trimble", "Hexagon", "千寻位置 (Qianxun SI)", "六分科技 (Sixents Technology)"]
+              },
+              {
+                "子-子环节名称": "GNSS 芯片",
+                "代表公司": ["高通 (Qualcomm)", "U-blox", "联发科 (MediaTek)", "华为 (Huawei)", "北斗星通 (BDStar)"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "中游：系统集成与整车制造",
+        "子环节": [
+          {
+            "子环节名称": "智能驾驶系统",
+            "子-子环节": [
+              {
+                "子-子环节名称": "ADAS 系统",
+                "代表公司": ["Mobileye (Intel)", "博世 (Bosch)", "大陆集团 (Continental)", "德尔福 (Aptiv)", "采埃孚 (ZF)", "安波福 (Aptiv)", "电装 (Denso)"]
+              },
+              {
+                "子-子环节名称": "自动驾驶解决方案",
+                "代表公司": ["Waymo (Google)", "Cruise (GM)", "Argo AI (Ford, VW)", "Aurora", "百度 (Baidu Apollo)", "小马智行 (Pony.ai)", "文远知行 (WeRide)"]
+              },
+              {
+                "子-子环节名称": "自动驾驶仿真平台",
+                "代表公司": ["Ansys", "Synopsys", "Cognata", "Applied Intuition", "51VR"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "智能座舱系统",
+            "子-子环节": [
+              {
+                "子-子环节名称": "座舱域控制器",
+                "代表公司": ["伟世通 (Visteon)", "德赛西威 (Desay SV)", "哈曼 (Harman)", "博世 (Bosch)", "大陆集团 (Continental)", "安波福 (Aptiv)"]
+              },
+              {
+                "子-子环节名称": "车载信息娱乐系统 (IVI)",
+                "代表公司": ["哈曼 (Harman)", "阿尔派 (Alpine)", "先锋 (Pioneer)", "松下 (Panasonic)", "博世 (Bosch)"]
+              },
+              {
+                "子-子环节名称": "数字仪表 (Digital Cluster)",
+                "代表公司": ["伟世通 (Visteon)", "大陆集团 (Continental)", "博世 (Bosch)", "德赛西威 (Desay SV)", "日本精机 (Nippon Seiki)"]
+              },
+              {
+                "子-子环节名称": "抬头显示 (HUD)",
+                "代表公司": ["日本精机 (Nippon Seiki)", "大陆集团 (Continental)", "伟世通 (Visteon)", "电装 (Denso)", "怡利电子 (E-Lead)"]
+              },
+              {
+                "子-子环节名称": "语音交互系统",
+                "代表公司": ["Nuance (Microsoft)", "Cerence", "科大讯飞 (iFlytek)", "思必驰 (AISpeech)", "云知声 (Unisound)"]
+              },
+              {
+                "子-子环节名称": "手势识别系统",
+                "代表公司": ["Ultraleap", "Gestigon (Valeo)", "Eyesight Technologies", "PointGrab (Qualcomm)", "SoftKinetic (Sony)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "车联网系统",
+            "子-子环节": [
+              {
+                "子-子环节名称": "T-Box/车联网模块",
+                "代表公司": ["LG", "华为 (Huawei)", "大陆集团 (Continental)", "哈曼 (Harman)", "高新兴 (Gosuncn)"]
+              },
+              {
+                "子-子环节名称": "V2X 解决方案",
+                "代表公司": ["大唐电信 (Datang Telecom)", "华为 (Huawei)", "高通 (Qualcomm)", "Autotalks", "Savari"]
+              },
+              {
+                "子-子环节名称": "TSP 平台",
+                "代表公司": ["WirelessCar", "Airbiquity", "Bright Box", "Octo Telematics", "博泰 (Pateo)"]
+              },
+              {
+                "子-子环节名称": "网络安全",
+                "代表公司": ["Argus Cyber Security", "Karamba Security", "GuardKnox", "Upstream Security", "360"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "整车制造",
+            "子-子环节": [
+              {
+                "子-子环节名称": "传统车企",
+                "代表公司": ["大众 (Volkswagen)", "丰田 (Toyota)", "通用 (GM)", "福特 (Ford)", "戴姆勒 (Daimler)", "宝马 (BMW)", "本田 (Honda)"]
+              },
+              {
+                "子-子环节名称": "新能源车企",
+                "代表公司": ["特斯拉 (Tesla)", "比亚迪 (BYD)", "蔚来 (NIO)", "小鹏 (XPeng)", "理想 (Li Auto)", "威马 (Weltmeister)"]
+              },
+              {
+                "子-子环节名称": "新势力造车",
+                "代表公司": ["Rivian", "Lucid Motors", "Fisker", "Canoo", "零跑 (Leapmotor)"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "下游：应用与服务",
+        "子环节": [
+          {
+            "子环节名称": "出行服务",
+            "子-子环节": [
+              {
+                "子-子环节名称": "共享出行",
+                "代表公司": ["Uber", "Lyft", "滴滴出行 (Didi Chuxing)", "Grab", "Go-Jek"]
+              },
+              {
+                "子-子环节名称": "Robotaxi",
+                "代表公司": ["Waymo (Google)", "Cruise (GM)", "AutoX", "Pony.ai", "WeRide"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "车辆运营与管理",
+            "子-子环节": [
+              {
+                "子-子环节名称": "车队管理",
+                "代表公司": ["Geotab", "Verizon Connect", "Omnitracs", "Trimble", "Fleetmatics"]
+              },
+              {
+                "子-子环节名称": "UBI 车险",
+                "代表公司": ["Progressive", "Allstate", "State Farm", "Metromile", "Cambridge Mobile Telematics"]
+              },
+              {
+                "子-子环节名称": "车辆诊断与维护",
+                "代表公司": ["Bosch", "Snap-on", "Autel", "Launch Tech", "Xtool"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "智慧交通",
+            "子-子环节": [
+              {
+                "子-子环节名称": "交通管理平台",
+                "代表公司": ["华为 (Huawei)", "阿里巴巴 (Alibaba)", "海康威视 (Hikvision)", "大华股份 (Dahua Technology)", "千方科技 (Qianfang Technology)"]
+              },
+              {
+                "子-子环节名称": "智慧停车",
+                "代表公司": ["ETCP", "停简单 (Tingjiandan)", "AIpark", "顺易通 (Sunyiton)", "捷顺科技 (Jieshun Technology)"]
+              },
+              {
+                "子-子环节名称": "车路协同",
+                "代表公司": ["华为 (Huawei)", "大唐电信 (Datang Telecom)", "百度 (Baidu)", "千方科技 (Qianfang Technology)", "万集科技 (Wanji Technology)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "汽车后市场服务",
+            "子-子环节": [
+             {
+                "子-子环节名称": "汽车金融",
+                "代表公司": ["上汽通用汽车金融 (SAIC-GMAC)", "丰田汽车金融 (Toyota Financial Services)", "大众汽车金融 (Volkswagen Financial Services)", "平安银行汽车金融 (Ping An Bank Auto Finance)", "易鑫集团 (Yixin Group)"]
+              },
+              {
+                "子-子环节名称": "汽车电商",
+                "代表公司": ["瓜子二手车 (Guazi)", "优信二手车 (Uxin)", "人人车 (Renrenche)", "天猫好车 (Tmall Haoche)", "汽车之家 (Autohome)"]
+              },
+              {
+                "子-子环节名称": "汽车维修保养",
+                "代表公司": ["途虎养车 (Tuhu)", "京东京车会 (JD.com Auto Service)", "天猫养车 (Tmall Car Service)", "乐车邦 (Lecarlink)", "有壹手 (Youyishou)"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

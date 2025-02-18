@@ -1,0 +1,306 @@
+{
+  "产业链": "生物医药",
+  "环节": [
+    {
+      "环节名称": "上游：原料与设备供应",
+      "子环节": [
+        {
+          "子环节名称": "生物原料",
+          "子-子环节": [
+            {
+              "子-子环节名称": "细胞/菌株",
+              "代表公司": ["ATCC", "DSMZ", "JCRB", "CCTCC", "NCTC"]
+            },
+            {
+              "子-子环节名称": "培养基",
+              "代表公司": ["Thermo Fisher Scientific", "Merck Millipore", "Lonza", "Cytiva (formerly GE Healthcare Life Sciences)", "BD Biosciences"]
+            },
+            {
+              "子-子环节名称": "生物酶",
+              "代表公司": ["Novozymes", "Roche", "BASF", "DuPont", "AB Enzymes"]
+            },
+            {
+              "子-子环节名称": "抗体",
+              "代表公司": ["Abcam", "Thermo Fisher Scientific", "BioLegend", "Cell Signaling Technology", "Santa Cruz Biotechnology"]
+            },
+            {
+              "子-子环节名称": "多肽",
+              "代表公司": ["GenScript", "Peptides International", "Bachem", "CPC Scientific", "AnaSpec"]
+            },
+            {
+              "子-子环节名称": "核酸",
+              "代表公司": ["IDT", "Thermo Fisher Scientific", "GenScript", "Eurofins Genomics", "BGI"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "化学原料",
+          "子-子环节": [
+            {
+              "子-子环节名称": "中间体",
+              "代表公司": ["Lonza", "BASF", "Evonik", "Wuxi AppTec", "Asymchem"]
+            },
+            {
+              "子-子环节名称": "溶剂",
+              "代表公司": ["Merck", "Honeywell", "Sigma-Aldrich", "Fisher Scientific", "VWR"]
+            },
+            {
+              "子-子环节名称": "催化剂",
+              "代表公司": ["Johnson Matthey", "BASF", "Umicore", "Heraeus", "Evonik"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "实验耗材",
+          "子-子环节": [
+            {
+              "子-子环节名称": "试剂盒",
+              "代表公司": ["Qiagen", "Thermo Fisher Scientific", "Roche", "Promega", "Bio-Rad"]
+            },
+            {
+              "子-子环节名称": "塑料耗材",
+              "代表公司": ["Corning", "Thermo Fisher Scientific", "Greiner Bio-One", "Eppendorf", "Sarstedt"]
+            },
+            {
+              "子-子环节名称": "玻璃器皿",
+              "代表公司": ["Duran Group", "Kimble Chase", "Wheaton", "Pyrex", "Schott"]
+            },
+            {
+              "子-子环节名称": "滤膜/滤器",
+              "代表公司": ["Merck Millipore", "Cytiva (formerly GE Healthcare Life Sciences)", "Sartorius", "Pall Corporation", "Thermo Fisher Scientific"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "仪器设备",
+          "子-子环节": [
+            {
+              "子-子环节名称": "生物反应器",
+              "代表公司": ["Sartorius", "Eppendorf", "Thermo Fisher Scientific", "GE Healthcare", "Applikon Biotechnology"]
+            },
+            {
+              "子-子环节名称": "色谱系统",
+              "代表公司": ["Agilent Technologies", "Waters Corporation", "Shimadzu Corporation", "Thermo Fisher Scientific", "PerkinElmer"]
+            },
+            {
+              "子-子环节名称": "质谱仪",
+              "代表公司": ["Thermo Fisher Scientific", "Agilent Technologies", "Waters Corporation", "Bruker", "Sciex"]
+            },
+            {
+              "子-子环节名称": "PCR仪",
+              "代表公司": ["Bio-Rad", "Thermo Fisher Scientific", "Eppendorf", "Qiagen", "Analytik Jena"]
+            },
+            {
+              "子-子环节名称": "测序仪",
+              "代表公司": ["Illumina", "Thermo Fisher Scientific", "Pacific Biosciences", "Oxford Nanopore Technologies", "BGI"]
+            },
+            {
+              "子-子环节名称": "显微镜",
+              "代表公司": ["Zeiss", "Leica Microsystems", "Nikon", "Olympus", "Thermo Fisher Scientific"]
+            },
+            {
+              "子-子环节名称": "离心机",
+              "代表公司": ["Thermo Fisher Scientific", "Eppendorf", "Beckman Coulter", "Sigma Laborzentrifugen", "Hettich"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "制药设备",
+          "子-子环节": [
+            {
+              "子-子环节名称": "制粒机",
+              "代表公司": ["Glatt", "Freund", "BOSCH", "GEA", "L.B. Bohle"]
+            },
+            {
+              "子-子环节名称": "压片机",
+              "代表公司": ["Fette Compacting", "Korsch", "IMA", "Manesty", "Courtoy"]
+            },
+            {
+              "子-子环节名称": "胶囊填充机",
+              "代表公司": ["Bosch", "IMA", "MG2", "Zanasi", "Harro Höfliger"]
+            },
+            {
+              "子-子环节名称": "包衣机",
+              "代表公司": ["O'Hara Technologies", "Glatt", "Freund", "BOSCH", "GEA"]
+            },
+            {
+              "子-子环节名称": "冻干机",
+              "代表公司": ["SP Scientific", "Telstar", "IMA Life", "GEA", "Tofflon"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "中游：研发、生产与服务",
+      "子环节": [
+        {
+          "子环节名称": "药物研发",
+          "子-子环节": [
+            {
+              "子-子环节名称": "药物发现",
+              "代表公司": ["辉瑞 (Pfizer)", "罗氏 (Roche)", "诺华 (Novartis)", "默沙东 (Merck)", "强生 (Johnson & Johnson)"]
+            },
+            {
+              "子-子环节名称": "临床前研究",
+              "代表公司": ["Charles River Laboratories", "Covance (LabCorp)", "Wuxi AppTec", "药明康德 (WuXi AppTec)", "康龙化成 (Pharmaron)"]
+            },
+            {
+              "子-子环节名称": "临床试验",
+              "代表公司": ["IQVIA", "Parexel", "PPD", "ICON plc", "Syneos Health"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "药物生产",
+          "子-子环节": [
+            {
+              "子-子环节名称": "原料药 (API)",
+              "代表公司": ["Lonza", "Catalent", "Boehringer Ingelheim", "Wuxi AppTec", "Asymchem"]
+            },
+            {
+              "子-子环节名称": "制剂",
+              "代表公司": ["辉瑞 (Pfizer)", "罗氏 (Roche)", "诺华 (Novartis)", "默沙东 (Merck)", "强生 (Johnson & Johnson)"]
+            },
+            {
+              "子-子环节名称": "CDMO/CMO",
+              "代表公司": ["Lonza", "Catalent", "Samsung Biologics", "Boehringer Ingelheim", "Wuxi Biologics"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "生物技术",
+          "子-子环节": [
+            {
+              "子-子环节名称": "基因工程",
+              "代表公司": ["Genentech (Roche)", "Amgen", "Biogen", "Gilead Sciences", "Regeneron Pharmaceuticals"]
+            },
+            {
+              "子-子环节名称": "细胞工程",
+              "代表公司": ["Kite Pharma (Gilead)", "Juno Therapeutics (Celgene/BMS)", "Novartis", "Bluebird Bio", "Adaptimmune"]
+            },
+            {
+              "子-子环节名称": "发酵工程",
+              "代表公司": ["Novozymes", "DSM", "BASF", "DuPont", "AB Enzymes"]
+            },
+            {
+              "子-子环节名称": "酶工程",
+              "代表公司": ["Codexis", "Direvo", "EnEvolv", "Maxygen", "Verenium"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "医疗器械",
+          "子-子环节": [
+            {
+              "子-子环节名称": "诊断设备",
+              "代表公司": ["Roche Diagnostics", "Siemens Healthineers", "Abbott Diagnostics", "Danaher", "Thermo Fisher Scientific"]
+            },
+            {
+              "子-子环节名称": "治疗设备",
+              "代表公司": ["Medtronic", "Johnson & Johnson Medical Devices", "Stryker", "Abbott", "Boston Scientific"]
+            },
+            {
+              "子-子环节名称": "植入物",
+              "代表公司": ["Johnson & Johnson Medical Devices", "Stryker", "Zimmer Biomet", "Smith & Nephew", "Medtronic"]
+            },
+            {
+              "子-子环节名称": "高值耗材",
+              "代表公司": ["Abbott", "Boston Scientific", "Medtronic", "Edwards Lifesciences", "Teleflex"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "外包服务 (CRO/CDMO/CMO)",
+          "子-子环节": [
+            {
+              "子-子环节名称": "CRO",
+              "代表公司": ["IQVIA", "Parexel", "PPD", "ICON plc", "Syneos Health"]
+            },
+            {
+              "子-子环节名称": "CDMO",
+              "代表公司": ["Lonza", "Catalent", "Samsung Biologics", "Boehringer Ingelheim", "Wuxi Biologics"]
+            },
+            {
+              "子-子环节名称": "CMO",
+              "代表公司": ["Lonza", "Catalent", "Patheon (Thermo Fisher Scientific)", "Recipharm", "Siegfried"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "下游：流通、应用与终端",
+      "子环节": [
+        {
+          "子环节名称": "医药流通",
+          "子-子环节": [
+            {
+              "子-子环节名称": "医药分销",
+              "代表公司": ["McKesson", "AmerisourceBergen", "Cardinal Health", "国药控股 (Sinopharm)", "上海医药 (Shanghai Pharmaceuticals)"]
+            },
+            {
+              "子-子环节名称": "医药零售",
+              "代表公司": ["CVS Health", "Walgreens Boots Alliance", "Rite Aid", "大参林 (Daxin)", "益丰药房 (Yifeng Pharmacy)"]
+            },
+            {
+              "子-子环节名称": "医药电商",
+              "代表公司": ["阿里健康 (Ali Health)", "京东健康 (JD Health)", "平安好医生 (Ping An Good Doctor)", "1药网 (111, Inc.)", "叮当快药 (Dingdang Medicine Express)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "医疗机构",
+          "子-子环节": [
+            {
+              "子-子环节名称": "医院",
+              "代表公司": ["Mayo Clinic", "Cleveland Clinic", "Massachusetts General Hospital", "Johns Hopkins Hospital", "中国人民解放军总医院 (PLA General Hospital)"]
+            },
+            {
+              "子-子环节名称": "诊所",
+              "代表公司": ["HCA Healthcare", "Tenet Healthcare", "Community Health Systems", "Universal Health Services", "爱尔眼科 (Aier Eye Hospital)"]
+            },
+            {
+              "子-子环节名称": "体检中心",
+              "代表公司": ["美年大健康 (Meinian Onehealth)", "爱康国宾 (iKang Healthcare Group)", "慈铭体检 (Ciming Checkup)", "瑞慈医疗 (Rui Ci Healthcare)", "普惠体检 (Puhui Health)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "患者与消费者",
+          "子-子环节": [
+            {
+              "子-子环节名称": "处方药",
+              "代表公司": ["无特定公司，患者遵医嘱使用"]
+            },
+            {
+              "子-子环节名称": "OTC药品",
+              "代表公司": ["Johnson & Johnson Consumer Health", "Bayer", "GlaxoSmithKline Consumer Healthcare", "Sanofi", "Pfizer Consumer Healthcare"]
+            },
+            {
+              "子-子环节名称": "保健品",
+              "代表公司": ["Amway", "Herbalife", "GNC", "Nature's Bounty", "汤臣倍健 (By-Health)"]
+            },
+            {
+              "子-子环节名称": "医疗美容",
+              "代表公司": ["Allergan Aesthetics (AbbVie)", "Galderma", "Merz Aesthetics", "华熙生物 (Bloomage Biotechnology)", "爱美客 (Imeik Technology)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "支付方",
+          "子-子环节": [
+            {
+              "子-子环节名称": "医保机构",
+              "代表公司": ["国家医疗保障局 (National Healthcare Security Administration)", "美国医疗保险和医疗补助服务中心 (CMS)", "英国国民保健署 (NHS)", "德国法定医疗保险 (GKV)", "日本厚生劳动省 (MHLW)"]
+            },
+            {
+              "子-子环节名称": "商业保险",
+              "代表公司": ["UnitedHealth Group", "Anthem", "Aetna (CVS Health)", "Cigna", "Humana"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

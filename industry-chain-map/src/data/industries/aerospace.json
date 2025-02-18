@@ -1,0 +1,185 @@
+{
+  "产业链": "空天技术",
+  "环节": [
+    {
+      "环节名称": "上游：原材料与核心元器件",
+      "子环节": [
+        {
+          "子环节名称": "特种金属材料",
+          "子-子环节": [
+            {
+              "子-子环节名称": "钛合金",
+              "代表公司": ["宝钛股份 (BAOTI)", "西部超导 (Western Superconducting Technologies)", "阿勒格尼技术 (Allegheny Technologies Incorporated, ATI)", "VSMPO-AVISMA", "Howmet Aerospace"]
+            },
+            {
+              "子-子环节名称": "高温合金",
+              "代表公司": ["中国航发北京航空材料研究院 (AECC Beijing Institute of Aeronautical Materials)", "钢研高纳 (CISRI-GAONA)", "抚顺特钢 (Fushun Special Steel)", "Carpenter Technology Corporation", "VDM Metals"]
+            },
+            {
+              "子-子环节名称": "铝合金",
+              "代表公司": ["中国铝业 (Aluminum Corporation of China, CHALCO)", "南山铝业 (Nanshan Aluminum)", "美国铝业 (Alcoa)", "力拓铝业 (Rio Tinto Alcan)", "海德鲁 (Norsk Hydro)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "复合材料",
+          "子-子环节": [
+            {
+              "子-子环节名称": "碳纤维",
+              "代表公司": ["东丽 (Toray)", "帝人 (Teijin)", "三菱化学 (Mitsubishi Chemical)", "赫氏 (Hexcel)", "西格里集团 (SGL Group)"]
+            },
+            {
+              "子-子环节名称": "树脂基复合材料",
+              "代表公司": ["中航复合材料 (AVIC Composite Corporation)", "光威复材 (Guangwei Composites)", "亨斯迈 (Huntsman)", "苏威 (Solvay)", "赢创工业 (Evonik Industries)"]
+            },
+            {
+              "子-子环节名称": "陶瓷基复合材料",
+              "代表公司": ["赛峰 (Safran)", "通用电气 (General Electric, GE)", "罗尔斯·罗伊斯 (Rolls-Royce)", "普拉特·惠特尼 (Pratt & Whitney)", "CoorsTek"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "核心元器件",
+          "子-子环节": [
+            {
+              "子-子环节名称": "惯性导航系统",
+              "代表公司": ["霍尼韦尔 (Honeywell)", "诺斯罗普·格鲁曼 (Northrop Grumman)", "赛峰 (Safran)", "泰雷兹 (Thales)", "中国航天科工集团 (CASIC)"]
+            },
+            {
+              "子-子环节名称": "卫星导航芯片",
+              "代表公司": ["高通 (Qualcomm)", "联发科 (MediaTek)", "博通 (Broadcom)", "U-blox", "北斗星通 (BDStar)"]
+            },
+            {
+              "子-子环节名称": "高精度传感器",
+              "代表公司": ["博世 (Bosch)", "意法半导体 (STMicroelectronics)", "德州仪器 (Texas Instruments, TI)", "英飞凌 (Infineon)", "TDK"]
+            },
+            {
+              "子-子环节名称": "宇航级芯片",
+              "代表公司": ["赛灵思 (Xilinx, 被AMD收购)", "英特尔 (Intel)", "Microchip Technology", "BAE Systems", "中国航天科技集团 (CASC)"]
+            },
+            {
+              "子-子环节名称": "星载计算机",
+              "代表公司": ["霍尼韦尔 (Honeywell)", "洛克希德·马丁 (Lockheed Martin)", "波音 (Boeing)", "空中客车 (Airbus)", "中国空间技术研究院 (CAST)"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "中游：空天装备制造与发射服务",
+      "子环节": [
+        {
+          "子环节名称": "航空装备制造",
+          "子-子环节": [
+            {
+              "子-子环节名称": "飞机设计与制造",
+              "代表公司": ["波音 (Boeing)", "空中客车 (Airbus)", "中国商飞 (COMAC)", "巴西航空工业 (Embraer)", "庞巴迪 (Bombardier)"]
+            },
+            {
+              "子-子环节名称": "航空发动机",
+              "代表公司": ["通用电气 (General Electric, GE)", "罗尔斯·罗伊斯 (Rolls-Royce)", "普拉特·惠特尼 (Pratt & Whitney)", "赛峰 (Safran)", "中国航发 (AECC)"]
+            },
+            {
+              "子-子环节名称": "无人机系统",
+              "代表公司": ["大疆创新 (DJI)", "派诺特 (Parrot)", "亿航智能 (EHang)", "极飞科技 (XAG)", "诺斯罗普·格鲁曼 (Northrop Grumman)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "航天装备制造",
+          "子-子环节": [
+            {
+              "子-子环节名称": "运载火箭",
+              "代表公司": ["SpaceX", "联合发射联盟 (United Launch Alliance, ULA)", "中国航天科技集团 (CASC)", "欧洲航天局 (ESA)", "俄罗斯航天国家集团 (Roscosmos)"]
+            },
+            {
+              "子-子环节名称": "卫星制造",
+              "代表公司": ["洛克希德·马丁 (Lockheed Martin)", "波音 (Boeing)", "空中客车 (Airbus)", "泰雷兹阿莱尼亚宇航 (Thales Alenia Space)", "中国空间技术研究院 (CAST)"]
+            },
+            {
+              "子-子环节名称": "空间站/载人飞船",
+              "代表公司": ["波音 (Boeing)", "SpaceX", "中国航天科技集团 (CASC)", "俄罗斯航天国家集团 (Roscosmos)", "诺斯罗普·格鲁曼 (Northrop Grumman)"]
+            },
+            {
+              "子-子环节名称": "深空探测器",
+              "代表公司": ["美国国家航空航天局 (NASA)", "欧洲航天局 (ESA)", "中国国家航天局 (CNSA)", "俄罗斯航天国家集团 (Roscosmos)", "日本宇宙航空研究开发机构 (JAXA)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "发射服务",
+          "子-子环节": [
+            {
+              "子-子环节名称": "商业发射服务",
+              "代表公司": ["SpaceX", "Arianespace", "联合发射联盟 (United Launch Alliance, ULA)", "Rocket Lab", "维珍轨道 (Virgin Orbit)"]
+            },
+            {
+              "子-子环节名称": "政府发射服务",
+              "代表公司": ["中国航天科技集团 (CASC)", "俄罗斯航天国家集团 (Roscosmos)", "美国国家航空航天局 (NASA)", "欧洲航天局 (ESA)", "印度空间研究组织 (ISRO)"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "下游：空天技术应用与服务",
+      "子环节": [
+        {
+          "子环节名称": "卫星应用",
+          "子-子环节": [
+            {
+              "子-子环节名称": "卫星通信",
+              "代表公司": ["国际通信卫星组织 (Intelsat)", "欧洲通信卫星公司 (Eutelsat)", "SES", "铱星 (Iridium)", "中国卫通 (China Satcom)"]
+            },
+            {
+              "子-子环节名称": "卫星遥感",
+              "代表公司": ["Maxar Technologies", "空中客车 (Airbus)", "Planet Labs", "DigitalGlobe (被Maxar收购)", "中国资源卫星应用中心 (CRESDA)"]
+            },
+            {
+              "子-子环节名称": "卫星导航",
+              "代表公司": ["美国GPS (Global Positioning System)", "欧洲伽利略 (Galileo)", "俄罗斯格洛纳斯 (GLONASS)", "中国北斗 (BeiDou)", "Trimble"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "航空应用",
+          "子-子环节": [
+            {
+              "子-子环节名称": "商业航空运输",
+              "代表公司": ["达美航空 (Delta Air Lines)", "美国航空 (American Airlines)", "联合航空 (United Airlines)", "中国南方航空 (China Southern Airlines)", "汉莎航空 (Lufthansa)"]
+            },
+            {
+              "子-子环节名称": "通用航空",
+              "代表公司": ["德事隆航空 (Textron Aviation)", "西锐飞机 (Cirrus Aircraft)", "钻石飞机 (Diamond Aircraft)", "湾流宇航 (Gulfstream Aerospace)", "贝尔直升机 (Bell Helicopter)"]
+            },
+            {
+              "子-子环节名称": "航空物流",
+              "代表公司": ["联邦快递 (FedEx)", "联合包裹服务 (UPS)", "DHL", "顺丰速运 (SF Express)", "亚马逊 (Amazon)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "新兴应用领域",
+          "子-子环节": [
+            {
+              "子-子环节名称": "太空旅游",
+              "代表公司": ["维珍银河 (Virgin Galactic)", "蓝色起源 (Blue Origin)", "SpaceX", "Axiom Space"]
+            },
+            {
+              "子-子环节名称": "太空资源开发",
+              "代表公司": ["行星资源公司 (Planetary Resources)", "深空工业 (Deep Space Industries)", "ispace", "TransAstra"]
+            },
+            {
+              "子-子环节名称": "低轨卫星互联网",
+              "代表公司": ["SpaceX (Starlink)", "OneWeb", "亚马逊 (Project Kuiper)", "Telesat"]
+            },
+            {
+              "子-子环节名称": "临近空间飞行器",
+              "代表公司": ["World View Enterprises", "Zero 2 Infinity", "Zephyr (Airbus)"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

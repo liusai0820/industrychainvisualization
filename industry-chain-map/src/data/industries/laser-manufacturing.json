@@ -1,0 +1,266 @@
+{
+    "产业链": "激光与增材制造",
+    "环节": [
+      {
+        "环节名称": "上游：核心器件与材料",
+        "子环节": [
+          {
+            "子环节名称": "激光器",
+            "子-子环节": [
+              {
+                "子-子环节名称": "光纤激光器",
+                "代表公司": ["IPG Photonics", "相干公司（Coherent）", "恩耐（nLIGHT）", "锐科激光（Raycus）", "创鑫激光（Maxphotonics）"]
+              },
+              {
+                "子-子环节名称": "固体激光器",
+                "代表公司": ["相干公司（Coherent）", "通快（TRUMPF）", "光谱物理（Spectra-Physics）", "大族激光（Han's Laser）", "华日激光（Huaray Laser）"]
+              },
+              {
+                "子-子环节名称": "半导体激光器",
+                "代表公司": ["罗芬（Rofin）", "相干公司（Coherent）", "欧司朗（OSRAM）", "日亚化学（Nichia）", "华光光电（HG Genuine Optics）"]
+              },
+              {
+                "子-子环节名称": "气体激光器",
+                "代表公司": ["相干公司（Coherent）", "通快（TRUMPF）", "中科科仪（ZKY）", "北光世纪（Beijing GK Laser）", "大族激光（Han's Laser）"]
+              },
+              {
+                "子-子环节名称": "超快激光器",
+                "代表公司": ["相干公司（Coherent）", "光谱物理（Spectra-Physics）", "Amplitude Laser Group", "Light Conversion", "EKSPLA"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "光学元件",
+            "子-子环节": [
+              {
+                "子-子环节名称": "激光晶体",
+                "代表公司": ["福晶科技（CASTECH）", "EKSMA Optics", "Altechna", "Crystech", "Newlight Photonics"]
+              },
+              {
+                "子-子环节名称": "光学镜片",
+                "代表公司": ["蔡司（Zeiss）", "肖特（Schott）", "豪雅（HOYA）", "尼康（Nikon）", "腾龙（Tamron）"]
+              },
+              {
+                "子-子环节名称": "光学模块",
+                "代表公司": ["II-VI Incorporated", "Lumentum", "Thorlabs", "Newport Corporation", "长光华芯（Everbright Photonics）"]
+              },
+              {
+                "子-子环节名称": "扫描振镜",
+                "代表公司": ["剑桥科技（Cambridge Technology）", "SCANLAB", "Nutfield Technology", "Sunny Technology", "金海创（Sino-Galvo）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "激光电源",
+            "子-子环节": [
+              {
+                "子-子环节名称": "高压电源",
+                "代表公司": ["TDK-Lambda", "Advanced Energy", "XP Power", "PULS", "Mean Well"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "控制系统",
+            "子-子环节": [
+              {
+                "子-子环节名称": "激光加工控制系统",
+                "代表公司": ["柏楚电子（BoChu）", "维宏股份（Weihong）", "金橙子（JCZ）", "倍福（Beckhoff）", "西门子（Siemens）"]
+              },
+              {
+                "子-子环节名称": "运动控制卡",
+                "代表公司": ["固高科技（Googol Technology）", "雷赛智能（Leadshine）", "凌华科技（ADLINK）", "研华科技（Advantech）", "埃斯顿（ESTUN）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "增材制造材料",
+            "子-子环节": [
+              {
+                "子-子环节名称": "金属粉末",
+                "代表公司": ["AP&C (GE Additive)", "EOS", "SLM Solutions", "Carpenter Technology", "Sandvik Materials Technology"]
+              },
+              {
+                "子-子环节名称": "高分子材料",
+                "代表公司": ["Stratasys", "3D Systems", "Evonik", "BASF", "SABIC"]
+              },
+              {
+                "子-子环节名称": "陶瓷材料",
+                "代表公司": ["3D Ceram", "Lithoz", "XJet", "Admatec", "Tethon 3D"]
+              },
+              {
+                "子-子环节名称": "光敏树脂",
+                "代表公司": ["3D Systems", "Stratasys", "EnvisionTEC", "Formlabs", "Carbon"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "中游：激光与增材制造设备",
+        "子环节": [
+          {
+            "子环节名称": "激光加工设备",
+            "子-子环节": [
+              {
+                "子-子环节名称": "激光切割设备",
+                "代表公司": ["通快（TRUMPF）", "大族激光（Han's Laser）", "百超（Bystronic）", "天田（Amada）", "奔腾激光（Penta-Chutian）"]
+              },
+              {
+                "子-子环节名称": "激光焊接设备",
+                "代表公司": ["通快（TRUMPF）", "相干公司（Coherent）", "IPG Photonics", "大族激光（Han's Laser）", "联赢激光（United Winners Laser）"]
+              },
+              {
+                "子-子环节名称": "激光打标设备",
+                "代表公司": ["通快（TRUMPF）", "大族激光（Han's Laser）", "华工激光（HGTECH）", "帝耐激光（DiNo Laser）", "创鑫激光（Maxphotonics）"]
+              },
+              {
+                "子-子环节名称": "激光熔覆设备",
+                "代表公司": ["通快（TRUMPF）", "普锐马（Prima Power）", "欧梯克（O.R. Lasertechnologie）", "西菱克（SLM Solutions）", "中科煜宸（Zhongke Yuchen）"]
+              },
+              {
+                "子-子环节名称": "激光清洗设备",
+                "代表公司": ["IPG Photonics", "P-Laser", "CleanLASER", "Adapt Laser Systems", "海目星激光（Hymson Laser）"]
+              },
+              {
+                "子-子环节名称": "激光微纳加工设备",
+                "代表公司": ["Nanoscribe", "Multiphoton Optics", "FemtoPrint", "Microrelleus", "Workshop of Photonics"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "增材制造设备",
+            "子-子环节": [
+              {
+                "子-子环节名称": "金属3D打印设备",
+                "代表公司": ["GE Additive", "EOS", "SLM Solutions", "3D Systems", "Renishaw"]
+              },
+              {
+                "子-子环节名称": "非金属3D打印设备",
+                "代表公司": ["Stratasys", "3D Systems", "HP", "Carbon", "Formlabs"]
+              },
+              {
+                "子-子环节名称": "桌面级3D打印机",
+                "代表公司": ["Ultimaker", "Formlabs", "MakerBot", "Prusa Research", "Raise3D"]
+              },
+              {
+                "子-子环节名称": "生物3D打印设备",
+                "代表公司": ["Organovo", "EnvisionTEC", "CELLINK", "RegenHU", "Aspect Biosystems"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "激光与增材制造系统集成",
+            "子-子环节": [
+              {
+                "子-子环节名称": "自动化集成",
+                "代表公司": ["ABB", "发那科（FANUC）", "库卡（KUKA）", "安川电机（Yaskawa）", "新松机器人（SIASUN）"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "下游：应用领域",
+        "子环节": [
+          {
+            "子环节名称": "工业制造",
+            "子-子环节": [
+              {
+                "子-子环节名称": "汽车制造",
+                "代表公司": ["大众汽车（Volkswagen）", "通用汽车（General Motors）", "宝马（BMW）", "戴姆勒（Daimler）", "丰田汽车（Toyota）"]
+              },
+              {
+                "子-子环节名称": "航空航天",
+                "代表公司": ["波音（Boeing）", "空客（Airbus）", "洛克希德·马丁（Lockheed Martin）", "中国商飞（COMAC）", "中国航发（AECC）"]
+              },
+              {
+                "子-子环节名称": "模具制造",
+                "代表公司": ["GF Machining Solutions", "DMG MORI", "牧野（Makino）", "沙迪克（Sodick）", "海天精工（Haitian Precision）"]
+              },
+              {
+                "子-子环节名称": "电子制造",
+                "代表公司": ["三星电子（Samsung Electronics）", "苹果（Apple）", "富士康（Foxconn）", "台积电（TSMC）", "英特尔（Intel）"]
+              },
+              {
+                "子-子环节名称": "船舶制造",
+                "代表公司": ["现代重工（Hyundai Heavy Industries）", "大宇造船海洋（Daewoo Shipbuilding & Marine Engineering）", "三星重工（Samsung Heavy Industries）", "中国船舶集团（CSSC）", "日本联合造船（Japan Marine United）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "医疗健康",
+            "子-子环节": [
+              {
+                "子-子环节名称": "医疗器械",
+                "代表公司": ["美敦力（Medtronic）", "强生（Johnson & Johnson）", "史赛克（Stryker）", "捷迈邦美（Zimmer Biomet）", "西门子医疗（Siemens Healthineers）"]
+              },
+              {
+                "子-子环节名称": "齿科",
+                "代表公司": ["登士柏西诺德（Dentsply Sirona）", "爱齐科技（Align Technology）", "士卓曼（Straumann）", "Envista Holdings", "3Shape"]
+              },
+              {
+                "子-子环节名称": "生物医学",
+                "代表公司": ["Organovo", "CELLINK", "Aspect Biosystems", "Regenovo", "清华大学"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "消费品",
+            "子-子环节": [
+              {
+                "子-子环节名称": "珠宝首饰",
+                "代表公司": ["周大福（Chow Tai Fook）", "周生生（Chow Sang Sang）", "六福珠宝（Lukfook Jewellery）", "Tiffany & Co.", "Cartier"]
+              },
+              {
+                "子-子环节名称": "工艺品",
+                "代表公司": ["大族激光（Han's Laser）", "华工激光（HGTECH）", "博丽激光（Bole Laser）", "金运激光（Golden Laser）", "百维激光（Perfect Laser）"]
+              },
+              {
+                "子-子环节名称": "个性化定制",
+                "代表公司": ["Materialise", "Shapeways", "Sculpteo", "Xometry", "Protolabs"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "建筑领域",
+            "子-子环节": [
+              {
+                "子-子环节名称": "建筑设计",
+                "代表公司": ["XtreeE", "Winsun", "Apis Cor", "CyBe Construction", "COBOD"]
+              },
+              {
+                "子-子环节名称": "建筑构件",
+                "代表公司": ["Winsun", "XtreeE", "Apis Cor", "CyBe Construction", "COBOD"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "科研教育",
+            "子-子环节": [
+              {
+                "子-子环节名称": "科研机构",
+                "代表公司": ["Fraunhofer-Gesellschaft", "MIT", "Caltech", "清华大学", "上海交通大学"]
+              },
+              {
+                "子-子环节名称": "高等院校",
+                "代表公司": ["MIT", "Stanford University", "University of Cambridge", "清华大学", "上海交通大学"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "文化创意",
+            "子-子环节": [
+              {
+                "子-子环节名称": "艺术品",
+                "代表公司": ["Materialise", "Shapeways", "Sculpteo", "Stratasys", "3D Systems"]
+              },
+              {
+                "子-子环节名称": "文物修复",
+                "代表公司": ["西北工业大学", "北京工业大学", "清华大学", "大族激光（Han's Laser）", "华工激光（HGTECH）"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

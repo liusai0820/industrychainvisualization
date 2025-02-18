@@ -1,0 +1,310 @@
+{
+    "产业链": "智能传感器",
+    "环节": [
+      {
+        "环节名称": "上游：原材料与核心组件",
+        "子环节": [
+          {
+            "子环节名称": "敏感材料",
+            "子-子环节": [
+              {
+                "子-子环节名称": "半导体材料（硅、锗、砷化镓等）",
+                "代表公司": ["信越化学工业株式会社 (Shin-Etsu Chemical)", "胜高科技 (SUMCO)", "环球晶圆 (GlobalWafers)", "德国世创电子材料 (Siltronic)", "SK Siltron"]
+              },
+              {
+                "子-子环节名称": "压电材料（石英晶体、陶瓷、聚合物等）",
+                "代表公司": ["村田制作所 (Murata Manufacturing)", "TDK 株式会社 (TDK Corporation)", "京瓷株式会社 (Kyocera)", "CTS Corporation", "Morgan Advanced Materials"]
+              },
+              {
+                "子-子环节名称": "磁性材料（铁氧体、钕铁硼、钐钴等）",
+                "代表公司": ["日立金属 (Hitachi Metals)", "TDK 株式会社 (TDK Corporation)", "信越化学工业株式会社 (Shin-Etsu Chemical)", "VACUUMSCHMELZE GmbH & Co. KG", "Arnold Magnetic Technologies"]
+              },
+              {
+                "子-子环节名称": "光学材料（光学玻璃、光学塑料、光纤等）",
+                "代表公司": ["肖特集团 (SCHOTT AG)", "豪雅 (HOYA Corporation)", "康宁公司 (Corning Incorporated)", "AGC Inc.", "长飞光纤光缆 (Yangtze Optical Fibre and Cable)"]
+              },
+              {
+                "子-子环节名称": "MEMS材料",
+                "代表公司": ["博世 (Robert Bosch GmbH)", "意法半导体 (STMicroelectronics)", "德州仪器 (Texas Instruments)", "英飞凌 (Infineon Technologies AG)", "Qorvo"]
+              },
+              {
+                "子-子环节名称": "生物/化学敏感材料",
+                "代表公司": ["罗氏 (Roche)", "丹纳赫 (Danaher Corporation)", "赛默飞世尔科技 (Thermo Fisher Scientific)", "拜耳 (Bayer)", "默克 (Merck)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "芯片设计",
+            "子-子环节": [
+              {
+                "子-子环节名称": "传感器芯片设计",
+                "代表公司": ["博世 (Robert Bosch GmbH)", "意法半导体 (STMicroelectronics)", "德州仪器 (Texas Instruments)", "英飞凌 (Infineon Technologies AG)", "艾迈斯欧司朗 (ams OSRAM)"]
+              },
+              {
+                "子-子环节名称": "MCU/SoC芯片设计",
+                "代表公司": ["恩智浦 (NXP Semiconductors)", "瑞萨电子 (Renesas Electronics)", "微芯科技 (Microchip Technology)", "意法半导体 (STMicroelectronics)", "德州仪器 (Texas Instruments)"]
+              },
+              {
+                "子-子环节名称": "电源管理芯片设计",
+                "代表公司": ["德州仪器 (Texas Instruments)", "亚德诺半导体 (Analog Devices)", "英飞凌 (Infineon Technologies AG)", "安森美半导体 (ON Semiconductor)", "Maxim Integrated (现已被ADI收购)"]
+              },
+              {
+                "子-子环节名称": "无线通信芯片设计（Wi-Fi, 蓝牙, Zigbee, LoRa, NB-IoT等）",
+                "代表公司": ["高通 (Qualcomm)", "联发科 (MediaTek)", "华为海思 (HiSilicon)", "紫光展锐 (UNISOC)", "乐鑫科技 (Espressif Systems)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "制造与封装",
+            "子-子环节": [
+              {
+                "子-子环节名称": "晶圆制造",
+                "代表公司": ["台积电 (TSMC)", "三星电子 (Samsung Electronics)", "格罗方德 (GlobalFoundries)", "联华电子 (UMC)", "中芯国际 (SMIC)"]
+              },
+              {
+                "子-子环节名称": "MEMS制造",
+                "代表公司": ["博世 (Robert Bosch GmbH)", "意法半导体 (STMicroelectronics)", "德州仪器 (Texas Instruments)", "台积电 (TSMC)", "X-FAB Silicon Foundries"]
+              },
+              {
+                "子-子环节名称": "芯片封装与测试",
+                "代表公司": ["日月光 (ASE Technology Holding)", "安靠 (Amkor Technology)", "长电科技 (JCET Group)", "力成科技 (Powertech Technology Inc.)", "华天科技 (Hua Tian Technology)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "其他组件",
+            "子-子环节": [
+              {
+                "子-子环节名称": "光学元件（透镜、滤光片等）",
+                "代表公司": ["舜宇光学科技 (Sunny Optical Technology)", "大立光电 (Largan Precision)", "玉晶光电 (GSEO)", "亚洲光学 (Asia Optical)", "今国光学 (Kinko Optical)"]
+              },
+              {
+                "子-子环节名称": "微型电池",
+                "代表公司": ["村田制作所 (Murata Manufacturing)", "TDK 株式会社 (TDK Corporation)", "松下电器 (Panasonic)", "三星SDI (Samsung SDI)", "LG新能源 (LG Energy Solution)"]
+              },
+              {
+                "子-子环节名称": "外壳/结构件",
+                "代表公司": ["富士康 (Foxconn)", "可成科技 (Catcher Technology)", "比亚迪电子 (BYD Electronic)", "长盈精密 (Everwin Precision Technology)", "捷普 (Jabil)"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "中游：传感器模块与系统集成",
+        "子环节": [
+          {
+            "子环节名称": "传感器模块",
+            "子-子环节": [
+              {
+                "子-子环节名称": "物理量传感器（温度、压力、湿度、流量、位移、加速度等）",
+                "代表公司": ["博世 (Robert Bosch GmbH)", "霍尼韦尔 (Honeywell)", "西门子 (Siemens)", "艾默生 (Emerson Electric)", "ABB"]
+              },
+              {
+                "子-子环节名称": "化学/生物传感器（气体、离子、pH值、生物分子等）",
+                "代表公司": ["罗氏 (Roche)", "丹纳赫 (Danaher Corporation)", "赛默飞世尔科技 (Thermo Fisher Scientific)", "ABB", "霍尼韦尔 (Honeywell)"]
+              },
+              {
+                "子-子环节名称": "图像传感器",
+                "代表公司": ["索尼 (Sony)", "三星电子 (Samsung Electronics)", "豪威科技 (OmniVision Technologies)", "安森美半导体 (ON Semiconductor)", "SK海力士 (SK Hynix)"]
+              },
+              {
+                "子-子环节名称": "声学传感器（麦克风、超声波传感器等）",
+                "代表公司": ["楼氏电子 (Knowles Corporation)", "歌尔股份 (Goertek)", "瑞声科技 (AAC Technologies)", "英飞凌 (Infineon Technologies AG)", "TDK 株式会社 (TDK Corporation)"]
+              },
+              {
+                "子-子环节名称": "光电传感器",
+                "代表公司": ["艾迈斯欧司朗 (ams OSRAM)", "罗姆半导体 (Rohm Semiconductor)", "Vishay Intertechnology", "滨松光子学 (Hamamatsu Photonics)", "基恩士 (Keyence)"]
+              },
+              {
+                "子-子环节名称": "磁传感器",
+                "代表公司": ["艾迈斯欧司朗 (ams OSRAM)", "英飞凌 (Infineon Technologies AG)", "TDK 株式会社 (TDK Corporation)", "霍尼韦尔 (Honeywell)", "Allegro MicroSystems"]
+              },
+              {
+                "子-子环节名称": "惯性传感器（陀螺仪、加速度计、IMU）",
+                "代表公司": ["博世 (Robert Bosch GmbH)", "意法半导体 (STMicroelectronics)", "TDK 株式会社 (TDK Corporation)", "InvenSense (已被TDK收购)", "ADI"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "系统集成",
+            "子-子环节": [
+              {
+                "子-子环节名称": "传感器数据融合",
+                "代表公司": ["博世 (Robert Bosch GmbH)", "意法半导体 (STMicroelectronics)", "英飞凌 (Infineon Technologies AG)", "恩智浦 (NXP Semiconductors)", "TDK 株式会社 (TDK Corporation)"]
+              },
+              {
+                "子-子环节名称": "嵌入式系统开发",
+                "代表公司": ["Wind River Systems", "Green Hills Software", "Mentor Graphics (Siemens EDA)", "Express Logic (被Microsoft收购)", "QNX (BlackBerry)"]
+              },
+              {
+                "子-子环节名称": "通信协议栈开发",
+                "代表公司": ["Silicon Labs", "Nordic Semiconductor", "Cypress Semiconductor (被Infineon收购)", "Microchip Technology", "Texas Instruments"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "下游：应用领域",
+        "子环节": [
+          {
+            "子环节名称": "消费电子",
+            "子-子环节": [
+              {
+                "子-子环节名称": "智能手机",
+                "代表公司": ["苹果 (Apple)", "三星电子 (Samsung Electronics)", "华为 (Huawei)", "小米 (Xiaomi)", "OPPO"]
+              },
+              {
+                "子-子环节名称": "可穿戴设备",
+                "代表公司": ["苹果 (Apple)", "三星电子 (Samsung Electronics)", "Fitbit (被Google收购)", "Garmin", "小米 (Xiaomi)"]
+              },
+              {
+                "子-子环节名称": "智能家居",
+                "代表公司": ["亚马逊 (Amazon)", "谷歌 (Google)", "苹果 (Apple)", "小米 (Xiaomi)", "三星电子 (Samsung Electronics)"]
+              },
+              {
+                "子-子环节名称": "游戏设备",
+                "代表公司": ["索尼 (Sony)", "微软 (Microsoft)", "任天堂 (Nintendo)", "Valve Corporation", "Oculus (Meta)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "工业",
+            "子-子环节": [
+              {
+                "子-子环节名称": "工业自动化",
+                "代表公司": ["西门子 (Siemens)", "ABB", "施耐德电气 (Schneider Electric)", "三菱电机 (Mitsubishi Electric)", "欧姆龙 (Omron)"]
+              },
+              {
+                "子-子环节名称": "机器人",
+                "代表公司": ["发那科 (Fanuc)", "ABB", "库卡 (KUKA)", "安川电机 (Yaskawa Electric Corporation)", "优傲机器人 (Universal Robots)"]
+              },
+              {
+                "子-子环节名称": "过程控制",
+                "代表公司": ["霍尼韦尔 (Honeywell)", "艾默生 (Emerson Electric)", "横河电机 (Yokogawa Electric)", "西门子 (Siemens)", "ABB"]
+              },
+              {
+                "子-子环节名称": "智能电网",
+                "代表公司": ["通用电气 (General Electric)", "西门子 (Siemens)", "ABB", "施耐德电气 (Schneider Electric)", "Itron"]
+              },
+              {
+                "子-子环节名称": "预测性维护",
+                "代表公司": ["SKF", "Rockwell Automation", "Emerson", "Siemens", "GE Digital"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "汽车",
+            "子-子环节": [
+              {
+                "子-子环节名称": "ADAS（高级驾驶辅助系统）",
+                "代表公司": ["Mobileye (Intel)", "英伟达 (NVIDIA)", "高通 (Qualcomm)", "特斯拉 (Tesla)", "博世 (Robert Bosch GmbH)"]
+              },
+              {
+                "子-子环节名称": "自动驾驶",
+                "代表公司": ["Waymo (Google)", "Cruise (GM)", "Argo AI (Ford & VW)", "百度 (Baidu)", "特斯拉 (Tesla)"]
+              },
+              {
+                "子-子环节名称": "车身电子",
+                "代表公司": ["博世 (Robert Bosch GmbH)", "大陆集团 (Continental AG)", "电装 (Denso)", "采埃孚 (ZF Friedrichshafen AG)", "海拉 (Hella)"]
+              },
+              {
+                "子-子环节名称": "动力总成",
+                "代表公司": ["博世 (Robert Bosch GmbH)", "大陆集团 (Continental AG)", "电装 (Denso)", "德尔福科技 (Delphi Technologies)", "舍弗勒 (Schaeffler Group)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "医疗健康",
+            "子-子环节": [
+              {
+                "子-子环节名称": "医疗诊断",
+                "代表公司": ["罗氏 (Roche)", "雅培 (Abbott Laboratories)", "西门子医疗 (Siemens Healthineers)", "飞利浦医疗 (Philips Healthcare)", "通用电气医疗 (GE Healthcare)"]
+              },
+              {
+                "子-子环节名称": "生命体征监测",
+                "代表公司": ["飞利浦医疗 (Philips Healthcare)", "通用电气医疗 (GE Healthcare)", "美敦力 (Medtronic)", "迈瑞医疗 (Mindray)", "欧姆龙 (Omron)"]
+              },
+              {
+                "子-子环节名称": "可穿戴医疗设备",
+                "代表公司": ["美敦力 (Medtronic)", "雅培 (Abbott Laboratories)", "Dexcom", "iRhythm Technologies", "Senseonics"]
+              },
+              {
+                "子-子环节名称": "药物输送",
+                "代表公司": ["美敦力 (Medtronic)", "Insulet Corporation", "Tandem Diabetes Care", "Becton Dickinson", "Ypsomed"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "环境监测",
+            "子-子环节": [
+              {
+                "子-子环节名称": "空气质量监测",
+                "代表公司": ["赛默飞世尔科技 (Thermo Fisher Scientific)", "霍尼韦尔 (Honeywell)", "西门子 (Siemens)", "ABB", "Teledyne API"]
+              },
+              {
+                "子-子环节名称": "水质监测",
+                "代表公司": ["哈希公司 (Hach Company)", "赛莱默 (Xylem Inc.)", "丹纳赫 (Danaher Corporation)", "Evoqua Water Technologies", "Endress+Hauser"]
+              },
+              {
+                "子-子环节名称": "气象监测",
+                "代表公司": ["维萨拉 (Vaisala)", "Campbell Scientific", "Kipp & Zonen", "LI-COR Biosciences", "RM Young"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "航空航天",
+            "子-子环节": [
+              {
+                "子-子环节名称": "飞行控制",
+                "代表公司": ["霍尼韦尔 (Honeywell)", "柯林斯宇航 (Collins Aerospace)", "泰雷兹 (Thales Group)", "赛峰集团 (Safran)", "Moog Inc."]
+              },
+              {
+                "子-子环节名称": "导航与定位",
+                "代表公司": ["霍尼韦尔 (Honeywell)", "诺斯罗普·格鲁曼 (Northrop Grumman)", "柯林斯宇航 (Collins Aerospace)", "泰雷兹 (Thales Group)", "Garmin"]
+              },
+              {
+                "子-子环节名称": "结构健康监测",
+                "代表公司": ["波音 (Boeing)", "空中客车 (Airbus)", "洛克希德·马丁 (Lockheed Martin)", "霍尼韦尔 (Honeywell)", "Meggitt Sensing Systems"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "智慧农业",
+            "子-子环节": [
+              {
+                "子-子环节名称": "土壤监测",
+                "代表公司": ["Sentera", "CropX", "The Climate Corporation (Bayer)", "John Deere", "Trimble"]
+              },
+              {
+                "子-子环节名称": "作物监测",
+                "代表公司": ["DJI (大疆创新)", "Parrot", "senseFly (Parrot)", "PrecisionHawk", "AgEagle Aerial Systems"]
+              },
+              {
+                "子-子环节名称": "精准灌溉",
+                "代表公司": ["Netafim", "Lindsay Corporation", "Valmont Industries", "Jain Irrigation Systems", "Rain Bird Corporation"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "智能物流",
+            "子-子环节": [
+              {
+                "子-子环节名称": "RFID标签",
+                "代表公司": ["斑马技术 (Zebra Technologies)", "Alien Technology", "Impinj", "NXP Semiconductors", "SMARTRAC (被Avery Dennison收购)"]
+              },
+              {
+                "子-子环节名称": "货物追踪",
+                "代表公司": ["Orbcomm", "SkyBitz", "I.D. Systems", "CalAmp", "Geotab"]
+              },
+              {
+                "子-子环节名称": "仓库管理",
+                "代表公司": ["霍尼韦尔 (Honeywell)", "斑马技术 (Zebra Technologies)", "Dematic (KION Group)", "Manhattan Associates", "Blue Yonder (JDA Software)"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

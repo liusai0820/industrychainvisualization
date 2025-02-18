@@ -1,0 +1,177 @@
+{
+  "产业链": "脑科学与类脑智能",
+  "环节": [
+    {
+      "环节名称": "上游：基础研究与技术支撑",
+      "子环节": [
+        {
+          "子环节名称": "脑科学基础研究",
+          "子-子环节": [
+            {
+              "子-子环节名称": "神经生物学研究",
+              "代表公司": ["艾伦脑科学研究所 (Allen Institute for Brain Science)", "马克斯·普朗克神经生物学研究所 (Max Planck Institute of Neurobiology)", "霍华德·休斯医学研究所 (Howard Hughes Medical Institute, HHMI)", "冷泉港实验室 (Cold Spring Harbor Laboratory, CSHL)", "索尔克生物研究所 (Salk Institute for Biological Studies)"]
+            },
+            {
+              "子-子环节名称": "认知神经科学研究",
+              "代表公司": ["麻省理工学院麦戈文脑研究所 (McGovern Institute for Brain Research at MIT)", "斯坦福大学神经科学研究所 (Stanford Neurosciences Institute)", "加州大学伯克利分校海伦·威尔斯神经科学研究所 (Helen Wills Neuroscience Institute at UC Berkeley)", "哥伦比亚大学莫蒂默·B·扎克曼心智、大脑与行为研究所 (Mortimer B. Zuckerman Mind Brain Behavior Institute at Columbia University)", "约翰霍普金斯大学脑科学研究所 (Brain Science Institute at Johns Hopkins University)"]
+            },
+            {
+              "子-子环节名称": "神经计算与建模",
+              "代表公司": ["瑞士洛桑联邦理工学院蓝脑计划 (Blue Brain Project, EPFL)", "艾伦脑科学研究所 (Allen Institute for Brain Science)", "Human Brain Project (HBP)", "Janelia Research Campus", "Neuroscience Gateway (NSG)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "类脑智能技术研究",
+          "子-子环节": [
+            {
+              "子-子环节名称": "类脑计算架构",
+              "代表公司": ["IBM (IBM)", "英特尔 (Intel)", "高通 (Qualcomm)", "英伟达 (NVIDIA)", "谷歌 (Google)", "华为 (Huawei)", "寒武纪 (Cambricon)", "SpiNNaker"]
+            },
+            {
+              "子-子环节名称": "神经形态芯片",
+              "代表公司": ["英特尔 (Intel) - Loihi", "IBM (IBM) - TrueNorth", "高通 (Qualcomm) - Zeroth", "BrainChip (BrainChip) - Akida", "General Vision (General Vision) - NeuroMem"]
+            },
+            {
+              "子-子环节名称": "类脑智能算法",
+              "代表公司": ["谷歌 (Google) - DeepMind", "OpenAI (OpenAI)", "微软 (Microsoft)", "脸书 (Facebook)", "亚马逊 (Amazon)", "百度 (Baidu)", "商汤科技 (SenseTime)", "旷视科技 (Megvii)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "关键技术与工具",
+          "子-子环节": [
+            {
+              "子-子环节名称": "脑成像技术",
+              "代表公司": ["西门子 (Siemens)", "通用电气 (GE Healthcare)", "飞利浦 (Philips)", "佳能医疗 (Canon Medical Systems)", "日立 (Hitachi)", "Bruker", "尼康 (Nikon)", "蔡司 (Zeiss)"]
+            },
+            {
+              "子-子环节名称": "神经电生理技术",
+              "代表公司": ["Neuralink (Neuralink)", "Blackrock Neurotech", "Plexon", "NeuroNexus", "Tucker-Davis Technologies (TDT)", "Ripple Neuro", "Intan Technologies", "Multi Channel Systems (MCS)"]
+            },
+            {
+              "子-子环节名称": "光遗传学/化学遗传学技术",
+              "代表公司": ["Thorlabs (Thorlabs)", "Coherent (Coherent)", "Newport (Newport)", "Olympus (Olympus)", "Scientifica", "Prizmatix", "Mightex", "Doric Lenses"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "中游：技术转化与平台开发",
+      "子环节": [
+        {
+          "子环节名称": "脑机接口技术",
+          "子-子环节": [
+            {
+              "子-子环节名称": "侵入式脑机接口",
+              "代表公司": ["Neuralink (Neuralink)", "Blackrock Neurotech", "Synchron (Synchron)", "Paradromics (Paradromics)", "CereGate", "Neurable", "Precision Neuroscience", "Motif Neurotech"]
+            },
+            {
+              "子-子环节名称": "非侵入式脑机接口",
+              "代表公司": ["Emotiv (Emotiv)", "NeuroSky (NeuroSky)", "BrainCo (BrainCo)", "Bitbrain (Bitbrain)", "g.tec medical engineering (g.tec)", "OpenBCI", "NextMind", "Muse"]
+            },
+            {
+              "子-子环节名称": "脑机接口信号处理与解码",
+              "代表公司": ["Blackrock Neurotech", "Ripple Neuro", "Plexon", "Intan Technologies", "Tucker-Davis Technologies (TDT)", "National Instruments (NI)", "MathWorks", "COMSOL"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "类脑智能计算平台",
+          "子-子环节": [
+            {
+              "子-子环节名称": "类脑智能开发框架",
+              "代表公司": ["谷歌 (Google) - TensorFlow", "脸书 (Facebook) - PyTorch", "微软 (Microsoft) - CNTK", "亚马逊 (Amazon) - MXNet", "Nengo", "Brian", "CARLsim", "GeNN"]
+            },
+            {
+              "子-子环节名称": "类脑智能计算系统",
+              "代表公司": ["IBM (IBM)", "英特尔 (Intel)", "高通 (Qualcomm)", "英伟达 (NVIDIA)", "华为 (Huawei)", "寒武纪 (Cambricon)", "SpiNNaker", "BrainScaleS"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "数据分析与处理平台",
+          "子-子环节": [
+            {
+              "子-子环节名称": "脑科学数据分析",
+              "代表公司": ["MathWorks - MATLAB", "SPM (Statistical Parametric Mapping)", "FSL (FMRIB Software Library)", "FreeSurfer", "AFNI (Analysis of Functional NeuroImages)", "Brainstorm", "EEGLAB", "FieldTrip"]
+            },
+            {
+              "子-子环节名称": "类脑智能数据标注与处理",
+              "代表公司": ["Appen (Appen)", "Scale AI (Scale AI)", "Lionbridge AI (Lionbridge AI)", "CloudFactory (CloudFactory)", "Amazon Mechanical Turk (MTurk)", "Labelbox", "Hivemind", "DataRobot"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "下游：应用与服务",
+      "子环节": [
+        {
+          "子环节名称": "医疗健康",
+          "子-子环节": [
+            {
+              "子-子环节名称": "神经系统疾病诊断与治疗",
+              "代表公司": ["美敦力 (Medtronic)", "波士顿科学 (Boston Scientific)", "雅培 (Abbott)", "强生 (Johnson & Johnson)", "罗氏诊断 (Roche Diagnostics)", "西门子医疗 (Siemens Healthineers)", "飞利浦医疗 (Philips Healthcare)", "GE医疗 (GE Healthcare)"]
+            },
+            {
+              "子-子环节名称": "精神疾病诊断与治疗",
+              "代表公司": ["Otsuka Pharmaceutical (大冢制药)", "Takeda Pharmaceutical (武田制药)", "Lundbeck", "Janssen Pharmaceuticals (杨森制药)", "Alkermes", "Neurocrine Biosciences", "Acadia Pharmaceuticals", "Sage Therapeutics"]
+            },
+            {
+              "子-子环节名称": "认知功能障碍康复",
+              "代表公司": ["Cogmed (Cogmed)", "Posit Science (Posit Science)", "Lumos Labs (Lumosity)", "BrainHQ", "HappyNeuron", "Scientific Brain Training (SBT)", "NeuroNation", "Elevate"]
+            },
+            {
+              "子-子环节名称": "脑机接口辅助康复",
+              "代表公司": ["Ottobock (Ottobock)", "Ossur (Ossur)", "Hocoma (Hocoma)", "Ekso Bionics (Ekso Bionics)", "ReWalk Robotics (ReWalk Robotics)", "Cyberdyne (Cyberdyne)", "MindMaze", "Motus Nova"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "智能应用",
+          "子-子环节": [
+            {
+              "子-子环节名称": "智能机器人",
+              "代表公司": ["波士顿动力 (Boston Dynamics)", "软银机器人 (SoftBank Robotics)", "ABB (ABB)", "发那科 (FANUC)", "库卡 (KUKA)", "优必选 (UBTECH)", "达闼科技 (CloudMinds)", "Agility Robotics"]
+            },
+            {
+              "子-子环节名称": "智能驾驶",
+              "代表公司": ["特斯拉 (Tesla)", "Waymo (Waymo)", "通用汽车 (General Motors) - Cruise", "福特汽车 (Ford) - Argo AI", "百度 (Baidu) - Apollo", "小马智行 (Pony.ai)", "文远知行 (WeRide)", "AutoX"]
+            },
+            {
+              "子-子环节名称": "智能家居",
+              "代表公司": ["亚马逊 (Amazon)", "谷歌 (Google)", "苹果 (Apple)", "三星 (Samsung)", "小米 (Xiaomi)", "海尔 (Haier)", "美的 (Midea)", "华为 (Huawei)"]
+            },
+            {
+              "子-子环节名称": "智能教育",
+              "代表公司": ["科大讯飞 (iFLYTEK)", "好未来 (TAL Education)", "新东方 (New Oriental)", "猿辅导 (Yuanfudao)", "作业帮 (Zuoyebang)", "VIPKid", "Coursera", "Udacity"]
+            },
+            {
+              "子-子环节名称": "智能安防",
+              "代表公司": ["海康威视 (Hikvision)", "大华股份 (Dahua Technology)", "旷视科技 (Megvii)", "商汤科技 (SenseTime)", "云从科技 (CloudWalk)", "依图科技 (Yitu Technology)", "Axis Communications", "Bosch Security Systems"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "人机交互与增强",
+          "子-子环节": [
+            {
+              "子-子环节名称": "情感计算",
+              "代表公司": ["Affectiva (Affectiva)", "Realeyes (Realeyes)", "NuraLogix (NuraLogix)", "Beyond Verbal (Beyond Verbal)", "Kairos (Kairos)", "Eyeris (Eyeris)", "nViso", "Cogito"]
+            },
+            {
+              "子-子环节名称": "虚拟现实/增强现实 (VR/AR)",
+              "代表公司": ["Meta (Meta) - Oculus", "索尼 (Sony) - PlayStation VR", "HTC (HTC) - Vive", "微软 (Microsoft) - HoloLens", "苹果 (Apple)", "Magic Leap (Magic Leap)", "Varjo", "Pico"]
+            },
+            {
+              "子-子环节名称": "人机协同",
+              "代表公司": ["Rethink Robotics (Rethink Robotics)", "Universal Robots (Universal Robots)", "Franka Emika (Franka Emika)", "ABB (ABB) - YuMi", "KUKA (KUKA) - LBR iiwa", "FANUC (FANUC) - CR Series", "Fetch Robotics", "Omron Adept"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

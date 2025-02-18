@@ -1,0 +1,196 @@
+{
+    "产业链": "可见光通信与光计算",
+    "环节": [
+      {
+        "环节名称": "上游：基础研究、材料与核心器件",
+        "子环节": [
+          {
+            "子环节名称": "基础研究",
+            "子-子环节": [
+              {
+                "子-子环节名称": "可见光通信理论",
+                "代表公司": ["pureLiFi", "Oledcomm", "VLNComm", "Lucibel", "ByteLight"]
+              },
+              {
+                "子-子环节名称": "光计算理论",
+                "代表公司": ["Lightelligence", "Lightmatter", "Luminous Computing", "Optalysys", "Fathom Computing"]
+              },
+              {
+                "子-子环节名称": "光子集成技术",
+                "代表公司": ["Intel", "IBM", "GlobalFoundries", "IMEC", "AIM Photonics"]
+              },
+              {
+                "子-子环节名称": "非线性光学",
+                "代表公司": ["Thorlabs", "Newport Corporation", "Coherent", "Menlo Systems", "TOPTICA Photonics"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "材料",
+            "子-子环节": [
+              {
+                "子-子环节名称": "III-V族半导体",
+                "代表公司": ["Cree", "Osram", "Lumileds", "Nichia", "Samsung"]
+              },
+              {
+                "子-子环节名称": "硅光子材料",
+                "代表公司": ["Intel", "GlobalFoundries", "IMEC", "STMicroelectronics", "Tower Semiconductor"]
+              },
+              {
+                "子-子环节名称": "非线性光学晶体",
+                "代表公司": ["Raicol Crystals", "CASTECH", "Newlight Photonics", "EKSMA Optics", "Altechna"]
+              },
+              {
+                "子-子环节名称": "光敏材料",
+                "代表公司": ["Hamamatsu Photonics", "First Sensor", "Excelitas Technologies", "OSI Optoelectronics", "Thorlabs"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "核心器件",
+            "子-子环节": [
+              {
+                "子-子环节名称": "LED芯片",
+                "代表公司": ["Cree", "Osram", "Lumileds", "Nichia", "Epistar"]
+              },
+              {
+                "子-子环节名称": "激光器",
+                "代表公司": ["Coherent", "IPG Photonics", "Trumpf", "Lumentum", "nLIGHT"]
+              },
+              {
+                "子-子环节名称": "光调制器",
+                "代表公司": ["Lumentum", "Fujitsu Optical Components", "Finisar (II-VI)", "Sumitomo Electric", "Thorlabs"]
+              },
+              {
+                "子-子环节名称": "光探测器",
+                "代表公司": ["Hamamatsu Photonics", "First Sensor", "Excelitas Technologies", "OSI Optoelectronics", "Thorlabs"]
+              },
+              {
+                "子-子环节名称": "光子集成芯片 (PIC)",
+                "代表公司": ["Intel", "Luminous Computing", "Ayar Labs", "Lightmatter", "Rockley Photonics"]
+              },
+              {
+                "子-子环节名称": "微透镜阵列",
+                "代表公司": ["LIMO", "Jenoptik", "ams AG", "SUSS MicroOptics", "RPC Photonics"]
+              },
+              {
+                "子-子环节名称": "空间光调制器 (SLM)",
+                "代表公司": ["Holoeye Photonics", "Meadowlark Optics", "Kopin Corporation", "Santec", "Hamamatsu Photonics"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "中游：系统集成与设备制造",
+        "子环节": [
+          {
+            "子环节名称": "可见光通信系统",
+            "子-子环节": [
+              {
+                "子-子环节名称": "Li-Fi系统",
+                "代表公司": ["pureLiFi", "Oledcomm", "VLNComm", "Lucibel", "Signify (Philips Lighting)"]
+              },
+              {
+                "子-子环节名称": "室内定位系统",
+                "代表公司": ["ByteLight (Acuity Brands)", "GE Current", "Philips Lighting (Signify)", "Qualcomm", "iBeacon (Apple)"]
+              },
+              {
+                "子-子环节名称": "可见光无线光通信 (OWC)",
+                "代表公司": ["Mostcom", "Panasonic", "NEC", "Fujitsu", "Casio"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "光计算系统",
+            "子-子环节": [
+              {
+                "子-子环节名称": "光子神经网络处理器",
+                "代表公司": ["Lightelligence", "Lightmatter", "Luminous Computing", "Fathom Computing", "Optalysys"]
+              },
+              {
+                "子-子环节名称": "光子芯片",
+                "代表公司": ["PsiQuantum", "Xanadu", "ORCA Computing", "QuiX Quantum", "AegiQ"]
+              },
+              {
+                "子-子环节名称": "光学模拟计算机",
+                "代表公司": ["Optalysys", "Analog Photonics", "LightOn"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "光学器件与模块",
+            "子-子环节": [
+              {
+                "子-子环节名称": "光学收发模块",
+                "代表公司": ["Finisar (II-VI)", "Lumentum", "Sumitomo Electric", "Fujitsu Optical Components", "Source Photonics"]
+              },
+              {
+                "子-子环节名称": "光学引擎",
+                "代表公司": ["Intel", "Luxtera (Cisco)", "Acacia Communications (Cisco)", "Elenion Technologies", "Inphi"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "下游：应用与服务",
+        "子环节": [
+          {
+            "子环节名称": "可见光通信应用",
+            "子-子环节": [
+              {
+                "子-子环节名称": "室内无线通信",
+                "代表公司": ["pureLiFi", "Oledcomm", "VLNComm", "Lucibel", "Signify (Philips Lighting)"]
+              },
+              {
+                "子-子环节名称": "水下通信",
+                "代表公司": ["Sonardyne", "Kongsberg Maritime", "Teledyne Marine", "EvoLogics", "Subnero"]
+              },
+              {
+                "子-子环节名称": "智能交通",
+                "代表公司": ["Denso", "Toyota", "Nissan", "Honda", "General Motors"]
+              },
+              {
+                "子-子环节名称": "医疗健康",
+                "代表公司": ["GE Healthcare", "Philips Healthcare", "Siemens Healthineers", "Medtronic", "Stryker"]
+              },
+              {
+                "子-子环节名称": "航空航天",
+                "代表公司": ["Boeing", "Airbus", "Lockheed Martin", "Northrop Grumman", "Raytheon Technologies"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "光计算应用",
+            "子-子环节": [
+              {
+                "子-子环节名称": "人工智能",
+                "代表公司": ["Lightelligence", "Lightmatter", "Luminous Computing", "Fathom Computing", "Optalysys"]
+              },
+              {
+                "子-子环节名称": "机器学习",
+                "代表公司": ["Google", "Microsoft", "Amazon", "Facebook", "IBM"]
+              },
+              {
+                "子-子环节名称": "药物研发",
+                "代表公司": ["Schrödinger", "Atomwise", "Exscientia", "BenevolentAI", "Insilico Medicine"]
+              },
+              {
+                "子-子环节名称": "材料科学",
+                "代表公司": ["Dow Chemical", "BASF", "3M", "DuPont", "Evonik"]
+              },
+              {
+                "子-子环节名称": "金融建模",
+                "代表公司": ["JPMorgan Chase", "Goldman Sachs", "Citigroup", "Morgan Stanley", "Bank of America"]
+              },
+              {
+                "子-子环节名称": "密码学",
+                "代表公司": ["NSA", "GCHQ", "CSEC", "ASD", "DRDO"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

@@ -1,0 +1,264 @@
+{
+    "产业链": "安全节能环保",
+    "环节": [
+      {
+        "环节名称": "上游：原材料与核心设备",
+        "子环节": [
+          {
+            "子环节名称": "安全领域",
+            "子-子环节": [
+              {
+                "子-子环节名称": "特种钢材",
+                "代表公司": ["宝武钢铁集团（Baowu Steel Group）", "鞍钢集团（Ansteel Group）", "首钢集团（Shougang Group）", "蒂森克虏伯（Thyssenkrupp）", "浦项制铁（POSCO）"]
+              },
+              {
+                "子-子环节名称": "阻燃材料",
+                "代表公司": ["巴斯夫（BASF）", "杜邦（DuPont）", "科思创（Covestro）", "朗盛（LANXESS）", "金发科技（Kingfa Sci. & Tech.）"]
+              },
+              {
+                "子-子环节名称": "防爆电气元件",
+                "代表公司": ["施耐德电气（Schneider Electric）", "ABB", "西门子（Siemens）", "伊顿（Eaton）", "华荣股份（Warom Technology）"]
+              },
+              {
+                "子-子环节名称": "传感器（气体、温度、压力等）",
+                "代表公司": ["霍尼韦尔（Honeywell）", "博世（Bosch）", "西门子（Siemens）", "艾默生（Emerson）", "德尔格（Dräger）"]
+              },
+              {
+                "子-子环节名称": "监控摄像头及芯片",
+                "代表公司": ["海康威视（Hikvision）", "大华股份（Dahua Technology）", "索尼（Sony）", "安霸（Ambarella）", "华为海思（HiSilicon）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "节能领域",
+            "子-子环节": [
+              {
+                "子-子环节名称": "高效节能材料",
+                "代表公司": ["圣戈班（Saint-Gobain）", "欧文斯科宁（Owens Corning）", "可耐福（Knauf）", "洛科威（ROCKWOOL）", "北新建材（BNBM）"]
+              },
+              {
+                "子-子环节名称": "变频器",
+                "代表公司": ["ABB", "西门子（Siemens）", "施耐德电气（Schneider Electric）", "三菱电机（Mitsubishi Electric）", "汇川技术（Inovance）"]
+              },
+              {
+                "子-子环节名称": "高效电机",
+                "代表公司": ["ABB", "西门子（Siemens）", "卧龙电驱（Wolong Electric）", "大洋电机（Broad-Ocean）", "中电电机（Zhongdian Electric）"]
+              },
+              {
+                "子-子环节名称": "余热回收设备",
+                "代表公司": ["阿尔法拉伐（Alfa Laval）", "斯派莎克（Spirax Sarco）", "GEA集团", "双良节能（Shuangliang Eco-Energy）", "川润股份（Chuanrun Co., Ltd.）"]
+              },
+              {
+                "子-子环节名称": "LED芯片及封装",
+                "代表公司": ["三安光电（Sanan Optoelectronics）", "华灿光电（HC SemiTek）", "欧司朗（OSRAM）", "日亚化学（Nichia）", "首尔半导体（Seoul Semiconductor）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "环保领域",
+            "子-子环节": [
+              {
+                "子-子环节名称": "膜材料与组件",
+                "代表公司": ["陶氏化学（Dow Chemical）", "苏伊士（SUEZ）", "旭化成（Asahi Kasei）", "海德能（Hydranautics）", "碧水源（OriginWater）"]
+              },
+              {
+                "子-子环节名称": "滤料滤材",
+                "代表公司": ["唐纳森（Donaldson）", "康斐尔（Camfil）", "曼胡默尔（MANN+HUMMEL）", "科德宝（Freudenberg）", "金海环境（Jinhai Environment）"]
+              },
+              {
+                "子-子环节名称": "吸附材料",
+                "代表公司": ["卡尔冈炭素（Calgon Carbon）", "卡博特（Cabot）", "大阪燃气化学（Osaka Gas Chemicals）", "Jacobi Carbons", "美埃（MayAir）"]
+              },
+              {
+                "子-子环节名称": "催化剂",
+                "代表公司": ["庄信万丰（Johnson Matthey）", "巴斯夫（BASF）", "优美科（Umicore）", "科莱恩（Clariant）", "中石化催化剂（Sinopec Catalyst）"]
+              },
+              {
+                "子-子环节名称": "环保设备专用泵阀",
+                "代表公司": ["格兰富（Grundfos）", "赛莱默（Xylem）", "KSB", "荏原（Ebara）", "南方泵业（CNP）"]
+              },
+              {
+                "子-子环节名称": "环境监测仪器",
+                "代表公司": ["赛默飞世尔科技（Thermo Fisher Scientific）", "丹纳赫（Danaher）", "岛津（Shimadzu）", "堀场（HORIBA）", "聚光科技（Focused Photonics）"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "中游：设备集成与工程服务",
+        "子环节": [
+          {
+            "子环节名称": "安全领域",
+            "子-子环节": [
+              {
+                "子-子环节名称": "安全设备集成",
+                "代表公司": ["霍尼韦尔（Honeywell）", "江森自控（Johnson Controls）", "泰科安全（Tyco Security Products）", "博世安防（Bosch Security Systems）", "海康威视（Hikvision）"]
+              },
+              {
+                "子-子环节名称": "消防工程",
+                "代表公司": ["中集集团（CIMC）", "天广消防（TianGuang Fire-fighting）", "坚瑞沃能（J&R Optimum Energy）", "海湾安全（GST）", "青鸟消防（Jade Bird Fire）"]
+              },
+              {
+                "子-子环节名称": "安防工程",
+                "代表公司": ["海康威视（Hikvision）", "大华股份（Dahua Technology）", "宇视科技（Uniview）", "天地伟业（Tiandy）", "苏州科达（Kedacom）"]
+              },
+              {
+                "子-子环节名称": "安全咨询与评估",
+                "代表公司": ["劳氏（Lloyd's Register）", "必维国际检验集团（Bureau Veritas）", "DNV GL", "TÜV南德意志集团（TÜV SÜD）", "中国安全生产科学研究院"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "节能领域",
+            "子-子环节": [
+              {
+                "子-子环节名称": "节能系统集成",
+                "代表公司": ["西门子（Siemens）", "施耐德电气（Schneider Electric）", "霍尼韦尔（Honeywell）", "江森自控（Johnson Controls）", "远景能源（Envision Energy）"]
+              },
+              {
+                "子-子环节名称": "建筑节能改造",
+                "代表公司": ["江森自控（Johnson Controls）", "霍尼韦尔（Honeywell）", "西门子（Siemens）", "施耐德电气（Schneider Electric）", "达实智能（Das Intellitech）"]
+              },
+              {
+                "子-子环节名称": "工业节能改造",
+                "代表公司": ["西门子（Siemens）", "施耐德电气（Schneider Electric）", "ABB", "汇川技术（Inovance）", "双良节能（Shuangliang Eco-Energy）"]
+              },
+              {
+                "子-子环节名称": "合同能源管理（EMC）",
+                "代表公司": ["远景能源（Envision Energy）", "双良节能（Shuangliang Eco-Energy）", "北京科锐（Beijing Create Century Technology）", "智光电气（Zhiguang Electric）", "天壕环境（Tellhow Sci-Tech）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "环保领域",
+            "子-子环节": [
+              {
+                "子-子环节名称": "水处理工程",
+                "代表公司": ["苏伊士（SUEZ）", "威立雅（Veolia）", "北控水务（BEWG）", "碧水源（OriginWater）", "首创股份（Capital Environment）"]
+              },
+              {
+                "子-子环节名称": "大气治理工程",
+                "代表公司": ["龙净环保（Longking）", "菲达环保（Feida Environmental Protection）", "清新环境（SPC Environment）", "科林环保（Kelin Environmental Protection）", "永清环保（Yonker Environmental Protection）"]
+              },
+              {
+                "子-子环节名称": "固废处理工程",
+                "代表公司": ["光大环境（China Everbright Environment）", "瀚蓝环境（Grandblue Environment）", "伟明环保（WELLE Environmental）", "格林美（GEM）", "启迪环境（Tus-Sound Environmental Resources）"]
+              },
+              {
+                "子-子环节名称": "土壤修复工程",
+                "代表公司": ["高能环境（High-tech Environment）", "博世科（BOSSKY）", "建工修复（BCEG Environmental Remediation）", "中科鼎实（Zhongke Dingshi）", "永清环保（Yonker Environmental Protection）"]
+              },
+              {
+                "子-子环节名称": "环境监测与运维",
+                "代表公司": ["聚光科技（Focused Photonics）", "先河环保（Sunho）", "雪迪龙（SDL）", "力合科技（LEAD TECH）", "盈峰环境（Infore Environment）"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "下游：应用场景",
+        "子环节": [
+          {
+            "子环节名称": "工业领域",
+            "子-子环节": [
+              {
+                "子-子环节名称": "石油化工",
+                "代表公司": ["中石油（PetroChina）", "中石化（Sinopec）", "中海油（CNOOC）", "巴斯夫（BASF）", "陶氏化学（Dow Chemical）"]
+              },
+              {
+                "子-子环节名称": "钢铁冶金",
+                "代表公司": ["宝武钢铁集团（Baowu Steel Group）", "鞍钢集团（Ansteel Group）", "首钢集团（Shougang Group）", "塔塔钢铁（Tata Steel）", "新日铁（Nippon Steel）"]
+              },
+              {
+                "子-子环节名称": "电力能源",
+                "代表公司": ["国家电网（State Grid）", "南方电网（China Southern Power Grid）", "华能集团（China Huaneng Group）", "大唐集团（China Datang Corporation）", "国家能源集团（China Energy Investment Corporation）"]
+              },
+              {
+                "子-子环节名称": "水泥建材",
+                "代表公司": ["海螺水泥（Anhui Conch Cement）", "中国建材（China National Building Material）", "华新水泥（Huaxin Cement）", "冀东水泥（Jidong Cement）", "金隅集团（BBMG Group）"]
+              },
+              {
+                "子-子环节名称": "矿山",
+                "代表公司":["必和必拓（BHP）", "力拓（Rio Tinto）", "淡水河谷（Vale）", "嘉能可（Glencore）", "紫金矿业（Zijin Mining）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "建筑领域",
+            "子-子环节": [
+              {
+                "子-子环节名称": "绿色建筑",
+                "代表公司": ["中国建筑（China State Construction）", "万科（China Vanke）", "碧桂园（Country Garden）", "绿地集团（Greenland Group）", "保利发展（Poly Developments and Holdings）"]
+              },
+              {
+                "子-子环节名称": "智能楼宇",
+                "代表公司": ["江森自控（Johnson Controls）", "霍尼韦尔（Honeywell）", "西门子（Siemens）", "施耐德电气（Schneider Electric）", "达实智能（Das Intellitech）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "交通领域",
+            "子-子环节": [
+              {
+                "子-子环节名称": "新能源汽车",
+                "代表公司": ["特斯拉（Tesla）", "比亚迪（BYD）", "蔚来（NIO）", "小鹏汽车（XPeng）", "理想汽车（Li Auto）"]
+              },
+              {
+                "子-子环节名称": "公共交通",
+                "代表公司": ["比亚迪（BYD）", "宇通客车（Yutong Bus）", "中车时代电动（CRRC Times Electric）", "金龙客车（King Long）", "中通客车（Zhongtong Bus）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "市政领域",
+            "子-子环节": [
+              {
+                "子-子环节名称": "智慧城市",
+                "代表公司": ["华为（Huawei）", "阿里巴巴（Alibaba）", "腾讯（Tencent）", "平安科技（Ping An Technology）", "中兴通讯（ZTE）"]
+              },
+              {
+                "子-子环节名称": "水务",
+                "代表公司": ["北控水务（BEWG）", "首创股份（Capital Environment）", "碧水源（OriginWater）", "桑德国际（Sound Global）", "康达环保（Kangda International Environmental）"]
+              },
+              {
+                "子-子环节名称": "固废处理",
+                "代表公司": ["光大环境（China Everbright Environment）", "瀚蓝环境（Grandblue Environment）", "伟明环保（WELLE Environmental）", "格林美（GEM）", "启迪环境（Tus-Sound Environmental Resources）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "公共安全",
+            "子-子环节": [
+              {
+                "子-子环节名称": "应急管理",
+                "代表公司": ["辰安科技（Thunis）", "中国安科院", "航天宏图（PIESAT）", "中电科（CETC）", "新兴际华（Xinxing Cathay International Group）"]
+              },
+              {
+                "子-子环节名称": "消防安全",
+                "代表公司": ["海湾安全（GST）", "青鸟消防（Jade Bird Fire）", "泰和安（T&A）", "尼特消防（Nittan）", "霍尼韦尔（Honeywell）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "居民消费",
+            "子-子环节": [
+              {
+                "子-子环节名称": "空气净化器",
+                "代表公司": ["飞利浦（Philips）", "霍尼韦尔（Honeywell）", "小米（Xiaomi）", "布鲁雅尔（Blueair）", "戴森（Dyson）"]
+              },
+              {
+                "子-子环节名称": "净水器",
+                "代表公司": ["A.O.史密斯（A.O. Smith）", "美的（Midea）", "沁园（Qinyuan）", "3M", "安吉尔（Angel）"]
+              },
+              {
+                "子-子环节名称": "节能家电",
+                "代表公司": ["海尔（Haier）", "美的（Midea）", "格力（Gree）", "海信（Hisense）", "长虹（Changhong）"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

@@ -1,0 +1,319 @@
+{
+    "产业链": "新能源",
+    "环节": [
+      {
+        "环节名称": "上游：原材料与核心设备",
+        "子环节": [
+          {
+            "子环节名称": "光伏",
+            "子-子环节": [
+              {
+                "子-子环节名称": "多晶硅",
+                "代表公司": ["通威股份（Tongwei）", "保利协鑫能源（GCL-Poly）", "新特能源（Xinte Energy）", "大全能源（Daqo New Energy）", "瓦克化学（Wacker Chemie）"]
+              },
+              {
+                "子-子环节名称": "硅片",
+                "代表公司": ["隆基绿能（LONGi）", "中环股份（TCL Zhonghuan）", "晶科能源（Jinko Solar）", "晶澳科技（JA Solar）", "阿特斯（Canadian Solar）"]
+              },
+              {
+                "子-子环节名称": "电池片",
+                "代表公司": ["隆基绿能（LONGi）", "通威股份（Tongwei）", "爱旭股份（Aiko Solar）", "晶科能源（Jinko Solar）", "天合光能（Trina Solar）"]
+              },
+              {
+                "子-子环节名称": "光伏组件",
+                "代表公司": ["隆基绿能（LONGi）", "晶科能源（Jinko Solar）", "天合光能（Trina Solar）", "晶澳科技（JA Solar）", "阿特斯（Canadian Solar）"]
+              },
+              {
+                "子-子环节名称": "光伏玻璃",
+                "代表公司": ["信义光能（Xinyi Solar）", "福莱特玻璃（Flat Glass）", "彩虹集团（IRICO Group）", "南玻A（CSG Holding）", "亚玛顿（Almaden）"]
+              },
+              {
+                "子-子环节名称": "光伏胶膜（EVA、POE）",
+                "代表公司": ["福斯特（First Applied Material）", "海优新材（HiUV New Material）", "斯威克（SVECK）", "赛伍技术（Cybrid Technologies）", "东方日升（Risen Energy）"]
+              },
+              {
+                "子-子环节名称": "光伏逆变器",
+                "代表公司": ["华为（Huawei）", "阳光电源（Sungrow）", "SMA Solar Technology", "Power Electronics", "锦浪科技（Ginlong Solis）"]
+              },
+              {
+                "子-子环节名称": "光伏支架",
+                "代表公司": ["中信博（Arctech Solar）", "国强集团（Guoqiang Group）", "天合光能（Trina Solar）", "清源股份（Akcome）", "爱康科技（Akcome）"]
+              },
+              {
+                "子-子环节名称": "光伏设备",
+                "代表公司": ["捷佳伟创（Jinchen Machinery）", "迈为股份（Maxwell Technologies）", "帝尔激光（DR Laser）", "金辰股份（Jinchen Shares）", "北方华创（NAURA）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "风电",
+            "子-子环节": [
+              {
+                "子-子环节名称": "风机叶片",
+                "代表公司": ["中材科技（Sinoma Science & Technology）", "时代新材（Times New Material）", "艾尔姆风能（LM Wind Power）", "TPI Composites", "维斯塔斯（Vestas）"]
+              },
+              {
+                "子-子环节名称": "风机主轴",
+                "代表公司": ["金雷股份（Jinlei Technology）", "通裕重工（Toncin Group）", "大金重工（Dajin Heavy Industry）", "天顺风能（Tianneng Wind Energy）", "恒润股份（Hengrun Corporation）"]
+              },
+              {
+                "子-子环节名称": "风机齿轮箱",
+                "代表公司": ["南高齿（NGC）", "采埃孚（ZF Friedrichshafen）", "维斯塔斯（Vestas）", "西门子歌美飒（Siemens Gamesa）", "重齿（CGC）"]
+              },
+              {
+                "子-子环节名称": "风机发电机",
+                "代表公司": ["金风科技（Goldwind）", "远景能源（Envision Energy）", "明阳智能（Mingyang Smart Energy）", "西门子歌美飒（Siemens Gamesa）", "通用电气（GE Renewable Energy）"]
+              },
+              {
+                "子-子环节名称": "风机塔筒",
+                "代表公司": ["天顺风能（Tianneng Wind Energy）", "泰胜风能（Taisheng Wind Power）", "大金重工（Dajin Heavy Industry）", "天能重工（Tianneng Heavy Industries）", "海力风电（Haili Wind Power）"]
+              },
+              {
+                "子-子环节名称": "风电变流器",
+                "代表公司": ["阳光电源（Sungrow）", "禾望电气（Hopewind）", "汇川技术（Inovance）", "ABB", "西门子（Siemens）"]
+              },
+              {
+                "子-子环节名称": "风电主控系统",
+                "代表公司": ["金风科技（Goldwind）", "远景能源（Envision Energy）", "明阳智能（Mingyang Smart Energy）", "维斯塔斯（Vestas）", "西门子歌美飒（Siemens Gamesa）"]
+              },
+              {
+                "子-子环节名称": "海缆",
+                "代表公司": ["东方电缆（Orient Cable）", "中天科技（ZTT）", "亨通光电（Hengtong Optic-Electric）", "宝胜股份（Baosheng Science and Technology Innovation）", "汉缆股份（Hanhe Cable）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "储能",
+            "子-子环节": [
+              {
+                "子-子环节名称": "锂电池",
+                "代表公司": ["宁德时代（CATL）", "比亚迪（BYD）", "LG新能源（LG Energy Solution）", "松下（Panasonic）", "三星SDI（Samsung SDI）"]
+              },
+              {
+                "子-子环节名称": "电池正极材料",
+                "代表公司": ["当升科技（Easpring）", "容百科技（Ronbay Technology）", "杉杉股份（Shanshan）", "厦门钨业（Xiamen Tungsten）", "格林美（GEM）"]
+              },
+              {
+                "子-子环节名称": "电池负极材料",
+                "代表公司": ["贝特瑞（BTR）", "杉杉股份（Shanshan）", "璞泰来（Putailai）", "中科电气（Zhongke Electric）", "凯金能源（Kaijin Energy）"]
+              },
+              {
+                "子-子环节名称": "电池隔膜",
+                "代表公司": ["恩捷股份（Semcorp）", "星源材质（Senior Technology Material）", "沧州明珠（Cangzhou Mingzhu）", "中材科技（Sinoma Science & Technology）", "惠强新材（Huiqiang New Material）"]
+              },
+              {
+                "子-子环节名称": "电池电解液",
+                "代表公司": ["天赐材料（Tinci Materials）", "新宙邦（Capchem）", "多氟多（Do-Fluoride Chemicals）", "国泰华荣（Guotai-Huarong）", "杉杉股份（Shanshan）"]
+              },
+              {
+                "子-子环节名称": "储能变流器（PCS）",
+                "代表公司": ["阳光电源（Sungrow）", "科华数据（Kehua Data）", "上能电气（Sineng Electric）", "固德威（GoodWe）", "锦浪科技（Ginlong Solis）"]
+              },
+              {
+                "子-子环节名称": "储能系统集成",
+                "代表公司": ["阳光电源（Sungrow）", "海博思创（HyperStrong）", "南都电源（Narada Power）", "派能科技（Pylontech）", "比亚迪（BYD）"]
+              },
+              {
+                "子-子环节名称": "电池管理系统（BMS）",
+                "代表公司": ["宁德时代（CATL）", "比亚迪（BYD）", "国轩高科（Gotion High-tech）", "亿纬锂能（EVE Energy）", "欣旺达（Sunwoda）"]
+              },
+              {
+                "子-子环节名称": "能量管理系统（EMS）",
+                "代表公司": ["阳光电源（Sungrow）", "科华数据（Kehua Data）", "南瑞继保（NARI）", "许继电气（XJ Electric）", "国电南自（Guodian Nanjing Automation）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "氢能",
+            "子-子环节": [
+              {
+                "子-子环节名称": "制氢设备",
+                "代表公司": ["阳光电源（Sungrow）", "隆基氢能（LONGi Hydrogen）", "考克利尔竞立（Cockerill Jingli Hydrogen）", "派瑞氢能（PERIC Hydrogen Technologies）", "中电丰业（Zhongdian Fengye）"]
+              },
+              {
+                "子-子环节名称": "储氢材料/设备",
+                "代表公司": ["中材科技（Sinoma Science & Technology）", "天海工业（Tianhai Industry）", "富瑞特装（Furui Special Equipment）", "京城股份（Jingcheng Shares）", "中集安瑞科（CIMC Enric）"]
+              },
+              {
+                "子-子环节名称": "氢燃料电池",
+                "代表公司": ["亿华通（Yihuatong）", "国鸿氢能（Guohong Hydrogen Energy）", "重塑股份（Re-Fire Technology）", "捷氢科技（Shanghai Hydrogen Propulsion Technology）", "潍柴动力（Weichai Power）"]
+              },
+              {
+                "子-子环节名称": "燃料电池电堆",
+                "代表公司": ["巴拉德动力系统（Ballard Power Systems）", "普拉格能源（Plug Power）", "Bloom Energy", "亿华通（Yihuatong）", "国鸿氢能（Guohong Hydrogen Energy）"]
+              },
+              {
+                "子-子环节名称": "燃料电池核心材料（质子交换膜、催化剂、碳纸/气体扩散层）",
+                "代表公司": ["戈尔（Gore）", "科德宝（Freudenberg）", "东岳集团（Dongyue Group）", "庄信万丰（Johnson Matthey）", "田中贵金属（Tanaka Kikinzoku）"]
+              },
+              {
+                "子-子环节名称": "加氢站设备",
+                "代表公司": ["厚普股份（HOUPU Clean Energy）", "舜华新能源（Shanghai Shunhua New Energy System）", "国富氢能（Guofu Hydrogen Energy Equipment）", "海德利森（Hydrogenics）", "林德集团（Linde）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "核能",
+            "子-子环节": [
+              {
+                "子-子环节名称": "核燃料",
+                "代表公司": ["中核集团（CNNC）", "Cameco", "Kazatomprom", "Orano", "Rosatom"]
+              },
+              {
+                "子-子环节名称": "核岛设备",
+                "代表公司": ["中核集团（CNNC）", "中国广核集团（CGN）", "东方电气（DEC）", "上海电气（SEC）", "哈尔滨电气（HEC）"]
+              },
+              {
+                "子-子环节名称": "常规岛设备",
+                "代表公司": ["东方电气（DEC）", "上海电气（SEC）", "哈尔滨电气（HEC）", "通用电气（GE）", "西门子（Siemens）"]
+              },
+              {
+                "子-子环节名称": "核电仪控系统",
+                "代表公司": ["中核集团（CNNC）", "中国广核集团（CGN）", "和利时（HollySys）", "广利核（GPEC）", "中国核动力研究设计院（NPIC）"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "中游：能源生产与转换",
+        "子环节": [
+          {
+            "子环节名称": "光伏发电",
+            "子-子环节": [
+              {
+                "子-子环节名称": "光伏电站开发/运营",
+                "代表公司": ["国家电投（SPIC）", "华能集团（China Huaneng Group）", "华电集团（China Huadian Corporation）", "大唐集团（China Datang Corporation）", "国家能源集团（China Energy Investment Corporation）"]
+              },
+              {
+                "子-子环节名称": "EPC总承包",
+                "代表公司": ["中国电建（PowerChina）", "中国能建（China Energy Engineering Group）", "特变电工（TBEA）", "正泰集团（CHINT Group）", "中利集团（Zhongli Group）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "风力发电",
+            "子-子环节": [
+              {
+                "子-子环节名称": "风电场开发/运营",
+                "代表公司": ["国家能源集团（China Energy Investment Corporation）", "华能集团（China Huaneng Group）", "大唐集团（China Datang Corporation）", "国家电投（SPIC）", "华电集团（China Huadian Corporation）"]
+              },
+              {
+                "子-子环节名称": "EPC总承包",
+                "代表公司": ["中国电建（PowerChina）", "中国能建（China Energy Engineering Group）", "金风科技（Goldwind）", "远景能源（Envision Energy）", "明阳智能（Mingyang Smart Energy）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "储能电站",
+            "子-子环节": [
+              {
+                "子-子环节名称": "储能电站开发/运营",
+                "代表公司": ["国家电网（State Grid）", "南方电网（China Southern Power Grid）", "宁德时代（CATL）", "比亚迪（BYD）", "阳光电源（Sungrow）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "氢能应用",
+            "子-子环节": [
+              {
+                "子-子环节名称": "燃料电池汽车",
+                "代表公司": ["丰田汽车（Toyota）", "现代汽车（Hyundai）", "上汽集团（SAIC Motor）", "长城汽车（Great Wall Motor）", "宇通客车（Yutong Bus）"]
+              },
+              {
+                "子-子环节名称": "氢能分布式发电",
+                "代表公司": ["Bloom Energy", "FuelCell Energy", "Plug Power", "斗山（Doosan）", "三菱电力（Mitsubishi Power）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "核电站",
+            "子-子环节": [
+              {
+                "子-子环节名称": "核电站运营",
+                "代表公司": ["中核集团（CNNC）", "中国广核集团（CGN）", "国家电投（SPIC）", "法国电力集团（EDF）", "俄罗斯国家原子能公司（Rosatom）"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "下游：能源应用与服务",
+        "子环节": [
+          {
+            "子环节名称": "电力",
+            "子-子环节": [
+              {
+                "子-子环节名称": "电网输配电",
+                "代表公司": ["国家电网（State Grid）", "南方电网（China Southern Power Grid）", "内蒙古电力（Inner Mongolia Power）", "中国电力建设集团（PowerChina）", "中国能源建设集团（China Energy Engineering Group）"]
+              },
+              {
+                "子-子环节名称": "售电服务",
+                "代表公司": ["国家电网（State Grid）", "南方电网（China Southern Power Grid）", "华润电力（China Resources Power）", "粤电力A（Guangdong Electric Power Development）", "申能股份（Shenergy）"]
+              },
+              {
+                "子-子环节名称": "电力交易",
+                "代表公司": ["北京电力交易中心", "广州电力交易中心", "各省电力交易中心"]
+              },
+              {
+                "子-子环节名称": "综合能源服务",
+                "代表公司": ["国家电网（State Grid）", "南方电网（China Southern Power Grid）", "协鑫集团（GCL Group）", "远景能源（Envision Energy）", "隆基绿能（LONGi）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "交通",
+            "子-子环节": [
+              {
+                "子-子环节名称": "电动汽车",
+                "代表公司": ["特斯拉（Tesla）", "比亚迪（BYD）", "蔚来（NIO）", "小鹏汽车（XPeng）", "理想汽车（Li Auto）"]
+              },
+              {
+                "子-子环节名称": "充电桩/换电站",
+                "代表公司": ["特来电（TELD）", "星星充电（Star Charge）", "国家电网（State Grid）", "南方电网（China Southern Power Grid）", "云快充（Yun Fast Charging）"]
+              },
+              {
+                "子-子环节名称": "电动汽车运营",
+                "代表公司": ["滴滴出行（Didi Chuxing）", "曹操出行（Cao Cao Mobility）", "T3出行（T3 Mobility）", "首汽约车（Shouqi Limousine & Chauffeur）", "享道出行（SAIC Mobility）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "建筑",
+            "子-子环节": [
+              {
+                "子-子环节名称": "光伏建筑一体化（BIPV）",
+                "代表公司": ["隆基绿能（LONGi）", "中建材（CNBM）", "汉能（Hanergy）", "东方日升（Risen Energy）", "亚玛顿（Almaden）"]
+              },
+              {
+                "子-子环节名称": "建筑节能",
+                "代表公司": ["江森自控（Johnson Controls）", "霍尼韦尔（Honeywell）", "西门子（Siemens）", "施耐德电气（Schneider Electric）", "达实智能（Das Intellitech）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "工业",
+            "子-子环节": [
+              {
+                "子-子环节名称": "工业节能",
+                "代表公司": ["西门子（Siemens）", "施耐德电气（Schneider Electric）", "ABB", "汇川技术（Inovance）", "双良节能（Shuangliang Eco-Energy）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "储能应用",
+            "子-子环节": [
+             {
+                "子-子环节名称": "工商业储能",
+                "代表公司": ["阳光电源（Sungrow）", "南都电源（Narada Power）", "科华数据（Kehua Data）", "欣旺达（Sunwoda）", "远景能源（Envision Energy）"]
+              },
+              {
+                "子-子环节名称": "家庭储能",
+                "代表公司": ["特斯拉（Tesla）", "派能科技（Pylontech）", "比亚迪（BYD）", "LG新能源（LG Energy Solution）", "Sonnen"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

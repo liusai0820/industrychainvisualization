@@ -1,0 +1,309 @@
+{
+  "产业链": "区块链技术",
+  "环节": [
+    {
+      "环节名称": "上游：基础设施与底层技术",
+      "子环节": [
+        {
+          "子环节名称": "硬件基础设施",
+          "子-子环节": [
+            {
+              "子-子环节名称": "矿机/芯片",
+              "代表公司": ["比特大陆 (Bitmain)", "嘉楠耘智 (Canaan Creative)", "亿邦国际 (Ebang International)", "英伟达 (Nvidia)", "超微半导体 (AMD)"]
+            },
+            {
+              "子-子环节名称": "服务器",
+              "代表公司": ["戴尔 (Dell)", "惠普 (HPE)", "浪潮 (Inspur)", "联想 (Lenovo)", "华为 (Huawei)"]
+            },
+            {
+              "子-子环节名称": "存储设备",
+              "代表公司": ["戴尔易安信 (Dell EMC)", "惠普 (HPE)", "NetApp", "IBM", "Pure Storage"]
+            },
+            {
+              "子-子环节名称": "网络设备",
+              "代表公司": ["思科 (Cisco)", "华为 (Huawei)", "瞻博网络 (Juniper Networks)", "新华三 (H3C)", "Arista Networks"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "底层技术",
+          "子-子环节": [
+            {
+              "子-子环节名称": "共识机制",
+              "代表公司": ["比特币 (Bitcoin) - PoW", "以太坊 (Ethereum) - PoW/PoS", "Cardano (ADA) - PoS", "Algorand (ALGO) - PPoS", "Tendermint (Cosmos) - BFT"]
+            },
+            {
+              "子-子环节名称": "密码学算法",
+              "代表公司": ["NIST", "IETF", "IEEE", "ISO", "中国密码学会 (CACR)"]
+            },
+            {
+              "子-子环节名称": "分布式存储",
+              "代表公司": ["IPFS (Protocol Labs)", "Filecoin (Protocol Labs)", "Storj", "Swarm", "Arweave"]
+            },
+            {
+              "子-子环节名称": "智能合约",
+              "代表公司": ["以太坊 (Ethereum)", "EOS", "TRON", "Cardano (ADA)", "Tezos"]
+            },
+            {
+              "子-子环节名称": "跨链技术",
+              "代表公司": ["Polkadot (Web3 Foundation)", "Cosmos (Tendermint)", "Chainlink", "Wanchain", "Ren"]
+            },
+            {
+              "子-子环节名称": "隐私计算",
+              "代表公司": ["Oasis Labs", "Enigma (Secret Network)", "Phala Network", "ARPA", "PlatON"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "开发工具与平台",
+          "子-子环节": [
+            {
+              "子-子环节名称": "开发框架",
+              "代表公司": ["Truffle Suite", "Hardhat", "Brownie", "Embark", "OpenZeppelin"]
+            },
+            {
+              "子-子环节名称": "IDE",
+              "代表公司": ["Remix", "Visual Studio Code", "IntelliJ IDEA", "Atom", "Sublime Text"]
+            },
+            {
+              "子-子环节名称": "测试工具",
+              "代表公司": ["Ganache", "MythX", "Slither", "Manticore", "Echidna"]
+            },
+            {
+              "子-子环节名称": "区块链即服务 (BaaS)",
+              "代表公司": ["亚马逊 (Amazon Managed Blockchain)", "微软 (Azure Blockchain Service)", "IBM Blockchain Platform", "阿里云区块链服务 (Alibaba Cloud BaaS)", "腾讯云区块链服务 (TBaaS)"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "中游：区块链平台与解决方案",
+      "子环节": [
+        {
+          "子环节名称": "公有链",
+          "子-子环节": [
+            {
+              "子-子环节名称": "比特币 (Bitcoin)",
+              "代表公司": ["Bitcoin Core developers"]
+            },
+            {
+              "子-子环节名称": "以太坊 (Ethereum)",
+              "代表公司": ["Ethereum Foundation"]
+            },
+            {
+              "子-子环节名称": "EOS",
+              "代表公司": ["Block.one"]
+            },
+            {
+              "子-子环节名称": "TRON",
+              "代表公司": ["TRON Foundation"]
+            },
+            {
+              "子-子环节名称": "Cardano (ADA)",
+              "代表公司": ["IOHK", "Emurgo", "Cardano Foundation"]
+            },
+            {
+              "子-子环节名称": "币安智能链 (BSC)",
+              "代表公司": ["Binance"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "联盟链",
+          "子-子环节": [
+            {
+              "子-子环节名称": "Hyperledger Fabric",
+              "代表公司": ["IBM", "Intel", "SAP", "R3", "Digital Asset"]
+            },
+            {
+              "子-子环节名称": "R3 Corda",
+              "代表公司": ["R3", "Accenture", "Microsoft", "Intel", "HSBC"]
+            },
+            {
+              "子-子环节名称": "FISCO BCOS",
+              "代表公司": ["微众银行 (WeBank)", "金链盟 (FISCO)"]
+            },
+            {
+              "子-子环节名称": "蚂蚁链 (AntChain)",
+              "代表公司": ["蚂蚁集团 (Ant Group)"]
+            },
+            {
+              "子-子环节名称": "Quorum",
+              "代表公司": ["JPMorgan Chase", "ConsenSys"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "私有链",
+          "子-子环节": [
+            {
+              "子-子环节名称": "企业级区块链平台",
+              "代表公司": ["IBM Blockchain Platform", "Microsoft Azure Blockchain Service", "Oracle Blockchain Platform", "SAP Cloud Platform Blockchain Service", "Amazon Managed Blockchain"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "行业解决方案",
+          "子-子环节": [
+            {
+              "子-子环节名称": "金融服务",
+              "代表公司": ["Ripple", "R3", "Chainlink", "Circle", "Digital Asset"]
+            },
+            {
+              "子-子环节名称": "供应链管理",
+              "代表公司": ["VeChain", "Ambrosus", "OriginTrail", "Waltonchain", "TE-FOOD"]
+            },
+            {
+              "子-子环节名称": "数字身份",
+              "代表公司": ["Civic", "Sovrin", "uPort", "SelfKey", "Veres One"]
+            },
+            {
+              "子-子环节名称": "版权保护",
+              "代表公司": ["Po.et", "Mediachain", "Binded", "Copytrack", "Custos Media Technologies"]
+            },
+            {
+              "子-子环节名称": "物联网",
+              "代表公司": ["IOTA", "IoTeX", "VeChain", "Helium", "Streamr"]
+            },
+            {
+              "子-子环节名称": "数据存证",
+              "代表公司": ["Factom", "Tierion", "Blockstack", "OriginStamp", "Tieron"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "下游：应用与服务",
+      "子环节": [
+        {
+          "子环节名称": "数字货币",
+          "子-子环节": [
+            {
+              "子-子环节名称": "加密货币交易所",
+              "代表公司": ["Binance", "Coinbase", "Huobi", "OKEx", "Kraken"]
+            },
+            {
+              "子-子环节名称": "数字钱包",
+              "代表公司": ["Ledger", "Trezor", "Blockchain.com", "Coinbase Wallet", "Trust Wallet"]
+            },
+            {
+              "子-子环节名称": "支付服务",
+              "代表公司": ["BitPay", "CoinPayments", "Circle", "Strike", "Flexa"]
+            },
+            {
+              "子-子环节名称": "稳定币",
+              "代表公司": ["Tether (USDT)", "USD Coin (USDC)", "Dai (MakerDAO)", "Binance USD (BUSD)", "TrueUSD (TUSD)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "去中心化金融 (DeFi)",
+          "子-子环节": [
+            {
+              "子-子环节名称": "借贷平台",
+              "代表公司": ["Compound", "Aave", "MakerDAO", "Nexo", "BlockFi"]
+            },
+            {
+              "子-子环节名称": "去中心化交易所 (DEX)",
+              "代表公司": ["Uniswap", "SushiSwap", "Curve Finance", "Balancer", "0x"]
+            },
+            {
+              "子-子环节名称": "衍生品",
+              "代表公司": ["Synthetix", "dYdX", "Nexus Mutual", "Opyn", "UMA"]
+            },
+            {
+              "子-子环节名称": "预言机",
+              "代表公司": ["Chainlink", "Band Protocol", "Augur", "MakerDAO", "Compound"]
+            },
+            {
+              "子-子环节名称": "资产管理",
+              "代表公司": ["Yearn.finance", "Zapper", "Zerion", "Instadapp", "Argent"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "非同质化代币 (NFT)",
+          "子-子环节": [
+            {
+              "子-子环节名称": "NFT 市场",
+              "代表公司": ["OpenSea", "Rarible", "SuperRare", "Foundation", "Nifty Gateway"]
+            },
+            {
+              "子-子环节名称": "数字艺术品",
+              "代表公司": ["Beeple", "Pak", "XCOPY", "Fewocious", "Trevor Jones"]
+            },
+            {
+              "子-子环节名称": "游戏",
+              "代表公司": ["Axie Infinity", "Decentraland", "The Sandbox", "CryptoKitties", "Gods Unchained"]
+            },
+            {
+              "子-子环节名称": "收藏品",
+              "代表公司": ["NBA Top Shot", "Sorare", "VeeFriends", "Bored Ape Yacht Club", "CryptoPunks"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "分布式应用 (DApp)",
+          "子-子环节": [
+            {
+              "子-子环节名称": "社交媒体",
+              "代表公司": ["Steemit", "Minds", "Voice", "Peepeth", "Memo.cash"]
+            },
+            {
+              "子-子环节名称": "预测市场",
+              "代表公司": ["Augur", "Gnosis", "Polymarket", "Omen", "Numerai"]
+            },
+            {
+              "子-子环节名称": "云存储",
+              "代表公司": ["Filecoin", "Storj", "Sia", "Arweave", "0Chain"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "行业应用",
+          "子-子环节": [
+            {
+              "子-子环节名称": "金融服务",
+              "代表公司": ["Ripple", "R3", "Chainlink", "Circle", "Digital Asset"]
+            },
+            {
+              "子-子环节名称": "供应链管理",
+              "代表公司": ["VeChain", "Ambrosus", "OriginTrail", "Waltonchain", "TE-FOOD"]
+            },
+            {
+              "子-子环节名称": "数字身份",
+              "代表公司": ["Civic", "Sovrin", "uPort", "SelfKey", "Veres One"]
+            },
+            {
+              "子-子环节名称": "版权保护",
+              "代表公司": ["Po.et", "Mediachain", "Binded", "Copytrack", "Custos Media Technologies"]
+            },
+            {
+              "子-子环节名称": "物联网",
+              "代表公司": ["IOTA", "IoTeX", "VeChain", "Helium", "Streamr"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "安全与监管",
+          "子-子环节": [
+            {
+              "子-子环节名称": "安全审计",
+              "代表公司": ["CertiK", "Quantstamp", "Trail of Bits", "OpenZeppelin", "ConsenSys Diligence"]
+            },
+            {
+              "子-子环节名称": "合规服务",
+              "代表公司": ["Chainalysis", "Elliptic", "CipherTrace", "Coinfirm", "Scorechain"]
+            },
+            {
+              "子-子环节名称": "监管机构",
+              "代表公司": ["美国证券交易委员会 (SEC)", "美国商品期货交易委员会 (CFTC)", "金融犯罪执法网络 (FinCEN)", "欧洲银行管理局 (EBA)", "中国人民银行 (PBoC)"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

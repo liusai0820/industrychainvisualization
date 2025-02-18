@@ -1,0 +1,397 @@
+{
+    "产业链": "软件与信息服务",
+    "环节": [
+      {
+        "环节名称": "上游：基础资源与硬件支持",
+        "子环节": [
+          {
+            "子环节名称": "硬件基础设施",
+            "子-子环节": [
+              {
+                "子-子环节名称": "服务器",
+                "代表公司": ["戴尔 (Dell)", "惠普 (HPE)", "浪潮 (Inspur)", "联想 (Lenovo)", "华为 (Huawei)", "新华三 (H3C)", "超微 (Supermicro)"]
+              },
+              {
+                "子-子环节名称": "网络设备",
+                "代表公司": ["思科 (Cisco)", "华为 (Huawei)", "瞻博网络 (Juniper Networks)", "新华三 (H3C)", "Arista Networks", "中兴 (ZTE)"]
+              },
+              {
+                "子-子环节名称": "存储设备",
+                "代表公司": ["戴尔易安信 (Dell EMC)", "惠普 (HPE)", "NetApp", "IBM", "Pure Storage", "华为 (Huawei)", "浪潮 (Inspur)"]
+              },
+              {
+                "子-子环节名称": "芯片/半导体",
+                "代表公司": ["英特尔 (Intel)", "英伟达 (Nvidia)", "超微半导体 (AMD)", "高通 (Qualcomm)", "博通 (Broadcom)", "台积电 (TSMC)", "三星 (Samsung)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "基础软件",
+            "子-子环节": [
+              {
+                "子-子环节名称": "操作系统",
+                "代表公司": ["微软 (Microsoft)", "红帽 (Red Hat)", "Canonical (Ubuntu)", "SUSE", "谷歌 (Google)"]
+              },
+              {
+                "子-子环节名称": "数据库",
+                "代表公司": ["甲骨文 (Oracle)", "微软 (Microsoft)", "IBM", "SAP", "亚马逊 (Amazon)", "MongoDB", "Redis Labs"]
+              },
+              {
+                "子-子环节名称": "中间件",
+                "代表公司": ["IBM", "甲骨文 (Oracle)", "红帽 (Red Hat)", "微软 (Microsoft)", "亚马逊 (Amazon)", "Salesforce (MuleSoft)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "云计算资源",
+            "子-子环节": [
+              {
+                "子-子环节名称": "IaaS",
+                "代表公司": ["亚马逊 (Amazon Web Services)", "微软 (Microsoft Azure)", "谷歌 (Google Cloud Platform)", "阿里云 (Alibaba Cloud)", "腾讯云 (Tencent Cloud)", "华为云 (Huawei Cloud)", "IBM Cloud"]
+              },
+              {
+                "子-子环节名称": "PaaS",
+                "代表公司": ["亚马逊 (Amazon Web Services)", "微软 (Microsoft Azure)", "谷歌 (Google Cloud Platform)", "Salesforce (Heroku, Force.com)", "红帽 (Red Hat OpenShift)", "阿里云 (Alibaba Cloud)", "腾讯云 (Tencent Cloud)"]
+              },
+              {
+                "子-子环节名称": "SaaS (基础设施相关)",
+                "代表公司": ["Cloudflare", "Akamai", "Fastly", "亚马逊 (Amazon Web Services)", "微软 (Microsoft Azure)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "数据资源",
+            "子-子环节": [
+              {
+                "子-子环节名称": "数据采集",
+                "代表公司": ["Palantir", "Splunk", "Informatica", "Talend", "Alteryx"]
+              },
+              {
+                "子-子环节名称": "数据标注",
+                "代表公司": ["Appen", "Scale AI", "Lionbridge AI", "CloudFactory", "Hivemind"]
+              },
+              {
+                "子-子环节名称": "数据交易平台",
+                "代表公司": ["Dawex", "BDEX", "Narrative", "Otonomo", "DataStreamX"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "中游：软件开发与信息技术服务",
+        "子环节": [
+          {
+            "子环节名称": "软件开发",
+            "子-子环节": [
+              {
+                "子-子环节名称": "通用软件",
+                "代表公司": ["微软 (Microsoft)", "Adobe", "甲骨文 (Oracle)", "SAP", "Salesforce", "Intuit", "ServiceNow"]
+              },
+              {
+                "子-子环节名称": "行业应用软件",
+                "代表公司": ["西门子 (Siemens)", "达索系统 (Dassault Systèmes)", "Autodesk", "Cadence", "Synopsys", "Ansys", "PTC"]
+              },
+              {
+                "子-子环节名称": "嵌入式软件",
+                "代表公司": ["Wind River", "Green Hills Software", "QNX (BlackBerry)", "Mentor Graphics (Siemens)", "Express Logic (Microsoft)"]
+              },
+              {
+                "子-子环节名称": "开源软件",
+                "代表公司": ["红帽 (Red Hat)", "Canonical (Ubuntu)", "SUSE", "Mozilla", "Apache Software Foundation"]
+              },
+              {
+                "子-子环节名称": "低代码/无代码平台",
+                "代表公司": ["Mendix (Siemens)", "OutSystems", "Appian", "Microsoft Power Apps", "Salesforce Lightning Platform"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "信息技术服务",
+            "子-子环节": [
+              {
+                "子-子环节名称": "IT咨询",
+                "代表公司": ["埃森哲 (Accenture)", "德勤 (Deloitte)", "普华永道 (PwC)", "毕马威 (KPMG)", "凯捷 (Capgemini)", "IBM", "Tata Consultancy Services"]
+              },
+              {
+                "子-子环节名称": "系统集成",
+                "代表公司": ["埃森哲 (Accenture)", "IBM", "Tata Consultancy Services", "Infosys", "Wipro", "HCL Technologies", "Cognizant"]
+              },
+              {
+                "子-子环节名称": "IT外包",
+                "代表公司": ["埃森哲 (Accenture)", "IBM", "Tata Consultancy Services", "Infosys", "Wipro", "HCL Technologies", "Cognizant"]
+              },
+              {
+                "子-子环节名称": "云服务管理",
+                "代表公司": ["埃森哲 (Accenture)", "德勤 (Deloitte)", "Rackspace", "Cloudreach", "2nd Watch"]
+              },
+              {
+                "子-子环节名称": "数据中心服务",
+                "代表公司": ["Equinix", "Digital Realty", "China Telecom", "China Unicom", "China Mobile", "NTT Communications", "KDDI"]
+              },
+              {
+                "子-子环节名称": "网络安全服务",
+                "代表公司": ["Palo Alto Networks", "Fortinet", "Check Point", "思科 (Cisco)", "Symantec (Broadcom)", "CrowdStrike", "FireEye"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "人工智能技术服务",
+            "子-子环节": [
+              {
+                "子-子环节名称": "机器学习平台",
+                "代表公司": ["亚马逊 (Amazon SageMaker)", "微软 (Microsoft Azure Machine Learning)", "谷歌 (Google Cloud AI Platform)", "DataRobot", "H2O.ai"]
+              },
+              {
+                "子-子环节名称": "自然语言处理",
+                "代表公司": ["谷歌 (Google)", "微软 (Microsoft)", "亚马逊 (Amazon)", "IBM", "Facebook", "百度 (Baidu)"]
+              },
+              {
+                "子-子环节名称": "计算机视觉",
+                "代表公司": ["谷歌 (Google)", "微软 (Microsoft)", "亚马逊 (Amazon)", "Facebook", "商汤科技 (SenseTime)", "旷视科技 (Megvii)"]
+              },
+              {
+                "子-子环节名称": "智能语音",
+                "代表公司": ["谷歌 (Google)", "亚马逊 (Amazon)", "苹果 (Apple)", "微软 (Microsoft)", "科大讯飞 (iFlytek)", "百度 (Baidu)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "大数据服务",
+            "子-子环节": [
+              {
+                "子-子环节名称": "数据分析平台",
+                "代表公司": ["Palantir", "Splunk", "Tableau (Salesforce)", "Qlik", "SAS", "Alteryx"]
+              },
+              {
+                "子-子环节名称": "数据仓库",
+                "代表公司": ["Snowflake", "亚马逊 (Amazon Redshift)", "谷歌 (Google BigQuery)", "微软 (Microsoft Azure Synapse Analytics)", "Teradata"]
+              },
+              {
+                "子-子环节名称": "数据可视化",
+                "代表公司": ["Tableau (Salesforce)", "Qlik", "Microsoft Power BI", "Domo", "Sisense"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "区块链服务",
+            "子-子环节": [
+              {
+                "子-子环节名称": "区块链平台",
+                "代表公司": ["IBM", "微软 (Microsoft)", "亚马逊 (Amazon)", "蚂蚁集团 (Ant Group)", "腾讯 (Tencent)", "百度 (Baidu)"]
+              },
+              {
+                "子-子环节名称": "加密货币",
+                "代表公司": ["比特币 (Bitcoin)", "以太坊 (Ethereum)", "Ripple (XRP)", "Litecoin (LTC)", "Cardano (ADA)"]
+              },
+              {
+                "子-子环节名称": "数字钱包",
+                "代表公司": ["Coinbase", "Binance", "Blockchain.com", "Ledger", "Trezor"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "下游：应用领域",
+        "子环节": [
+          {
+            "子环节名称": "互联网服务",
+            "子-子环节": [
+              {
+                "子-子环节名称": "电子商务",
+                "代表公司": ["亚马逊 (Amazon)", "阿里巴巴 (Alibaba)", "京东 (JD.com)", "拼多多 (Pinduoduo)", "Shopify"]
+              },
+              {
+                "子-子环节名称": "社交网络",
+                "代表公司": ["Facebook (Meta)", "腾讯 (Tencent)", "Twitter", "Snapchat", "字节跳动 (ByteDance)"]
+              },
+              {
+                "子-子环节名称": "搜索引擎",
+                "代表公司": ["谷歌 (Google)", "百度 (Baidu)", "微软 (Microsoft Bing)", "Yandex", "DuckDuckGo"]
+              },
+              {
+                "子-子环节名称": "在线视频",
+                "代表公司": ["Netflix", "YouTube (Google)", "Amazon Prime Video", "Hulu", "爱奇艺 (iQIYI)", "腾讯视频 (Tencent Video)"]
+              },
+              {
+                "子-子环节名称": "在线游戏",
+                "代表公司": ["腾讯 (Tencent)", "网易 (NetEase)", "动视暴雪 (Activision Blizzard)", "艺电 (Electronic Arts)", "Take-Two Interactive"]
+              },
+              {
+                "子-子环节名称": "在线教育",
+                "代表公司": ["Coursera", "edX", "Udacity", "学堂在线", "猿辅导"]
+              },
+              {
+                "子-子环节名称": "数字营销",
+                "代表公司": ["谷歌 (Google)", "Facebook (Meta)", "Adobe", "Salesforce", "HubSpot"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "企业服务",
+            "子-子环节": [
+              {
+                "子-子环节名称": "企业资源管理 (ERP)",
+                "代表公司": ["SAP", "甲骨文 (Oracle)", "用友 (Yonyou)", "金蝶 (Kingdee)", "浪潮 (Inspur)"]
+              },
+              {
+                "子-子环节名称": "客户关系管理 (CRM)",
+                "代表公司": ["Salesforce", "微软 (Microsoft)", "SAP", "甲骨文 (Oracle)", "Adobe"]
+              },
+              {
+                "子-子环节名称": "人力资源管理 (HCM)",
+                "代表公司": ["Workday", "SAP SuccessFactors", "甲骨文 (Oracle)", "ADP", "Ceridian"]
+              },
+              {
+                "子-子环节名称": "供应链管理 (SCM)",
+                "代表公司": ["SAP", "甲骨文 (Oracle)", "JDA Software", "Infor", "Blue Yonder"]
+              },
+              {
+                "子-子环节名称": "协同办公",
+                "代表公司": ["微软 (Microsoft)", "谷歌 (Google)", "Slack (Salesforce)", "Zoom", "钉钉 (DingTalk)", "企业微信 (WeChat Work)"]
+              },
+              {
+                "子-子环节名称": "网络安全",
+                "代表公司":["Palo Alto Networks", "Fortinet", "Check Point", "思科 (Cisco)", "Symantec (Broadcom)", "CrowdStrike", "FireEye"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "金融服务",
+            "子-子环节": [
+              {
+                "子-子环节名称": "银行核心系统",
+                "代表公司": ["FIS", "Fiserv", "Jack Henry & Associates", "Temenos", "Infosys Finacle"]
+              },
+              {
+                "子-子环节名称": "支付系统",
+                "代表公司": ["Visa", "Mastercard", "PayPal", "蚂蚁集团 (Ant Group)", "腾讯 (Tencent)"]
+              },
+              {
+                "子-子环节名称": "金融数据服务",
+                "代表公司": ["Bloomberg", "Refinitiv (LSEG)", "FactSet", "S&P Global", "Moody's Analytics"]
+              },
+              {
+                "子-子环节名称": "金融风险管理",
+                "代表公司": ["SAS", "IBM", "FICO", "RiskMetrics (MSCI)", "FIS"]
+              },
+              {
+                "子-子环节名称": "区块链金融",
+                "代表公司": ["Ripple", "Circle", "Coinbase", "BitPay", "Chainlink"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "工业互联网",
+            "子-子环节": [
+              {
+                "子-子环节名称": "工业物联网平台",
+                "代表公司": ["西门子 (Siemens MindSphere)", "通用电气 (GE Predix)", "PTC ThingWorx", "微软 (Microsoft Azure IoT)", "亚马逊 (AWS IoT)"]
+              },
+              {
+                "子-子环节名称": "工业数据分析",
+                "代表公司": ["SAP", "甲骨文 (Oracle)", "西门子 (Siemens)", "通用电气 (GE)", "施耐德电气 (Schneider Electric)"]
+              },
+              {
+                "子-子环节名称": "工业机器人",
+                "代表公司": ["ABB", "发那科 (Fanuc)", "库卡 (KUKA)", "安川电机 (Yaskawa)", "川崎机器人 (Kawasaki Robotics)"]
+              },
+              {
+                "子-子环节名称": "机器视觉",
+                "代表公司": ["康耐视 (Cognex)", "基恩士 (Keyence)", "欧姆龙 (Omron)", "National Instruments", "Teledyne DALSA"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "智慧城市",
+            "子-子环节": [
+              {
+                "子-子环节名称": "城市管理平台",
+                "代表公司": ["华为 (Huawei)", "阿里巴巴 (Alibaba)", "腾讯 (Tencent)", "中兴 (ZTE)", "浪潮 (Inspur)"]
+              },
+              {
+                "子-子环节名称": "智能交通",
+                "代表公司": ["海康威视 (Hikvision)", "大华股份 (Dahua Technology)", "千方科技 (Qianfang Technology)", "易华录 (Ehuadee)", "高德地图 (AutoNavi)"]
+              },
+              {
+                "子-子环节名称": "智能安防",
+                "代表公司": ["海康威视 (Hikvision)", "大华股份 (Dahua Technology)", "宇视科技 (Uniview)", "天地伟业 (Tiandy)", "旷视科技 (Megvii)"]
+              },
+              {
+                "子-子环节名称": "智能环保",
+                "代表公司": ["先河环保 (Sunho)", "雪迪龙 (SDL)", "聚光科技 (Focused Photonics)", "力合科技 (Liaho)", "天瑞仪器 (Skyray Instrument)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "医疗健康",
+            "子-子环节": [
+              {
+                "子-子环节名称": "电子病历 (EMR)",
+                "代表公司": ["Epic Systems", "Cerner", "Allscripts", "Meditech", "athenahealth"]
+              },
+              {
+                "子-子环节名称": "医疗影像",
+                "代表公司": ["GE Healthcare", "Philips Healthcare", "Siemens Healthineers", "Canon Medical Systems", "Hologic"]
+              },
+              {
+                "子-子环节名称": "远程医疗",
+                "代表公司": ["Teladoc Health", "Amwell", "MDLIVE", "Doctor On Demand", "平安好医生 (Ping An Good Doctor)"]
+              },
+              {
+                "子-子环节名称": "健康管理",
+                "代表公司": ["Apple", "Fitbit (Google)", "Garmin", "Samsung", "小米 (Xiaomi)"]
+              },
+              {
+                "子-子环节名称": "AI 辅助诊断",
+                "代表公司":["IBM Watson Health", "Google Health", "Microsoft Healthcare", "Infervision", "Airdoc"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "智能家居",
+            "子-子环节": [
+              {
+                "子-子环节名称": "智能家电",
+                "代表公司": ["海尔智家 (Haier Smart Home)", "美的 (Midea)", "格力 (Gree)", "三星 (Samsung)", "LG"]
+              },
+              {
+                "子-子环节名称": "智能安防",
+                "代表公司": ["海康威视 (Hikvision)", "大华股份 (Dahua Technology)", "萤石 (Ezviz)", "小米 (Xiaomi)", "华为 (Huawei)"]
+              },
+              {
+                "子-子环节名称": "智能音箱",
+                "代表公司": ["亚马逊 (Amazon Echo)", "谷歌 (Google Home)", "苹果 (Apple HomePod)", "小米 (Xiaomi XiaoAI)", "百度 (Baidu Xiaodu)"]
+              },
+              {
+                "子-子环节名称": "智能照明",
+                "代表公司": ["飞利浦 (Philips Hue)", "欧普照明 (Opple)", "雷士照明 (NVC Lighting)", "Yeelight", "宜家 (IKEA)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "自动驾驶",
+            "子-子环节": [
+              {
+                "子-子环节名称": "自动驾驶平台",
+                "代表公司": ["Waymo (Google)", "百度 (Baidu Apollo)", "Cruise (GM)", "Argo AI (Ford, VW)", "Aurora"]
+              },
+              {
+                "子-子环节名称": "高精地图",
+                "代表公司": ["Here Technologies", "TomTom", "百度 (Baidu)", "高德地图 (AutoNavi)", "四维图新 (NavInfo)"]
+              },
+              {
+                "子-子环节名称": "激光雷达",
+                "代表公司": ["Velodyne Lidar", "Luminar", "Innoviz", "Ouster", "禾赛科技 (Hesai Technology)"]
+              },
+              {
+                "子-子环节名称": "毫米波雷达",
+                "代表公司": ["博世 (Bosch)", "大陆集团 (Continental)", "德尔福 (Aptiv)", "海拉 (Hella)", "采埃孚 (ZF)"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

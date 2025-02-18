@@ -1,0 +1,234 @@
+{
+    "产业链": "量子信息",
+    "环节": [
+      {
+        "环节名称": "上游：基础研究、核心元器件与材料",
+        "子环节": [
+          {
+            "子环节名称": "基础研究",
+            "子-子环节": [
+              {
+                "子-子环节名称": "量子计算理论",
+                "代表公司": ["IBM", "Google", "Microsoft", "Intel", "Rigetti Computing"]
+              },
+              {
+                "子-子环节名称": "量子通信理论",
+                "代表公司": ["ID Quantique", "Qasky", "QuantumCTek", "Toshiba", "QuintessenceLabs"]
+              },
+              {
+                "子-子环节名称": "量子测量理论",
+                "代表公司": ["Keysight Technologies", "Rohde & Schwarz", "Tektronix", "National Instruments", "Anritsu"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "核心元器件",
+            "子-子环节": [
+              {
+                "子-子环节名称": "量子芯片",
+                "代表公司": ["IBM", "Google", "Intel", "Rigetti Computing", "本源量子 (Origin Quantum)"]
+              },
+              {
+                "子-子环节名称": "单光子源",
+                "代表公司": ["ID Quantique", "PicoQuant", "Single Quantum", "TOPTICA Photonics", "Quside"]
+              },
+              {
+                "子-子环节名称": "单光子探测器",
+                "代表公司": ["ID Quantique", "PicoQuant", "Single Quantum", "Micro Photon Devices", "Scontel"]
+              },
+              {
+                "子-子环节名称": "超导材料",
+                "代表公司": ["Superconductor Technologies Inc. (STI)", "American Superconductor (AMSC)", "Bruker", "Oxford Instruments", "CAN Superconductors"]
+              },
+              {
+                "子-子环节名称": "低温制冷设备",
+                "代表公司": ["Bluefors", "Oxford Instruments", "Cryomech", "Janis Research Company", "Sumitomo Heavy Industries"]
+              },
+              {
+                "子-子环节名称": "激光器",
+                "代表公司": ["TOPTICA Photonics", "M Squared Lasers", "Newport Corporation", "Coherent", "Thorlabs"]
+              },
+              {
+                "子-子环节名称": "光纤及光缆",
+                "代表公司": ["Corning", "Prysmian Group", "Furukawa Electric", "CommScope", "YOFC"]
+              },
+              {
+                "子-子环节名称": "高性能电子测量仪器",
+                "代表公司": ["Keysight Technologies", "Rohde & Schwarz", "Tektronix", "National Instruments", "Anritsu"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "关键材料",
+            "子-子环节": [
+              {
+                "子-子环节名称": "稀有金属",
+                "代表公司": ["中国五矿集团 (China Minmetals)", "洛阳钼业 (China Molybdenum)", "江西铜业 (Jiangxi Copper)", "紫金矿业 (Zijin Mining)", "Western Mining"]
+              },
+              {
+                "子-子环节名称": "高纯气体",
+                "代表公司": ["Air Liquide", "Linde plc", "Air Products and Chemicals", "Taiyo Nippon Sanso", "Messer Group"]
+              },
+              {
+                "子-子环节名称": "光电子材料",
+                "代表公司": ["Sumitomo Chemical", "Dow Chemical", "Merck", "BASF", "JSR Corporation"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "中游：核心系统与设备",
+        "子环节": [
+          {
+            "子环节名称": "量子计算机",
+            "子-子环节": [
+              {
+                "子-子环节名称": "超导量子计算机",
+                "代表公司": ["IBM", "Google", "Rigetti Computing", "本源量子 (Origin Quantum)", "D-Wave Systems"]
+              },
+              {
+                "子-子环节名称": "离子阱量子计算机",
+                "代表公司": ["IonQ", "Honeywell", "AQT (Alpine Quantum Technologies)"]
+              },
+              {
+                "子-子环节名称": "光量子计算机",
+                "代表公司": ["PsiQuantum", "Xanadu", "ORCA Computing"]
+              },
+              {
+                "子-子环节名称": "中性原子量子计算机",
+                "代表公司": ["ColdQuanta", "Atom Computing", "Pasqal"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "量子通信设备",
+            "子-子环节": [
+              {
+                "子-子环节名称": "QKD设备",
+                "代表公司": ["ID Quantique", "QuantumCTek", "Qasky", "Toshiba", "QuintessenceLabs"]
+              },
+              {
+                "子-子环节名称": "量子安全服务平台",
+                "代表公司": ["QuantumCTek", "Qasky", "ID Quantique"]
+              },
+               {
+                "子-子环节名称": "量子中继器",
+                "代表公司": ["Toshiba", "SK Telecom", "华为 (Huawei)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "量子测量设备",
+            "子-子环节": [
+              {
+                "子-子环节名称": "量子精密测量仪器",
+                "代表公司": ["Keysight Technologies", "Rohde & Schwarz", "Tektronix", "National Instruments", "Anritsu"]
+              },
+              {
+                "子-子环节名称": "量子传感器",
+                "代表公司": ["M Squared Lasers", "Muquans", "AOSense", "Vector Atomic", "Qnami"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "量子软件与算法",
+            "子-子环节": [
+              {
+                "子-子环节名称": "量子编程框架",
+                "代表公司": ["IBM (Qiskit)", "Google (Cirq)", "Rigetti Computing (Forest)", "Microsoft (Q#)", "D-Wave (Ocean)"]
+              },
+              {
+                "子-子环节名称": "量子算法库",
+                "代表公司": ["Zapata Computing", "Cambridge Quantum Computing (CQC)", "1QBit", "QC Ware", "Riverlane"]
+              },
+              {
+                "子-子环节名称": "量子模拟器",
+                "代表公司": ["Atos", "IBM", "Google", "Microsoft", "Amazon (AWS)"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "下游：应用领域",
+        "子环节": [
+          {
+            "子环节名称": "量子计算应用",
+            "子-子环节": [
+              {
+                "子-子环节名称": "药物研发",
+                "代表公司": ["Schrödinger", "Cambridge Quantum Computing (CQC)", "Zapata Computing", "Molecular Quantum Solutions", "Menten AI"]
+              },
+              {
+                "子-子环节名称": "材料科学",
+                "代表公司": ["IBM", "Google", "Dow Chemical", "BASF", "JSR Corporation"]
+              },
+              {
+                "子-子环节名称": "金融建模",
+                "代表公司": ["JPMorgan Chase", "Goldman Sachs", "Barclays", "HSBC", "Citigroup"]
+              },
+              {
+                "子-子环节名称": "人工智能",
+                "代表公司": ["Google", "IBM", "Microsoft", "Amazon", "Facebook"]
+              },
+              {
+                "子-子环节名称": "优化问题",
+                "代表公司": ["D-Wave Systems", "1QBit", "QC Ware", "Volkswagen", "Airbus"]
+              },
+              {
+                "子-子环节名称": "密码分析",
+                "代表公司": ["NSA", "GCHQ", "CSEC", "ASD", "DRDO"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "量子通信应用",
+            "子-子环节": [
+              {
+                "子-子环节名称": "安全通信",
+                "代表公司": ["ID Quantique", "QuantumCTek", "Qasky", "Toshiba", "QuintessenceLabs"]
+              },
+              {
+                "子-子环节名称": "政府/国防",
+                "代表公司": ["中国电信 (China Telecom)", "中国移动 (China Mobile)", "中国联通 (China Unicom)", "美国国防部 (US Department of Defense)", "英国政府 (UK Government)"]
+              },
+              {
+                "子-子环节名称": "金融安全",
+                "代表公司": ["QuantumCTek", "Qasky", "ID Quantique"]
+              },
+              {
+                "子-子环节名称": "数据中心",
+                "代表公司": ["Equinix", "Digital Realty", "Amazon Web Services", "Microsoft Azure", "Google Cloud Platform"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "量子测量应用",
+            "子-子环节": [
+              {
+                "子-子环节名称": "精密计时",
+                "代表公司": ["NIST", "PTB", "NPL", "NRC", "USNO"]
+              },
+              {
+                "子-子环节名称": "导航定位",
+                "代表公司": ["美国空军 (US Air Force)", "欧洲航天局 (ESA)", "中国北斗卫星导航系统 (BeiDou Navigation Satellite System)", "俄罗斯格洛纳斯系统 (GLONASS)", "日本准天顶卫星系统 (QZSS)"]
+              },
+              {
+                "子-子环节名称": "地球物理勘探",
+                "代表公司": ["Schlumberger", "Halliburton", "Baker Hughes", "CGG", "Weatherford"]
+              },
+              {
+                "子-子环节名称": "医学成像",
+                "代表公司": ["GE Healthcare", "Philips Healthcare", "Siemens Healthineers", "Canon Medical Systems", "Hitachi Medical Systems"]
+              },
+              {
+                "子-子环节名称": "基础物理研究",
+                "代表公司": ["CERN", "Fermilab", "SLAC National Accelerator Laboratory", "RIKEN", "Max Planck Institutes"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

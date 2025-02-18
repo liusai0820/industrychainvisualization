@@ -1,0 +1,260 @@
+{
+  "产业链": "海洋产业",
+  "环节": [
+    {
+      "环节名称": "上游：海洋资源勘探、开发与技术支持",
+      "子环节": [
+        {
+          "子环节名称": "海洋资源勘探",
+          "子-子环节": [
+            {
+              "子-子环节名称": "海洋油气勘探",
+              "代表公司": ["Schlumberger", "Halliburton", "Baker Hughes", "CGG", "TGS"]
+            },
+            {
+              "子-子环节名称": "海洋矿产勘探",
+              "代表公司": ["Diamond Offshore Drilling", "Transocean", "Seadrill", "Subsea 7", "TechnipFMC"]
+            },
+            {
+              "子-子环节名称": "海洋生物资源调查",
+              "代表公司": ["Fugro", "Gardline Marine Sciences", "XOCEAN", "OceanX", "Schmidt Ocean Institute"]
+            },
+             {
+              "子-子环节名称": "海洋可再生能源勘测",
+              "代表公司": ["Fugro", "RPS Group", "DNV GL", "Wood.", "Black & Veatch"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "海洋资源开发装备制造",
+          "子-子环节": [
+            {
+              "子-子环节名称": "海洋油气钻采平台",
+              "代表公司": ["SBM Offshore", "MODEC", "Keppel Corporation", "Sembcorp Marine", "CIMC Raffles"]
+            },
+            {
+              "子-子环节名称": "海洋矿产开采设备",
+              "代表公司": ["Royal IHC", "Nautilus Minerals", "DEME Group", "Allseas", "Boskalis"]
+            },
+            {
+              "子-子环节名称": "海洋能发电设备",
+              "代表公司": ["Siemens Gamesa", "Vestas", "GE Renewable Energy", "SIMEC Atlantis Energy", "Ocean Power Technologies"]
+            },
+            {
+              "子-子环节名称": "海水淡化设备",
+              "代表公司": ["IDE Technologies", "Veolia Water Technologies", "Suez", "Doosan Heavy Industries & Construction", "Acciona Agua"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "海洋技术服务",
+          "子-子环节": [
+            {
+              "子-子环节名称": "海洋工程设计",
+              "代表公司": ["Aker Solutions", "McDermott", "Saipem", "Worley", "John Wood Group"]
+            },
+            {
+              "子-子环节名称": "海洋地球物理勘探",
+              "代表公司": ["PGS", "Shearwater GeoServices", "WesternGeco (Schlumberger)", "ION Geophysical", "CGG"]
+            },
+            {
+              "子-子环节名称": "海洋环境监测",
+              "代表公司": ["Fugro", "Intertek", "EGS Survey", "APEM Ltd", "OSIL"]
+            },
+            {
+              "子-子环节名称": "海洋信息技术服务",
+              "代表公司":["Teledyne Marine", "Kongsberg Maritime", "L3Harris Technologies", "Thales", "Raytheon Technologies"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "中游：海洋资源利用与加工",
+      "子环节": [
+        {
+          "子环节名称": "海洋油气开采与加工",
+          "子-子环节": [
+            {
+              "子-子环节名称": "原油开采",
+              "代表公司": ["ExxonMobil", "Shell", "BP", "Chevron", "TotalEnergies"]
+            },
+            {
+              "子-子环节名称": "天然气开采",
+              "代表公司": ["Equinor", "Gazprom", "QatarEnergy", "ConocoPhillips", "CNOOC"]
+            },
+            {
+              "子-子环节名称": "油气加工与炼制",
+              "代表公司": ["Saudi Aramco", "Sinopec", "PetroChina", "Reliance Industries", "Marathon Petroleum"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "海洋渔业捕捞与养殖",
+          "子-子环节": [
+            {
+              "子-子环节名称": "远洋捕捞",
+              "代表公司": ["China National Fisheries Corporation (CNFC)", "Thai Union Group", "Maruha Nichiro", "Nippon Suisan Kaisha", "Trident Seafoods"]
+            },
+            {
+              "子-子环节名称": "海水养殖",
+              "代表公司": ["Marine Harvest (Mowi)", "SalMar", "Lerøy Seafood Group", "Cermaq", "Cooke Aquaculture"]
+            },
+             {
+              "子-子环节名称": "海洋牧场",
+              "代表公司": ["獐子岛", "东方海洋", "好当家", "国联水产", "大湖股份"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "海洋生物资源加工",
+          "子-子环节": [
+            {
+              "子-子环节名称": "海产品加工",
+              "代表公司": ["Thai Union Group", "Maruha Nichiro", "Nippon Suisan Kaisha", "High Liner Foods", "Nomad Foods"]
+            },
+            {
+              "子-子环节名称": "海洋生物医药原料提取",
+              "代表公司": ["DSM", "BASF", "Lonza", "FMC BioPolymer", "Aker BioMarine"]
+            },
+            {
+              "子-子环节名称": "海洋功能食品原料提取",
+              "代表公司": ["Cargill", "ADM", "Ingredion", "Tate & Lyle", "Roquette"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "海水利用",
+          "子-子环节": [
+            {
+              "子-子环节名称": "海水淡化",
+              "代表公司": ["IDE Technologies", "Veolia Water Technologies", "Suez", "Doosan Heavy Industries & Construction", "Acciona Agua"]
+            },
+            {
+              "子-子环节名称": "海水直接利用（冷却等）",
+              "代表公司": ["Ebara", "Torishima Pump", "Sulzer", "Flowserve", "KSB"]
+            },
+            {
+              "子-子环节名称": "海水化学资源提取",
+              "代表公司": ["Compass Minerals", "K+S", "SQM", "ICL", "Intrepid Potash"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "海洋可再生能源发电",
+          "子-子环节":
+          [
+            {
+              "子-子环节名称":"海上风电",
+              "代表公司":["Ørsted", "Siemens Gamesa", "Vestas", "Iberdrola", "RWE"]
+            },
+            {
+              "子-子环节名称":"潮汐能发电",
+              "代表公司":["SIMEC Atlantis Energy", "Nova Innovation", "Sustainable Marine", "Verdant Power", "Andritz Hydro"]
+            },
+            {
+              "子-子环节名称":"波浪能发电",
+              "代表公司":["Ocean Power Technologies", "CorPower Ocean", "Eco Wave Power", "Carnegie Clean Energy", "Wave Swell Energy"]
+            },
+            {
+              "子-子环节名称":"温差能发电",
+              "代表公司":["Lockheed Martin", "Makai Ocean Engineering", "Bluerise", "Ocean Thermal Energy Corporation", "KRISO"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "下游：海洋相关产业与服务",
+      "子环节": [
+        {
+          "子环节名称": "海洋交通运输",
+          "子-子环节": [
+            {
+              "子-子环节名称": "航运",
+              "代表公司": ["Maersk", "COSCO Shipping", "CMA CGM", "Hapag-Lloyd", "Evergreen Marine"]
+            },
+            {
+              "子-子环节名称": "港口运营",
+              "代表公司": ["PSA International", "Hutchison Ports", "DP World", "APM Terminals", "China Merchants Port"]
+            },
+            {
+              "子-子环节名称": "造船与修船",
+              "代表公司": ["China State Shipbuilding Corporation (CSSC)", "Hyundai Heavy Industries", "Samsung Heavy Industries", "Daewoo Shipbuilding & Marine Engineering", "Japan Marine United"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "滨海旅游",
+          "子-子环节": [
+            {
+              "子-子环节名称": "邮轮旅游",
+              "代表公司": ["Carnival Corporation", "Royal Caribbean Cruises", "Norwegian Cruise Line", "MSC Cruises", "Genting Cruise Lines"]
+            },
+            {
+              "子-子环节名称": "海滨度假",
+              "代表公司": ["Marriott International", "Hilton Worldwide", "InterContinental Hotels Group", "Accor", "Hyatt Hotels Corporation"]
+            },
+            {
+              "子-子环节名称": "海洋娱乐",
+              "代表公司": ["Merlin Entertainments", "Chimelong Group", "OCT Parks China", "Fantawild Holdings", "Haichang Ocean Park"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "海洋工程建筑",
+          "子-子环节": [
+            {
+              "子-子环节名称": "跨海大桥建设",
+              "代表公司": ["China Communications Construction Company (CCCC)", "Vinci", "Skanska", "Bechtel", "Fluor"]
+            },
+            {
+              "子-子环节名称": "海底隧道建设",
+              "代表公司": ["China Railway Construction Corporation (CRCC)", "Bouygues", "Hochtief", "Kajima Corporation", "Obayashi Corporation"]
+            },
+            {
+              "子-子环节名称": "人工岛建设",
+              "代表公司": ["Van Oord", "Boskalis", "DEME Group", "Jan De Nul Group", "Hyundai Engineering & Construction"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "海洋信息服务",
+          "子-子环节": [
+            {
+                "子-子环节名称": "海洋大数据",
+                "代表公司":["Ocean Networks Canada", "National Oceanography Centre", "Woods Hole Oceanographic Institution", "Scripps Institution of Oceanography", "JAMSTEC"]
+            },
+            {
+                "子-子环节名称": "海洋通信",
+                "代表公司":["SubCom", "Alcatel Submarine Networks", "NEC", "Huawei Marine", "HMN Tech"]
+            },
+            {
+                "子-子环节名称":"海洋导航",
+                "代表公司":["Garmin", "Navico", "Raymarine (FLIR)", "Furuno", "Humminbird"]
+            }
+
+          ]
+        },
+        {
+          "子环节名称": "海洋金融保险",
+          "子-子环节": [
+            {
+              "子-子环节名称":"海洋产业投资",
+              "代表公司":["Brookfield Asset Management", "BlackRock", "Macquarie Group", "The Carlyle Group", "KKR"]
+            },
+            {
+              "子-子环节名称":"船舶保险",
+              "代表公司":["Marsh", "Aon", "Willis Towers Watson", "Lloyd's of London", "Gard P&I"]
+            },
+            {
+              "子-子环节名称":"海洋工程保险",
+              "代表公司":["Allianz", "AXA", "Munich Re", "Swiss Re", "Zurich Insurance Group"]
+            }
+
+          ]
+        }
+      ]
+    }
+  ]
+}

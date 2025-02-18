@@ -1,0 +1,231 @@
+{
+    "产业链": "智能机器人",
+    "环节": [
+      {
+        "环节名称": "上游：核心零部件及软件",
+        "子环节": [
+          {
+            "子环节名称": "感知系统",
+            "子-子环节": [
+              {
+                "子-子环节名称": "激光雷达",
+                "代表公司": ["禾赛科技 (Hesai Technology)", "速腾聚创 (RoboSense)", "Luminar (Luminar Technologies)", "Velodyne Lidar (Velodyne Lidar)", "Innoviz (Innoviz Technologies)", "Ouster (Ouster)", "Valeo (Valeo)", "AEye (AEye)"]
+              },
+              {
+                "子-子环节名称": "毫米波雷达",
+                "代表公司": ["博世 (Bosch)", "大陆集团 (Continental AG)", "安波福 (Aptiv)", "德尔福 (Delphi Technologies)", "海拉 (Hella)", "采埃孚 (ZF Friedrichshafen AG)", "NXP Semiconductors (NXP Semiconductors)", "英飞凌 (Infineon Technologies)"]
+              },
+              {
+                "子-子环节名称": "视觉传感器（摄像头）",
+                "代表公司": ["索尼 (Sony)", "三星 (Samsung)", "豪威科技 (OmniVision Technologies)", "安森美半导体 (ON Semiconductor)", "松下 (Panasonic)", "佳能 (Canon)", "尼康 (Nikon)", "徕卡 (Leica)"]
+              },
+              {
+                "子-子环节名称": "惯性测量单元（IMU）",
+                "代表公司": ["博世 (Bosch)", "TDK (TDK Corporation)", "意法半导体 (STMicroelectronics)", "霍尼韦尔 (Honeywell)", "ADI (Analog Devices)", "村田制作所 (Murata Manufacturing)", "InvenSense (InvenSense, a TDK Group Company)", "Northrop Grumman (Northrop Grumman)"]
+              },
+              {
+                "子-子环节名称": "超声波传感器",
+                "代表公司": ["博世 (Bosch)", "村田制作所 (Murata Manufacturing)", "TDK (TDK Corporation)", "MaxBotix (MaxBotix Inc.)", "Honeywell (Honeywell)", "SensComp (SensComp)", "Texas Instruments (Texas Instruments)", "Pepperl+Fuchs (Pepperl+Fuchs)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "控制系统",
+            "子-子环节": [
+              {
+                "子-子环节名称": "核心处理器（CPU/GPU/FPGA/ASIC）",
+                "代表公司": ["英伟达 (NVIDIA)", "英特尔 (Intel)", "AMD (Advanced Micro Devices)", "赛灵思 (Xilinx, now part of AMD)", "高通 (Qualcomm)", "联发科 (MediaTek)", "华为海思 (HiSilicon)", "地平线 (Horizon Robotics)"]
+              },
+              {
+                "子-子环节名称": "嵌入式控制器",
+                "代表公司": ["德州仪器 (Texas Instruments)", "意法半导体 (STMicroelectronics)", "恩智浦 (NXP Semiconductors)", "瑞萨电子 (Renesas Electronics)", "微芯科技 (Microchip Technology)", "英飞凌 (Infineon Technologies)", "赛普拉斯 (Cypress Semiconductor, now part of Infineon)", "ADI (Analog Devices)"]
+              },
+              {
+                "子-子环节名称": "机器人操作系统（ROS）及中间件",
+                "代表公司": ["Open Robotics (Open Robotics)", "Clearpath Robotics (Clearpath Robotics)", "Rethink Robotics (Rethink Robotics, now part of HAHN Group)", "Apex.AI (Apex.AI)", "Autoware Foundation (Autoware Foundation)", "ROS Industrial Consortium (ROS Industrial Consortium)", "Cyberbotics (Cyberbotics)", "eProsima (eProsima)"]
+              },
+              {
+                "子-子环节名称": "运动控制卡/器",
+                "代表公司": ["固高科技 (Googol Technology)", "凌华科技 (ADLINK Technology)", "研华科技 (Advantech)", "倍福 (Beckhoff Automation)", "ACS Motion Control (ACS Motion Control)", "Galil Motion Control (Galil Motion Control)", "Delta Tau (Delta Tau Data Systems, now part of OMRON)", "Elmo Motion Control (Elmo Motion Control)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "执行系统",
+            "子-子环节": [
+              {
+                "子-子环节名称": "伺服电机",
+                "代表公司": ["发那科 (FANUC)", "安川电机 (Yaskawa Electric Corporation)", "三菱电机 (Mitsubishi Electric)", "西门子 (Siemens)", "ABB (ABB)", "松下 (Panasonic)", "台达 (Delta Electronics)", "汇川技术 (Inovance Technology)"]
+              },
+              {
+                "子-子环节名称": "减速器",
+                "代表公司": ["纳博特斯克 (Nabtesco)", "哈默纳科 (Harmonic Drive Systems)", "住友重机械 (Sumitomo Heavy Industries)", "新宝减速机 (Shimpo)", "Spinea (Spinea)", "Leaderdrive (Leaderdrive)", "南通振康 (Nantong Zhenkang Machinery)", "双环传动 (Shuanghuan Driveline)"]
+              },
+              {
+                "子-子环节名称": "驱动器",
+                "代表公司": ["发那科 (FANUC)", "安川电机 (Yaskawa Electric Corporation)", "三菱电机 (Mitsubishi Electric)", "西门子 (Siemens)", "ABB (ABB)", "科尔摩根 (Kollmorgen)", "Elmo Motion Control (Elmo Motion Control)", "Maxon Motor (Maxon Motor)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "通信系统",
+            "子-子环节": [
+              {
+                "子-子环节名称": "工业以太网",
+                "代表公司": ["西门子 (Siemens)", "罗克韦尔自动化 (Rockwell Automation)", "贝加莱 (B&R Industrial Automation)", "倍福 (Beckhoff Automation)", "赫优讯 (Hilscher)", "Moxa (Moxa)", "HMS Networks (HMS Networks)", "思科 (Cisco)"]
+              },
+              {
+                "子-子环节名称": "无线通信模块（Wi-Fi/蓝牙/5G/Zigbee）",
+                "代表公司": ["高通 (Qualcomm)", "博通 (Broadcom)", "联发科 (MediaTek)", "德州仪器 (Texas Instruments)", "英特尔 (Intel)", "华为 (Huawei)", "中兴 (ZTE)", "Silicon Labs (Silicon Labs)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "电源系统",
+            "子-子环节": [
+              {
+                "子-子环节名称": "电池",
+                "代表公司": ["宁德时代 (CATL)", "比亚迪 (BYD)", "LG新能源 (LG Energy Solution)", "松下 (Panasonic)", "三星SDI (Samsung SDI)", "SK Innovation (SK Innovation)", "远景动力 (Envision AESC)", "中创新航 (CALB)"]
+              },
+              {
+                "子-子环节名称": "电源管理芯片",
+                "代表公司": ["德州仪器 (Texas Instruments)", "ADI (Analog Devices)", "英飞凌 (Infineon Technologies)", "安森美半导体 (ON Semiconductor)", "意法半导体 (STMicroelectronics)", "瑞萨电子 (Renesas Electronics)", "NXP Semiconductors (NXP Semiconductors)", "Maxim Integrated (Maxim Integrated, now part of ADI)"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "中游：机器人本体制造及系统集成",
+        "子环节": [
+          {
+            "子环节名称": "工业机器人本体",
+            "子-子环节": [
+              {
+                "子-子环节名称": "多关节机器人",
+                "代表公司": ["发那科 (FANUC)", "ABB (ABB)", "库卡 (KUKA)", "安川电机 (Yaskawa Electric Corporation)", "川崎机器人 (Kawasaki Robotics)", "那智不二越 (Nachi-Fujikoshi)", "爱普生 (Epson Robots)", "史陶比尔 (Stäubli)"]
+              },
+              {
+                "子-子环节名称": "SCARA机器人",
+                "代表公司": ["爱普生 (Epson Robots)", "雅马哈 (Yamaha Motor)", "东芝机械 (Toshiba Machine)", "史陶比尔 (Stäubli)", "三菱电机 (Mitsubishi Electric)", "发那科 (FANUC)", "ABB (ABB)", "川崎机器人 (Kawasaki Robotics)"]
+              },
+              {
+                "子-子环节名称": "协作机器人",
+                "代表公司": ["优傲机器人 (Universal Robots)", "遨博机器人 (AUBO Robotics)", "Franka Emika (Franka Emika)", "Rethink Robotics (Rethink Robotics, now part of HAHN Group)", "ABB (ABB)", "发那科 (FANUC)", "库卡 (KUKA)", "安川电机 (Yaskawa Electric Corporation)"]
+              },
+              {
+                "子-子环节名称": "Delta机器人",
+                "代表公司": ["ABB (ABB)", "发那科 (FANUC)", "欧姆龙 (Omron Adept Technologies)", "川崎机器人 (Kawasaki Robotics)", "雅马哈 (Yamaha Motor)", "Codian Robotics (Codian Robotics)", "FANUC (FANUC)", "B&R Industrial Automation (B&R Industrial Automation)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "服务机器人本体",
+            "子-子环节": [
+              {
+                "子-子环节名称": "家用服务机器人",
+                "代表公司": ["iRobot (iRobot)", "科沃斯 (Ecovacs Robotics)", "石头科技 (Roborock)", "小米 (Xiaomi)", "SharkNinja (SharkNinja)", "三星 (Samsung)", "LG (LG)", "美的 (Midea)"]
+              },
+              {
+                "子-子环节名称": "商用服务机器人",
+                "代表公司": ["普渡科技 (Pudu Robotics)", "擎朗智能 (Keenon Robotics)", "云迹科技 (Yunji Technology)", "优必选 (UBTECH Robotics)", "猎户星空 (OrionStar)", "高仙机器人 (Gaussian Robotics)", "Savioke (Savioke)", "Bear Robotics (Bear Robotics)"]
+              },
+              {
+                "子-子环节名称": "特种服务机器人",
+                "代表公司": ["波士顿动力 (Boston Dynamics)", "中信重工 (CITIC Heavy Industries)", "大疆 (DJI)", "Ghost Robotics (Ghost Robotics)", "ANYbotics (ANYbotics)", "Exyn Technologies (Exyn Technologies)", "Clearpath Robotics (Clearpath Robotics)", "Sarcos Robotics (Sarcos Robotics)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "系统集成",
+            "子-子环节": [
+              {
+                "子-子环节名称": "工业机器人系统集成",
+                "代表公司": ["ABB (ABB)", "发那科 (FANUC)", "库卡 (KUKA)", "安川电机 (Yaskawa Electric Corporation)", "西门子 (Siemens)", "新松机器人 (SIASUN)", "埃斯顿 (Estun Automation)", "广州数控 (GSK CNC Equipment)"]
+              },
+              {
+                "子-子环节名称": "服务机器人系统集成",
+                "代表公司": ["软银机器人 (SoftBank Robotics)", "科大讯飞 (iFLYTEK)", "优必选 (UBTECH Robotics)", "康力优蓝 (Canbot)", "穿山甲机器人 (Pangolin Robot)", "新松机器人 (SIASUN)", "达闼科技 (CloudMinds)", "Roobo (Roobo)"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "下游：应用领域",
+        "子环节": [
+          {
+            "子环节名称": "工业领域",
+            "子-子环节": [
+              {
+                "子-子环节名称": "汽车制造",
+                "代表公司": ["丰田 (Toyota)", "大众 (Volkswagen)", "通用汽车 (General Motors)", "福特 (Ford)", "宝马 (BMW)", "戴姆勒 (Daimler)", "特斯拉 (Tesla)", "现代汽车 (Hyundai Motor Company)"]
+              },
+              {
+                "子-子环节名称": "3C电子制造",
+                "代表公司": ["富士康 (Foxconn)", "和硕 (Pegatron)", "纬创 (Wistron)", "广达 (Quanta Computer)", "仁宝 (Compal Electronics)", "英业达 (Inventec)", "三星电子 (Samsung Electronics)", "立讯精密 (Luxshare Precision Industry)"]
+              },
+              {
+                "子-子环节名称": "金属加工",
+                "代表公司": ["蒂森克虏伯 (Thyssenkrupp)", "浦项制铁 (POSCO)", "宝武钢铁 (Baowu Steel Group)", "新日铁 (Nippon Steel)", "JFE钢铁 (JFE Steel)", "安赛乐米塔尔 (ArcelorMittal)", "塔塔钢铁 (Tata Steel)", "纽柯钢铁 (Nucor Corporation)"]
+              },
+              {
+                "子-子环节名称": "食品饮料",
+                "代表公司": ["雀巢 (Nestlé)", "百事可乐 (PepsiCo)", "可口可乐 (Coca-Cola)", "联合利华 (Unilever)", "达能 (Danone)", "玛氏 (Mars)", "亿滋国际 (Mondelēz International)", "通用磨坊 (General Mills)"]
+              },
+              {
+                "子-子环节名称": "物流仓储",
+                "代表公司": ["亚马逊 (Amazon)", "京东 (JD.com)", "阿里巴巴 (Alibaba)", "顺丰 (SF Express)", "DHL (DHL)", "UPS (UPS)", "FedEx (FedEx)", "XPO Logistics (XPO Logistics)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "服务领域",
+            "子-子环节": [
+              {
+                "子-子环节名称": "餐饮服务",
+                "代表公司": ["海底捞 (Haidilao)", "麦当劳 (McDonald's)", "星巴克 (Starbucks)", "肯德基 (KFC)", "必胜客 (Pizza Hut)", "赛百味 (Subway)", "达美乐比萨 (Domino's Pizza)", "汉堡王 (Burger King)"]
+              },
+              {
+                "子-子环节名称": "酒店服务",
+                "代表公司": ["万豪国际 (Marriott International)", "希尔顿 (Hilton)", "洲际酒店 (IHG)", "雅高 (Accor)", "温德姆 (Wyndham Hotels & Resorts)", "华住 (Huazhu Group)", "锦江国际 (Jin Jiang International)", "首旅如家 (BTG Homeinns Hotels)"]
+              },
+              {
+                "子-子环节名称": "医疗服务",
+                "代表公司": ["Intuitive Surgical (Intuitive Surgical)", "Stryker (Stryker Corporation)", "Medtronic (Medtronic)", "强生 (Johnson & Johnson)", "西门子医疗 (Siemens Healthineers)", "飞利浦医疗 (Philips Healthcare)", "GE医疗 (GE Healthcare)", "达芬奇手术机器人(da Vinci Surgical System)"]
+              },
+              {
+                "子-子环节名称": "教育服务",
+                "代表公司": ["好未来 (TAL Education Group)", "新东方 (New Oriental Education & Technology Group)", "VIPKID (VIPKID)", "猿辅导 (Yuanfudao)", "作业帮 (Zuoyebang)", "一起教育科技 (17 Education & Technology Group)", "掌门1对1 (Zhangmen)", "DaDa英语 (DaDaABC)"]
+              },
+              {
+                "子-子环节名称": "家庭服务",
+                "代表公司": ["iRobot (iRobot)", "科沃斯 (Ecovacs Robotics)", "石头科技 (Roborock)", "小米 (Xiaomi)", "SharkNinja (SharkNinja)", "三星 (Samsung)", "LG (LG)", "美的 (Midea)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "特种领域",
+            "子-子环节": [
+              {
+                "子-子环节名称": "安防巡检",
+                "代表公司": ["海康威视 (Hikvision)", "大华股份 (Dahua Technology)", "安讯士 (Axis Communications)", "博世安防 (Bosch Security Systems)", "霍尼韦尔安防 (Honeywell Security)", "泰科安防 (Tyco Security Products)", "Flir Systems (Flir Systems)", "韩华Techwin (Hanwha Techwin)"]
+              },
+              {
+                "子-子环节名称": "勘探探测",
+                "代表公司": ["Schlumberger (Schlumberger)", "Halliburton (Halliburton)", "Baker Hughes (Baker Hughes)", "Weatherford International (Weatherford International)", "National Oilwell Varco (National Oilwell Varco)", "Transocean (Transocean)", "Diamond Offshore Drilling (Diamond Offshore Drilling)", "Noble Corporation (Noble Corporation)"]
+              },
+              {
+                "子-子环节名称": "国防军工",
+                "代表公司": ["洛克希德·马丁 (Lockheed Martin)", "波音 (Boeing)", "诺斯罗普·格鲁曼 (Northrop Grumman)", "雷神技术 (Raytheon Technologies)", "通用动力 (General Dynamics)", "BAE Systems (BAE Systems)", "中国兵器工业集团 (China North Industries Group Corporation Limited)", "中国航天科工集团 (China Aerospace Science and Industry Corporation)"]
+              },
+              {
+                "子-子环节名称": "应急救援",
+                "代表公司": ["中信重工 (CITIC Heavy Industries)", "中国地震应急搜救中心 (China Earthquake Administration)", "中国安全生产科学研究院 (China Academy of Safety Science and Technology)", "中国救援 (China Rescue)", "国家安全生产应急救援中心 (National Work Safety Emergency Rescue Center)", "徐工集团 (XCMG)", "三一重工 (Sany Heavy Industry)", "同方威视 (Nuctech Company Limited)"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

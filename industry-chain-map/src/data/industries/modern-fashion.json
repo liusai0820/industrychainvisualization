@@ -1,0 +1,223 @@
+{
+    "产业链": "现代时尚产业",
+    "环节": [
+      {
+        "环节名称": "上游：原材料供应与设计研发",
+        "子环节": [
+          {
+            "子环节名称": "原材料供应",
+            "子-子环节": [
+              {
+                "子-子环节名称": "天然纤维",
+                "代表公司": ["中国棉花集团 (China National Cotton Group)", "路易达孚 (Louis Dreyfus Company)", "奥兰国际 (Olam International)", "澳大利亚羊毛创新公司 (Australian Wool Innovation Limited)", "巴西棉花种植者协会 (ABRAPA)"]
+              },
+              {
+                "子-子环节名称": "化学纤维",
+                "代表公司": ["英威达 (Invista)", "兰精 (Lenzing)", "东丽 (Toray)", "帝人 (Teijin)", "晓星 (Hyosung)"]
+              },
+              {
+                "子-子环节名称": "皮革",
+                "代表公司": ["JBS Couros", "Gruppo Mastrotto", "Dani S.p.A.", "TFL Ledertechnik GmbH", "隆丰皮草 (Longfeng Fur)"]
+              },
+              {
+                "子-子环节名称": "纱线",
+                "代表公司": ["华孚时尚 (Huafu Fashion)", "百隆东方 (Bros Eastern)", "鲁泰纺织 (Luthai Textile)", "Filpucci", "Lineapiù Italia"]
+              },
+              {
+                "子-子环节名称": "面料",
+                "代表公司": ["溢达集团 (Esquel Group)", "福田实业 (Fukutomi)", "德永佳集团 (Texwinca Holdings)", "Loro Piana", "Ermenegildo Zegna"]
+              },
+              {
+                "子-子环节名称": "辅料",
+                "代表公司": ["YKK", "SBS Zipper", "Riri", "Coats", "Morito"]
+              },
+              {
+                "子-子环节名称": "染料/助剂",
+                "代表公司": ["亨斯迈 (Huntsman)", "德司达 (DyStar)", "昂高 (Archroma)", "巴斯夫 (BASF)", "科莱恩 (Clariant)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "设计研发",
+            "子-子环节": [
+              {
+                "子-子环节名称": "服装设计",
+                "代表公司": ["LVMH", "开云集团 (Kering)", "历峰集团 (Richemont)", "香奈儿 (Chanel)", "爱马仕 (Hermès)"]
+              },
+              {
+                "子-子环节名称": "鞋履设计",
+                "代表公司": ["耐克 (Nike)", "阿迪达斯 (Adidas)", "彪马 (Puma)", "New Balance", "斯凯奇 (Skechers)"]
+              },
+              {
+                "子-子环节名称": "箱包设计",
+                "代表公司": ["LVMH", "开云集团 (Kering)", "历峰集团 (Richemont)", "香奈儿 (Chanel)", "爱马仕 (Hermès)"]
+              },
+              {
+                "子-子环节名称": "珠宝设计",
+                "代表公司": ["历峰集团 (Richemont)", "蒂芙尼 (Tiffany & Co.)", "施华洛世奇 (Swarovski)", "潘多拉 (Pandora)", "周大福 (Chow Tai Fook)"]
+              },
+              {
+                "子-子环节名称": "配饰设计",
+                "代表公司": ["Luxottica", "Safilo", "Marcolin", "De Rigo Vision", "Marchon Eyewear"]
+              },
+              {
+                "子-子环节名称": "时尚趋势预测",
+                "代表公司": ["WGSN", "Fashion Snoops", "Promostyl", "PeclersParis", "Trend Union"]
+              },
+              {
+                "子-子环节名称": "时尚科技研发",
+                "代表公司": ["The Unseen", "CuteCircuit", "Studio XO", "Bolt Threads", "Modern Meadow"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "中游：生产制造与品牌运营",
+        "子环节": [
+          {
+            "子环节名称": "生产制造",
+            "子-子环节": [
+              {
+                "子-子环节名称": "服装制造",
+                "代表公司": ["申洲国际 (Shenzhou International)", "晶苑国际 (Crystal International)", "联泰控股 (Luen Thai Holdings)", "维珍妮 (Regina Miracle)", "TAL Apparel"]
+              },
+              {
+                "子-子环节名称": "鞋履制造",
+                "代表公司": ["裕元集团 (Yue Yuen Industrial)", "丰泰企业 (Feng Tay Enterprises)", "华利集团 (Hua Li Industrial Group)", "九兴控股 (Stella International)", "宝成工业 (Pou Chen Group)"]
+              },
+              {
+                "子-子环节名称": "箱包制造",
+                "代表公司": ["时代集团 (Time Interconnect)", "Samsonite", "Tumi", "Rimowa (LVMH)", "Longchamp"]
+              },
+              {
+                "子-子环节名称": "珠宝制造",
+                "代表公司": ["Richemont", "Tiffany & Co.", "Swarovski", "Pandora", "Chow Tai Fook"]
+              },
+              {
+                "子-子环节名称": "配饰制造",
+                "代表公司": ["Luxottica", "Safilo", "Marcolin", "De Rigo Vision", "Marchon Eyewear"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "品牌运营",
+            "子-子环节": [
+              {
+                "子-子环节名称": "奢侈品牌",
+                "代表公司": ["LVMH", "开云集团 (Kering)", "历峰集团 (Richemont)", "香奈儿 (Chanel)", "爱马仕 (Hermès)"]
+              },
+              {
+                "子-子环节名称": "轻奢品牌",
+                "代表公司": ["Tapestry (Coach, Kate Spade, Stuart Weitzman)", "Capri Holdings (Michael Kors, Jimmy Choo, Versace)", "Michael Kors", "Tory Burch", "Furla"]
+              },
+              {
+                "子-子环节名称": "快时尚品牌",
+                "代表公司": ["Inditex (Zara)", "H&M", "迅销 (Fast Retailing - Uniqlo)", "Gap", "Forever 21"]
+              },
+              {
+                "子-子环节名称": "运动品牌",
+                "代表公司": ["耐克 (Nike)", "阿迪达斯 (Adidas)", "彪马 (Puma)", "Under Armour", "New Balance"]
+              },
+              {
+                "子-子环节名称": "设计师品牌",
+                "代表公司": ["Alexander McQueen", "Stella McCartney", "Balenciaga", "Off-White", "Vetements"]
+              },
+              {
+                "子-子环节名称": "电商品牌",
+                "代表公司": ["ASOS", "Boohoo", "Zalando", "Farfetch", "Net-a-Porter"]
+              },
+              {
+                "子-子环节名称": "品牌营销与公关",
+                "代表公司": ["WPP", "Omnicom Group", "Publicis Groupe", "Interpublic Group of Companies (IPG)", "Dentsu"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "下游：零售渠道与消费市场",
+        "子环节": [
+          {
+            "子环节名称": "零售渠道",
+            "子-子环节": [
+              {
+                "子-子环节名称": "百货公司",
+                "代表公司": ["梅西百货 (Macy's)", "诺德斯特龙 (Nordstrom)", "哈罗德百货 (Harrods)", "老佛爷百货 (Galeries Lafayette)", "伊势丹 (Isetan)"]
+              },
+              {
+                "子-子环节名称": "品牌专卖店",
+                "代表公司": ["LVMH", "开云集团 (Kering)", "历峰集团 (Richemont)", "香奈儿 (Chanel)", "爱马仕 (Hermès)"]
+              },
+              {
+                "子-子环节名称": "多品牌集合店",
+                "代表公司": ["Dover Street Market", "10 Corso Como", "Colette (closed)", "Opening Ceremony", "IT"]
+              },
+              {
+                "子-子环节名称": "奥特莱斯",
+                "代表公司": ["Simon Property Group", "Tanger Factory Outlet Centers", "McArthurGlen Designer Outlets", "Value Retail", "RDM Group"]
+              },
+              {
+                "子-子环节名称": "电商平台",
+                "代表公司": ["Farfetch", "Net-a-Porter", "Mytheresa", "SSENSE", "Matchesfashion"]
+              },
+              {
+                "子-子环节名称": "社交电商",
+                "代表公司": ["Instagram Shopping", "Pinterest Shop", "Facebook Marketplace", "小红书 (Xiaohongshu)", "抖音 (Douyin)"]
+              },
+              {
+                "子-子环节名称": "二手/租赁平台",
+                "代表公司": ["The RealReal", "Vestiaire Collective", "ThredUp", "Rent the Runway", "Poshmark"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "消费市场",
+            "子-子环节": [
+              {
+                "子-子环节名称": "高端市场",
+                "代表公司": ["LVMH", "开云集团 (Kering)", "历峰集团 (Richemont)", "香奈儿 (Chanel)", "爱马仕 (Hermès)"]
+              },
+              {
+                "子-子环节名称": "中端市场",
+                "代表公司": ["Inditex (Zara)", "H&M", "迅销 (Fast Retailing - Uniqlo)", "Gap", "Mango"]
+              },
+              {
+                "子-子环节名称": "大众市场",
+                "代表公司": ["Walmart", "Target", "Primark", "H&M", "Forever 21"]
+              },
+              {
+                "子-子环节名称": "细分市场 (例如：运动、户外、童装等)",
+                "代表公司": ["耐克 (Nike)", "阿迪达斯 (Adidas)", "Lululemon", "The North Face", "Patagonia"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "时尚媒体与传播",
+            "子-子环节": [
+              {
+                "子-子环节名称": "时尚杂志",
+                "代表公司": ["Vogue", "Harper's Bazaar", "Elle", "GQ", "Esquire"]
+              },
+              {
+                "子-子环节名称": "时尚网站/博客",
+                "代表公司": ["Business of Fashion (BoF)", "WWD", "Hypebeast", "Highsnobiety", "Refinery29"]
+              },
+              {
+                "子-子环节名称": "社交媒体",
+                "代表公司": ["Instagram", "TikTok", "YouTube", "Facebook", "Twitter"]
+              },
+              {
+                "子-子环节名称": "时尚博主/KOL",
+                "代表公司": ["Chiara Ferragni", "Aimee Song", "Bryanboy", "Susie Bubble", "Gogoboi"]
+              },
+              {
+                "子-子环节名称": "时尚活动 (时装周、展会等)",
+                "代表公司": ["纽约时装周 (NYFW)", "伦敦时装周 (LFW)", "米兰时装周 (MFW)", "巴黎时装周 (PFW)", "Première Vision Paris"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
