@@ -116,31 +116,31 @@ export default function Home() {
             )}
 
             {!showChart ? (
-                <div className="max-w-[1800px] mx-auto px-6 py-16 min-h-screen flex flex-col">
-                    <div className="text-center mb-24">
-                        <h1 className="text-7xl font-bold mb-16 tracking-wider" style={{ color: '#2B2B2B' }}>
+                <div className="max-w-[1800px] mx-auto px-6 py-12 min-h-screen flex flex-col">
+                    <div className="text-center mb-12">
+                        <h1 className="text-6xl font-bold mb-8 tracking-wider" style={{ color: '#2B2B2B' }}>
                             智绘链图
                         </h1>
-                        <div className="grid grid-cols-2 gap-8 max-w-3xl mx-auto text-base text-gray-600">
-                            <div className="flex items-center justify-center gap-3 px-6 py-4">
+                        <div className="grid grid-cols-2 gap-3 max-w-3xl mx-auto text-sm text-gray-600">
+                            <div className="flex items-center justify-center gap-3 px-6 py-2">
                                 <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                                 </svg>
                                 <span>智能分析产业链层级关系</span>
                             </div>
-                            <div className="flex items-center justify-center gap-3 px-6 py-4">
+                            <div className="flex items-center justify-center gap-3 px-6 py-2">
                                 <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                                 </svg>
                                 <span>精准识别产业链关键节点</span>
                             </div>
-                            <div className="flex items-center justify-center gap-3 px-6 py-4">
+                            <div className="flex items-center justify-center gap-3 px-6 py-2">
                                 <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
                                 </svg>
                                 <span>深入洞察产业发展新方向</span>
                             </div>
-                            <div className="flex items-center justify-center gap-3 px-6 py-4">
+                            <div className="flex items-center justify-center gap-3 px-6 py-2">
                                 <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
                                 </svg>
@@ -150,7 +150,7 @@ export default function Home() {
                     </div>
                         
                     {/* 搜索框 */}
-                    <div className="w-full max-w-3xl mx-auto mb-16">
+                    <div className="w-full max-w-3xl mx-auto mb-8">
                         <form onSubmit={handleSearch} className="w-full">
                             <div className="flex gap-4 w-full">
                                 <input
@@ -184,22 +184,22 @@ export default function Home() {
                         </form>
                     </div>
 
-                    {/* 加载进度条 */}
-                    {isLoading && (
-                        <div className="max-w-5xl mx-auto">
+                    {/* 预留进度条位置的容器，保持布局一致性 */}
+                    <div className="w-full max-w-3xl mx-auto h-24">
+                        {isLoading && (
                             <ProgressBar
                                 currentProgress={currentProgress}
                                 stages={PROGRESS_STAGES}
                                 currentStage={currentStage}
                                 detail={PROGRESS_STAGES[currentStage].detail}
                             />
-                        </div>
-                    )}
+                        )}
+                    </div>
 
-                    <div className="grid grid-cols-1 gap-4 flex-grow mt-8">
-                        {PRESET_INDUSTRIES.map((category) => (
-                            <div key={category.id}>
-                                <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                    <div className="grid grid-cols-1 gap-0 flex-grow mt-20">
+                        {PRESET_INDUSTRIES.map((category, index) => (
+                            <div key={category.id} className={`${index === 1 ? '-mt-6' : ''}`}>
+                                <h2 className="text-base font-bold text-gray-800 mb-2">
                                     {category.id === 'strategic' ? '深圳重点发展20大战略性新兴产业' : '深圳优先布局8大未来产业'}
                                 </h2>
                                 <PresetIndustrySection
@@ -212,7 +212,7 @@ export default function Home() {
 
                     {/* 底部创作者信息 */}
                     <footer className="text-center py-6 mt-auto border-t border-gray-100">
-                        <p className="text-sm text-gray-400">Created by lius with ❤️</p>
+                        <p className="text-sm text-gray-400">Created by lius with Cursor</p>
                     </footer>
                 </div>
             ) : (

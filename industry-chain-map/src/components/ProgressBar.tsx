@@ -25,18 +25,18 @@ export default function ProgressBar({
     }, [currentProgress]);
 
     return (
-        <div className="w-full max-w-2xl mx-auto mt-8">
-            <div className="relative w-full max-w-800px mx-auto pt-10">
+        <div className="w-full mx-auto mt-2">
+            <div className="relative w-full mx-auto pt-4">
                 {/* 进度百分比 */}
-                <div className="absolute right-0 top-0 text-sm text-black">
+                <div className="absolute right-0 top-0 text-xs text-gray-600">
                     {Math.round(currentProgress)}%
                 </div>
 
                 {/* 进度条 */}
-                <div className="relative h-[1px] bg-gray-200 my-10">
+                <div className="relative h-[2px] bg-gray-200 my-4">
                     <div
                         ref={progressLineRef}
-                        className="absolute left-0 top-0 h-full bg-black transition-all duration-500"
+                        className="absolute left-0 top-0 h-full bg-blue-600 transition-all duration-500"
                         style={{ width: `${currentProgress}%` }}
                     />
                     
@@ -50,10 +50,10 @@ export default function ProgressBar({
                                 }`}
                             >
                                 <div
-                                    className={`w-6 h-6 rounded-full flex items-center justify-center text-xs
+                                    className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px]
                                         ${
                                             index <= currentStage
-                                                ? 'bg-black text-white border-black'
+                                                ? 'bg-blue-600 text-white border-blue-600'
                                                 : 'bg-white text-gray-500 border-gray-300'
                                         }
                                         border transition-all duration-300`}
@@ -61,10 +61,10 @@ export default function ProgressBar({
                                     {index + 1}
                                 </div>
                                 <div
-                                    className={`mt-3 text-sm font-medium transition-colors duration-300
+                                    className={`mt-1.5 text-xs font-medium transition-colors duration-300
                                         ${
                                             index <= currentStage
-                                                ? 'text-black'
+                                                ? 'text-blue-600'
                                                 : 'text-gray-500'
                                         }`}
                                 >
@@ -76,8 +76,8 @@ export default function ProgressBar({
                 </div>
 
                 {/* 进度详情 */}
-                <div className="text-center mt-10">
-                    <p className="text-sm text-gray-800">{detail}</p>
+                <div className="text-center mt-4">
+                    <p className="text-xs text-gray-600">{detail}</p>
                 </div>
             </div>
         </div>
