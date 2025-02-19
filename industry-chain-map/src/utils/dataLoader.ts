@@ -1,6 +1,21 @@
 import { IndustryChainData } from '@/types';
 import { PRESET_INDUSTRIES } from '@/data/preset-industries';
 
+// 定义原始数据结构的类型
+interface RawIndustryData {
+    产业链: string;
+    环节: Array<{
+        环节名称: string;
+        子环节: Array<{
+            子环节名称: string;
+            '子-子环节': Array<{
+                '子-子环节名称': string;
+                代表公司: string[];
+            }>;
+        }>;
+    }>;
+}
+
 // 内存缓存
 const dataCache: { [key: string]: IndustryChainData } = {};
 
@@ -33,18 +48,20 @@ export const addToCache = (industryId: string, data: IndustryChainData): void =>
 };
 
 // 验证数据结构
-const validateData = (data: any): boolean => {
+const validateData = (data: unknown): data is RawIndustryData => {
     try {
         if (!data || typeof data !== 'object') return false;
-        if (!data.产业链 || !Array.isArray(data.环节)) return false;
+        const rawData = data as RawIndustryData;
         
-        return data.环节.every((segment: any) => 
+        if (!rawData.产业链 || !Array.isArray(rawData.环节)) return false;
+        
+        return rawData.环节.every(segment => 
             segment.环节名称 && 
             Array.isArray(segment.子环节) &&
-            segment.子环节.every((sub: any) => 
+            segment.子环节.every(sub => 
                 sub.子环节名称 && 
                 Array.isArray(sub['子-子环节']) &&
-                sub['子-子环节'].every((subSub: any) => 
+                sub['子-子环节'].every(subSub => 
                     subSub['子-子环节名称'] && 
                     Array.isArray(subSub.代表公司)
                 )
@@ -57,7 +74,7 @@ const validateData = (data: any): boolean => {
 };
 
 // 转换数据结构
-const transformData = (rawData: any): IndustryChainData => {
+const transformData = (rawData: RawIndustryData): IndustryChainData => {
     try {
         if (!validateData(rawData)) {
             throw new Error('Invalid data structure');
@@ -65,13 +82,13 @@ const transformData = (rawData: any): IndustryChainData => {
 
         return {
             name: rawData.产业链,
-            children: rawData.环节.map((segment: any) => ({
+            children: rawData.环节.map(segment => ({
                 name: segment.环节名称,
-                children: segment.子环节.map((subSegment: any) => ({
+                children: segment.子环节.map(subSegment => ({
                     name: subSegment.子环节名称,
-                    children: subSegment['子-子环节'].map((subSubSegment: any) => ({
+                    children: subSegment['子-子环节'].map(subSubSegment => ({
                         name: subSubSegment['子-子环节名称'],
-                        children: subSubSegment.代表公司.map((company: string) => ({
+                        children: subSubSegment.代表公司.map(company => ({
                             name: company
                         }))
                     }))
@@ -80,7 +97,7 @@ const transformData = (rawData: any): IndustryChainData => {
         };
     } catch (error) {
         console.error('Error transforming data:', error);
-        throw new Error(`Failed to transform industry data: ${error.message}`);
+        throw new Error(`Failed to transform industry data: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
 };
 
@@ -114,7 +131,7 @@ const fetchFromDifyApi = async (industryName: string): Promise<IndustryChainData
         return result.data;
     } catch (error) {
         console.error('Error fetching from Dify API:', error);
-        throw new Error(`Failed to generate industry chain data: ${error.message}`);
+        throw new Error(`Failed to generate industry chain data: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
 };
 
@@ -128,17 +145,21 @@ export const loadIndustryChainData = async (industryNameOrId: string): Promise<I
             // 是预设产业，检查缓存
             if (isCached(presetId)) {
                 console.log('Loading from cache:', presetId);
-                return getFromCache(presetId)!;
+                const cachedData = getFromCache(presetId);
+                if (!cachedData) {
+                    throw new Error('Cache data not found');
+                }
+                return cachedData;
             }
 
             console.log('Loading preset industry from file:', presetId);
             // 动态导入数据文件
-            const module = await import(`@/data/industries/${presetId}.json`);
-            const rawData = module.default || module;
+            const moduleData = await import(`@/data/industries/${presetId}.json`);
+            const rawData = moduleData.default || moduleData;
             
             // 验证数据
             if (!validateData(rawData)) {
-                throw new Error('Invalid data structure');
+                throw new Error('Invalid data structure in preset data');
             }
             
             // 转换数据结构
@@ -151,12 +172,11 @@ export const loadIndustryChainData = async (industryNameOrId: string): Promise<I
         } else {
             // 非预设产业，调用 Dify API
             console.log('Generating data from Dify API:', industryNameOrId);
-            const data = await fetchFromDifyApi(industryNameOrId);
-            return data;
+            return await fetchFromDifyApi(industryNameOrId);
         }
     } catch (error) {
         console.error('Error loading industry data:', error);
-        throw new Error(`Failed to load data for industry: ${industryNameOrId}`);
+        throw new Error(`Failed to load data for industry: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
 };
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import IndustryChainChart from '@/components/IndustryChainChart';
 import PresetIndustrySection from '@/components/PresetIndustrySection';
 import ProgressBar from '@/components/ProgressBar';
@@ -75,10 +75,7 @@ export default function Home() {
     // 修改进度条更新逻辑
     useEffect(() => {
         if (isLoading) {
-            let interval: NodeJS.Timeout;
-            let currentStageIndex = 0;
-
-            const updateProgress = () => {
+            const interval = setInterval(() => {
                 setCurrentProgress(prev => {
                     // 确保进度只增加不减少
                     const nextProgress = prev + (
@@ -89,20 +86,18 @@ export default function Home() {
                     );
 
                     // 更新当前阶段
-                    if (nextProgress >= PROGRESS_STAGES[currentStageIndex].progress) {
-                        currentStageIndex = Math.min(currentStageIndex + 1, PROGRESS_STAGES.length - 1);
-                        setCurrentStage(currentStageIndex);
+                    if (nextProgress >= PROGRESS_STAGES[currentStage].progress) {
+                        setCurrentStage(Math.min(currentStage + 1, PROGRESS_STAGES.length - 1));
                     }
 
                     // 在最后阶段限制最大进度为95%
                     return Math.min(nextProgress, 95);
                 });
-            };
+            }, 100);
 
-            interval = setInterval(updateProgress, 100);
             return () => clearInterval(interval);
         }
-    }, [isLoading]);
+    }, [isLoading, currentStage]);
 
     // 在数据加载完成后，直接设置为100%
     useEffect(() => {
