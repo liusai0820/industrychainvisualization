@@ -9,9 +9,6 @@ const nextConfig = {
       }
     });
     return config;
-  },
-  experimental: {
-    esmExternals: 'loose'
   }
 };
 

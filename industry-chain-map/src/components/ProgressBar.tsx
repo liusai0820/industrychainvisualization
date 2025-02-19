@@ -46,13 +46,13 @@ export default function ProgressBar({
                             <div
                                 key={stage.name}
                                 className={`relative flex flex-col items-center ${
-                                    currentProgress >= stage.progress ? 'active' : ''
+                                    index <= currentStage ? 'active' : ''
                                 }`}
                             >
                                 <div
                                     className={`w-6 h-6 rounded-full flex items-center justify-center text-xs
                                         ${
-                                            currentProgress >= stage.progress
+                                            index <= currentStage
                                                 ? 'bg-black text-white border-black'
                                                 : 'bg-white text-gray-500 border-gray-300'
                                         }
@@ -63,7 +63,7 @@ export default function ProgressBar({
                                 <div
                                     className={`mt-3 text-sm font-medium transition-colors duration-300
                                         ${
-                                            currentProgress >= stage.progress
+                                            index <= currentStage
                                                 ? 'text-black'
                                                 : 'text-gray-500'
                                         }`}
@@ -77,7 +77,7 @@ export default function ProgressBar({
 
                 {/* 进度详情 */}
                 <div className="text-center mt-10">
-                    <p className="text-sm text-gray-800">{stages[currentStage].detail}</p>
+                    <p className="text-sm text-gray-800">{detail}</p>
                 </div>
             </div>
         </div>

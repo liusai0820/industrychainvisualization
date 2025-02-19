@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { IndustryChainData, MainSection, SubSection, SubSubSection, Company } from '@/types';
 
 interface IndustryChainChartProps {
@@ -18,8 +18,9 @@ export default function IndustryChainChart({ data }: IndustryChainChartProps) {
             // 使用 html2canvas 进行截图
             const html2canvas = (await import('html2canvas')).default;
             const canvas = await html2canvas(containerRef.current, {
-                backgroundColor: '#fff',
-                scale: 2,
+                background: '#ffffff',
+                width: window.innerWidth * 2,
+                height: window.innerHeight * 2
             });
 
             const dataUrl = canvas.toDataURL('image/png');
@@ -172,4 +173,4 @@ function CompanyItem({ company }: CompanyItemProps) {
             {company.name}
         </div>
     );
-} 
+}
