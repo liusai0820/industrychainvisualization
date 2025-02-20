@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { Resend } from 'resend';
-import { Octokit } from 'octokit';
+import { Octokit } from '@octokit/rest';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const octokit = new Octokit({ auth: process.env.GITHUB_ACCESS_TOKEN });

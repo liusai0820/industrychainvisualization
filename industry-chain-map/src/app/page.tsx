@@ -7,6 +7,7 @@ import ProgressBar from '@/components/ProgressBar';
 import { PRESET_INDUSTRIES } from '@/data/preset-industries';
 import { PresetIndustry, IndustryChainData, ProgressStage } from '@/types';
 import { loadIndustryChainData } from '@/utils/dataLoader';
+import FeedbackButton from '@/components/FeedbackButton';
 
 // 定义进度阶段
 const PROGRESS_STAGES: ProgressStage[] = [
@@ -150,36 +151,43 @@ export default function Home() {
                     </div>
                         
                     {/* 搜索框 */}
-                    <div className="w-full max-w-3xl mx-auto mb-8">
+                    <div className="w-full max-w-2xl mx-auto mb-8">
                         <form onSubmit={handleSearch} className="w-full">
-                            <div className="flex gap-4 w-full">
-                                <input
-                                    type="text"
-                                    value={searchInput}
-                                    onChange={(e) => setSearchInput(e.target.value)}
-                                    placeholder="输入产业链名称，例如：ai芯片"
-                                    disabled={isLoading}
-                                    className="w-full px-8 py-4 text-lg rounded-xl border border-gray-300 
-                                             focus:border-blue-500 focus:ring-2 focus:ring-blue-200 
-                                             transition-colors shadow-sm disabled:bg-gray-50 
-                                             disabled:text-gray-500 disabled:cursor-not-allowed"
-                                />
-                                <button
-                                    type="submit"
-                                    disabled={isLoading || !searchInput.trim()}
-                                    className={`px-8 py-4 text-white text-lg font-medium 
-                                             rounded-xl transition-colors shadow-md 
-                                             flex items-center gap-3 whitespace-nowrap
-                                             ${isLoading 
-                                               ? 'bg-gray-400 cursor-not-allowed' 
-                                               : 'bg-blue-600 hover:bg-blue-700'}`}
-                                >
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                                              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                                    </svg>
-                                    <span>{isLoading ? '生成中...' : '生成图谱'}</span>
-                                </button>
+                            <div className="w-full relative">
+                                <div className="flex gap-3">
+                                    <div className="w-full">
+                                        <input
+                                            type="text"
+                                            value={searchInput}
+                                            onChange={(e) => setSearchInput(e.target.value)}
+                                            placeholder="输入感兴趣的产业链，例如：人形机器人、低空飞行器..."
+                                            disabled={isLoading}
+                                            className="w-full h-[46px] px-6 text-sm rounded-lg border border-gray-300 
+                                                     focus:border-blue-500 focus:ring-2 focus:ring-blue-200 
+                                                     transition-colors shadow-sm disabled:bg-gray-50 
+                                                     disabled:text-gray-500 disabled:cursor-not-allowed"
+                                        />
+                                        <div className="mt-2 text-[11px] text-gray-500 text-center">
+                                            <p>或直接点击下方的产业名称，快速生成对应的产业链图谱</p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        type="submit"
+                                        disabled={isLoading || !searchInput.trim()}
+                                        className={`h-[46px] px-6 text-white text-sm font-medium 
+                                                 rounded-lg transition-colors shadow-md 
+                                                 flex items-center justify-center gap-2 whitespace-nowrap
+                                                 ${isLoading 
+                                                   ? 'bg-gray-400 cursor-not-allowed' 
+                                                   : 'bg-blue-600 hover:bg-blue-700'}`}
+                                    >
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                        </svg>
+                                        <span>{isLoading ? '生成中' : '生成图谱'}</span>
+                                    </button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -212,7 +220,11 @@ export default function Home() {
 
                     {/* 底部创作者信息 */}
                     <footer className="text-center py-6 mt-auto border-t border-gray-100">
-                        <p className="text-sm text-gray-400">Created by lius with Cursor</p>
+                        <div className="flex items-center justify-center gap-2 text-[13px] text-[#666]">
+                            <span>Created by lius with Cursor</span>
+                            <span>|</span>
+                            <FeedbackButton />
+                        </div>
                     </footer>
                 </div>
             ) : (
