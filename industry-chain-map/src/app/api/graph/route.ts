@@ -50,28 +50,30 @@ async function callDifyApi(industryName: string) {
         
         const payload = {
             "inputs": {
-                "value_chain": industryName
+                "query": `请生成${industryName}的产业链数据，包括上中下游环节和代表性公司`
             },
             "response_mode": "blocking",
             "user": "default"
         };
 
         console.log('Sending request to Dify API:', {
-            url: `${DIFY_BASE_URL}/workflows/run`,
+            url: `${DIFY_BASE_URL}/completion-messages`,
             headers: {
                 ...headers,
                 Authorization: 'Bearer [HIDDEN]'
             },
-            payload
+            payload: JSON.stringify(payload, null, 2)
         });
 
-        const response = await fetch(`${DIFY_BASE_URL}/workflows/run`, {
+        const response = await fetch(`${DIFY_BASE_URL}/completion-messages`, {
             method: 'POST',
             headers,
             body: JSON.stringify(payload),
         });
 
         const responseText = await response.text();
+        console.log('Raw API Response Status:', response.status);
+        console.log('Raw API Response Headers:', Object.fromEntries(response.headers.entries()));
         console.log('Raw API Response Text:', responseText);
 
         if (!response.ok) {
@@ -81,33 +83,43 @@ async function callDifyApi(industryName: string) {
 
         let result;
         try {
+            // 检查responseText是否为空
+            if (!responseText.trim()) {
+                throw new Error('Empty response from API');
+            }
+            
             result = JSON.parse(responseText);
+            console.log('Successfully parsed response as JSON:', JSON.stringify(result, null, 2));
         } catch (parseError) {
             console.error('Failed to parse API response as JSON:', parseError);
-            throw new Error(`Invalid JSON response from API: ${responseText}`);
+            console.error('Response text that failed to parse:', responseText);
+            throw new Error(`Invalid JSON response from API: ${parseError.message}`);
         }
 
-        console.log('Parsed API Response:', JSON.stringify(result, null, 2));
-        
-        if (!result.data?.outputs?.text) {
+        if (!result.answer) {
             console.error('Invalid API Response Structure:', result);
-            throw new Error('Invalid response format from Dify API - missing data.outputs.text');
+            throw new Error('Invalid response format from Dify API - missing answer field');
         }
 
         try {
             // 处理Dify返回的数据格式
-            const rawText = result.data.outputs.text;
-            // 移除JSON代码块标记和前后的换行符
-            const jsonText = rawText.replace(/^```json\n|\n```$/g, '').trim();
-            console.log('Cleaned JSON text:', jsonText);
+            const rawText = result.answer;
+            console.log('Raw answer text:', rawText);
+
+            // 检查是否包含JSON代码块
+            const jsonMatch = rawText.match(/```json\n([\s\S]*?)\n```/);
+            const jsonText = jsonMatch ? jsonMatch[1].trim() : rawText.trim();
+            
+            console.log('Extracted JSON text:', jsonText);
             
             let data;
             try {
                 data = JSON.parse(jsonText);
+                console.log('Successfully parsed JSON data:', JSON.stringify(data, null, 2));
             } catch (parseError) {
                 console.error('JSON Parse Error:', parseError);
                 console.error('Invalid JSON text:', jsonText);
-                throw new Error(`Failed to parse JSON from text: ${jsonText}`);
+                throw new Error(`Failed to parse JSON from text: ${parseError.message}`);
             }
             
             // 检查数据结构
@@ -116,7 +128,9 @@ async function callDifyApi(industryName: string) {
                 throw new Error(`Invalid data structure - missing required fields. Got: ${JSON.stringify(data)}`);
             }
 
-            return transformToTree(data);
+            const result = transformToTree(data);
+            console.log('Final transformed result:', JSON.stringify(result, null, 2));
+            return result;
         } catch (error) {
             console.error('Error processing Dify API response:', error);
             throw error;
