@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import OfflineNotice from '@/components/OfflineNotice'
 
 export const metadata: Metadata = {
   title: '产业链图谱生成系统',
@@ -13,7 +14,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh">
-      <body>{children}</body>
+      <body>
+        {children}
+        <OfflineNotice />
+      </body>
     </html>
   )
 } 
