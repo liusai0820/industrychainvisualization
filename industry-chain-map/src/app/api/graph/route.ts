@@ -38,9 +38,11 @@ interface TransformedData {
 }
 
 interface DifyResponse {
-    answer: string;
-    id: string;
-    created_at: number;
+    data: {
+        outputs: {
+            text: string;
+        };
+    };
 }
 
 async function callDifyApi(industryName: string) {
@@ -56,14 +58,14 @@ async function callDifyApi(industryName: string) {
         
         const payload = {
             "inputs": {
-                "query": `请生成${industryName}的产业链数据，包括上中下游环节和代表性公司`
+                "value_chain": industryName
             },
             "response_mode": "blocking",
             "user": "default"
         };
 
         console.log('Sending request to Dify API:', {
-            url: `${DIFY_BASE_URL}/completion-messages`,
+            url: `${DIFY_BASE_URL}/workflows/run`,
             headers: {
                 ...headers,
                 Authorization: 'Bearer [HIDDEN]'
@@ -71,7 +73,7 @@ async function callDifyApi(industryName: string) {
             payload: JSON.stringify(payload, null, 2)
         });
 
-        const response = await fetch(`${DIFY_BASE_URL}/completion-messages`, {
+        const response = await fetch(`${DIFY_BASE_URL}/workflows/run`, {
             method: 'POST',
             headers,
             body: JSON.stringify(payload),
@@ -103,14 +105,14 @@ async function callDifyApi(industryName: string) {
             throw new Error(`Invalid JSON response from API: ${parseError.message}`);
         }
 
-        if (!difyResponse.answer) {
+        if (!difyResponse.data?.outputs?.text) {
             console.error('Invalid API Response Structure:', difyResponse);
-            throw new Error('Invalid response format from Dify API - missing answer field');
+            throw new Error('Invalid response format from Dify API - missing data.outputs.text field');
         }
 
         try {
             // 处理Dify返回的数据格式
-            const rawText = difyResponse.answer;
+            const rawText = difyResponse.data.outputs.text;
             console.log('Raw answer text:', rawText);
 
             // 检查是否包含JSON代码块
@@ -206,6 +208,18 @@ function transformToTree(data: RawData): TransformedData {
 export async function POST(request: NextRequest) {
     console.log('Received POST request to /api/graph');
     
+    // 添加CORS头
+    const headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    };
+
+    // 处理预检请求
+    if (request.method === 'OPTIONS') {
+        return new NextResponse(null, { status: 200, headers });
+    }
+    
     try {
         const body = await request.json();
         const { industryName } = body;
@@ -217,7 +231,7 @@ export async function POST(request: NextRequest) {
                     error: '请输入产业链名称',
                     data: null
                 },
-                { status: 400 }
+                { status: 400, headers }
             );
         }
 
@@ -239,13 +253,13 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ 
                 success: true, 
                 data: data
-            });
+            }, { headers });
         } catch (error) {
             console.error('Error processing data:', error);
             // 返回一个用户友好的错误响应
             return NextResponse.json({ 
                 success: false, 
-                error: '生成产业链图谱时出现错误，请稍后重试',
+                error: error instanceof Error ? error.message : '生成产业链图谱时出现错误，请稍后重试',
                 data: {
                     name: industryName,
                     children: [{
@@ -253,7 +267,7 @@ export async function POST(request: NextRequest) {
                         children: []
                     }]
                 }
-            }, { status: 200 }); // 使用 200 状态码，让前端能够正常处理
+            }, { status: 200, headers }); // 使用 200 状态码，让前端能够正常处理
         }
     } catch (error) {
         console.error('Error processing request:', error);
@@ -263,7 +277,7 @@ export async function POST(request: NextRequest) {
                 error: '请求处理失败，请检查输入格式是否正确',
                 data: null
             },
-            { status: 400 }
+            { status: 400, headers }
         );
     }
 } 
