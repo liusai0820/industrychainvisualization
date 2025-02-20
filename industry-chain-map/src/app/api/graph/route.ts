@@ -6,90 +6,6 @@ import { loadIndustryChainData } from '@/utils/dataLoader';
 const DIFY_BASE_URL = process.env.DIFY_BASE_URL || "https://api.dify.ai/v1";
 const INDUSTRY_CHAIN_API_KEY = process.env.DIFY_API_KEY;
 
-async function callDifyApi(industryName: string) {
-    if (!INDUSTRY_CHAIN_API_KEY) {
-        throw new Error('Dify API Key not configured');
-    }
-
-    try {
-        const headers = {
-            "Authorization": `Bearer ${INDUSTRY_CHAIN_API_KEY}`,
-            "Content-Type": "application/json"
-        };
-        
-        const payload = {
-            "inputs": {
-                "value_chain": industryName
-            },
-            "response_mode": "blocking",
-            "user": "default"
-        };
-
-        console.log('Sending request to Dify API:', {
-            url: `${DIFY_BASE_URL}/workflows/run`,
-            payload
-        });
-
-        const response = await fetch(`${DIFY_BASE_URL}/workflows/run`, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(payload),
-        });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('API Error Response:', errorText);
-            throw new Error(`Dify API request failed: ${response.status} ${errorText}`);
-        }
-
-        const result = await response.json();
-        console.log('Raw API Response:', JSON.stringify(result, null, 2));
-        
-        if (!result.data?.outputs?.text) {
-            console.error('Invalid API Response Structure:', result);
-            throw new Error('Invalid response format from Dify API');
-        }
-
-        try {
-            // 去掉 markdown 代码块标记，然后解析 JSON
-            const jsonText = result.data.outputs.text.replace(/```json\n|```/g, '').trim();
-            console.log('Cleaned JSON text:', jsonText);
-            
-            let data;
-            try {
-                data = JSON.parse(jsonText);
-            } catch (parseError) {
-                console.error('JSON Parse Error:', parseError);
-                console.error('Invalid JSON text:', jsonText);
-                throw new Error('Failed to parse JSON response from Dify API');
-            }
-            
-            // 检查数据结构
-            if (!data.产业链 || !Array.isArray(data.环节)) {
-                console.error('Data structure validation failed:', data);
-                throw new Error('Invalid data structure - missing required fields');
-            }
-
-            return transformToTree(data);
-        } catch (error) {
-            console.error('Error processing Dify API response:', error);
-            if (error instanceof Error) {
-                throw new Error(`Failed to process Dify API response: ${error.message}`);
-            } else {
-                throw new Error('Failed to process Dify API response: Unknown error');
-            }
-        }
-    } catch (error) {
-        console.error('Error in callDifyApi:', error);
-        if (error instanceof Error) {
-            throw error;
-        } else {
-            throw new Error('Unknown error in callDifyApi');
-        }
-    }
-}
-
-// 修改 transformToTree 函数的类型定义
 interface RawData {
     产业链: string;
     环节: Array<{
@@ -115,13 +31,100 @@ interface TransformedData {
                 name: string;
                 children?: Array<{
                     name: string;
-                    children?: Array<{
-                        name: string;
-                    }>;
                 }>;
             }>;
         }>;
     }>;
+}
+
+async function callDifyApi(industryName: string) {
+    if (!INDUSTRY_CHAIN_API_KEY) {
+        throw new Error('Dify API Key not configured');
+    }
+
+    try {
+        const headers = {
+            "Authorization": `Bearer ${INDUSTRY_CHAIN_API_KEY}`,
+            "Content-Type": "application/json"
+        };
+        
+        const payload = {
+            "inputs": {
+                "value_chain": industryName
+            },
+            "response_mode": "blocking",
+            "user": "default"
+        };
+
+        console.log('Sending request to Dify API:', {
+            url: `${DIFY_BASE_URL}/workflows/run`,
+            headers: {
+                ...headers,
+                Authorization: 'Bearer [HIDDEN]'
+            },
+            payload
+        });
+
+        const response = await fetch(`${DIFY_BASE_URL}/workflows/run`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(payload),
+        });
+
+        const responseText = await response.text();
+        console.log('Raw API Response Text:', responseText);
+
+        if (!response.ok) {
+            console.error('API Error Response:', responseText);
+            throw new Error(`Dify API request failed: ${response.status} ${responseText}`);
+        }
+
+        let result;
+        try {
+            result = JSON.parse(responseText);
+        } catch (parseError) {
+            console.error('Failed to parse API response as JSON:', parseError);
+            throw new Error(`Invalid JSON response from API: ${responseText}`);
+        }
+
+        console.log('Parsed API Response:', JSON.stringify(result, null, 2));
+        
+        if (!result.data?.outputs?.text) {
+            console.error('Invalid API Response Structure:', result);
+            throw new Error('Invalid response format from Dify API - missing data.outputs.text');
+        }
+
+        try {
+            // 处理Dify返回的数据格式
+            const rawText = result.data.outputs.text;
+            // 移除JSON代码块标记和前后的换行符
+            const jsonText = rawText.replace(/^```json\n|\n```$/g, '').trim();
+            console.log('Cleaned JSON text:', jsonText);
+            
+            let data;
+            try {
+                data = JSON.parse(jsonText);
+            } catch (parseError) {
+                console.error('JSON Parse Error:', parseError);
+                console.error('Invalid JSON text:', jsonText);
+                throw new Error(`Failed to parse JSON from text: ${jsonText}`);
+            }
+            
+            // 检查数据结构
+            if (!data.产业链 || !Array.isArray(data.环节)) {
+                console.error('Data structure validation failed:', data);
+                throw new Error(`Invalid data structure - missing required fields. Got: ${JSON.stringify(data)}`);
+            }
+
+            return transformToTree(data);
+        } catch (error) {
+            console.error('Error processing Dify API response:', error);
+            throw error;
+        }
+    } catch (error) {
+        console.error('Error in callDifyApi:', error);
+        throw error;
+    }
 }
 
 function transformToTree(data: RawData): TransformedData {
@@ -135,67 +138,20 @@ function transformToTree(data: RawData): TransformedData {
             throw new Error('Missing required fields in data structure');
         }
 
-        const transformed = {
+        const transformed: TransformedData = {
             name: data.产业链,
-            children: data.环节.map(segment => {
-                // 验证环节数据
-                if (!segment.环节名称 || !Array.isArray(segment.子环节)) {
-                    console.warn(`Invalid segment structure: ${JSON.stringify(segment)}`);
-                    return {
-                        name: segment.环节名称 || '未知环节',
-                        children: []
-                    };
-                }
-
-                return {
-                    name: segment.环节名称,
-                    children: segment.子环节.map(subSegment => {
-                        // 验证子环节数据
-                        if (!subSegment.子环节名称) {
-                            console.warn(`Invalid subSegment structure: ${JSON.stringify(subSegment)}`);
-                            return {
-                                name: '未知子环节',
-                                children: []
-                            };
-                        }
-
-                        // 处理特殊情况：直接包含代表公司的子环节
-                        if (Array.isArray(subSegment.代表公司)) {
-                            return {
-                                name: subSegment.子环节名称,
-                                children: subSegment.代表公司.map(company => ({
-                                    name: company
-                                }))
-                            };
-                        }
-
-                        // 处理常规情况：包含子-子环节的结构
-                        const subSubSegments = Array.isArray(subSegment['子-子环节']) 
-                            ? subSegment['子-子环节']
-                            : [];
-
-                        return {
-                            name: subSegment.子环节名称,
-                            children: subSubSegments.map(subSubSegment => {
-                                if (!subSubSegment['子-子环节名称'] || !Array.isArray(subSubSegment.代表公司)) {
-                                    console.warn(`Invalid subSubSegment structure: ${JSON.stringify(subSubSegment)}`);
-                                    return {
-                                        name: subSubSegment['子-子环节名称'] || '未知子-子环节',
-                                        children: []
-                                    };
-                                }
-
-                                return {
-                                    name: subSubSegment['子-子环节名称'],
-                                    children: subSubSegment.代表公司.map(company => ({
-                                        name: company
-                                    }))
-                                };
-                            })
-                        };
-                    })
-                };
-            })
+            children: data.环节.map(segment => ({
+                name: segment.环节名称 || '未知环节',
+                children: Array.isArray(segment.子环节) ? segment.子环节.map(subSegment => ({
+                    name: subSegment.子环节名称 || '未知子环节',
+                    children: Array.isArray(subSegment['子-子环节']) ? subSegment['子-子环节'].map(subSubSegment => ({
+                        name: subSubSegment['子-子环节名称'] || '未知子-子环节',
+                        children: Array.isArray(subSubSegment.代表公司) ? subSubSegment.代表公司.map(company => ({
+                            name: company
+                        })) : []
+                    })) : []
+                })) : []
+            }))
         };
 
         // 验证转换后的数据结构
