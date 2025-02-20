@@ -89,7 +89,7 @@ async function callDifyApi(industryName: string) {
 
         // 添加超时控制
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 50000); // 25 秒超时
+        const timeoutId = setTimeout(() => controller.abort(), 25000); // 25 秒超时
 
         try {
             const response = await fetch(requestUrl, {
@@ -106,7 +106,7 @@ async function callDifyApi(industryName: string) {
                 statusText: response.statusText,
                 headers: Object.fromEntries(response.headers.entries()),
                 responseLength: responseText.length,
-                responsePreview: responseText.substring(0, 200) // 只显示前200个字符
+                responsePreview: responseText.substring(0, 200)
             });
 
             if (!response.ok) {
@@ -185,9 +185,9 @@ async function callDifyApi(industryName: string) {
             const transformedResult = transformToTree(data);
             console.log('Final transformed result:', JSON.stringify(transformedResult, null, 2));
             return transformedResult;
-        } catch (error) {
+        } catch (error: unknown) {
             clearTimeout(timeoutId);
-            if (error.name === 'AbortError') {
+            if (error instanceof Error && error.name === 'AbortError') {
                 console.error('Request timeout');
                 throw new Error('请求超时，请稍后重试');
             }
