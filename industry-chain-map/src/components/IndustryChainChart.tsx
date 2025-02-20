@@ -7,11 +7,16 @@ import html2canvas from 'html2canvas';
 
 interface IndustryChainChartProps {
     data: IndustryChainData;
+    options?: {
+        tooltip?: {
+            show?: boolean;
+        };
+    };
 }
 
 type Html2CanvasOptions = Parameters<typeof html2canvas>[1];
 
-export default function IndustryChainChart({ data }: IndustryChainChartProps) {
+export default function IndustryChainChart({ data, options = {} }: IndustryChainChartProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [error] = useState<string | null>(null);
     const [, setLayout] = useState<LayoutConfig[]>([]);
@@ -208,6 +213,7 @@ export default function IndustryChainChart({ data }: IndustryChainChartProps) {
                                     index === 1 ? 'bg-green-50' :
                                     'bg-red-50'
                                 }`}
+                                options={options}
                             />
                         ))}
                     </div>
@@ -221,9 +227,10 @@ interface MainSectionCardProps {
     section: MainSection;
     index: number;
     className?: string;
+    options?: IndustryChainChartProps['options'];
 }
 
-function MainSectionCard({ section, index, className = '' }: MainSectionCardProps) {
+function MainSectionCard({ section, index, className = '', options }: MainSectionCardProps) {
     const borderColor = index === 0 ? 'border-indigo-200' :
                        index === 1 ? 'border-green-200' :
                        'border-red-200';
@@ -249,6 +256,7 @@ function MainSectionCard({ section, index, className = '' }: MainSectionCardProp
                         key={subSection.name}
                         subSection={subSection}
                         index={index}
+                        options={options}
                     />
                 ))}
             </div>
@@ -259,9 +267,10 @@ function MainSectionCard({ section, index, className = '' }: MainSectionCardProp
 interface SubSectionCardProps {
     subSection: SubSection;
     index: number;
+    options?: IndustryChainChartProps['options'];
 }
 
-function SubSectionCard({ subSection, index }: SubSectionCardProps) {
+function SubSectionCard({ subSection, index, options }: SubSectionCardProps) {
     const borderColor = index === 0 ? 'border-indigo-200' :
                        index === 1 ? 'border-green-200' :
                        'border-red-200';
@@ -288,6 +297,7 @@ function SubSectionCard({ subSection, index }: SubSectionCardProps) {
                         key={subSubSection.name}
                         subSubSection={subSubSection}
                         isCompact={isCompact}
+                        options={options}
                     />
                 ))}
             </div>
@@ -298,9 +308,10 @@ function SubSectionCard({ subSection, index }: SubSectionCardProps) {
 interface SubSubSectionCardProps {
     subSubSection: SubSubSection;
     isCompact: boolean;
+    options?: IndustryChainChartProps['options'];
 }
 
-function SubSubSectionCard({ subSubSection, isCompact }: SubSubSectionCardProps) {
+function SubSubSectionCard({ subSubSection, isCompact, options }: SubSubSectionCardProps) {
     const companiesCount = subSubSection.children?.length || 0;
     
     // 简化卡片样式
@@ -326,6 +337,7 @@ function SubSubSectionCard({ subSubSection, isCompact }: SubSubSectionCardProps)
                         key={company.name} 
                         company={company}
                         isSingle={companiesCount === 1}
+                        options={options}
                     />
                 ))}
             </div>
@@ -336,9 +348,12 @@ function SubSubSectionCard({ subSubSection, isCompact }: SubSubSectionCardProps)
 interface CompanyItemProps {
     company: Company;
     isSingle?: boolean;
+    options?: IndustryChainChartProps['options'];
 }
 
-function CompanyItem({ company, isSingle = false }: CompanyItemProps) {
+function CompanyItem({ company, isSingle = false, options }: CompanyItemProps) {
+    const showTooltip = options?.tooltip?.show ?? true;
+    
     return (
         <div 
             className={`text-[11px] text-gray-600 relative h-7 flex items-center
@@ -347,10 +362,12 @@ function CompanyItem({ company, isSingle = false }: CompanyItemProps) {
                      px-1 min-w-0`}
         >
             <span className="block leading-none whitespace-normal break-words">{company.name}</span>
-            <span className="absolute left-0 top-full mt-1 bg-white shadow-lg px-2 py-1 rounded 
-                         invisible group-hover:visible z-10 whitespace-nowrap">
-                {company.name}
-            </span>
+            {showTooltip && (
+                <span className="absolute left-0 top-full mt-1 bg-white shadow-lg px-2 py-1 rounded 
+                             invisible group-hover:visible z-10 whitespace-nowrap">
+                    {company.name}
+                </span>
+            )}
         </div>
     );
 }

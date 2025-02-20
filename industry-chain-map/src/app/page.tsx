@@ -227,7 +227,16 @@ export default function Home() {
                         </svg>
                         <span>返回首页</span>
                     </button>
-                    {data && <IndustryChainChart data={data} />}
+                    {data && (
+                        <IndustryChainChart 
+                            data={data} 
+                            options={{
+                                tooltip: {
+                                    show: false
+                                }
+                            }}
+                        />
+                    )}
                 </div>
             )}
         </main>

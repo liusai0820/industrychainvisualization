@@ -45,6 +45,11 @@ interface DifyResponse {
     };
 }
 
+interface TreeNode {
+    name: string;
+    children: TreeNode[];
+}
+
 async function callDifyApi(industryName: string) {
     if (!INDUSTRY_CHAIN_API_KEY) {
         throw new Error('Dify API Key not configured');
@@ -91,9 +96,14 @@ async function callDifyApi(industryName: string) {
 
         let difyResponse: DifyResponse;
         try {
-            // 检查responseText是否为空
+            // 检查responseText是否为空或者是否包含错误信息
             if (!responseText.trim()) {
                 throw new Error('Empty response from API');
+            }
+            
+            // 尝试检测是否是错误消息
+            if (responseText.includes('An error occurred') || responseText.startsWith('An error')) {
+                throw new Error(responseText);
             }
             
             difyResponse = JSON.parse(responseText) as DifyResponse;
@@ -102,6 +112,12 @@ async function callDifyApi(industryName: string) {
             const parseError = error as Error;
             console.error('Failed to parse API response as JSON:', parseError);
             console.error('Response text that failed to parse:', responseText);
+            
+            // 如果响应包含错误信息，直接抛出该错误
+            if (responseText.includes('An error occurred') || responseText.startsWith('An error')) {
+                throw new Error(responseText);
+            }
+            
             throw new Error(`Invalid JSON response from API: ${parseError.message}`);
         }
 
@@ -110,41 +126,41 @@ async function callDifyApi(industryName: string) {
             throw new Error('Invalid response format from Dify API - missing data.outputs.text field');
         }
 
-        try {
-            // 处理Dify返回的数据格式
-            const rawText = difyResponse.data.outputs.text;
-            console.log('Raw answer text:', rawText);
+        const rawText = difyResponse.data.outputs.text;
+        console.log('Raw answer text:', rawText);
 
-            // 检查是否包含JSON代码块
-            const jsonMatch = rawText.match(/```json\n([\s\S]*?)\n```/);
-            const jsonText = jsonMatch ? jsonMatch[1].trim() : rawText.trim();
-            
-            console.log('Extracted JSON text:', jsonText);
-            
-            let data: RawData;
-            try {
-                data = JSON.parse(jsonText) as RawData;
-                console.log('Successfully parsed JSON data:', JSON.stringify(data, null, 2));
-            } catch (error) {
-                const parseError = error as Error;
-                console.error('JSON Parse Error:', parseError);
-                console.error('Invalid JSON text:', jsonText);
-                throw new Error(`Failed to parse JSON from text: ${parseError.message}`);
-            }
-            
-            // 检查数据结构
-            if (!data.产业链 || !Array.isArray(data.环节)) {
-                console.error('Data structure validation failed:', data);
-                throw new Error(`Invalid data structure - missing required fields. Got: ${JSON.stringify(data)}`);
-            }
-
-            const transformedResult = transformToTree(data);
-            console.log('Final transformed result:', JSON.stringify(transformedResult, null, 2));
-            return transformedResult;
-        } catch (error) {
-            console.error('Error processing Dify API response:', error);
-            throw error;
+        // 尝试提取JSON部分
+        let jsonText = '';
+        const jsonBlockMatch = rawText.match(/```json\n([\s\S]*?)\n```/);
+        if (jsonBlockMatch) {
+            jsonText = jsonBlockMatch[1].trim();
+        } else {
+            // 如果没有JSON代码块标记，尝试直接解析整个文本
+            jsonText = rawText.trim();
         }
+        
+        console.log('Extracted JSON text:', jsonText);
+        
+        let data: RawData;
+        try {
+            data = JSON.parse(jsonText) as RawData;
+            console.log('Successfully parsed JSON data:', JSON.stringify(data, null, 2));
+        } catch (error) {
+            const parseError = error as Error;
+            console.error('JSON Parse Error:', parseError);
+            console.error('Invalid JSON text:', jsonText);
+            throw new Error(`Failed to parse JSON from text: ${parseError.message}`);
+        }
+        
+        // 检查数据结构
+        if (!data.产业链 || !Array.isArray(data.环节)) {
+            console.error('Data structure validation failed:', data);
+            throw new Error(`Invalid data structure - missing required fields. Got: ${JSON.stringify(data)}`);
+        }
+
+        const transformedResult = transformToTree(data);
+        console.log('Final transformed result:', JSON.stringify(transformedResult, null, 2));
+        return transformedResult;
     } catch (error) {
         console.error('Error in callDifyApi:', error);
         throw error;
@@ -162,36 +178,74 @@ function transformToTree(data: RawData): TransformedData {
             throw new Error('Missing required fields in data structure');
         }
 
+        // 创建根节点
         const transformed: TransformedData = {
             name: data.产业链,
-            children: data.环节.map(segment => ({
-                name: segment.环节名称 || '未知环节',
-                children: Array.isArray(segment.子环节) ? segment.子环节.map(subSegment => ({
-                    name: subSegment.子环节名称 || '未知子环节',
-                    children: Array.isArray(subSegment['子-子环节']) ? subSegment['子-子环节'].map(subSubSegment => ({
-                        name: subSubSegment['子-子环节名称'] || '未知子-子环节',
-                        children: Array.isArray(subSubSegment.代表公司) ? subSubSegment.代表公司.map(company => ({
-                            name: company
-                        })) : []
-                    })) : []
-                })) : []
-            }))
+            children: []
         };
+
+        // 处理每个环节
+        transformed.children = data.环节.map(segment => {
+            const segmentNode: TreeNode = {
+                name: segment.环节名称,
+                children: []
+            };
+
+            // 处理子环节
+            if (Array.isArray(segment.子环节)) {
+                segmentNode.children = segment.子环节.map(subSegment => {
+                    const subSegmentNode: TreeNode = {
+                        name: subSegment.子环节名称,
+                        children: []
+                    };
+
+                    // 处理子-子环节
+                    if (Array.isArray(subSegment['子-子环节'])) {
+                        subSegmentNode.children = subSegment['子-子环节'].map(subSubSegment => {
+                            const subSubSegmentNode: TreeNode = {
+                                name: subSubSegment['子-子环节名称'],
+                                children: []
+                            };
+
+                            // 处理代表公司
+                            if (Array.isArray(subSubSegment.代表公司)) {
+                                subSubSegmentNode.children = subSubSegment.代表公司.map(company => ({
+                                    name: company,
+                                    children: []
+                                }));
+                            }
+
+                            return subSubSegmentNode;
+                        });
+                    }
+
+                    return subSegmentNode;
+                });
+            }
+
+            return segmentNode;
+        });
 
         // 验证转换后的数据结构
         if (!transformed.name || !Array.isArray(transformed.children)) {
+            console.error('Invalid transformed data:', transformed);
             throw new Error('Transformed data structure is invalid');
         }
 
+        // 记录转换结果的统计信息
         console.log('Data transformation successful:', {
             name: transformed.name,
-            childrenCount: transformed.children.length
+            topLevelNodes: transformed.children.length,
+            structure: transformed.children.map(node => ({
+                name: node.name,
+                childCount: node.children.length
+            }))
         });
 
         return transformed;
     } catch (error) {
         console.error('Error in transformToTree:', error);
-        // 返回一个基础的错误数据结构，而不是抛出错误
+        // 返回一个基础的错误数据结构
         return {
             name: '数据处理出错',
             children: [{
@@ -224,7 +278,10 @@ export async function POST(request: NextRequest) {
         const body = await request.json();
         const { industryName } = body;
 
+        console.log('Processing request for industry:', industryName);
+
         if (!industryName) {
+            console.warn('No industry name provided in request');
             return NextResponse.json(
                 { 
                     success: false, 
@@ -245,10 +302,24 @@ export async function POST(request: NextRequest) {
             if (presetIndustry) {
                 console.log('Loading preset data for:', presetIndustry.id);
                 data = await loadIndustryChainData(presetIndustry.id);
+                console.log('Successfully loaded preset data');
             } else {
                 console.log('Calling Dify API for:', industryName);
                 data = await callDifyApi(industryName);
+                console.log('Successfully received and transformed Dify API response');
             }
+
+            // 验证返回的数据结构
+            if (!data || typeof data !== 'object' || !data.name || !Array.isArray(data.children)) {
+                console.error('Invalid data structure returned:', data);
+                throw new Error('Invalid data structure returned from processing');
+            }
+
+            console.log('Returning successful response with data structure:', {
+                name: data.name,
+                childrenCount: data.children.length,
+                totalNodes: JSON.stringify(data).match(/"name":/g)?.length || 0
+            });
 
             return NextResponse.json({ 
                 success: true, 
@@ -257,9 +328,12 @@ export async function POST(request: NextRequest) {
         } catch (error) {
             console.error('Error processing data:', error);
             // 返回一个用户友好的错误响应
+            const errorMessage = error instanceof Error ? error.message : '生成产业链图谱时出现错误，请稍后重试';
+            console.log('Returning error response:', errorMessage);
+            
             return NextResponse.json({ 
                 success: false, 
-                error: error instanceof Error ? error.message : '生成产业链图谱时出现错误，请稍后重试',
+                error: errorMessage,
                 data: {
                     name: industryName,
                     children: [{
