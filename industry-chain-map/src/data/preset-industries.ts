@@ -10,28 +10,28 @@ export const PRESET_INDUSTRIES: IndustryCategory[] = [
                 id: 'network-comm',
                 name: '网络与通信',
                 category: 'strategic',
-                icon: '🌐',
+                icon: '📡',
                 description: '新一代通信网络技术与设备'
             },
             {
                 id: 'semiconductor',
                 name: '半导体与集成电路',
                 category: 'strategic',
-                icon: '🔧',
+                icon: '🔲',
                 description: '芯片设计与制造'
             },
             {
                 id: 'ultra-hd',
                 name: '超高清视频显示',
                 category: 'strategic',
-                icon: '📺',
+                icon: '🖥️',
                 description: '新型显示技术与设备'
             },
             {
                 id: 'smart-terminal',
                 name: '智能终端',
                 category: 'strategic',
-                icon: '📱',
+                icon: '📳',
                 description: '智能手机及智能硬件'
             },
             {
@@ -45,7 +45,7 @@ export const PRESET_INDUSTRIES: IndustryCategory[] = [
                 id: 'software',
                 name: '软件与信息服务',
                 category: 'strategic',
-                icon: '💻',
+                icon: '📲',
                 description: '软件开发与信息服务'
             },
             {
@@ -66,7 +66,7 @@ export const PRESET_INDUSTRIES: IndustryCategory[] = [
                 id: 'industrial-machine',
                 name: '工业母机',
                 category: 'strategic',
-                icon: '⚙️',
+                icon: '🏭',
                 description: '高端工业装备'
             },
             {
@@ -80,21 +80,21 @@ export const PRESET_INDUSTRIES: IndustryCategory[] = [
                 id: 'laser-manufacturing',
                 name: '激光与增材制造',
                 category: 'strategic',
-                icon: '🔆',
+                icon: '⚡',
                 description: '3D打印与激光技术'
             },
             {
                 id: 'precision-instrument',
                 name: '精密仪器设备',
                 category: 'strategic',
-                icon: '📊',
+                icon: '🔬',
                 description: '精密测量与控制设备'
             },
             {
                 id: 'new-energy',
                 name: '新能源',
                 category: 'strategic',
-                icon: '⚡',
+                icon: '☀️',
                 description: '清洁能源技术与设备'
             },
             {
@@ -136,7 +136,7 @@ export const PRESET_INDUSTRIES: IndustryCategory[] = [
                 id: 'healthcare',
                 name: '大健康',
                 category: 'strategic',
-                icon: '🌿',
+                icon: '💆',
                 description: '健康服务与管理'
             },
             {
@@ -164,21 +164,21 @@ export const PRESET_INDUSTRIES: IndustryCategory[] = [
                 id: 'blockchain',
                 name: '区块链技术',
                 category: 'future',
-                icon: '⛓️',
+                icon: '₿',
                 description: '区块链技术研发与应用'
             },
             {
                 id: 'cell-gene',
                 name: '细胞与基因技术',
                 category: 'future',
-                icon: '🔬',
+                icon: '🦠',
                 description: '细胞与基因治疗技术'
             },
             {
                 id: 'aerospace',
                 name: '空天技术',
                 category: 'future',
-                icon: '🛸',
+                icon: '🚀',
                 description: '航空航天技术研发'
             },
             {
@@ -192,7 +192,7 @@ export const PRESET_INDUSTRIES: IndustryCategory[] = [
                 id: 'deep-tech',
                 name: '深地深海技术',
                 category: 'future',
-                icon: '🌋',
+                icon: '🌊',
                 description: '深地深海资源开发'
             },
             {
