@@ -52,8 +52,15 @@ interface TreeNode {
 
 async function callDifyApi(industryName: string) {
     if (!INDUSTRY_CHAIN_API_KEY) {
+        console.error('Missing DIFY_API_KEY environment variable');
         throw new Error('Dify API Key not configured');
     }
+
+    console.log('Environment check:', {
+        DIFY_BASE_URL: DIFY_BASE_URL,
+        API_KEY_EXISTS: !!INDUSTRY_CHAIN_API_KEY,
+        API_KEY_LENGTH: INDUSTRY_CHAIN_API_KEY?.length
+    });
 
     try {
         const headers = {
@@ -69,28 +76,38 @@ async function callDifyApi(industryName: string) {
             "user": "default"
         };
 
-        console.log('Sending request to Dify API:', {
-            url: `${DIFY_BASE_URL}/workflows/run`,
+        const requestUrl = `${DIFY_BASE_URL}/workflows/run`;
+        console.log('Request details:', {
+            url: requestUrl,
+            method: 'POST',
             headers: {
-                ...headers,
-                Authorization: 'Bearer [HIDDEN]'
+                'Content-Type': headers['Content-Type'],
+                'Authorization': 'Bearer [HIDDEN]'
             },
             payload: JSON.stringify(payload, null, 2)
         });
 
-        const response = await fetch(`${DIFY_BASE_URL}/workflows/run`, {
+        const response = await fetch(requestUrl, {
             method: 'POST',
             headers,
             body: JSON.stringify(payload),
         });
 
         const responseText = await response.text();
-        console.log('Raw API Response Status:', response.status);
-        console.log('Raw API Response Headers:', Object.fromEntries(response.headers.entries()));
-        console.log('Raw API Response Text:', responseText);
+        console.log('API Response details:', {
+            status: response.status,
+            statusText: response.statusText,
+            headers: Object.fromEntries(response.headers.entries()),
+            responseLength: responseText.length,
+            responsePreview: responseText.substring(0, 200) // 只显示前200个字符
+        });
 
         if (!response.ok) {
-            console.error('API Error Response:', responseText);
+            console.error('API Error:', {
+                status: response.status,
+                statusText: response.statusText,
+                response: responseText
+            });
             throw new Error(`Dify API request failed: ${response.status} ${responseText}`);
         }
 
