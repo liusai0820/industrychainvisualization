@@ -103,36 +103,88 @@ const transformData = (rawData: RawIndustryData): IndustryChainData => {
 
 // 从 Dify API 获取数据
 const fetchFromDifyApi = async (industryName: string): Promise<IndustryChainData> => {
-    try {
-        const response = await fetch('/api/graph', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ industryName }),
-        });
+    const maxRetries = 3;
+    const baseDelay = 3000; // 增加到3秒
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to fetch data from API');
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+        try {
+            if (attempt > 0) {
+                // 指数退避策略，增加等待时间
+                const delay = baseDelay * Math.pow(2, attempt);
+                console.log(`Retry attempt ${attempt + 1}, waiting ${delay}ms`);
+                await new Promise(resolve => setTimeout(resolve, delay));
+            }
+
+            const response = await fetch('/api/graph', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ industryName }),
+                // 添加更多的 fetch 选项
+                cache: 'no-cache',
+                keepalive: true,
+                // 设置前端请求超时为90秒
+                signal: AbortSignal.timeout(90000)
+            });
+
+            // 检查是否是超时或服务器错误
+            if (response.status >= 500 || response.status === 408) {
+                console.log(`Received error status ${response.status}, will retry`);
+                if (attempt === maxRetries - 1) {
+                    throw new Error('服务暂时不可用，请稍后重试');
+                }
+                continue;
+            }
+
+            let result;
+            try {
+                result = await response.json();
+            } catch (error) {
+                console.error('Failed to parse response as JSON:', error);
+                throw new Error('服务响应格式错误，请稍后重试');
+            }
+
+            // 检查响应状态
+            if (!response.ok) {
+                console.error('API Error:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    result
+                });
+                throw new Error(result.error || `请求失败: ${response.status}`);
+            }
+
+            // 检查响应数据
+            if (!result.success || !result.data) {
+                console.error('Invalid API Response:', result);
+                const errorMessage = result.error || '获取数据失败，请稍后重试';
+                if (attempt < maxRetries - 1) {
+                    console.log(`Retrying due to invalid response (attempt ${attempt + 1})`);
+                    continue;
+                }
+                throw new Error(errorMessage);
+            }
+
+            // 添加数据验证
+            if (!result.data.name || !Array.isArray(result.data.children)) {
+                console.error('Invalid data structure:', result.data);
+                throw new Error('数据格式错误，请稍后重试');
+            }
+
+            return result.data;
+        } catch (error) {
+            console.error(`Attempt ${attempt + 1} failed:`, error);
+            
+            // 如果是最后一次尝试，抛出错误
+            if (attempt === maxRetries - 1) {
+                throw new Error(`生成产业链数据失败: ${error instanceof Error ? error.message : '未知错误'}`);
+            }
         }
-
-        const result = await response.json();
-        if (!result.success || !result.data) {
-            throw new Error(result.error || 'API request failed');
-        }
-
-        // 检查转换后的数据结构
-        if (!result.data.name || !Array.isArray(result.data.children)) {
-            console.error('Invalid transformed data structure:', result.data);
-            throw new Error('Invalid data structure received from API');
-        }
-
-        return result.data;
-    } catch (error) {
-        console.error('Error fetching from Dify API:', error);
-        throw new Error(`Failed to generate industry chain data: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
+
+    // 这行代码理论上永远不会执行，因为在最后一次重试失败时会抛出错误
+    throw new Error('所有重试都失败了');
 };
 
 // 加载产业链数据

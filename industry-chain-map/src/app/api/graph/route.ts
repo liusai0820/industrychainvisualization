@@ -62,140 +62,169 @@ async function callDifyApi(industryName: string) {
         API_KEY_LENGTH: INDUSTRY_CHAIN_API_KEY?.length
     });
 
-    try {
-        const headers = {
-            "Authorization": `Bearer ${INDUSTRY_CHAIN_API_KEY}`,
-            "Content-Type": "application/json"
-        };
-        
-        const payload = {
-            "inputs": {
-                "value_chain": industryName
-            },
-            "response_mode": "blocking",
-            "user": "default"
-        };
+    const maxRetries = 3;
+    const baseDelay = 2000; // 增加到2秒
 
-        const requestUrl = `${DIFY_BASE_URL}/workflows/run`;
-        console.log('Request details:', {
-            url: requestUrl,
-            method: 'POST',
-            headers: {
-                'Content-Type': headers['Content-Type'],
-                'Authorization': 'Bearer [HIDDEN]'
-            },
-            payload: JSON.stringify(payload, null, 2)
-        });
-
-        // 添加超时控制
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 25000); // 25 秒超时
-
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
         try {
-            const response = await fetch(requestUrl, {
+            if (attempt > 0) {
+                // 指数退避策略，增加等待时间
+                const delay = baseDelay * Math.pow(2, attempt);
+                console.log(`Retry attempt ${attempt + 1}, waiting ${delay}ms`);
+                await new Promise(resolve => setTimeout(resolve, delay));
+            }
+
+            const headers = {
+                "Authorization": `Bearer ${INDUSTRY_CHAIN_API_KEY}`,
+                "Content-Type": "application/json"
+            };
+            
+            const payload = {
+                "inputs": {
+                    "value_chain": industryName
+                },
+                "response_mode": "blocking",
+                "user": "default"
+            };
+
+            const requestUrl = `${DIFY_BASE_URL}/workflows/run`;
+            console.log('Request details:', {
+                url: requestUrl,
                 method: 'POST',
-                headers,
-                body: JSON.stringify(payload),
-                signal: controller.signal
-            });
-            clearTimeout(timeoutId);
-
-            const responseText = await response.text();
-            console.log('API Response details:', {
-                status: response.status,
-                statusText: response.statusText,
-                headers: Object.fromEntries(response.headers.entries()),
-                responseLength: responseText.length,
-                responsePreview: responseText.substring(0, 200)
+                headers: {
+                    'Content-Type': headers['Content-Type'],
+                    'Authorization': 'Bearer [HIDDEN]'
+                },
+                payload: JSON.stringify(payload, null, 2)
             });
 
-            if (!response.ok) {
-                console.error('API Error:', {
+            // 增加超时时间到60秒
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 60000); // 60秒超时
+
+            try {
+                const response = await fetch(requestUrl, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify(payload),
+                    signal: controller.signal,
+                    // 添加更多的 fetch 选项
+                    cache: 'no-cache',
+                    keepalive: true
+                });
+                clearTimeout(timeoutId);
+
+                const responseText = await response.text();
+                console.log('API Response details:', {
                     status: response.status,
                     statusText: response.statusText,
-                    response: responseText
+                    headers: Object.fromEntries(response.headers.entries()),
+                    responseLength: responseText.length,
+                    responsePreview: responseText.substring(0, 200)
                 });
-                throw new Error(`Dify API request failed: ${response.status} ${responseText}`);
-            }
 
-            let difyResponse: DifyResponse;
-            try {
-                // 检查responseText是否为空或者是否包含错误信息
-                if (!responseText.trim()) {
-                    throw new Error('Empty response from API');
+                // 如果是502错误或超时错误，继续重试
+                if (response.status === 502 || response.status === 504 || response.status === 408) {
+                    console.log(`Received ${response.status} error, will retry`);
+                    continue;
+                }
+
+                if (!response.ok) {
+                    console.error('API Error:', {
+                        status: response.status,
+                        statusText: response.statusText,
+                        response: responseText,
+                        headers: Object.fromEntries(response.headers.entries()),
+                        requestUrl,
+                        attempt: attempt + 1
+                    });
+                    
+                    // 如果是最后一次重试，抛出错误
+                    if (attempt === maxRetries - 1) {
+                        throw new Error(`Dify API request failed: ${response.status} ${responseText}`);
+                    }
+                    continue;
+                }
+
+                let difyResponse: DifyResponse;
+                try {
+                    // 检查responseText是否为空或者是否包含错误信息
+                    if (!responseText.trim()) {
+                        throw new Error('Empty response from API');
+                    }
+                    
+                    // 尝试检测是否是错误消息
+                    if (responseText.includes('An error occurred') || responseText.startsWith('An error')) {
+                        throw new Error(responseText);
+                    }
+                    
+                    difyResponse = JSON.parse(responseText) as DifyResponse;
+                    console.log('Successfully parsed response as JSON:', JSON.stringify(difyResponse, null, 2));
+                } catch (error) {
+                    const parseError = error as Error;
+                    console.error('Failed to parse API response as JSON:', parseError);
+                    console.error('Response text that failed to parse:', responseText);
+                    
+                    // 如果响应包含错误信息，直接抛出该错误
+                    if (responseText.includes('An error occurred') || responseText.startsWith('An error')) {
+                        throw new Error(responseText);
+                    }
+                    
+                    throw new Error(`Invalid JSON response from API: ${parseError.message}`);
+                }
+
+                if (!difyResponse.data?.outputs?.text) {
+                    console.error('Invalid API Response Structure:', difyResponse);
+                    throw new Error('Invalid response format from Dify API - missing data.outputs.text field');
+                }
+
+                const rawText = difyResponse.data.outputs.text;
+                console.log('Raw answer text:', rawText);
+
+                // 尝试提取JSON部分
+                let jsonText = '';
+                const jsonBlockMatch = rawText.match(/```json\n([\s\S]*?)\n```/);
+                if (jsonBlockMatch) {
+                    jsonText = jsonBlockMatch[1].trim();
+                } else {
+                    // 如果没有JSON代码块标记，尝试直接解析整个文本
+                    jsonText = rawText.trim();
                 }
                 
-                // 尝试检测是否是错误消息
-                if (responseText.includes('An error occurred') || responseText.startsWith('An error')) {
-                    throw new Error(responseText);
+                console.log('Extracted JSON text:', jsonText);
+                
+                let data: RawData;
+                try {
+                    data = JSON.parse(jsonText) as RawData;
+                    console.log('Successfully parsed JSON data:', JSON.stringify(data, null, 2));
+                } catch (error) {
+                    const parseError = error as Error;
+                    console.error('JSON Parse Error:', parseError);
+                    console.error('Invalid JSON text:', jsonText);
+                    throw new Error(`Failed to parse JSON from text: ${parseError.message}`);
                 }
                 
-                difyResponse = JSON.parse(responseText) as DifyResponse;
-                console.log('Successfully parsed response as JSON:', JSON.stringify(difyResponse, null, 2));
-            } catch (error) {
-                const parseError = error as Error;
-                console.error('Failed to parse API response as JSON:', parseError);
-                console.error('Response text that failed to parse:', responseText);
-                
-                // 如果响应包含错误信息，直接抛出该错误
-                if (responseText.includes('An error occurred') || responseText.startsWith('An error')) {
-                    throw new Error(responseText);
+                // 检查数据结构
+                if (!data.产业链 || !Array.isArray(data.环节)) {
+                    console.error('Data structure validation failed:', data);
+                    throw new Error(`Invalid data structure - missing required fields. Got: ${JSON.stringify(data)}`);
                 }
-                
-                throw new Error(`Invalid JSON response from API: ${parseError.message}`);
-            }
 
-            if (!difyResponse.data?.outputs?.text) {
-                console.error('Invalid API Response Structure:', difyResponse);
-                throw new Error('Invalid response format from Dify API - missing data.outputs.text field');
+                const transformedResult = transformToTree(data);
+                console.log('Final transformed result:', JSON.stringify(transformedResult, null, 2));
+                return transformedResult;
+            } catch (error: unknown) {
+                clearTimeout(timeoutId);
+                if (error instanceof Error && error.name === 'AbortError') {
+                    console.error('Request timeout');
+                    throw new Error('请求超时，请稍后重试');
+                }
+                throw error;
             }
-
-            const rawText = difyResponse.data.outputs.text;
-            console.log('Raw answer text:', rawText);
-
-            // 尝试提取JSON部分
-            let jsonText = '';
-            const jsonBlockMatch = rawText.match(/```json\n([\s\S]*?)\n```/);
-            if (jsonBlockMatch) {
-                jsonText = jsonBlockMatch[1].trim();
-            } else {
-                // 如果没有JSON代码块标记，尝试直接解析整个文本
-                jsonText = rawText.trim();
-            }
-            
-            console.log('Extracted JSON text:', jsonText);
-            
-            let data: RawData;
-            try {
-                data = JSON.parse(jsonText) as RawData;
-                console.log('Successfully parsed JSON data:', JSON.stringify(data, null, 2));
-            } catch (error) {
-                const parseError = error as Error;
-                console.error('JSON Parse Error:', parseError);
-                console.error('Invalid JSON text:', jsonText);
-                throw new Error(`Failed to parse JSON from text: ${parseError.message}`);
-            }
-            
-            // 检查数据结构
-            if (!data.产业链 || !Array.isArray(data.环节)) {
-                console.error('Data structure validation failed:', data);
-                throw new Error(`Invalid data structure - missing required fields. Got: ${JSON.stringify(data)}`);
-            }
-
-            const transformedResult = transformToTree(data);
-            console.log('Final transformed result:', JSON.stringify(transformedResult, null, 2));
-            return transformedResult;
-        } catch (error: unknown) {
-            clearTimeout(timeoutId);
-            if (error instanceof Error && error.name === 'AbortError') {
-                console.error('Request timeout');
-                throw new Error('请求超时，请稍后重试');
-            }
+        } catch (error) {
+            console.error('Error in callDifyApi:', error);
             throw error;
         }
-    } catch (error) {
-        console.error('Error in callDifyApi:', error);
-        throw error;
     }
 }
 
@@ -324,13 +353,13 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        let data;
         try {
             // 检查是否是预设产业
             const presetIndustry = PRESET_INDUSTRIES.flatMap(category => 
                 category.industries
             ).find(ind => ind.name === industryName || ind.id === industryName);
 
+            let data;
             if (presetIndustry) {
                 console.log('Loading preset data for:', presetIndustry.id);
                 data = await loadIndustryChainData(presetIndustry.id);
@@ -344,14 +373,8 @@ export async function POST(request: NextRequest) {
             // 验证返回的数据结构
             if (!data || typeof data !== 'object' || !data.name || !Array.isArray(data.children)) {
                 console.error('Invalid data structure returned:', data);
-                throw new Error('Invalid data structure returned from processing');
+                throw new Error('生成的数据结构无效，请稍后重试');
             }
-
-            console.log('Returning successful response with data structure:', {
-                name: data.name,
-                childrenCount: data.children.length,
-                totalNodes: JSON.stringify(data).match(/"name":/g)?.length || 0
-            });
 
             return NextResponse.json({ 
                 success: true, 
@@ -359,13 +382,16 @@ export async function POST(request: NextRequest) {
             }, { headers });
         } catch (error) {
             console.error('Error processing data:', error);
-            // 返回一个用户友好的错误响应
             const errorMessage = error instanceof Error ? error.message : '生成产业链图谱时出现错误，请稍后重试';
-            console.log('Returning error response:', errorMessage);
+            
+            // 对于某些特定错误，返回更友好的错误信息
+            const userFriendlyMessage = errorMessage.includes('API Key not configured') 
+                ? '系统配置错误，请联系管理员'
+                : errorMessage;
             
             return NextResponse.json({ 
                 success: false, 
-                error: errorMessage,
+                error: userFriendlyMessage,
                 data: {
                     name: industryName,
                     children: [{
@@ -373,7 +399,7 @@ export async function POST(request: NextRequest) {
                         children: []
                     }]
                 }
-            }, { status: 200, headers }); // 使用 200 状态码，让前端能够正常处理
+            }, { status: 200, headers });
         }
     } catch (error) {
         console.error('Error processing request:', error);
