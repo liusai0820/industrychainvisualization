@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from 'react';
 import { IndustryChainData, MainSection, SubSection, SubSubSection, Company } from '@/types';
 import { calculateOptimalLayout, LayoutConfig } from '@/utils/layoutCalculator';
 import html2canvas from 'html2canvas';
+import CompanyReportModal from './CompanyReportModal';
 
 interface IndustryChainChartProps {
     data: IndustryChainData;
@@ -20,6 +21,7 @@ export default function IndustryChainChart({ data, options = {} }: IndustryChain
     const containerRef = useRef<HTMLDivElement>(null);
     const [error] = useState<string | null>(null);
     const [, setLayout] = useState<LayoutConfig[]>([]);
+    const [selectedCompany, setSelectedCompany] = useState<{name: string, industryName: string} | null>(null);
 
     // 计算最佳布局
     useEffect(() => {
@@ -214,11 +216,25 @@ export default function IndustryChainChart({ data, options = {} }: IndustryChain
                                     'bg-red-50'
                                 }`}
                                 options={options}
+                                onCompanyClick={(companyName) => setSelectedCompany({
+                                    name: companyName,
+                                    industryName: data.name
+                                })}
                             />
                         ))}
                     </div>
                 </div>
             </div>
+
+            {/* 企业画像报告模态框 */}
+            {selectedCompany && (
+                <CompanyReportModal
+                    isOpen={!!selectedCompany}
+                    onClose={() => setSelectedCompany(null)}
+                    companyName={selectedCompany.name}
+                    industryName={selectedCompany.industryName}
+                />
+            )}
         </>
     );
 }
@@ -228,9 +244,10 @@ interface MainSectionCardProps {
     index: number;
     className?: string;
     options?: IndustryChainChartProps['options'];
+    onCompanyClick: (companyName: string) => void;
 }
 
-function MainSectionCard({ section, index, className = '', options }: MainSectionCardProps) {
+function MainSectionCard({ section, index, className = '', options, onCompanyClick }: Omit<MainSectionCardProps, 'industryName'>) {
     const borderColor = index === 0 ? 'border-indigo-200' :
                        index === 1 ? 'border-green-200' :
                        'border-red-200';
@@ -241,7 +258,7 @@ function MainSectionCard({ section, index, className = '', options }: MainSectio
         minWidth: 0,
         maxWidth: '100%'
     };
-
+    
     return (
         <section 
             className={`rounded-lg border ${borderColor} ${className} overflow-hidden min-w-0`}
@@ -252,11 +269,12 @@ function MainSectionCard({ section, index, className = '', options }: MainSectio
             </h2>
             <div className="p-2 space-y-2 w-full min-w-0">
                 {section.children?.map(subSection => (
-                    <SubSectionCard
+                    <SubSectionCard 
                         key={subSection.name}
-                        subSection={subSection}
+                        subSection={subSection} 
                         index={index}
                         options={options}
+                        onCompanyClick={onCompanyClick}
                     />
                 ))}
             </div>
@@ -268,9 +286,10 @@ interface SubSectionCardProps {
     subSection: SubSection;
     index: number;
     options?: IndustryChainChartProps['options'];
+    onCompanyClick: (companyName: string) => void;
 }
 
-function SubSectionCard({ subSection, index, options }: SubSectionCardProps) {
+function SubSectionCard({ subSection, index, options, onCompanyClick }: Omit<SubSectionCardProps, 'industryName'>) {
     const borderColor = index === 0 ? 'border-indigo-200' :
                        index === 1 ? 'border-green-200' :
                        'border-red-200';
@@ -285,7 +304,7 @@ function SubSectionCard({ subSection, index, options }: SubSectionCardProps) {
         (sub.children?.length || 0) <= 3);
 
     const layoutClass = isCompact ? 'grid grid-cols-3 gap-2' : 'flex flex-wrap gap-2';
-
+    
     return (
         <div className={`rounded-lg border ${borderColor} ${bgColor} transition-colors w-full min-w-0`}>
             <h3 className="text-sm font-semibold p-2 border-b ${borderColor} truncate">
@@ -293,11 +312,12 @@ function SubSectionCard({ subSection, index, options }: SubSectionCardProps) {
             </h3>
             <div className={`p-2 ${layoutClass} w-full min-w-0`}>
                 {subSections.map((subSubSection) => (
-                    <SubSubSectionCard
+                    <SubSubSectionCard 
                         key={subSubSection.name}
-                        subSubSection={subSubSection}
+                        subSubSection={subSubSection} 
                         isCompact={isCompact}
                         options={options}
+                        onCompanyClick={onCompanyClick}
                     />
                 ))}
             </div>
@@ -309,9 +329,10 @@ interface SubSubSectionCardProps {
     subSubSection: SubSubSection;
     isCompact: boolean;
     options?: IndustryChainChartProps['options'];
+    onCompanyClick: (companyName: string) => void;
 }
 
-function SubSubSectionCard({ subSubSection, isCompact, options }: SubSubSectionCardProps) {
+function SubSubSectionCard({ subSubSection, isCompact, options, onCompanyClick }: Omit<SubSubSectionCardProps, 'industryName'>) {
     const companiesCount = subSubSection.children?.length || 0;
     
     // 简化卡片样式
@@ -338,6 +359,7 @@ function SubSubSectionCard({ subSubSection, isCompact, options }: SubSubSectionC
                         company={company}
                         isSingle={companiesCount === 1}
                         options={options}
+                        onCompanyClick={onCompanyClick}
                     />
                 ))}
             </div>
@@ -349,17 +371,19 @@ interface CompanyItemProps {
     company: Company;
     isSingle?: boolean;
     options?: IndustryChainChartProps['options'];
+    onCompanyClick: (companyName: string) => void;
 }
 
-function CompanyItem({ company, isSingle = false, options }: CompanyItemProps) {
+function CompanyItem({ company, isSingle = false, options, onCompanyClick }: Pick<CompanyItemProps, 'company' | 'isSingle' | 'options' | 'onCompanyClick'>) {
     const showTooltip = options?.tooltip?.show ?? true;
     
     return (
         <div 
+            onClick={() => onCompanyClick(company.name)}
             className={`text-[11px] text-gray-600 relative h-7 flex items-center
                      transition-colors duration-200 hover:text-blue-600 group
                      ${isSingle ? 'text-center justify-center font-medium' : ''} 
-                     px-1 min-w-0`}
+                     px-1 min-w-0 cursor-pointer hover:bg-blue-50 rounded`}
         >
             <span className="block leading-none whitespace-normal break-words">{company.name}</span>
             {showTooltip && (

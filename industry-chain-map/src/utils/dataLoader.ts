@@ -1,6 +1,36 @@
 import { IndustryChainData } from '@/types';
 import { PRESET_INDUSTRIES } from '@/data/preset-industries';
 
+// 导入所有预设产业数据
+import aerospace from '@/data/industries/aerospace.json';
+import bioMedicine from '@/data/industries/bio-medicine.json';
+import blockchain from '@/data/industries/blockchain.json';
+import brainScience from '@/data/industries/brain-science.json';
+import cellGene from '@/data/industries/cell-gene.json';
+import deepTech from '@/data/industries/deep-tech.json';
+import digitalCreative from '@/data/industries/digital-creative.json';
+import energySaving from '@/data/industries/energy-saving.json';
+import healthcare from '@/data/industries/healthcare.json';
+import industrialMachine from '@/data/industries/industrial-machine.json';
+import laserManufacturing from '@/data/industries/laser-manufacturing.json';
+import lightComputing from '@/data/industries/light-computing.json';
+import marine from '@/data/industries/marine.json';
+import medicalDevice from '@/data/industries/medical-device.json';
+import modernFashion from '@/data/industries/modern-fashion.json';
+import networkComm from '@/data/industries/network-comm.json';
+import newEnergy from '@/data/industries/new-energy.json';
+import newMaterial from '@/data/industries/new-material.json';
+import precisionInstrument from '@/data/industries/precision-instrument.json';
+import quantum from '@/data/industries/quantum.json';
+import semiconductor from '@/data/industries/semiconductor.json';
+import smartRobot from '@/data/industries/smart-robot.json';
+import smartSensor from '@/data/industries/smart-sensor.json';
+import smartTerminal from '@/data/industries/smart-terminal.json';
+import smartVehicle from '@/data/industries/smart-vehicle.json';
+import software from '@/data/industries/software.json';
+import syntheticBio from '@/data/industries/synthetic-bio.json';
+import ultraHd from '@/data/industries/ultra-hd.json';
+
 // 定义原始数据结构的类型
 interface RawIndustryData {
     产业链: string;
@@ -18,6 +48,38 @@ interface RawIndustryData {
 
 // 内存缓存
 const dataCache: { [key: string]: IndustryChainData } = {};
+
+// 预设产业数据映射
+const PRESET_DATA: { [key: string]: RawIndustryData } = {
+    'aerospace': aerospace as RawIndustryData,
+    'bio-medicine': bioMedicine as RawIndustryData,
+    'blockchain': blockchain as RawIndustryData,
+    'brain-science': brainScience as RawIndustryData,
+    'cell-gene': cellGene as RawIndustryData,
+    'deep-tech': deepTech as RawIndustryData,
+    'digital-creative': digitalCreative as RawIndustryData,
+    'energy-saving': energySaving as RawIndustryData,
+    'healthcare': healthcare as RawIndustryData,
+    'industrial-machine': industrialMachine as RawIndustryData,
+    'laser-manufacturing': laserManufacturing as RawIndustryData,
+    'light-computing': lightComputing as RawIndustryData,
+    'marine': marine as RawIndustryData,
+    'medical-device': medicalDevice as RawIndustryData,
+    'modern-fashion': modernFashion as RawIndustryData,
+    'network-comm': networkComm as RawIndustryData,
+    'new-energy': newEnergy as RawIndustryData,
+    'new-material': newMaterial as RawIndustryData,
+    'precision-instrument': precisionInstrument as RawIndustryData,
+    'quantum': quantum as RawIndustryData,
+    'semiconductor': semiconductor as RawIndustryData,
+    'smart-robot': smartRobot as RawIndustryData,
+    'smart-sensor': smartSensor as RawIndustryData,
+    'smart-terminal': smartTerminal as RawIndustryData,
+    'smart-vehicle': smartVehicle as RawIndustryData,
+    'software': software as RawIndustryData,
+    'synthetic-bio': syntheticBio as RawIndustryData,
+    'ultra-hd': ultraHd as RawIndustryData
+};
 
 // 检查是否是预设产业
 export const isPresetIndustry = (industryName: string): string | null => {
@@ -204,10 +266,11 @@ export const loadIndustryChainData = async (industryNameOrId: string): Promise<I
                 return cachedData;
             }
 
-            console.log('Loading preset industry from file:', presetId);
-            // 动态导入数据文件
-            const moduleData = await import(`@/data/industries/${presetId}.json`);
-            const rawData = moduleData.default || moduleData;
+            console.log('Loading preset industry from static data:', presetId);
+            const rawData = PRESET_DATA[presetId];
+            if (!rawData) {
+                throw new Error(`Preset industry data not found: ${presetId}`);
+            }
             
             // 验证数据
             if (!validateData(rawData)) {

@@ -9,6 +9,15 @@ const nextConfig = {
       }
     });
     return config;
+  },
+  // 添加静态文件服务配置
+  async rewrites() {
+    return [
+      {
+        source: '/data/industries/:path*',
+        destination: '/src/data/industries/:path*'
+      }
+    ];
   }
 };
 
