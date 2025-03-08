@@ -17,11 +17,142 @@ interface IndustryChainChartProps {
 
 type Html2CanvasOptions = Parameters<typeof html2canvas>[1];
 
+// 移动端头部组件
+const MobileHeader = ({ title, onBackClick }: { title: string; onBackClick: () => void }) => (
+  <div className="sticky top-0 left-0 right-0 z-40 bg-white border-b">
+    <div className="flex items-center h-12">
+      <button
+        onClick={onBackClick}
+        className="h-12 w-12 flex items-center justify-center hover:bg-gray-50 transition-colors"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+      </button>
+      <h1 className="text-base font-medium flex-1 truncate pr-4">{title}产业链图谱</h1>
+    </div>
+  </div>
+);
+
+// 移动端视图组件
+const MobileView = ({ data, onCompanyClick }: { data: IndustryChainData; onCompanyClick: (name: string) => void }) => {
+  const [expandedSections, setExpandedSections] = useState<number[]>([]);
+  const [expandedSubSections, setExpandedSubSections] = useState<string[]>([]);
+
+  const getBackgroundColor = (index: number) => {
+    switch (index) {
+      case 0: return 'bg-indigo-50';
+      case 1: return 'bg-green-50';
+      default: return 'bg-red-50';
+    }
+  };
+
+  const getSubBackgroundColor = (index: number) => {
+    switch (index) {
+      case 0: return 'bg-indigo-50/50';
+      case 1: return 'bg-green-50/50';
+      default: return 'bg-red-50/50';
+    }
+  };
+
+  const toggleSection = (index: number) => {
+    setExpandedSections(prev => {
+      const isExpanded = prev.includes(index);
+      if (isExpanded) {
+        return prev.filter(i => i !== index);
+      } else {
+        return [...prev, index];
+      }
+    });
+  };
+
+  const toggleSubSection = (sectionIndex: number, subIndex: number) => {
+    const key = `${sectionIndex}-${subIndex}`;
+    setExpandedSubSections(prev => {
+      const isExpanded = prev.includes(key);
+      if (isExpanded) {
+        return prev.filter(k => k !== key);
+      } else {
+        return [...prev, key];
+      }
+    });
+  };
+
+  return (
+    <div className="min-h-screen bg-white">
+      <MobileHeader 
+        title={data.name} 
+        onBackClick={() => window.history.back()} 
+      />
+      <div className="pb-24">
+        {data.children?.map((section, index) => (
+          <div key={section.name} className="mb-4 px-4">
+            <div 
+              className={`p-3 rounded-lg font-medium ${getBackgroundColor(index)} cursor-pointer`}
+              onClick={() => toggleSection(index)}
+            >
+              {section.name}
+              <span className="float-right">{expandedSections.includes(index) ? '▼' : '▶'}</span>
+            </div>
+            
+            {expandedSections.includes(index) && section.children?.map((subSection, subIndex) => (
+              <div key={subSection.name} className="ml-4 mt-2">
+                <div 
+                  className={`p-2 rounded-md ${getSubBackgroundColor(index)} cursor-pointer`}
+                  onClick={() => toggleSubSection(index, subIndex)}
+                >
+                  {subSection.name}
+                  <span className="float-right">
+                    {expandedSubSections.includes(`${index}-${subIndex}`) ? '▼' : '▶'}
+                  </span>
+                </div>
+                
+                {expandedSubSections.includes(`${index}-${subIndex}`) && (
+                  <div className="grid grid-cols-1 gap-2 mt-2 ml-4">
+                    {subSection.children?.map(subSubSection => (
+                      <div key={subSubSection.name} className="bg-white rounded-md p-2 shadow-sm">
+                        <div className="font-medium text-sm mb-1">{subSubSection.name}</div>
+                        <div className="grid grid-cols-2 gap-1">
+                          {subSubSection.children?.map(company => (
+                            <div 
+                              key={company.name}
+                              className="text-xs p-1 bg-gray-50 rounded text-blue-600 truncate"
+                              onClick={() => onCompanyClick(company.name)}
+                            >
+                              {company.name}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 export default function IndustryChainChart({ data, options = {} }: IndustryChainChartProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [error] = useState<string | null>(null);
     const [, setLayout] = useState<LayoutConfig[]>([]);
     const [selectedCompany, setSelectedCompany] = useState<{name: string, industryName: string} | null>(null);
+    const [isMobile, setIsMobile] = useState(false);
+
+    // 检测设备尺寸
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     // 计算最佳布局
     useEffect(() => {
@@ -127,104 +258,140 @@ export default function IndustryChainChart({ data, options = {} }: IndustryChain
     return (
         <>
             <style jsx global>{`
-                /* 强制覆盖 Next.js 导航按钮样式 */
-                nav[class*="back"],
-                nav[class*="nav"],
-                nav {
-                    all: unset !important;
-                    position: fixed !important;
-                    top: 12px !important;
-                    left: 12px !important;
-                    height: 40px !important;
-                    width: auto !important;
-                    display: flex !important;
-                    align-items: center !important;
-                    padding: 0 !important;
-                    margin: 0 !important;
-                    background: transparent !important;
-                    z-index: 100 !important;
-                }
+                /* 移动端样式 */
+                @media (max-width: 768px) {
+                    html {
+                        font-size: 14px;
+                    }
+                    
+                    .mobile-section {
+                        margin-bottom: 0.75rem;
+                    }
+                    
+                    .mobile-company {
+                        padding: 0.5rem 0.75rem;
+                        font-size: 0.8125rem;
+                    }
 
-                nav > a,
-                nav[class*="back"] > a,
-                nav[class*="nav"] > a {
-                    all: unset !important;
-                    display: inline-flex !important;
-                    align-items: center !important;
-                    height: 36px !important;
-                    padding: 0 16px !important;
-                    background: #f8fafc !important;
-                    border: 1px solid #e2e8f0 !important;
-                    border-radius: 6px !important;
-                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
-                    font-size: 13px !important;
-                    font-weight: 500 !important;
-                    letter-spacing: -0.01em !important;
-                    color: #64748b !important;
-                    cursor: pointer !important;
-                    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
-                    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-                    white-space: nowrap !important;
+                    /* 隐藏默认的返回导航 */
+                    nav[class*="back"],
+                    nav[class*="nav"],
+                    nav {
+                        display: none !important;
+                    }
                 }
+                
+                /* 原有的导航样式，仅在非移动端显示 */
+                @media (min-width: 769px) {
+                    nav[class*="back"],
+                    nav[class*="nav"],
+                    nav {
+                        all: unset !important;
+                        position: fixed !important;
+                        top: 12px !important;
+                        left: 12px !important;
+                        height: 40px !important;
+                        width: auto !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        padding: 0 !important;
+                        margin: 0 !important;
+                        background: transparent !important;
+                        z-index: 100 !important;
+                    }
 
-                nav > a:hover,
-                nav[class*="back"] > a:hover,
-                nav[class*="nav"] > a:hover {
-                    background: #f1f5f9 !important;
-                    border-color: #cbd5e1 !important;
-                    color: #334155 !important;
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
-                }
+                    nav > a,
+                    nav[class*="back"] > a,
+                    nav[class*="nav"] > a {
+                        all: unset !important;
+                        display: inline-flex !important;
+                        align-items: center !important;
+                        height: 36px !important;
+                        padding: 0 16px !important;
+                        background: #f8fafc !important;
+                        border: 1px solid #e2e8f0 !important;
+                        border-radius: 6px !important;
+                        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+                        font-size: 13px !important;
+                        font-weight: 500 !important;
+                        letter-spacing: -0.01em !important;
+                        color: #64748b !important;
+                        cursor: pointer !important;
+                        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+                        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                        white-space: nowrap !important;
+                    }
 
-                nav > a::before,
-                nav[class*="back"] > a::before,
-                nav[class*="nav"] > a::before {
-                    content: "←" !important;
-                    margin-right: 8px !important;
-                    font-size: 15px !important;
-                    position: relative !important;
-                    top: 0px !important;
+                    nav > a:hover,
+                    nav[class*="back"] > a:hover,
+                    nav[class*="nav"] > a:hover {
+                        background: #f1f5f9 !important;
+                        border-color: #cbd5e1 !important;
+                        color: #334155 !important;
+                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+                    }
+
+                    nav > a::before,
+                    nav[class*="back"] > a::before,
+                    nav[class*="nav"] > a::before {
+                        content: "←" !important;
+                        margin-right: 8px !important;
+                        font-size: 15px !important;
+                        position: relative !important;
+                        top: 0px !important;
+                    }
                 }
             `}</style>
-            <div className="min-h-screen bg-white pt-16">
-                <div 
-                    ref={containerRef} 
-                    className="w-full h-full min-h-screen"
-                >
-                    {/* 标题区域 */}
-                    <div className="border-b bg-white">
-                        <h1 className="text-2xl font-bold text-center py-4 px-4">
-                            <span
-                                onClick={downloadChart}
-                                className="inline-block cursor-pointer text-gray-900 hover:text-blue-600 transition-colors duration-200"
-                            >
-                                {data.name}产业链全景图谱
-                            </span>
-                        </h1>
-                    </div>
 
-                    {/* 主要内容区域 */}
-                    <div className="flex flex-col lg:flex-row gap-6 p-6 w-full">
-                        {data.children?.map((section, index) => (
-                            <MainSectionCard
-                                key={section.name}
-                                section={section}
-                                index={index}
-                                className={`${
-                                    index === 0 ? 'bg-indigo-50' :
-                                    index === 1 ? 'bg-green-50' :
-                                    'bg-red-50'
-                                }`}
-                                options={options}
-                                onCompanyClick={(companyName) => setSelectedCompany({
-                                    name: companyName,
-                                    industryName: data.name
-                                })}
-                            />
-                        ))}
+            {isMobile ? (
+                <MobileView 
+                    data={data}
+                    onCompanyClick={(name) => setSelectedCompany({
+                        name,
+                        industryName: data.name
+                    })} 
+                />
+            ) : (
+                <div className="min-h-screen bg-white pt-16">
+                    <div 
+                        ref={containerRef} 
+                        className="w-full h-full min-h-screen"
+                    >
+                        {/* 标题区域 */}
+                        <div className="border-b bg-white">
+                            <h1 className="text-2xl font-bold text-center py-4 px-4">
+                                <span
+                                    onClick={downloadChart}
+                                    className="inline-block cursor-pointer text-gray-900 hover:text-blue-600 transition-colors duration-200"
+                                >
+                                    {data.name}产业链全景图谱
+                                </span>
+                            </h1>
+                        </div>
+
+                        {/* 主要内容区域 */}
+                        <div className="flex flex-col lg:flex-row gap-6 p-6 w-full">
+                            {data.children?.map((section, index) => (
+                                <MainSectionCard
+                                    key={section.name}
+                                    section={section}
+                                    index={index}
+                                    className={`${
+                                        index === 0 ? 'bg-indigo-50' :
+                                        index === 1 ? 'bg-green-50' :
+                                        'bg-red-50'
+                                    }`}
+                                    options={options}
+                                    onCompanyClick={(companyName) => setSelectedCompany({
+                                        name: companyName,
+                                        industryName: data.name
+                                    })}
+                                />
+                            ))}
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
 
             {/* 企业画像报告模态框 */}
             {selectedCompany && (

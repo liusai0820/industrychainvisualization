@@ -280,11 +280,8 @@ function processAnalysisResult(markdownText: string): AnalysisResult {
       // 不再过滤包含"公司"、"企业"的标题，因为"公司概览"、"企业战略"等是有效标题
       const isReportTitle = /研究报告|分析报告|画像报告|报告概述/.test(heading.title);
       
-      // 检查是否是常见的第一章节标题，这些标题应该保留
-      const isCommonFirstSection = /公司概览|企业概况|公司简介|企业简介|公司介绍|企业介绍|公司背景|企业背景/.test(heading.title);
-      
-      // 如果是第一个标题且是报告标题（但不是常见的第一章节标题），或者是重复标题，则过滤掉
-      return !(isDuplicate || (index === 0 && isReportTitle && !isCommonFirstSection));
+      // 如果是第一个标题且是报告标题，或者是重复标题，则过滤掉
+      return !(isDuplicate || (index === 0 && isReportTitle));
     });
     
     console.log('过滤后的标题数量:', filteredHeadings.length);

@@ -9,15 +9,19 @@
             "子-子环节": [
               {
                 "子-子环节名称": "LCD面板",
-                "代表公司": ["京东方 (BOE)", "TCL华星光电 (CSOT)", "友达光电 (AUO)", "群创光电 (Innolux)", "夏普 (Sharp)"]
+                "代表公司": ["京东方 (BOE)", "TCL华星光电 (CSOT)", "友达光电 (AUO)", "群创光电 (Innolux)", "夏普 (Sharp)", "三星显示 (Samsung Display)", "LG Display", "惠科 (HKC)", "彩虹股份"]
               },
               {
                 "子-子环节名称": "OLED面板",
-                "代表公司": ["三星显示 (Samsung Display)", "LG Display", "京东方 (BOE)", "维信诺 (Visionox)", "天马微电子 (Tianma)"]
+                "代表公司": ["三星显示 (Samsung Display)", "LG Display", "京东方 (BOE)", "维信诺 (Visionox)", "天马微电子 (Tianma)", "和辉光电 (EDO)", "TCL华星光电 (CSOT)", "柔宇科技 (Royole)"]
               },
               {
                 "子-子环节名称": "Mini/Micro LED",
-                "代表公司": ["三星电子 (Samsung Electronics)", "LG电子 (LG Electronics)", "TCL", "利亚德 (Leyard)", "洲明科技 (Unilumin)"]
+                "代表公司": ["三星电子 (Samsung Electronics)", "LG电子 (LG Electronics)", "TCL", "利亚德 (Leyard)", "洲明科技 (Unilumin)", "晶台股份", "聚积科技 (Macroblock)", "隆达电子 (Lextar)", "国星光电", "华灿光电"]
+              },
+              {
+                "子-子环节名称": "量子点显示",
+                "代表公司": ["三星电子 (Samsung Electronics)", "TCL", "海信 (Hisense)", "创维 (Skyworth)", "纳微科技 (Nanosys)", "Quantum Materials Corp", "京东方 (BOE)"]
               }
             ]
           },
@@ -26,11 +30,19 @@
             "子-子环节": [
               {
                 "子-子环节名称": "显示驱动IC",
-                "代表公司": ["联咏科技 (Novatek)", "奇景光电 (Himax)", "瑞鼎科技 (Raydium)", "矽创电子 (Sitronix)", "敦泰电子 (FocalTech)"]
+                "代表公司": ["联咏科技 (Novatek)", "奇景光电 (Himax)", "瑞鼎科技 (Raydium)", "矽创电子 (Sitronix)", "敦泰电子 (FocalTech)", "集创北方", "Solomon Systech", "晶门科技 (Solomon Systech)", "格科微 (Galaxy Core)"]
               },
               {
                 "子-子环节名称": "视频处理芯片",
-                "代表公司": ["联发科 (MediaTek)", "晶晨半导体 (Amlogic)", "海思半导体 (HiSilicon)", "瑞昱半导体 (Realtek)", "展讯通信 (UNISOC)"]
+                "代表公司": ["联发科 (MediaTek)", "晶晨半导体 (Amlogic)", "海思半导体 (HiSilicon)", "瑞昱半导体 (Realtek)", "展讯通信 (UNISOC)", "全志科技 (Allwinner)", "瑞芯微 (Rockchip)", "恩智浦 (NXP)", "英特尔 (Intel)"]
+              },
+              {
+                "子-子环节名称": "图像增强处理器",
+                "代表公司": ["杜比实验室 (Dolby Laboratories)", "Pixelworks", "Marvell", "德州仪器 (TI)", "意法半导体 (STMicroelectronics)", "瑞昱半导体 (Realtek)", "晶晨半导体 (Amlogic)"]
+              },
+              {
+                "子-子环节名称": "编解码芯片",
+                "代表公司": ["海思半导体 (HiSilicon)", "联发科 (MediaTek)", "瑞昱半导体 (Realtek)", "英特尔 (Intel)", "英伟达 (NVIDIA)", "AMD", "高通 (Qualcomm)", "晶晨半导体 (Amlogic)"]
               }
             ]
           },
@@ -39,11 +51,57 @@
             "子-子环节": [
               {
                 "子-子环节名称": "光学镜头",
-                "代表公司": ["大立光电 (Largan Precision)", "玉晶光电 (Genius Electronic)", "舜宇光学 (Sunny Optical)", "联创光电 (LCTC)", "五方光电 (O-Film)"]
+                "代表公司": ["大立光电 (Largan Precision)", "玉晶光电 (Genius Electronic)", "舜宇光学 (Sunny Optical)", "联创光电 (LCTC)", "五方光电 (O-Film)", "欧菲光 (OFILM)", "丘钛科技 (Q Technology)", "水晶光电"]
               },
               {
                 "子-子环节名称": "光学膜材",
-                "代表公司": ["3M", "住友化学 (Sumitomo Chemical)", "LG化学 (LG Chem)", "SKC", "三菱化学 (Mitsubishi Chemical)"]
+                "代表公司": ["3M", "住友化学 (Sumitomo Chemical)", "LG化学 (LG Chem)", "SKC", "三菱化学 (Mitsubishi Chemical)", "东丽 (Toray)", "乐凯胶片", "激智科技", "长阳科技", "深纺织"]
+              },
+              {
+                "子-子环节名称": "背光模组",
+                "代表公司": ["瑞仪光电 (Radiant)", "中强光电 (Coretronic)", "隆达电子 (Lextar)", "宏齐科技 (Harvatek)", "亿光电子 (Everlight)", "国星光电", "木林森", "聚飞光电"]
+              },
+              {
+                "子-子环节名称": "滤光片",
+                "代表公司": ["水晶光电", "五方光电 (O-Film)", "欧菲光 (OFILM)", "舜宇光学 (Sunny Optical)", "东尼电子", "美迪凯", "光韵达"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "关键材料",
+            "子-子环节": [
+              {
+                "子-子环节名称": "玻璃基板",
+                "代表公司": ["康宁 (Corning)", "旭硝子 (AGC)", "电气硝子 (NEG)", "信义玻璃", "彩虹股份", "东旭光电"]
+              },
+              {
+                "子-子环节名称": "偏光片",
+                "代表公司": ["LG化学 (LG Chem)", "住友化学 (Sumitomo Chemical)", "日东电工 (Nitto Denko)", "三星SDI (Samsung SDI)", "明基材料 (BenQ Materials)", "三利谱", "盛波光电"]
+              },
+              {
+                "子-子环节名称": "液晶材料",
+                "代表公司": ["默克 (Merck)", "JNC", "DIC", "八亿时空", "诚志永华", "飞凯材料", "万润股份"]
+              },
+              {
+                "子-子环节名称": "OLED材料",
+                "代表公司": ["默克 (Merck)", "出光兴产 (Idemitsu Kosan)", "杜邦 (DuPont)", "UDC", "三星SDI (Samsung SDI)", "LG化学 (LG Chem)", "瑞联新材", "万润股份"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "显示制造设备",
+            "子-子环节": [
+              {
+                "子-子环节名称": "面板制造设备",
+                "代表公司": ["应用材料 (Applied Materials)", "东京电子 (Tokyo Electron)", "尼康 (Nikon)", "佳能 (Canon)", "ULVAC", "精测电子", "华兴源创", "深科达"]
+              },
+              {
+                "子-子环节名称": "检测设备",
+                "代表公司": ["致茂电子 (Chroma ATE)", "东京电子 (Tokyo Electron)", "精测电子", "华兴源创", "天准科技", "维信诺 (Visionox)", "深科达"]
+              },
+              {
+                "子-子环节名称": "封装设备",
+                "代表公司": ["ASM Pacific Technology", "迪思科 (DISCO)", "东京精密 (Tokyo Seimitsu)", "日东电工 (Nitto Denko)", "新益昌", "大族激光", "联得装备"]
               }
             ]
           }
@@ -57,15 +115,19 @@
             "子-子环节": [
               {
                 "子-子环节名称": "电视机",
-                "代表公司": ["三星电子 (Samsung Electronics)", "LG电子 (LG Electronics)", "索尼 (Sony)", "TCL", "海信 (Hisense)"]
+                "代表公司": ["三星电子 (Samsung Electronics)", "LG电子 (LG Electronics)", "索尼 (Sony)", "TCL", "海信 (Hisense)", "创维 (Skyworth)", "小米 (Xiaomi)", "康佳 (Konka)", "长虹 (Changhong)", "夏普 (Sharp)"]
               },
               {
                 "子-子环节名称": "显示器",
-                "代表公司": ["戴尔 (Dell)", "惠普 (HP)", "华硕 (ASUS)", "明基 (BenQ)", "优派 (ViewSonic)"]
+                "代表公司": ["戴尔 (Dell)", "惠普 (HP)", "华硕 (ASUS)", "明基 (BenQ)", "优派 (ViewSonic)", "三星 (Samsung)", "LG", "AOC", "飞利浦 (Philips)", "宏碁 (Acer)"]
               },
               {
                 "子-子环节名称": "投影仪",
-                "代表公司": ["爱普生 (Epson)", "明基 (BenQ)", "索尼 (Sony)", "NEC", "奥图码 (Optoma)"]
+                "代表公司": ["爱普生 (Epson)", "明基 (BenQ)", "索尼 (Sony)", "NEC", "奥图码 (Optoma)", "松下 (Panasonic)", "优派 (ViewSonic)", "极米科技 (XGIMI)", "坚果 (JmGO)", "当贝"]
+              },
+              {
+                "子-子环节名称": "移动显示设备",
+                "代表公司": ["苹果 (Apple)", "三星 (Samsung)", "华为 (Huawei)", "小米 (Xiaomi)", "OPPO", "vivo", "联想 (Lenovo)", "荣耀 (Honor)", "传音 (Transsion)", "一加 (OnePlus)"]
               }
             ]
           },
@@ -74,11 +136,19 @@
             "子-子环节": [
               {
                 "子-子环节名称": "LED显示屏",
-                "代表公司": ["利亚德 (Leyard)", "洲明科技 (Unilumin)", "艾比森 (Absen)", "强力巨彩 (Qiangli)", "雷曼光电 (Ledman)"]
+                "代表公司": ["利亚德 (Leyard)", "洲明科技 (Unilumin)", "艾比森 (Absen)", "强力巨彩 (Qiangli)", "雷曼光电 (Ledman)", "奥拓电子", "联建光电", "华星光电 (CSOT)", "三星 (Samsung)", "LG"]
               },
               {
                 "子-子环节名称": "数字标牌",
-                "代表公司": ["三星电子 (Samsung Electronics)", "LG电子 (LG Electronics)", "NEC", "飞利浦 (Philips)", "夏普 (Sharp)"]
+                "代表公司": ["三星电子 (Samsung Electronics)", "LG电子 (LG Electronics)", "NEC", "飞利浦 (Philips)", "夏普 (Sharp)", "松下 (Panasonic)", "索尼 (Sony)", "海信商用 (Hisense)", "TCL商用", "创维商用 (Skyworth)"]
+              },
+              {
+                "子-子环节名称": "会议显示系统",
+                "代表公司": ["思科 (Cisco)", "华为 (Huawei)", "宝利通 (Polycom)", "罗技 (Logitech)", "MAXHUB", "鸿合科技", "海信会议 (Hisense)", "明基商用 (BenQ)", "创维商用 (Skyworth)"]
+              },
+              {
+                "子-子环节名称": "拼接屏",
+                "代表公司": ["三星 (Samsung)", "LG", "海信 (Hisense)", "TCL", "大华股份 (Dahua)", "利亚德 (Leyard)", "巴可 (Barco)", "威创股份", "中达电通 (Delta)"]
               }
             ]
           },
@@ -87,11 +157,36 @@
             "子-子环节": [
               {
                 "子-子环节名称": "医疗显示",
-                "代表公司": ["巴可 (Barco)", "飞利浦 (Philips)", "索尼 (Sony)", "京东方 (BOE)", "双威医疗 (Double Medical)"]
+                "代表公司": ["巴可 (Barco)", "飞利浦 (Philips)", "索尼 (Sony)", "京东方 (BOE)", "双威医疗 (Double Medical)", "NEC", "EIZO", "美亚光电", "迈瑞医疗 (Mindray)", "东软医疗"]
               },
               {
                 "子-子环节名称": "安防显示",
-                "代表公司": ["海康威视 (Hikvision)", "大华股份 (Dahua Technology)", "宇视科技 (Uniview)", "浩云科技 (Haoyun)", "英飞拓 (Infinova)"]
+                "代表公司": ["海康威视 (Hikvision)", "大华股份 (Dahua Technology)", "宇视科技 (Uniview)", "浩云科技 (Haoyun)", "英飞拓 (Infinova)", "科达 (Kedacom)", "天地伟业", "华为 (Huawei)", "安防宝", "中电科"]
+              },
+              {
+                "子-子环节名称": "广电显示",
+                "代表公司": ["索尼 (Sony)", "松下 (Panasonic)", "JVC", "佳能 (Canon)", "富士 (Fujifilm)", "黑魔方 (Blackmagic Design)", "科视 (Christie)", "巴可 (Barco)", "索尼专业 (Sony Professional)"]
+              },
+              {
+                "子-子环节名称": "航空航天显示",
+                "代表公司": ["霍尼韦尔 (Honeywell)", "泰雷兹 (Thales)", "洛克希德马丁 (Lockheed Martin)", "波音 (Boeing)", "空客 (Airbus)", "中航光电", "中电科", "航天电子", "航天科技"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "显示系统集成",
+            "子-子环节": [
+              {
+                "子-子环节名称": "家庭影院系统",
+                "代表公司": ["索尼 (Sony)", "三星 (Samsung)", "LG", "哈曼卡顿 (Harman Kardon)", "博士 (Bose)", "雅马哈 (Yamaha)", "丹拿 (Dynaudio)", "JBL", "飞利浦 (Philips)", "创维 (Skyworth)"]
+              },
+              {
+                "子-子环节名称": "智能家居显示",
+                "代表公司": ["谷歌 (Google)", "亚马逊 (Amazon)", "苹果 (Apple)", "小米 (Xiaomi)", "华为 (Huawei)", "三星 (Samsung)", "联想 (Lenovo)", "百度 (Baidu)", "京东 (JD)", "阿里巴巴 (Alibaba)"]
+              },
+              {
+                "子-子环节名称": "商业场所显示",
+                "代表公司": ["三星商用 (Samsung)", "LG商用", "NEC", "松下 (Panasonic)", "飞利浦 (Philips)", "利亚德 (Leyard)", "洲明科技 (Unilumin)", "艾比森 (Absen)", "强力巨彩 (Qiangli)", "奥拓电子"]
               }
             ]
           }
@@ -105,15 +200,40 @@
             "子-子环节": [
               {
                 "子-子环节名称": "影视制作",
-                "代表公司": ["华纳兄弟 (Warner Bros.)", "迪士尼 (Disney)", "环球影业 (Universal Pictures)", "索尼影业 (Sony Pictures)", "派拉蒙 (Paramount Pictures)"]
+                "代表公司": ["华纳兄弟 (Warner Bros.)", "迪士尼 (Disney)", "环球影业 (Universal Pictures)", "索尼影业 (Sony Pictures)", "派拉蒙 (Paramount Pictures)", "中国电影集团", "华谊兄弟", "博纳影业", "光线传媒", "万达影视"]
               },
               {
                 "子-子环节名称": "广播电视",
-                "代表公司": ["中央广播电视总台 (CCTV)", "BBC", "NHK", "Discovery", "Netflix"]
+                "代表公司": ["中央广播电视总台 (CCTV)", "BBC", "NHK", "Discovery", "Netflix", "湖南卫视", "浙江卫视", "江苏卫视", "爱奇艺 (iQIYI)", "腾讯视频"]
               },
               {
                 "子-子环节名称": "游戏开发",
-                "代表公司": ["动视暴雪 (Activision Blizzard)", "艺电 (Electronic Arts)", "育碧 (Ubisoft)", "腾讯 (Tencent)", "网易 (NetEase)"]
+                "代表公司": ["动视暴雪 (Activision Blizzard)", "艺电 (Electronic Arts)", "育碧 (Ubisoft)", "腾讯游戏 (Tencent Games)", "网易游戏 (NetEase Games)", "索尼互动娱乐 (Sony Interactive)", "任天堂 (Nintendo)", "米哈游", "完美世界", "盛趣游戏"]
+              },
+              {
+                "子-子环节名称": "超高清内容制作",
+                "代表公司": ["杜比实验室 (Dolby Laboratories)", "索尼 (Sony)", "松下 (Panasonic)", "佳能 (Canon)", "RED Digital Cinema", "ARRI", "黑魔方 (Blackmagic Design)", "华为 (Huawei)", "中央广播电视总台 (CCTV)", "爱奇艺 (iQIYI)"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "内容分发",
+            "子-子环节": [
+              {
+                "子-子环节名称": "流媒体平台",
+                "代表公司": ["Netflix", "亚马逊Prime Video (Amazon)", "Disney+", "HBO Max", "爱奇艺 (iQIYI)", "腾讯视频", "优酷 (Youku)", "芒果TV", "哔哩哔哩 (Bilibili)", "PPTV"]
+              },
+              {
+                "子-子环节名称": "有线电视网络",
+                "代表公司": ["中国广电", "歌华有线", "华数传媒", "江苏有线", "广东广电", "湖北广电", "Comcast", "Charter Communications", "AT&T", "Verizon"]
+              },
+              {
+                "子-子环节名称": "卫星电视",
+                "代表公司": ["中国卫通", "亚太卫星", "中星", "DirecTV", "Dish Network", "Sky", "Canal+", "中国广电", "亚洲卫星", "欧洲卫星"]
+              },
+              {
+                "子-子环节名称": "IPTV/OTT",
+                "代表公司": ["中国电信", "中国联通", "中国移动", "华为 (Huawei)", "小米 (Xiaomi)", "创维 (Skyworth)", "海信 (Hisense)", "TCL", "百视通", "芒果TV"]
               }
             ]
           },
@@ -121,8 +241,33 @@
             "子环节名称": "虚拟现实/增强现实",
             "子-子环节": [
               {
+                "子-子环节名称": "VR/AR硬件",
+                "代表公司": ["Meta (Facebook)", "索尼 (Sony)", "HTC", "微软 (Microsoft)", "苹果 (Apple)", "谷歌 (Google)", "Pico", "爱奇艺 (iQIYI)", "大朋VR", "3Glasses"]
+              },
+              {
                 "子-子环节名称": "VR/AR内容制作",
-                "代表公司": ["Unity Technologies", "Epic Games", "Valve", "Within", "Jaunt VR"]
+                "代表公司": ["Unity Technologies", "Epic Games", "Valve", "Within", "Jaunt VR", "网易影核", "完美世界", "腾讯游戏 (Tencent Games)", "爱奇艺奇遇 (iQIYI)", "字节跳动 (ByteDance)"]
+              },
+              {
+                "子-子环节名称": "VR/AR应用开发",
+                "代表公司": ["Meta (Facebook)", "谷歌 (Google)", "微软 (Microsoft)", "苹果 (Apple)", "Unity Technologies", "Epic Games", "商汤科技 (SenseTime)", "旷视科技 (Megvii)", "亮风台", "影创科技"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "显示应用服务",
+            "子-子环节": [
+              {
+                "子-子环节名称": "显示校准服务",
+                "代表公司": ["X-Rite", "Datacolor", "Portrait Displays", "Calibrite", "爱色丽", "明基 (BenQ)", "EIZO", "索尼 (Sony)", "LG", "三星 (Samsung)"]
+              },
+              {
+                "子-子环节名称": "内容保护技术",
+                "代表公司": ["杜比实验室 (Dolby Laboratories)", "DTS", "HDMI Licensing", "HDCP", "Widevine", "PlayReady", "FairPlay", "中广电", "华为 (Huawei)", "阿里巴巴 (Alibaba)"]
+              },
+              {
+                "子-子环节名称": "显示测试认证",
+                "代表公司": ["UL", "TÜV", "SGS", "Intertek", "中国质量认证中心 (CQC)", "中国电子技术标准化研究院", "工业和信息化部电子第五研究所", "广电计量", "华测检测", "谱尼测试"]
               }
             ]
           }
