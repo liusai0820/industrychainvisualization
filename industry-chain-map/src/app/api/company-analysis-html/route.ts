@@ -520,6 +520,7 @@ async function callOpenRouterForHTML(prompt: string) {
         let responseText;
         try {
           responseText = await response.text();
+          console.log('响应文本长度:', responseText.length);
           console.log('响应文本前100个字符:', responseText.substring(0, 100) + '...');
         } catch (textError) {
           console.error('读取响应文本失败:', textError);
@@ -535,12 +536,26 @@ async function callOpenRouterForHTML(prompt: string) {
           throw new Error('API返回了无效的JSON');
         }
 
-        if (!responseData.choices || !responseData.choices[0]?.message?.content) {
-          console.error('无效的API响应结构:', JSON.stringify(responseData).substring(0, 500) + '...');
-          throw new Error('API响应格式错误');
+        // 更安全地检查响应结构
+        if (!responseData) {
+          console.error('API响应为空');
+          throw new Error('API响应为空');
+        }
+        
+        // 检查choices是否存在
+        if (!responseData.choices || !Array.isArray(responseData.choices) || responseData.choices.length === 0) {
+          console.error('API响应中没有choices数组或为空:', JSON.stringify(responseData).substring(0, 500));
+          throw new Error('API响应中缺少choices数据');
+        }
+        
+        // 检查第一个choice是否有效
+        const firstChoice = responseData.choices[0];
+        if (!firstChoice || !firstChoice.message || typeof firstChoice.message.content !== 'string') {
+          console.error('API响应中的第一个choice无效:', firstChoice);
+          throw new Error('API响应中的消息内容无效');
         }
 
-        const htmlContent = responseData.choices[0].message.content;
+        const htmlContent = firstChoice.message.content;
         console.log('成功获取HTML内容，长度:', htmlContent.length);
         
         // 提取HTML代码块
