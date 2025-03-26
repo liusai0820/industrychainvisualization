@@ -320,7 +320,7 @@ function generateHTMLPrompt(companyName: string, industryName: string, analysisR
 
 - 所有页面内容必须为简体中文
 - 保持原文件的核心信息，但以更易读、可视化的方式呈现
-- 在页面底部添加版权信息和生成时间，版权所有者为"智绘链图"而不是"产业链地图"
+- 在页面底部添加版权信息和生成时间，版权所有者为"智绘链图"
 - 为数据和信息设计适合的可视化图表和组件
 - 突出显示重要的数据点和关键发现
 - 对比表格必须美观且易读，使用现代化的表格设计，确保表格内容对齐整齐，有适当的间距和边框
@@ -548,20 +548,12 @@ function generateTemplateHTML(companyName: string, industryName: string, analysi
     day: 'numeric'
   });
 
-  // 尝试使用公司英文名（如果没有提供，则使用中文名进行转换）
-  const companyEnName = companyName.match(/\(([^)]+)\)/) ? 
-    companyName.match(/\(([^)]+)\)/)?.[1] || '' : 
-    companyName.replace(/[\u4e00-\u9fa5]/g, '').trim();
-    
-  const firstLetter = companyName.charAt(0);
-  const safeFirstLetter = firstLetter.replace(/"/g, '\'');
-
   // 生成目录
   const tableOfContents = sections.map((section, index) => {
     return `<a href="#section-${index + 1}" class="toc-item flex items-center py-2 px-4 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors mb-2" data-section="section-${index + 1}">
-      <span class="w-8 h-8 inline-flex items-center justify-center rounded-full mr-3" style="background-color: ${primaryColor}; color: white;">
+      <div class="w-8 h-8 inline-flex items-center justify-center rounded-full mr-3" style="background-color: ${primaryColor}; color: white;">
         ${index + 1}
-      </span>
+      </div>
       <span style="color: ${textColor};">${section.title}</span>
     </a>`;
   }).join('\n');
@@ -575,6 +567,7 @@ function generateTemplateHTML(companyName: string, industryName: string, analysi
   <title>${companyName} - 企业分析报告</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --primary-color: ${primaryColor};
@@ -583,28 +576,45 @@ function generateTemplateHTML(companyName: string, industryName: string, analysi
       --background-color: ${backgroundColor};
       --text-color: ${textColor};
     }
+    
     body {
       font-family: ${fontFamily}, 'Noto Sans SC', sans-serif;
       color: ${textColor};
       background-color: ${backgroundColor};
+      word-break: keep-all; /* 防止单字换行 */
+      overflow-wrap: break-word;
     }
+    
+    /* 防止中文单字换行 */
+    p, h1, h2, h3, h4, h5, h6, li, td, th, div, span {
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+    
     .reveal-section {
       opacity: 0;
       transform: translateY(20px);
       transition: opacity 0.5s ease, transform 0.5s ease;
     }
+    
     .reveal-section.active {
       opacity: 1;
       transform: translateY(0);
     }
+    
     .toc-item {
       position: relative;
       transition: all 0.3s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+    
     .toc-item.active {
       background-color: rgba(var(--primary-color-rgb), 0.1);
       font-weight: bold;
     }
+    
     .toc-item.active::before {
       content: "";
       position: absolute;
@@ -615,21 +625,56 @@ function generateTemplateHTML(companyName: string, industryName: string, analysi
       background-color: var(--primary-color);
       border-radius: 0 2px 2px 0;
     }
-    .competition-table th, .competition-table td {
-      border: 1px solid #e5e7eb;
-      padding: 12px 16px;
+    
+    /* 现代卡片式比较表格 */
+    .comparison-card {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1.5rem;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    .competition-table thead th {
-      background-color: rgba(var(--primary-color-rgb), 0.1);
-      color: var(--primary-color);
+    
+    .comparison-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .comparison-header {
+      padding: 1rem;
+      color: white;
       font-weight: 600;
     }
-    .competition-table tbody tr:nth-child(even) {
-      background-color: rgba(var(--secondary-color-rgb), 0.05);
+    
+    .company-card {
+      border-top: 3px solid var(--primary-color);
     }
-    .competition-table tbody tr:hover {
-      background-color: rgba(var(--accent-color-rgb), 0.05);
+    
+    .competitor-card {
+      border-top: 3px solid var(--secondary-color);
     }
+    
+    .specialty-card {
+      border-top: 3px solid var(--accent-color);
+    }
+    
+    .comparison-content {
+      padding: 1.5rem;
+    }
+    
+    .comparison-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    
+    .icon-wrapper {
+      width: 24px;
+      margin-right: 12px;
+      color: var(--primary-color);
+      text-align: center;
+    }
+    
     @media print {
       .reveal-section {
         opacity: 1;
@@ -643,18 +688,13 @@ function generateTemplateHTML(companyName: string, industryName: string, analysi
     <!-- 页眉 -->
     <header class="mb-10 text-center">
       <div class="flex justify-center items-center mb-4">
-        <!-- 尝试加载公司logo -->
-        <div class="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center mr-4 border border-gray-200" style="background-color: ${primaryColor};">
-          <img 
-            src="https://logo.clearbit.com/${companyEnName.replace(/\s+/g, '')}.com" 
-            alt="${companyName}的Logo" 
-            class="company-logo w-full h-full object-cover"
-            onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22 fill=%22white%22><text x=%2250%%22 y=%2250%%22 style=%22dominant-baseline:middle;text-anchor:middle;font-size:50px%22>${safeFirstLetter}</text></svg>'; this.classList.add('fallback-logo');"
-          />
+        <!-- 使用品牌图标代替不确定的logo -->
+        <div class="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center mr-4" style="background-color: ${primaryColor};">
+          <i class="fas fa-building text-white text-3xl"></i>
         </div>
         <h1 class="text-4xl font-bold" style="color: ${primaryColor};">${companyName}</h1>
       </div>
-      <p class="text-xl mb-2">${industryName} 行业分析报告</p>
+      <p class="text-xl mb-2">${industryName || '行业'} 分析报告</p>
       <p class="text-sm opacity-75">生成日期：${currentDate}</p>
     </header>
 
@@ -662,7 +702,7 @@ function generateTemplateHTML(companyName: string, industryName: string, analysi
     <div class="flex flex-col lg:flex-row gap-8">
       <!-- 侧边栏目录 -->
       <div class="lg:w-1/4">
-        <div class="sticky top-8 p-6 rounded-lg shadow-lg" style="background-color: white;">
+        <div class="sticky top-8 p-6 rounded-lg shadow-lg bg-white dark:bg-gray-800">
           <h3 class="text-lg font-bold mb-4" style="color: ${primaryColor};">目录</h3>
           <nav class="space-y-1" id="toc-navigation">
             ${tableOfContents}
@@ -796,64 +836,88 @@ function generateReportContent(sections: AnalysisSection[], primaryColor: string
     
     // 特殊处理竞争分析类的内容
     if (isCompetitionAnalysisSection(section.title)) {
-      // 查找表格内容并为其添加特殊样式
-      processedContent = processedContent.replace(
-        /(\|.*\|)(\n\|[-:]+\|[-:]+\|.*\n)(\|.*\|(\n\|.*\|)*)/g, 
-        (match) => {
-          // 将原始表格标记转换为HTML表格
-          const rows = match.split('\n').filter(row => row.trim().length > 0);
-          if (rows.length < 2) return match; // 如果不是有效表格，保持原样
+      // 提取表格内容，并转换为现代卡片式比较组件
+      const tableRegex = /\|.*\|[\s\S]*?\n\s*\|[-|:]+\|[\s\S]*?\n\s*\|.*\|/g;
+      const tableMatches = processedContent.match(tableRegex);
+      
+      if (tableMatches && tableMatches.length > 0) {
+        // 处理每个找到的表格
+        tableMatches.forEach(tableContent => {
+          // 分割表格行
+          const rows = tableContent.split('\n').filter(row => row.trim().startsWith('|'));
           
-          // 第一行是表头
+          if (rows.length < 3) return; // 忽略不完整的表格
+          
+          // 处理表头
           const headerRow = rows[0];
-          // 第二行是对齐符号
-          // 其余行是数据
-          const dataRows = rows.slice(2);
-          
-          // 解析表头
-          const headers = headerRow.split('|')
-            .filter(cell => cell.trim().length > 0)
+          const headers = headerRow
+            .split('|')
+            .filter(cell => cell.trim() !== '')
             .map(cell => cell.trim());
           
-          // 构建HTML表格
-          let htmlTable = `
-<div class="overflow-x-auto my-6">
-  <table class="competition-table min-w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-    <thead class="bg-gray-50 dark:bg-gray-700">
-      <tr>
-        ${headers.map(header => `<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">${header}</th>`).join('')}
-      </tr>
-    </thead>
-    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-`;
+          // 跳过分隔行，处理数据行
+          const dataRows = rows.slice(2);
           
-          // 添加数据行
-          dataRows.forEach((row, rowIndex) => {
-            const cells = row.split('|')
-              .filter(cell => cell.trim().length > 0)
-              .map(cell => cell.trim());
+          // 创建现代化的卡片式对比视图
+          let comparisonView = `
+<div class="grid grid-cols-1 md:grid-cols-${Math.min(headers.length, 3)} gap-6 my-8">`;
+          
+          // 为每个公司创建卡片
+          headers.forEach((company, idx) => {
+            let cardClass = 'company-card';
+            let headerBgColor = primaryColor;
             
-            const isOdd = rowIndex % 2 === 0;
-            const rowClass = isOdd ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900';
+            // 根据位置使用不同的样式
+            if (idx === 1) {
+              cardClass = 'competitor-card';
+              headerBgColor = '#4C51BF'; // 靛蓝色
+            } else if (idx === 2) {
+              cardClass = 'specialty-card';
+              headerBgColor = '#ED64A6'; // 粉色
+            }
             
-            htmlTable += `      <tr class="${rowClass} hover:bg-gray-100 dark:hover:bg-gray-700">
-        ${cells.map((cell, cellIndex) => {
-          // 第一列通常是公司或特性名称，给予特殊样式
-          if (cellIndex === 0) {
-            return `<td class="px-6 py-4 whitespace-nowrap text-sm font-medium" style="color: ${primaryColor};">${cell}</td>`;
-          }
-          return `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">${cell}</td>`;
-        }).join('')}
-      </tr>`;
+            comparisonView += `
+  <div class="comparison-card ${cardClass} bg-white dark:bg-gray-800">
+    <div class="comparison-header" style="background-color: ${headerBgColor};">
+      <h4 class="text-center font-semibold">${company}</h4>
+    </div>
+    <div class="comparison-content">`;
+            
+            // 提取该公司的每行数据并添加到卡片中
+            dataRows.forEach(row => {
+              const cells = row
+                .split('|')
+                .filter(cell => cell.trim() !== '')
+                .map(cell => cell.trim());
+              
+              if (cells.length > idx) {
+                const feature = cells[0];
+                const value = cells[idx];
+                
+                comparisonView += `
+      <div class="comparison-item">
+        <div class="icon-wrapper">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div>
+          <strong>${feature}:</strong> ${value}
+        </div>
+      </div>`;
+              }
+            });
+            
+            comparisonView += `
+    </div>
+  </div>`;
           });
           
-          htmlTable += `    </tbody>
-  </table>
+          comparisonView += `
 </div>`;
           
-          return htmlTable;
-        }
-      );
+          // 用新的比较视图替换原始表格
+          processedContent = processedContent.replace(tableContent, comparisonView);
+        });
+      }
     }
     
     // 处理常规Markdown内容
@@ -862,18 +926,47 @@ function generateReportContent(sections: AnalysisSection[], primaryColor: string
       .replace(/\*(.*?)\*/g, '<em>$1</em>')              // 斜体
       .replace(/\n\n/g, '</p><p>')                       // 段落
       .replace(/\n- (.*)/g, '<li>$1</li>')               // 列表项
-      .replace(/<li>.*<\/li>(\n<li>.*<\/li>)*/g, '<ul>$&</ul>');  // 列表包装
+      .replace(/<li>.*<\/li>(\n<li>.*<\/li>)*/g, '<ul class="list-disc pl-5 space-y-2 my-4">$&</ul>');  // 列表包装
 
     return `<section id="section-${index + 1}" class="mb-16 reveal-section">
       <div class="flex items-center mb-6">
         <div class="w-10 h-10 inline-flex items-center justify-center rounded-full mr-4" style="background-color: ${primaryColor}; color: white;">
-          ${index + 1}
+          <i class="fas fa-${getSectionIcon(section.title)}"></i>
         </div>
         <h2 class="text-2xl font-bold" style="color: ${textColor};">${section.title}</h2>
       </div>
-      <div class="pl-14">
+      <div class="pl-6 lg:pl-14">
         <p>${processedContent}</p>
       </div>
     </section>`;
   }).join('\n');
+}
+
+// 辅助函数：根据章节标题获取适当的图标
+function getSectionIcon(title: string): string {
+  const titleLower = title.toLowerCase();
+  
+  if (titleLower.includes('概述') || titleLower.includes('简介') || titleLower.includes('概况')) {
+    return 'info-circle';
+  } else if (titleLower.includes('产品') || titleLower.includes('服务')) {
+    return 'cube';
+  } else if (titleLower.includes('市场') || titleLower.includes('行业')) {
+    return 'chart-line';
+  } else if (titleLower.includes('竞争') || titleLower.includes('对手')) {
+    return 'users';
+  } else if (titleLower.includes('战略') || titleLower.includes('发展')) {
+    return 'chess';
+  } else if (titleLower.includes('财务') || titleLower.includes('盈利')) {
+    return 'dollar-sign';
+  } else if (titleLower.includes('风险') || titleLower.includes('挑战')) {
+    return 'exclamation-triangle';
+  } else if (titleLower.includes('技术') || titleLower.includes('研发')) {
+    return 'microchip';
+  } else if (titleLower.includes('swot') || titleLower.includes('优势') || titleLower.includes('劣势')) {
+    return 'balance-scale';
+  } else if (titleLower.includes('前景') || titleLower.includes('趋势') || titleLower.includes('未来')) {
+    return 'binoculars';
+  } else {
+    return 'file-alt'; // 默认图标
+  }
 } 
