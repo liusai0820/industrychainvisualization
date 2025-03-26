@@ -374,9 +374,12 @@ function generateHTMLPrompt(companyName: string, industryName: string, analysisR
 
 ## 图片和图标处理
 
-- **不要试图使用Clearbit API获取公司logo**，这在许多情况下不可靠
-- 请使用Font Awesome图标库中的图标代替不确定的图片，例如使用\`fa-building\`作为公司图标
-- 根据章节内容智能选择合适的Font Awesome图标，例如：
+- **公司Logo处理**：
+  - 优先尝试使用Clearbit API获取公司logo: \`https://logo.clearbit.com/{公司英文名称}.com\`
+  - 如果无法通过Clearbit获取logo，则使用Font Awesome的\`fa-building\`图标或公司名称首字母作为替代
+  - 添加适当的错误处理，确保logo加载失败时显示替代内容而不影响整体页面
+- **文本中的图片**：对于内容中提到但无法获取的图片，使用相应的Font Awesome图标替代
+- **章节图标**：根据章节内容智能选择合适的Font Awesome图标，例如：
   - 公司概述：\`fa-info-circle\`
   - 产品服务：\`fa-cube\`
   - 市场分析：\`fa-chart-line\`
@@ -412,7 +415,7 @@ ${JSON.stringify(sections, null, 2)}
 2. 实现滚动同步高亮目录功能，使用Intersection Observer API
 3. 页脚版权信息显示为"智绘链图"
 4. 所有文本必须应用防止中文单字换行的CSS规则
-5. 使用Font Awesome图标替代不确定的图片，不要尝试获取公司logo
+5. 优先尝试使用Clearbit API获取公司logo，仅在无法获取时使用替代方案
 6. 每个章节标题旁边添加一个与内容相关的Font Awesome图标
 `;
 }
@@ -718,9 +721,11 @@ function generateTemplateHTML(companyName: string, industryName: string, analysi
     <!-- 页眉 -->
     <header class="mb-10 text-center">
       <div class="flex justify-center items-center mb-4">
-        <!-- 使用品牌图标代替不确定的logo -->
+        <!-- 尝试使用Clearbit API获取公司logo，失败时显示图标 -->
         <div class="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center mr-4" style="background-color: ${primaryColor};">
-          <i class="fas fa-building text-white text-3xl"></i>
+          <img src="https://logo.clearbit.com/${companyName.toLowerCase().replace(/[^a-zA-Z0-9]/g, '')}.com" 
+               onerror="this.onerror=null; this.style.display='none'; this.parentNode.innerHTML='<i class=\'fas fa-building text-white text-3xl\'></i>';" 
+               alt="${companyName} Logo" class="w-full h-full object-contain"/>
         </div>
         <h1 class="text-4xl font-bold" style="color: ${primaryColor};">${companyName}</h1>
       </div>
