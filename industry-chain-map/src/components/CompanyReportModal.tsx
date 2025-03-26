@@ -2,13 +2,14 @@
 
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Dialog } from '@headlessui/react';
-import { XMarkIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Document, Packer, Paragraph, HeadingLevel, AlignmentType } from 'docx';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { tomorrow } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { toast } from 'react-hot-toast';
 
 interface CompanyReportModalProps {
   isOpen: boolean;
@@ -270,6 +271,7 @@ export default function CompanyReportModal({
   const [stageMessage, setStageMessage] = useState('');
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   const [downloadingDocx, setDownloadingDocx] = useState(false);
+  const [generatingHTML, setGeneratingHTML] = useState(false);
   const reportRef = useRef<HTMLDivElement>(null);
   const requestIdRef = useRef<string>('');
   
@@ -701,6 +703,89 @@ export default function CompanyReportModal({
     });
   };
 
+  const generateHTMLReport = async () => {
+    try {
+      setGeneratingHTML(true);
+      
+      // 检查是否有分析结果
+      if (!analysisResult || analysisResult.sections.length === 0) {
+        toast.error('无法生成报告：分析结果为空');
+        setGeneratingHTML(false);
+        return;
+      }
+      
+      // 发送请求生成HTML报告
+      const response = await fetch('/api/company-analysis-html', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          companyName,
+          industryName,
+          analysisResult
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP错误，状态码: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      
+      if (!result.success) {
+        throw new Error(result.error || '生成HTML报告失败');
+      }
+      
+      // 检查是否从缓存获取
+      if (result.fromCache) {
+        toast.success('已从缓存加载报告', { 
+          duration: 3000,
+          icon: '📦'
+        });
+        console.log(`报告来自缓存，生成于: ${new Date(result.cachedAt).toLocaleString()}`);
+      } else if (result.fallback) {
+        // 如果使用了备选方案，通知用户
+        toast.error('使用了模板生成报告（API生成失败）', {
+          duration: 5000,
+          icon: '⚠️'
+        });
+      } else {
+        toast.success('报告生成成功！', {
+          duration: 3000
+        });
+      }
+      
+      // 获取HTML数据
+      const htmlContent = result.data;
+      
+      // 在新窗口中打开HTML
+      try {
+        const newWindow = window.open();
+        if (newWindow) {
+          newWindow.document.write(htmlContent);
+          newWindow.document.close();
+        } else {
+          toast.error('无法打开新窗口，请检查您的浏览器是否阻止了弹出窗口');
+        }
+      } catch (error) {
+        console.error('打开新窗口显示HTML失败:', error);
+        toast.error('无法显示HTML报告，请检查浏览器设置');
+      }
+      
+    } catch (error) {
+      console.error('生成HTML报告失败:', error);
+      // 特别处理网络中断错误
+      const errorMessage = error instanceof Error && 
+                          error.message.includes('Premature close') ? 
+                          '网络连接中断，请检查您的网络并重试' : 
+                          `生成HTML报告失败: ${error instanceof Error ? error.message : '未知错误'}`;
+      toast.error(errorMessage);
+    } finally {
+      setGeneratingHTML(false);
+    }
+  };
+
   return (
     <Dialog
       open={isOpen}
@@ -720,13 +805,51 @@ export default function CompanyReportModal({
               {analysisResult && !loading && (
                 <div className="flex space-x-2">
                   <button
+                    onClick={generateHTMLReport}
+                    disabled={generatingHTML}
+                    className="flex items-center px-3 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-md hover:from-green-700 hover:to-green-800 transition-all shadow-sm hover:shadow disabled:opacity-50 disabled:shadow-none"
+                    title="生成可视化报告"
+                  >
+                    {generatingHTML ? (
+                      <>
+                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        生成中...
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                        可视化报告
+                      </>
+                    )}
+                  </button>
+                  
+                  <button
                     onClick={downloadAsDocx}
                     disabled={downloadingDocx}
                     className="flex items-center px-3 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-md hover:from-green-700 hover:to-green-800 transition-all shadow-sm hover:shadow disabled:opacity-50 disabled:shadow-none"
                     title="下载Word文档"
                   >
-                    <DocumentTextIcon className="h-5 w-5 mr-1" />
-                    {downloadingDocx ? '生成中...' : 'Word文档'}
+                    {downloadingDocx ? (
+                      <>
+                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        处理中...
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                        下载Word文档
+                      </>
+                    )}
                   </button>
                 </div>
               )}
