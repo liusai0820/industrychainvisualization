@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { generateCompanyAnalysisPrompt } from '@/prompts/companyAnalysis';
 import fetch, { RequestInit } from 'node-fetch';
-import { kv } from '@vercel/kv';
+import { redis } from '@/lib/redis';
 
 // OpenRouter配置
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
@@ -63,9 +63,9 @@ export async function POST(request: NextRequest) {
     // 生成缓存键
     const analysisCacheKey = `analysis:${companyName}:${industryName || ''}`;
     
-    // 检查KV缓存
+    // 检查KV缓存 - 使用自定义redis客户端
     try {
-      const cachedAnalysis = await kv.get<AnalysisResult>(analysisCacheKey);
+      const cachedAnalysis = await redis.get<AnalysisResult>(analysisCacheKey);
       if (cachedAnalysis) {
         console.log('📦 命中分析结果缓存！');
         return NextResponse.json({
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
         });
       }
     } catch (kvError) {
-      console.error('⚠️ KV缓存检索错误:', kvError);
+      console.error('⚠️ Redis缓存检索错误:', kvError);
       // 继续流程，不中断
     }
 
@@ -83,13 +83,13 @@ export async function POST(request: NextRequest) {
     const analysisResult = await generateCompanyAnalysis(companyName, industryName);
     console.log('✅ 企业分析生成完成\n');
     
-    // 缓存分析结果
+    // 缓存分析结果 - 使用自定义redis客户端
     try {
       // 设置KV缓存，15天过期
-      await kv.set(analysisCacheKey, analysisResult, { ex: 60 * 60 * 24 * 15 });
-      console.log('📦 分析结果已缓存到KV存储（15天有效期）');
+      await redis.set(analysisCacheKey, analysisResult, { ex: 60 * 60 * 24 * 15 });
+      console.log('📦 分析结果已缓存到Redis存储（15天有效期）');
     } catch (kvError) {
-      console.error('⚠️ KV缓存存储错误:', kvError);
+      console.error('⚠️ Redis缓存存储错误:', kvError);
       // 继续流程，不中断
     }
     

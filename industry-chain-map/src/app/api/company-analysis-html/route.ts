@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getIndustryStyle, IndustryStyle } from '@/utils/industryStyles';
 import fetch from 'node-fetch';
-import { kv } from '@vercel/kv';
+import { redis } from '@/lib/redis';
 
 // OpenRouter配置
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
@@ -178,9 +178,9 @@ export async function POST(request: NextRequest) {
     
     // 2. 检查KV缓存
     try {
-      const kvCachedReport = await kv.get<CacheItem>(cacheKey);
+      const kvCachedReport = await redis.get<CacheItem>(cacheKey);
       if (kvCachedReport) {
-        console.log('📦 命中KV缓存！使用云端缓存的HTML报告');
+        console.log('📦 命中Redis缓存！使用云端缓存的HTML报告');
         console.log(`缓存生成时间: ${new Date(kvCachedReport.generatedAt).toLocaleString()}`);
         console.log(`缓存生成方式: ${kvCachedReport.method}${kvCachedReport.fallback ? ' (降级)' : ''}`);
         
@@ -193,12 +193,12 @@ export async function POST(request: NextRequest) {
           method: kvCachedReport.method,
           fallback: kvCachedReport.fallback,
           fromCache: true,
-          cacheSource: 'kv',
+          cacheSource: 'redis',
           cachedAt: kvCachedReport.generatedAt
         });
       }
     } catch (kvError) {
-      console.error('⚠️ KV缓存检索错误:', kvError);
+      console.error('⚠️ Redis缓存检索错误:', kvError);
       // 继续流程，不中断
     }
     
@@ -234,10 +234,10 @@ export async function POST(request: NextRequest) {
         // 更新KV缓存
         try {
           // 设置KV缓存，30天过期
-          await kv.set(cacheKey, cacheItem, { ex: 60 * 60 * 24 * 30 });
-          console.log('📦 HTML报告已缓存到KV存储（30天有效期）');
+          await redis.set(cacheKey, cacheItem, { ex: 60 * 60 * 24 * 30 });
+          console.log('📦 HTML报告已缓存到Redis存储（30天有效期）');
         } catch (kvError) {
-          console.error('⚠️ KV缓存存储错误:', kvError);
+          console.error('⚠️ Redis缓存存储错误:', kvError);
           // 继续流程，不中断
         }
         
@@ -274,10 +274,10 @@ export async function POST(request: NextRequest) {
       // 更新KV缓存
       try {
         // 设置KV缓存，30天过期
-        await kv.set(cacheKey, cacheItem, { ex: 60 * 60 * 24 * 30 });
-        console.log('📦 模板HTML报告已缓存到KV存储（30天有效期）');
+        await redis.set(cacheKey, cacheItem, { ex: 60 * 60 * 24 * 30 });
+        console.log('📦 模板HTML报告已缓存到Redis存储（30天有效期）');
       } catch (kvError) {
-        console.error('⚠️ KV缓存存储错误:', kvError);
+        console.error('⚠️ Redis缓存存储错误:', kvError);
         // 继续流程，不中断
       }
       
