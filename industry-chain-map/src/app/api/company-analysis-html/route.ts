@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getIndustryStyle, IndustryStyle } from '@/utils/industryStyles';
 import fetch from 'node-fetch';
+import { kv } from '@vercel/kv';
 
 // OpenRouter配置
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
@@ -114,7 +115,7 @@ function generateCacheKey(companyName: string, industryName: string, analysisRes
   const safeName = companyName || 'unknown';
   const safeIndustry = industryName || '';
   const safeHash = analysisResultHash || 'empty';
-  return `${safeName}|${safeIndustry}|${safeHash}`;
+  return `html:${safeName}|${safeIndustry}|${safeHash}`;
 }
 
 // 为分析结果生成简单哈希
@@ -157,11 +158,10 @@ export async function POST(request: NextRequest) {
     const analysisResultHash = generateSimpleHash(analysisResult);
     const cacheKey = generateCacheKey(companyName, industryName || '', analysisResultHash);
     
-    // 检查缓存中是否已有此报告
+    // 1. 检查内存缓存
     const cachedReport = htmlReportCache.get(cacheKey);
-    
     if (cachedReport) {
-      console.log('📦 命中缓存！使用已缓存的HTML报告');
+      console.log('📦 命中内存缓存！使用已缓存的HTML报告');
       console.log(`缓存生成时间: ${new Date(cachedReport.generatedAt).toLocaleString()}`);
       console.log(`缓存生成方式: ${cachedReport.method}${cachedReport.fallback ? ' (降级)' : ''}`);
       
@@ -171,8 +171,35 @@ export async function POST(request: NextRequest) {
         method: cachedReport.method,
         fallback: cachedReport.fallback,
         fromCache: true,
+        cacheSource: 'memory',
         cachedAt: cachedReport.generatedAt
       });
+    }
+    
+    // 2. 检查KV缓存
+    try {
+      const kvCachedReport = await kv.get<CacheItem>(cacheKey);
+      if (kvCachedReport) {
+        console.log('📦 命中KV缓存！使用云端缓存的HTML报告');
+        console.log(`缓存生成时间: ${new Date(kvCachedReport.generatedAt).toLocaleString()}`);
+        console.log(`缓存生成方式: ${kvCachedReport.method}${kvCachedReport.fallback ? ' (降级)' : ''}`);
+        
+        // 同时更新内存缓存
+        htmlReportCache.put(cacheKey, kvCachedReport);
+        
+        return NextResponse.json({
+          success: true,
+          data: kvCachedReport.html,
+          method: kvCachedReport.method,
+          fallback: kvCachedReport.fallback,
+          fromCache: true,
+          cacheSource: 'kv',
+          cachedAt: kvCachedReport.generatedAt
+        });
+      }
+    } catch (kvError) {
+      console.error('⚠️ KV缓存检索错误:', kvError);
+      // 继续流程，不中断
     }
     
     console.log('🚀 开始生成HTML企业分析...');
@@ -193,14 +220,26 @@ export async function POST(request: NextRequest) {
         const htmlResult = await callOpenRouterForHTML(htmlPrompt);
         console.log('✅ LLM生成HTML企业分析成功\n');
         
-        // 将生成的HTML保存到缓存
-        htmlReportCache.put(cacheKey, {
+        // 创建缓存项
+        const cacheItem: CacheItem = {
           html: htmlResult,
           method: 'llm',
           generatedAt: Date.now()
-        });
+        };
         
-        console.log(`📦 HTML报告已缓存，当前缓存报告数量: ${htmlReportCache.size()}`);
+        // 更新内存缓存
+        htmlReportCache.put(cacheKey, cacheItem);
+        console.log(`📦 HTML报告已缓存到内存，当前内存缓存报告数量: ${htmlReportCache.size()}`);
+        
+        // 更新KV缓存
+        try {
+          // 设置KV缓存，30天过期
+          await kv.set(cacheKey, cacheItem, { ex: 60 * 60 * 24 * 30 });
+          console.log('📦 HTML报告已缓存到KV存储（30天有效期）');
+        } catch (kvError) {
+          console.error('⚠️ KV缓存存储错误:', kvError);
+          // 继续流程，不中断
+        }
         
         return NextResponse.json({
           success: true,
@@ -220,15 +259,27 @@ export async function POST(request: NextRequest) {
       const htmlResult = generateTemplateHTML(companyName, industryName || '', analysisResult, industryStyle);
       console.log('✅ 使用模板生成HTML企业分析完成\n');
       
-      // 将生成的HTML保存到缓存
-      htmlReportCache.put(cacheKey, {
+      // 创建缓存项
+      const cacheItem: CacheItem = {
         html: htmlResult,
         method: 'template',
         generatedAt: Date.now(),
         fallback: true
-      });
+      };
       
-      console.log(`📦 模板HTML报告已缓存，当前缓存报告数量: ${htmlReportCache.size()}`);
+      // 更新内存缓存
+      htmlReportCache.put(cacheKey, cacheItem);
+      console.log(`📦 模板HTML报告已缓存到内存，当前内存缓存报告数量: ${htmlReportCache.size()}`);
+      
+      // 更新KV缓存
+      try {
+        // 设置KV缓存，30天过期
+        await kv.set(cacheKey, cacheItem, { ex: 60 * 60 * 24 * 30 });
+        console.log('📦 模板HTML报告已缓存到KV存储（30天有效期）');
+      } catch (kvError) {
+        console.error('⚠️ KV缓存存储错误:', kvError);
+        // 继续流程，不中断
+      }
       
       return NextResponse.json({
         success: true,

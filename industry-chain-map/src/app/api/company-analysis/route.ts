@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { generateCompanyAnalysisPrompt } from '@/prompts/companyAnalysis';
 import fetch, { RequestInit } from 'node-fetch';
+import { kv } from '@vercel/kv';
 
 // OpenRouter配置
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
@@ -59,9 +60,38 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // 生成缓存键
+    const analysisCacheKey = `analysis:${companyName}:${industryName || ''}`;
+    
+    // 检查KV缓存
+    try {
+      const cachedAnalysis = await kv.get<AnalysisResult>(analysisCacheKey);
+      if (cachedAnalysis) {
+        console.log('📦 命中分析结果缓存！');
+        return NextResponse.json({
+          success: true,
+          data: cachedAnalysis,
+          fromCache: true
+        });
+      }
+    } catch (kvError) {
+      console.error('⚠️ KV缓存检索错误:', kvError);
+      // 继续流程，不中断
+    }
+
     console.log('🚀 开始生成企业分析...');
     const analysisResult = await generateCompanyAnalysis(companyName, industryName);
     console.log('✅ 企业分析生成完成\n');
+    
+    // 缓存分析结果
+    try {
+      // 设置KV缓存，15天过期
+      await kv.set(analysisCacheKey, analysisResult, { ex: 60 * 60 * 24 * 15 });
+      console.log('📦 分析结果已缓存到KV存储（15天有效期）');
+    } catch (kvError) {
+      console.error('⚠️ KV缓存存储错误:', kvError);
+      // 继续流程，不中断
+    }
     
     return NextResponse.json({
       success: true,

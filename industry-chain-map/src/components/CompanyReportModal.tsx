@@ -274,6 +274,65 @@ export default function CompanyReportModal({
   const [generatingHTML, setGeneratingHTML] = useState(false);
   const reportRef = useRef<HTMLDivElement>(null);
   const requestIdRef = useRef<string>('');
+  const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  
+  // 添加进度模拟功能
+  const startProgressSimulation = useCallback(() => {
+    // 停止任何现有的模拟
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+      progressIntervalRef.current = null;
+    }
+    
+    // 设置初始阶段和进度
+    setProgress(0);
+    setGenerationStage('collecting');
+    let currentProgress = 0;
+    
+    // 创建进度模拟定时器
+    progressIntervalRef.current = setInterval(() => {
+      // 根据不同阶段设置不同的进度增加速度
+      let increment = 0;
+      
+      if (currentProgress < 25) {
+        // 收集阶段 (0-25%)
+        increment = 0.5;
+        setGenerationStage('collecting');
+      } else if (currentProgress < 50) {
+        // 分析阶段 (25-50%)
+        increment = 0.3;
+        setGenerationStage('analyzing');
+      } else if (currentProgress < 75) {
+        // 草拟阶段 (50-75%)
+        increment = 0.2;
+        setGenerationStage('drafting');
+      } else if (currentProgress < 90) {
+        // 审查阶段 (75-90%)
+        increment = 0.1;
+        setGenerationStage('reviewing');
+      } else if (currentProgress < 99) {
+        // 完成阶段 (90-99%)
+        increment = 0.05;
+        setGenerationStage('finalizing');
+      } else {
+        // 保持在99%，等待实际完成
+        if (progressIntervalRef.current) {
+          clearInterval(progressIntervalRef.current);
+          progressIntervalRef.current = null;
+        }
+      }
+      
+      currentProgress = Math.min(currentProgress + increment, 99);
+      setProgress(Math.round(currentProgress));
+    }, 200);
+  }, []);
+  
+  const stopProgressSimulation = useCallback(() => {
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+      progressIntervalRef.current = null;
+    }
+  }, []);
   
   // 报告生成阶段状态
   const stages = useMemo(() => ({
@@ -373,73 +432,78 @@ export default function CompanyReportModal({
 
   // 定义获取公司分析的函数
   const fetchCompanyAnalysis = useCallback(async () => {
-    // 生成新的请求ID
-    const currentRequestId = Date.now().toString();
-    requestIdRef.current = currentRequestId;
+    const fetchAnalysis = async () => {
+      if (!companyName) return;
+      
+      setLoading(true);
+      setError('');
+      setGenerationStage('collecting');
+      setProgress(0);
+      
+      try {
+        // 设置模拟的进度更新
+        startProgressSimulation();
+        
+        const response = await fetch('/api/company-analysis', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            companyName,
+            industryName
+          }),
+        });
+        
+        if (!response.ok) {
+          throw new Error(`请求失败, 状态码: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (!data.success) {
+          throw new Error(data.error || '分析生成失败');
+        }
 
-    // 如果已经在加载中或已有结果，则不重复请求
-    if (!companyName || loading || analysisResult) return;
-    
-    // 重置状态
-    setLoading(true);
-    setError(null);
-    setProgress(0);
-    setGenerationStage('collecting');
-    setStageMessage(stages.collecting.messages[0]);
-    
-    try {
-      const response = await fetch('/api/company-analysis', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          companyName,
-          industryName
-        }),
-      });
-
-      // 如果请求ID已经改变，说明有新的请求，放弃当前请求的处理
-      if (requestIdRef.current !== currentRequestId) {
-        console.log('请求已过期，放弃处理结果');
-        return;
-      }
-      
-      if (!response.ok) {
-        throw new Error(`请求失败: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      console.log('API响应数据:', data);
-      
-      if (!data.success) {
-        throw new Error(data.error || '请求失败');
-      }
-      
-      // 检查数据结构
-      if (!data.data || !data.data.sections) {
-        console.error('API返回的数据结构不正确:', data);
-        throw new Error('API返回的数据结构不正确');
-      }
-      
-      // 设置结果
-      setAnalysisResult(data.data);
-      setGenerationStage('complete');
-      setProgress(100);
-    } catch (err) {
-      // 如果请求ID已经改变，不设置错误状态
-      if (requestIdRef.current === currentRequestId) {
-        console.error('获取公司分析失败:', err);
-        setError(err instanceof Error ? err.message : '未知错误');
-        setGenerationStage('complete');
-      }
-    } finally {
-      // 如果请求ID没有改变，才设置loading状态
-      if (requestIdRef.current === currentRequestId) {
+        // 检查是否从缓存获取
+        if (data.fromCache) {
+          toast.success('已从缓存加载分析结果', { 
+            duration: 3000,
+            icon: '📦'
+          });
+          console.log(`分析结果来自缓存`);
+          
+          // 立即设置进度为100%并完成
+          setProgress(100);
+          setGenerationStage('complete');
+          stopProgressSimulation();
+        }
+        
+        setAnalysisResult(data.data);
+        
+      } catch (err) {
+        console.error('获取分析失败:', err);
+        setError(err instanceof Error ? err.message : '获取分析失败，请稍后重试');
+        toast.error(`获取企业分析失败: ${err instanceof Error ? err.message : '未知错误'}`);
+      } finally {
+        // 确保进度模拟停止
+        if (progressIntervalRef.current) {
+          clearInterval(progressIntervalRef.current);
+          progressIntervalRef.current = null;
+        }
         setLoading(false);
       }
-    }
-  }, [companyName, industryName, stages, loading, analysisResult]);
+    };
+    
+    fetchAnalysis();
+    
+    return () => {
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+        progressIntervalRef.current = null;
+      }
+    };
+  }, [companyName, industryName, toast, startProgressSimulation, stopProgressSimulation]);
 
   // 初始化时获取公司分析
   useEffect(() => {
@@ -739,11 +803,14 @@ export default function CompanyReportModal({
       
       // 检查是否从缓存获取
       if (result.fromCache) {
-        toast.success('已从缓存加载报告', { 
+        const cacheType = result.cacheSource === 'memory' ? '本地内存' : '云端';
+        const cacheDate = new Date(result.cachedAt).toLocaleString();
+        
+        toast.success(`已从${cacheType}缓存加载报告`, { 
           duration: 3000,
           icon: '📦'
         });
-        console.log(`报告来自缓存，生成于: ${new Date(result.cachedAt).toLocaleString()}`);
+        console.log(`报告来自${cacheType}缓存，生成于: ${cacheDate}`);
       } else if (result.fallback) {
         // 如果使用了备选方案，通知用户
         toast.error('使用了模板生成报告（API生成失败）', {
