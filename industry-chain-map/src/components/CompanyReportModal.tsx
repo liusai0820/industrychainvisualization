@@ -840,6 +840,38 @@ export default function CompanyReportModal({
         toast.error('无法显示HTML报告，请检查浏览器设置');
       }
       
+      // 自动下载HTML文件
+      try {
+        // 获取当前日期并格式化为 YYYY-MM-DD
+        const today = new Date();
+        const dateString = today.toISOString().split('T')[0];
+        const fileName = `${companyName}深度研究报告${dateString}.html`;
+        
+        // 创建一个Blob对象
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        
+        // 创建一个下载链接
+        const downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = fileName;
+        
+        // 触发下载
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        
+        // 清理
+        document.body.removeChild(downloadLink);
+        URL.revokeObjectURL(downloadLink.href);
+        
+        toast.success(`HTML报告已下载为: ${fileName}`, {
+          duration: 4000,
+          icon: '💾'
+        });
+      } catch (downloadError) {
+        console.error('下载HTML文件失败:', downloadError);
+        toast.error('无法下载HTML文件');
+      }
+      
     } catch (error) {
       console.error('生成HTML报告失败:', error);
       // 特别处理网络中断错误

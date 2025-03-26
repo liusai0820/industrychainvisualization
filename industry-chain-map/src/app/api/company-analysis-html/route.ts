@@ -348,15 +348,19 @@ function generateHTMLPrompt(companyName: string, industryName: string, analysisR
 
 ## CSS规范
 
-- **防止中文单字换行**：为所有文本元素应用以下CSS样式：
+- **文本排版规则**：为所有文本元素应用以下CSS样式：
   \`\`\`css
   p, h1, h2, h3, h4, h5, h6, li, td, th, div, span {
     word-break: keep-all;
     overflow-wrap: break-word;
+    text-align: justify; /* 文本两端对齐 */
+    hyphens: auto;
+    line-height: 1.6;
   }
   \`\`\`
 - 确保响应式设计在所有设备上都能正确显示中文文本
 - 使用\`font-family\`优先选择"Noto Sans SC"等适合中文显示的字体
+- 段落间需保持适当间距，改善长文本的可读性
 
 ## 响应式设计
 
@@ -367,10 +371,17 @@ function generateHTMLPrompt(companyName: string, industryName: string, analysisR
 ## 图表与视觉元素
 
 - 根据内容自动选择合适的图表类型（饼图、柱状图、折线图、雷达图等）
+- **图表尺寸控制**：
+  - 所有图表的最大高度不应超过50vh（视口高度的50%）
+  - 图表容器宽度在移动设备上为100%，在桌面设备上最大为75%
+  - 使用响应式设计确保图表在各种屏幕尺寸下合理显示
+  - 避免使用固定像素大小，改用相对单位（%, vh, em等）
 - 对于SWOT分析，使用四象限图表
 - 对于竞争分析，使用精美的卡片式比较组件，每个公司一张卡片，卡片顶部有标题和背景颜色区分，内容区域使用图标+文本的方式列出特点
 - 对于财务分析，使用趋势图和KPI卡片
 - 对于风险分析，使用热力图或等级指示器
+- 为每个图表添加简洁的标题和必要的数据标签，确保信息清晰可读
+- 使用Chart.js的响应式选项，设置maintainAspectRatio:false和适当的高度控制
 
 ## 图片和图标处理
 
@@ -414,9 +425,11 @@ ${JSON.stringify(sections, null, 2)}
 1. 对比表格必须使用现代卡片式设计，完全避免使用HTML表格标签，确保手机端显示良好
 2. 实现滚动同步高亮目录功能，使用Intersection Observer API
 3. 页脚版权信息显示为"智绘链图"
-4. 所有文本必须应用防止中文单字换行的CSS规则
+4. 所有文本必须应用防止中文单字换行的CSS规则和两端对齐样式
 5. 优先尝试使用Clearbit API获取公司logo，仅在无法获取时使用替代方案
 6. 每个章节标题旁边添加一个与内容相关的Font Awesome图标
+7. 图表大小不应超过视口高度的50%，确保美观且不占用过多屏幕空间
+8. 实现"保存到本地"按钮，允许用户下载HTML文件，文件名格式为"公司名+深度研究报告+生成日期"
 `;
 }
 
@@ -622,6 +635,9 @@ function generateTemplateHTML(companyName: string, industryName: string, analysi
     p, h1, h2, h3, h4, h5, h6, li, td, th, div, span {
       word-break: keep-all;
       overflow-wrap: break-word;
+      text-align: justify; /* 文本两端对齐 */
+      hyphens: auto;
+      line-height: 1.6;
     }
     
     .reveal-section {
@@ -657,6 +673,26 @@ function generateTemplateHTML(companyName: string, industryName: string, analysi
       width: 4px;
       background-color: var(--primary-color);
       border-radius: 0 2px 2px 0;
+    }
+    
+    /* 段落样式 */
+    p {
+      margin-bottom: 1.2em;
+      text-indent: 2em; /* 段落首行缩进 */
+    }
+    
+    /* 图表大小控制 */
+    .chart-container {
+      width: 100%;
+      max-width: 700px;
+      max-height: 50vh;
+      margin: 2em auto;
+    }
+    
+    @media (max-width: 768px) {
+      .chart-container {
+        max-height: 40vh;
+      }
     }
     
     /* 现代卡片式比较表格 */
@@ -757,6 +793,18 @@ function generateTemplateHTML(companyName: string, industryName: string, analysi
     </footer>
   </div>
 
+  <!-- 固定位置的下载按钮 -->
+  <div class="fixed bottom-6 right-6 z-50">
+    <button 
+      onclick="downloadHTML()" 
+      class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full shadow-lg flex items-center transition-all duration-300 hover:scale-105">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+      </svg>
+      保存报告
+    </button>
+  </div>
+
   <script>
     // 更新CSS变量，允许JS访问主色调
     document.documentElement.style.setProperty('--primary-color-rgb', hexToRgb('${primaryColor}'));
@@ -775,6 +823,22 @@ function generateTemplateHTML(companyName: string, industryName: string, analysi
       let b = bigint & 255;
       
       return r + "," + g + "," + b;
+    }
+
+    // 下载HTML功能
+    function downloadHTML() {
+      const htmlContent = document.documentElement.outerHTML;
+      const blob = new Blob([htmlContent], { type: 'text/html' });
+      const fileName = "${companyName}深度研究报告${currentDate.replace(/[年月日]/g, '').trim()}.html";
+      
+      const downloadLink = document.createElement('a');
+      downloadLink.href = URL.createObjectURL(blob);
+      downloadLink.download = fileName;
+      
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      URL.revokeObjectURL(downloadLink.href);
     }
 
     // 页面滚动动画和目录同步高亮
@@ -959,9 +1023,17 @@ function generateReportContent(sections: AnalysisSection[], primaryColor: string
     processedContent = processedContent
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')  // 加粗
       .replace(/\*(.*?)\*/g, '<em>$1</em>')              // 斜体
-      .replace(/\n\n/g, '</p><p>')                       // 段落
+      .replace(/\n\n/g, '</p><p class="indent-8 mb-4">')  // 段落，添加缩进和间距
       .replace(/\n- (.*)/g, '<li>$1</li>')               // 列表项
       .replace(/<li>.*<\/li>(\n<li>.*<\/li>)*/g, '<ul class="list-disc pl-5 space-y-2 my-4">$&</ul>');  // 列表包装
+    
+    // 确保内容被正确的段落标签包裹
+    if (!processedContent.startsWith('<p')) {
+      processedContent = `<p class="indent-8 mb-4">${processedContent}`;
+    }
+    if (!processedContent.endsWith('</p>')) {
+      processedContent = `${processedContent}</p>`;
+    }
 
     return `<section id="section-${index + 1}" class="mb-16 reveal-section">
       <div class="flex items-center mb-6">
@@ -971,7 +1043,9 @@ function generateReportContent(sections: AnalysisSection[], primaryColor: string
         <h2 class="text-2xl font-bold" style="color: ${textColor};">${section.title}</h2>
       </div>
       <div class="pl-6 lg:pl-14">
-        <p>${processedContent}</p>
+        <div class="content text-justify">
+          ${processedContent}
+        </div>
       </div>
     </section>`;
   }).join('\n');
