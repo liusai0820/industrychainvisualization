@@ -323,8 +323,9 @@ function generateHTMLPrompt(companyName: string, industryName: string, analysisR
 - 在页面底部添加版权信息和生成时间，版权所有者为"智绘链图"
 - 为数据和信息设计适合的可视化图表和组件
 - 突出显示重要的数据点和关键发现
-- 对比表格必须美观且易读，使用现代化的表格设计，确保表格内容对齐整齐，有适当的间距和边框
-- 尝试使用Clearbit API获取公司logo: https://logo.clearbit.com/{公司英文名称}.com，并显示在报告头部
+- 对比表格必须美观且易读，使用现代化的卡片式比较组件替代传统表格，每个公司用一张独立卡片表示，卡片之间有明显视觉差异
+- **严格禁止使用传统的HTML表格**，必须使用现代卡片组件设计，并且每个比较项使用图标+文本的组合方式
+- 请使用Font Awesome图标库，通过CDN引入：https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css
 
 ## 设计风格
 
@@ -345,18 +346,43 @@ function generateHTMLPrompt(companyName: string, industryName: string, analysisR
 - 代码结构清晰，便于理解和维护
 - 实现目录高亮功能：当用户滚动到某个章节时，左侧目录中对应的项目应自动高亮
 
+## CSS规范
+
+- **防止中文单字换行**：为所有文本元素应用以下CSS样式：
+  \`\`\`css
+  p, h1, h2, h3, h4, h5, h6, li, td, th, div, span {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+  \`\`\`
+- 确保响应式设计在所有设备上都能正确显示中文文本
+- 使用\`font-family\`优先选择"Noto Sans SC"等适合中文显示的字体
+
 ## 响应式设计
 
 - 页面必须在所有设备上（手机、平板、桌面）完美展示
 - 针对不同屏幕尺寸优化布局和字体大小
+- 卡片式比较组件在桌面端横向排列，在移动端要优雅地转为垂直堆叠
 
 ## 图表与视觉元素
 
 - 根据内容自动选择合适的图表类型（饼图、柱状图、折线图、雷达图等）
 - 对于SWOT分析，使用四象限图表
-- 对于竞争分析，使用精美的比较表格或雷达图，必须特别注意表格的美观性
+- 对于竞争分析，使用精美的卡片式比较组件，每个公司一张卡片，卡片顶部有标题和背景颜色区分，内容区域使用图标+文本的方式列出特点
 - 对于财务分析，使用趋势图和KPI卡片
 - 对于风险分析，使用热力图或等级指示器
+
+## 图片和图标处理
+
+- **不要试图使用Clearbit API获取公司logo**，这在许多情况下不可靠
+- 请使用Font Awesome图标库中的图标代替不确定的图片，例如使用\`fa-building\`作为公司图标
+- 根据章节内容智能选择合适的Font Awesome图标，例如：
+  - 公司概述：\`fa-info-circle\`
+  - 产品服务：\`fa-cube\`
+  - 市场分析：\`fa-chart-line\`
+  - 竞争分析：\`fa-users\`
+  - 财务分析：\`fa-dollar-sign\`
+  - 风险分析：\`fa-exclamation-triangle\`
 
 ## 交互体验
 
@@ -365,11 +391,13 @@ function generateHTMLPrompt(companyName: string, industryName: string, analysisR
 - 内容区块加载时有优雅的淡入动画
 - 提供目录导航，方便用户跳转到不同章节
 - 当用户滚动到特定章节时，相应的目录项应该自动高亮
+- 对比卡片添加悬停效果，如轻微上浮和阴影加深
 
 ## 输出要求
 
 - 提供完整可运行的单一HTML文件，包含所有必要的CSS和JavaScript
 - 确保代码符合W3C标准，无错误警告
+- 确保所有中文文本都能正确显示，不会出现单字换行的情况
 
 ## 报告内容
 
@@ -380,10 +408,12 @@ ${JSON.stringify(sections, null, 2)}
 请基于以上要求和内容，创建一个完整的HTML文件。生成的HTML应当可以独立运行，不依赖外部服务器（除了CDN资源）。
 
 特别注意：
-1. 对比表格的视觉呈现必须精美，使用线条、颜色和间距让表格内容清晰易读
+1. 对比表格必须使用现代卡片式设计，完全避免使用HTML表格标签，确保手机端显示良好
 2. 实现滚动同步高亮目录功能，使用Intersection Observer API
-3. 页脚版权信息显示为"智绘链图"而非"产业链地图"
-4. 尝试使用Clearbit API获取公司logo，如果无法获取则使用公司首字母作为替代图标
+3. 页脚版权信息显示为"智绘链图"
+4. 所有文本必须应用防止中文单字换行的CSS规则
+5. 使用Font Awesome图标替代不确定的图片，不要尝试获取公司logo
+6. 每个章节标题旁边添加一个与内容相关的Font Awesome图标
 `;
 }
 
