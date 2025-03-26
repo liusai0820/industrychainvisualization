@@ -7,7 +7,7 @@ interface ProgressBarProps {
     currentProgress: number;
     stages: ProgressStage[];
     currentStage: number;
-    detail: string;
+    detail?: string;
 }
 
 export default function ProgressBar({
@@ -77,7 +77,7 @@ export default function ProgressBar({
 
                 {/* 进度详情 */}
                 <div className="text-center mt-4">
-                    <p className="text-xs text-gray-600">{detail}</p>
+                    <p className="text-xs text-gray-600">{detail || stages[currentStage]?.detail || '正在处理...'}</p>
                 </div>
             </div>
         </div>

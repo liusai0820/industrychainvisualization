@@ -1,6 +1,6 @@
 'use client';
 
-import { IndustryCategory, PresetIndustry } from '@/types';
+import { PresetIndustry, IndustryCategory } from '@/types';
 import PresetIndustryCard from './PresetIndustryCard';
 
 interface PresetIndustrySectionProps {
