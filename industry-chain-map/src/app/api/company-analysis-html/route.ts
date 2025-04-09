@@ -2,10 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getIndustryStyle, IndustryStyle } from '@/utils/industryStyles';
 import fetch from 'node-fetch';
 import { redis } from '@/lib/redis';
+import { generateCompanyAnalysisHTMLPrompt } from '@/prompts/companyAnalysisHTML';
 
 // OpenRouter配置
-const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
+const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || "https://openrouter.ai/api/v1/chat/completions";
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
+// 从环境变量获取模型配置
+const HTML_REPORT_MODEL = process.env.HTML_REPORT_MODEL || "google/gemini-2.5-pro-exp-03-25:free";
+// 从环境变量获取温度配置
+const HTML_REPORT_TEMPERATURE = parseFloat(process.env.HTML_REPORT_TEMPERATURE || "0.7");
 
 // 缓存配置
 interface CacheItem {
@@ -211,18 +216,21 @@ export async function POST(request: NextRequest) {
     try {
       // 首先尝试使用LLM生成HTML
       if (OPENROUTER_API_KEY) {
-        console.log('📝 尝试使用LLM生成HTML报告...');
+        console.log('🤖 使用LLM生成HTML报告...');
         
-        // 创建请求LLM生成HTML的提示
-        const htmlPrompt = generateHTMLPrompt(companyName, industryName || '', analysisResult, industryStyle);
-        
-        // 调用OpenRouter API生成HTML
-        const htmlResult = await callOpenRouterForHTML(htmlPrompt);
-        console.log('✅ LLM生成HTML企业分析成功\n');
+        // 调用LLM生成HTML，使用从@/prompts/companyAnalysisHTML导入的函数
+        const htmlContent = await callOpenRouterForHTML(
+          generateCompanyAnalysisHTMLPrompt({
+            companyName,
+            industryName,
+            analysisResult,
+            industryStyle
+          })
+        );
         
         // 创建缓存项
         const cacheItem: CacheItem = {
-          html: htmlResult,
+          html: htmlContent,
           method: 'llm',
           generatedAt: Date.now()
         };
@@ -243,7 +251,7 @@ export async function POST(request: NextRequest) {
         
         return NextResponse.json({
           success: true,
-          data: htmlResult,
+          data: htmlContent,
           method: 'llm'
         });
       } else {
@@ -448,14 +456,14 @@ async function callOpenRouterForHTML(prompt: string) {
   };
   
   const payload = {
-    "model": "anthropic/claude-3.7-sonnet",
+    "model": HTML_REPORT_MODEL,
     "messages": [
       {
         "role": "user",
         "content": prompt
       }
     ],
-    "temperature": 0.7,
+    "temperature": HTML_REPORT_TEMPERATURE,
     "top_p": 1,
     "frequency_penalty": 0,
     "presence_penalty": 0,
@@ -466,6 +474,7 @@ async function callOpenRouterForHTML(prompt: string) {
   console.log('准备发送OpenRouter HTML生成请求:', {
     url: OPENROUTER_API_URL,
     model: payload.model,
+    temperature: payload.temperature,
     promptLength: prompt.length,
     headers: {
       ...headers,

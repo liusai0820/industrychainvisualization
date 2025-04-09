@@ -2,9 +2,15 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { PRESET_INDUSTRIES } from '@/data/preset-industries';
 import { loadIndustryChainData } from '@/utils/dataLoader';
+import { generateIndustryGraphPrompt } from '@/prompts/industryGraph';
+import fetch, { RequestInit, Response } from 'node-fetch';
 
 const DIFY_BASE_URL = process.env.DIFY_BASE_URL || "https://api.dify.ai/v1";
 const INDUSTRY_CHAIN_API_KEY = process.env.DIFY_API_KEY;
+const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || "https://openrouter.ai/api/v1/chat/completions";
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
+const INDUSTRY_GRAPH_MODEL = process.env.INDUSTRY_GRAPH_MODEL || "google/gemini-2.5-pro-exp-03-25:free";
+const INDUSTRY_GRAPH_TEMPERATURE = parseFloat(process.env.INDUSTRY_GRAPH_TEMPERATURE || "0.3");
 
 interface RawData {
     产业链: string;
@@ -320,6 +326,116 @@ function transformToTree(data: RawData): TransformedData {
     }
 }
 
+async function generateGraphWithOpenRouter(industryName: string): Promise<RawData> {
+    if (!OPENROUTER_API_KEY) {
+        console.error('Missing OPENROUTER_API_KEY environment variable');
+        throw new Error('OpenRouter API Key not configured');
+    }
+
+    const maxRetries = 3;
+    const baseDelay = 2000;
+
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+        try {
+            if (attempt > 0) {
+                const delay = baseDelay * Math.pow(2, attempt);
+                console.log(`OpenRouter Retry attempt ${attempt + 1}, waiting ${delay}ms`);
+                await new Promise(resolve => setTimeout(resolve, delay));
+            }
+
+            const headers = {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+                "HTTP-Referer": "https://industry-chain-map.vercel.app",
+                "X-Title": "Industry Chain Map",
+                "X-Organization-ID": "industry-chain-map"
+            };
+            
+            const prompt = generateIndustryGraphPrompt(industryName);
+            console.log('Generated Graph Prompt length:', prompt.length);
+
+            const payload = {
+                "model": INDUSTRY_GRAPH_MODEL,
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ],
+                "response_format": { "type": "json_object" },
+                "temperature": INDUSTRY_GRAPH_TEMPERATURE,
+                "top_p": 1,
+                "frequency_penalty": 0,
+                "presence_penalty": 0,
+                "stream": false
+            };
+
+            console.log('Sending OpenRouter Graph Request:', {
+                url: OPENROUTER_API_URL,
+                model: payload.model,
+                temperature: payload.temperature,
+                promptLength: prompt.length,
+                headers: { ...headers, "Authorization": "Bearer [HIDDEN]" }
+            });
+
+            const response = await fetch(OPENROUTER_API_URL, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify(payload),
+                signal: new AbortController().signal,
+                cache: 'no-cache',
+                keepalive: true
+            });
+
+            const responseText = await response.text();
+            console.log('OpenRouter API Response details:', {
+                status: response.status,
+                statusText: response.statusText,
+                headers: Object.fromEntries(response.headers.entries()),
+                responseLength: responseText.length,
+                responsePreview: responseText.substring(0, 200)
+            });
+
+            if (response.status === 502 || response.status === 504 || response.status === 408) {
+                console.log(`Received ${response.status} error, will retry`);
+                continue;
+            }
+
+            if (!response.ok) {
+                console.error('OpenRouter API Error:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    response: responseText,
+                    headers: Object.fromEntries(response.headers.entries()),
+                    requestUrl: OPENROUTER_API_URL,
+                    attempt: attempt + 1
+                });
+                
+                if (attempt === maxRetries - 1) {
+                    throw new Error(`OpenRouter API request failed: ${response.status} ${responseText}`);
+                }
+                continue;
+            }
+
+            let data: RawData;
+            try {
+                data = JSON.parse(responseText) as RawData;
+                console.log('Successfully parsed OpenRouter API response as JSON:', JSON.stringify(data, null, 2));
+            } catch (error) {
+                const parseError = error as Error;
+                console.error('OpenRouter API JSON Parse Error:', parseError);
+                console.error('Invalid OpenRouter API response text:', responseText);
+                throw new Error(`Failed to parse JSON from OpenRouter API response: ${parseError.message}`);
+            }
+
+            return data;
+        } catch (error) {
+            console.error('Error in generateGraphWithOpenRouter:', error);
+            throw error;
+        }
+    }
+}
+
 export async function POST(request: NextRequest) {
     console.log('Received POST request to /api/graph');
     
@@ -365,9 +481,9 @@ export async function POST(request: NextRequest) {
                 data = await loadIndustryChainData(presetIndustry.id);
                 console.log('Successfully loaded preset data');
             } else {
-                console.log('Calling Dify API for:', industryName);
-                data = await callDifyApi(industryName);
-                console.log('Successfully received and transformed Dify API response');
+                console.log('Calling OpenRouter API for:', industryName);
+                data = await generateGraphWithOpenRouter(industryName);
+                console.log('Successfully received and transformed OpenRouter API response');
             }
 
             // 验证返回的数据结构

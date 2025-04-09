@@ -5,8 +5,12 @@ import fetch, { RequestInit } from 'node-fetch';
 import { redis } from '@/lib/redis';
 
 // OpenRouter配置
-const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
+const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || "https://openrouter.ai/api/v1/chat/completions";
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
+// 从环境变量获取模型配置
+const COMPANY_ANALYSIS_MODEL = process.env.COMPANY_ANALYSIS_MODEL || "google/gemini-2.5-pro-exp-03-25:free";
+// 从环境变量获取温度配置
+const COMPANY_ANALYSIS_TEMPERATURE = parseFloat(process.env.COMPANY_ANALYSIS_TEMPERATURE || "0.7");
 
 // 响应类型定义
 interface OpenRouterResponse {
@@ -137,14 +141,14 @@ async function generateCompanyAnalysis(companyName: string, industryName?: strin
       console.log('生成的prompt长度:', prompt.length);
 
       const payload = {
-        "model": "google/gemini-2.5-pro-exp-03-25:free",
+        "model": COMPANY_ANALYSIS_MODEL,
         "messages": [
           {
             "role": "user",
             "content": prompt
           }
         ],
-        "temperature": 0.7,
+        "temperature": COMPANY_ANALYSIS_TEMPERATURE,
         "top_p": 1,
         "frequency_penalty": 0,
         "presence_penalty": 0,
@@ -154,6 +158,7 @@ async function generateCompanyAnalysis(companyName: string, industryName?: strin
       console.log('准备发送OpenRouter请求:', {
         url: OPENROUTER_API_URL,
         model: payload.model,
+        temperature: payload.temperature,
         promptLength: prompt.length,
         maxTokens: 8000,
         headers: {
