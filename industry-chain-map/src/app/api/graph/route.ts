@@ -1,15 +1,19 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { PRESET_INDUSTRIES } from '@/data/preset-industries';
-import { loadIndustryChainData } from '@/utils/dataLoader';
 import { generateIndustryGraphPrompt } from '@/prompts/industryGraph';
-import fetch, { RequestInit, Response } from 'node-fetch';
+import fetch from 'node-fetch';
 
-const DIFY_BASE_URL = process.env.DIFY_BASE_URL || "https://api.dify.ai/v1";
-const INDUSTRY_CHAIN_API_KEY = process.env.DIFY_API_KEY;
 const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || "https://openrouter.ai/api/v1/chat/completions";
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-const INDUSTRY_GRAPH_MODEL = process.env.INDUSTRY_GRAPH_MODEL || "google/gemini-2.5-pro-exp-03-25:free";
+
+// 添加多个模型选项
+const MODELS = [
+  process.env.INDUSTRY_GRAPH_MODEL || "google/gemini-2.5-pro-exp-03-25:free",
+  "anthropic/claude-3-haiku-20240307",
+  "anthropic/claude-3-sonnet-20240229",
+  "openai/gpt-3.5-turbo"
+];
+
 const INDUSTRY_GRAPH_TEMPERATURE = parseFloat(process.env.INDUSTRY_GRAPH_TEMPERATURE || "0.3");
 
 interface RawData {
@@ -43,195 +47,31 @@ interface TransformedData {
     }>;
 }
 
-interface DifyResponse {
-    data: {
-        outputs: {
-            text: string;
-        };
-    };
-}
-
 interface TreeNode {
     name: string;
     children: TreeNode[];
 }
 
-async function callDifyApi(industryName: string) {
-    if (!INDUSTRY_CHAIN_API_KEY) {
-        console.error('Missing DIFY_API_KEY environment variable');
-        throw new Error('Dify API Key not configured');
-    }
-
-    console.log('Environment check:', {
-        DIFY_BASE_URL: DIFY_BASE_URL,
-        API_KEY_EXISTS: !!INDUSTRY_CHAIN_API_KEY,
-        API_KEY_LENGTH: INDUSTRY_CHAIN_API_KEY?.length
-    });
-
-    const maxRetries = 3;
-    const baseDelay = 2000; // 增加到2秒
-
-    for (let attempt = 0; attempt < maxRetries; attempt++) {
-        try {
-            if (attempt > 0) {
-                // 指数退避策略，增加等待时间
-                const delay = baseDelay * Math.pow(2, attempt);
-                console.log(`Retry attempt ${attempt + 1}, waiting ${delay}ms`);
-                await new Promise(resolve => setTimeout(resolve, delay));
-            }
-
-            const headers = {
-                "Authorization": `Bearer ${INDUSTRY_CHAIN_API_KEY}`,
-                "Content-Type": "application/json"
-            };
-            
-            const payload = {
-                "inputs": {
-                    "value_chain": industryName
-                },
-                "response_mode": "blocking",
-                "user": "default"
-            };
-
-            const requestUrl = `${DIFY_BASE_URL}/workflows/run`;
-            console.log('Request details:', {
-                url: requestUrl,
-                method: 'POST',
-                headers: {
-                    'Content-Type': headers['Content-Type'],
-                    'Authorization': 'Bearer [HIDDEN]'
-                },
-                payload: JSON.stringify(payload, null, 2)
-            });
-
-            // 增加超时时间到60秒
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 60000); // 60秒超时
-
-            try {
-                const response = await fetch(requestUrl, {
-                    method: 'POST',
-                    headers,
-                    body: JSON.stringify(payload),
-                    signal: controller.signal,
-                    // 添加更多的 fetch 选项
-                    cache: 'no-cache',
-                    keepalive: true
-                });
-                clearTimeout(timeoutId);
-
-                const responseText = await response.text();
-                console.log('API Response details:', {
-                    status: response.status,
-                    statusText: response.statusText,
-                    headers: Object.fromEntries(response.headers.entries()),
-                    responseLength: responseText.length,
-                    responsePreview: responseText.substring(0, 200)
-                });
-
-                // 如果是502错误或超时错误，继续重试
-                if (response.status === 502 || response.status === 504 || response.status === 408) {
-                    console.log(`Received ${response.status} error, will retry`);
-                    continue;
-                }
-
-                if (!response.ok) {
-                    console.error('API Error:', {
-                        status: response.status,
-                        statusText: response.statusText,
-                        response: responseText,
-                        headers: Object.fromEntries(response.headers.entries()),
-                        requestUrl,
-                        attempt: attempt + 1
-                    });
-                    
-                    // 如果是最后一次重试，抛出错误
-                    if (attempt === maxRetries - 1) {
-                        throw new Error(`Dify API request failed: ${response.status} ${responseText}`);
-                    }
-                    continue;
-                }
-
-                let difyResponse: DifyResponse;
-                try {
-                    // 检查responseText是否为空或者是否包含错误信息
-                    if (!responseText.trim()) {
-                        throw new Error('Empty response from API');
-                    }
-                    
-                    // 尝试检测是否是错误消息
-                    if (responseText.includes('An error occurred') || responseText.startsWith('An error')) {
-                        throw new Error(responseText);
-                    }
-                    
-                    difyResponse = JSON.parse(responseText) as DifyResponse;
-                    console.log('Successfully parsed response as JSON:', JSON.stringify(difyResponse, null, 2));
-                } catch (error) {
-                    const parseError = error as Error;
-                    console.error('Failed to parse API response as JSON:', parseError);
-                    console.error('Response text that failed to parse:', responseText);
-                    
-                    // 如果响应包含错误信息，直接抛出该错误
-                    if (responseText.includes('An error occurred') || responseText.startsWith('An error')) {
-                        throw new Error(responseText);
-                    }
-                    
-                    throw new Error(`Invalid JSON response from API: ${parseError.message}`);
-                }
-
-                if (!difyResponse.data?.outputs?.text) {
-                    console.error('Invalid API Response Structure:', difyResponse);
-                    throw new Error('Invalid response format from Dify API - missing data.outputs.text field');
-                }
-
-                const rawText = difyResponse.data.outputs.text;
-                console.log('Raw answer text:', rawText);
-
-                // 尝试提取JSON部分
-                let jsonText = '';
-                const jsonBlockMatch = rawText.match(/```json\n([\s\S]*?)\n```/);
-                if (jsonBlockMatch) {
-                    jsonText = jsonBlockMatch[1].trim();
-                } else {
-                    // 如果没有JSON代码块标记，尝试直接解析整个文本
-                    jsonText = rawText.trim();
-                }
-                
-                console.log('Extracted JSON text:', jsonText);
-                
-                let data: RawData;
-                try {
-                    data = JSON.parse(jsonText) as RawData;
-                    console.log('Successfully parsed JSON data:', JSON.stringify(data, null, 2));
-                } catch (error) {
-                    const parseError = error as Error;
-                    console.error('JSON Parse Error:', parseError);
-                    console.error('Invalid JSON text:', jsonText);
-                    throw new Error(`Failed to parse JSON from text: ${parseError.message}`);
-                }
-                
-                // 检查数据结构
-                if (!data.产业链 || !Array.isArray(data.环节)) {
-                    console.error('Data structure validation failed:', data);
-                    throw new Error(`Invalid data structure - missing required fields. Got: ${JSON.stringify(data)}`);
-                }
-
-                const transformedResult = transformToTree(data);
-                console.log('Final transformed result:', JSON.stringify(transformedResult, null, 2));
-                return transformedResult;
-            } catch (error: unknown) {
-                clearTimeout(timeoutId);
-                if (error instanceof Error && error.name === 'AbortError') {
-                    console.error('Request timeout');
-                    throw new Error('请求超时，请稍后重试');
-                }
-                throw error;
-            }
-        } catch (error) {
-            console.error('Error in callDifyApi:', error);
-            throw error;
-        }
-    }
+// OpenRouter API 响应接口定义
+interface OpenRouterResponse {
+    model?: string;
+    usage?: {
+        prompt_tokens: number;
+        completion_tokens: number;
+        total_tokens: number;
+    };
+    choices?: Array<{
+        finish_reason: string;
+        message: {
+            role: string;
+            content: string;
+        };
+    }>;
+    error?: {
+        message: string;
+        code: number;
+    };
+    [key: string]: unknown; // 允许其他可能的字段
 }
 
 function transformToTree(data: RawData): TransformedData {
@@ -326,6 +166,18 @@ function transformToTree(data: RawData): TransformedData {
     }
 }
 
+// 正确验证RawData结构的函数
+function isValidRawData(data: unknown): data is RawData {
+  return (
+    data !== null && 
+    typeof data === 'object' && 
+    '产业链' in data && 
+    typeof (data as RawData).产业链 === 'string' && 
+    '环节' in data && 
+    Array.isArray((data as RawData).环节)
+  );
+}
+
 async function generateGraphWithOpenRouter(industryName: string): Promise<RawData> {
     if (!OPENROUTER_API_KEY) {
         console.error('Missing OPENROUTER_API_KEY environment variable');
@@ -335,118 +187,188 @@ async function generateGraphWithOpenRouter(industryName: string): Promise<RawDat
     const maxRetries = 3;
     const baseDelay = 2000;
 
-    for (let attempt = 0; attempt < maxRetries; attempt++) {
-        try {
-            if (attempt > 0) {
-                const delay = baseDelay * Math.pow(2, attempt);
-                console.log(`OpenRouter Retry attempt ${attempt + 1}, waiting ${delay}ms`);
-                await new Promise(resolve => setTimeout(resolve, delay));
-            }
+    // 尝试不同的模型
+    for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
+        const model = MODELS[modelIndex];
+        console.log(`尝试使用模型 (${modelIndex + 1}/${MODELS.length}): ${model}`);
 
-            const headers = {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
-                "HTTP-Referer": "https://industry-chain-map.vercel.app",
-                "X-Title": "Industry Chain Map",
-                "X-Organization-ID": "industry-chain-map"
-            };
-            
-            const prompt = generateIndustryGraphPrompt(industryName);
-            console.log('Generated Graph Prompt length:', prompt.length);
-
-            const payload = {
-                "model": INDUSTRY_GRAPH_MODEL,
-                "messages": [
-                    {
-                        "role": "user",
-                        "content": prompt
-                    }
-                ],
-                "response_format": { "type": "json_object" },
-                "temperature": INDUSTRY_GRAPH_TEMPERATURE,
-                "top_p": 1,
-                "frequency_penalty": 0,
-                "presence_penalty": 0,
-                "stream": false
-            };
-
-            console.log('Sending OpenRouter Graph Request:', {
-                url: OPENROUTER_API_URL,
-                model: payload.model,
-                temperature: payload.temperature,
-                promptLength: prompt.length,
-                headers: { ...headers, "Authorization": "Bearer [HIDDEN]" }
-            });
-
-            const response = await fetch(OPENROUTER_API_URL, {
-                method: 'POST',
-                headers,
-                body: JSON.stringify(payload),
-                signal: new AbortController().signal,
-                cache: 'no-cache',
-                keepalive: true
-            });
-
-            const responseText = await response.text();
-            console.log('OpenRouter API Response details:', {
-                status: response.status,
-                statusText: response.statusText,
-                headers: Object.fromEntries(response.headers.entries()),
-                responseLength: responseText.length,
-                responsePreview: responseText.substring(0, 200)
-            });
-
-            if (response.status === 502 || response.status === 504 || response.status === 408) {
-                console.log(`Received ${response.status} error, will retry`);
-                continue;
-            }
-
-            if (!response.ok) {
-                console.error('OpenRouter API Error:', {
-                    status: response.status,
-                    statusText: response.statusText,
-                    response: responseText,
-                    headers: Object.fromEntries(response.headers.entries()),
-                    requestUrl: OPENROUTER_API_URL,
-                    attempt: attempt + 1
-                });
-                
-                if (attempt === maxRetries - 1) {
-                    throw new Error(`OpenRouter API request failed: ${response.status} ${responseText}`);
-                }
-                continue;
-            }
-
-            let data: RawData;
+        for (let attempt = 0; attempt < maxRetries; attempt++) {
             try {
-                data = JSON.parse(responseText) as RawData;
-                console.log('Successfully parsed OpenRouter API response as JSON:', JSON.stringify(data, null, 2));
-            } catch (error) {
-                const parseError = error as Error;
-                console.error('OpenRouter API JSON Parse Error:', parseError);
-                console.error('Invalid OpenRouter API response text:', responseText);
-                throw new Error(`Failed to parse JSON from OpenRouter API response: ${parseError.message}`);
-            }
+                if (attempt > 0) {
+                    const delay = baseDelay * Math.pow(2, attempt);
+                    console.log(`模型 ${model} 重试第 ${attempt + 1} 次, 等待 ${delay}ms`);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
 
-            return data;
-        } catch (error) {
-            console.error('Error in generateGraphWithOpenRouter:', error);
-            throw error;
+                const headers = {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+                    "HTTP-Referer": "https://industry-chain-map.vercel.app",
+                    "X-Title": "Industry Chain Map",
+                    "X-Organization-ID": "industry-chain-map"
+                };
+                
+                // 直接使用用户提供的产业链名称，由模型自行判断并进行标准化
+                const prompt = generateIndustryGraphPrompt(industryName);
+                console.log('Generated Graph Prompt length:', prompt.length);
+
+                const payload = {
+                    "model": model,
+                    "messages": [
+                        {
+                            "role": "user",
+                            "content": prompt
+                        }
+                    ],
+                    "response_format": { "type": "json_object" },
+                    "temperature": INDUSTRY_GRAPH_TEMPERATURE,
+                    "top_p": 1,
+                    "frequency_penalty": 0,
+                    "presence_penalty": 0,
+                    "stream": false
+                };
+
+                console.log('Sending OpenRouter Graph Request:', {
+                    url: OPENROUTER_API_URL,
+                    model: payload.model,
+                    temperature: payload.temperature,
+                    promptLength: prompt.length,
+                    headers: { ...headers, "Authorization": "Bearer [HIDDEN]" }
+                });
+
+                const fetchOptions = {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify(payload),
+                    redirect: 'follow' as const
+                };
+
+                // 修改使用node-fetch的方式，避免AbortSignal类型问题
+                const timeoutPromise = new Promise<never>((_, reject) => {
+                    setTimeout(() => reject(new Error('OpenRouter API request timeout')), 5 * 60 * 1000);
+                });
+
+                const fetchPromise = fetch(OPENROUTER_API_URL, fetchOptions);
+                
+                const response = await Promise.race([fetchPromise, timeoutPromise]);
+
+                console.log('Received OpenRouter Graph Response:', {
+                    status: response.status,
+                    statusText: response.statusText
+                });
+
+                // 获取响应内容（无论成功或失败）
+                const responseText = await response.text();
+                let responseData: OpenRouterResponse;
+
+                // 尝试解析JSON响应
+                try {
+                    responseData = JSON.parse(responseText) as OpenRouterResponse;
+                    console.log('Successfully parsed API response as JSON');
+                } catch (parseError) {
+                    console.error('Failed to parse API response as JSON:', parseError);
+                    console.error('Raw response:', responseText);
+                    throw new Error(`Failed to parse API response: ${responseText.substring(0, 200)}...`);
+                }
+
+                if (!response.ok) {
+                    console.error('OpenRouter API Error:', {
+                        status: response.status,
+                        statusText: response.statusText,
+                        error: responseData.error || 'Unknown error',
+                        errorDetails: JSON.stringify(responseData)
+                    });
+                    
+                    // 构建详细的错误消息
+                    let errorMessage = `OpenRouter API request failed: ${response.status} - `;
+                    if (responseData.error && responseData.error.message) {
+                        errorMessage += responseData.error.message;
+                    } else {
+                        errorMessage += JSON.stringify(responseData);
+                    }
+                    
+                    if (attempt === maxRetries - 1) {
+                        // 如果当前模型的最后一次尝试也失败，尝试下一个模型
+                        console.log(`模型 ${model} 的所有尝试都失败了，将尝试下一个模型`);
+                        console.error(`失败原因: ${errorMessage}`);
+                        break; // 跳出当前模型的尝试循环
+                    }
+                    continue;
+                }
+
+                console.log('OpenRouter Graph Response Data:', {
+                    model: responseData.model || 'Unknown',
+                    usage: responseData.usage || 'Unknown',
+                    finishReason: responseData.choices?.[0]?.finish_reason || 'N/A',
+                    choicesCount: responseData.choices?.length || 0
+                });
+
+                if (!responseData.choices || responseData.choices.length === 0 || !responseData.choices[0].message?.content) {
+                    console.error('Invalid OpenRouter response structure or empty content:', responseData);
+                    
+                    if (responseData.error) {
+                        throw new Error(`API returned error: ${JSON.stringify(responseData.error)}`);
+                    } else {
+                        throw new Error('Invalid API response format or empty content from OpenRouter');
+                    }
+                }
+
+                // 获取内容
+                const jsonContent = responseData.choices[0].message.content;
+                console.log('Received JSON content length:', jsonContent.length);
+                console.log('Received JSON content preview:', jsonContent.substring(0, 200) + '...');
+                
+                try {
+                    // 直接尝试解析JSON，不再使用extractJsonFromText
+                    const parsedData = JSON.parse(jsonContent);
+                    
+                    // 使用新函数验证数据结构
+                    if (!isValidRawData(parsedData)) {
+                        console.error('Parsed JSON data does not match RawData structure:', parsedData);
+                        throw new Error('LLM returned JSON does not match expected RawData structure.');
+                    }
+                    
+                    console.log('Successfully parsed JSON data from OpenRouter.');
+                    return parsedData;
+                } catch (parseError) {
+                    console.error('Failed to parse JSON response from OpenRouter:', parseError);
+                    
+                    // 如果不是最后一次尝试，继续重试
+                    if (attempt < maxRetries - 1) {
+                        console.log('Will retry with different settings...');
+                        continue;
+                    }
+                    
+                    // 如果是此模型的最后一次尝试，尝试下一个模型
+                    console.log(`模型 ${model} 解析JSON失败，将尝试下一个模型`);
+                    break;
+                }
+            } catch (error) {
+                console.error(`模型 ${model} 第 ${attempt + 1} 次尝试失败:`, error);
+                if (attempt === maxRetries - 1) {
+                    // 如果是此模型的最后一次尝试，尝试下一个模型
+                    console.log(`模型 ${model} 的所有尝试都失败了，将尝试下一个模型`);
+                    // 如果是最后一个模型，则不抛出错误，而是继续到下一个模型
+                    if (modelIndex === MODELS.length - 1) {
+                        throw new Error(`所有模型都失败了: ${error instanceof Error ? error.message : String(error)}`);
+                    }
+                }
+            }
         }
     }
+    
+    throw new Error('All OpenRouter model attempts failed.');
 }
 
 export async function POST(request: NextRequest) {
-    console.log('Received POST request to /api/graph');
+    console.log('Received POST request to /api/graph (Using OpenRouter)');
     
-    // 添加CORS头
     const headers = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     };
 
-    // 处理预检请求
     if (request.method === 'OPTIONS') {
         return new NextResponse(null, { status: 200, headers });
     }
@@ -455,52 +377,38 @@ export async function POST(request: NextRequest) {
         const body = await request.json();
         const { industryName } = body;
 
-        console.log('Processing request for industry:', industryName);
+        console.log('Processing graph request for industry:', industryName);
 
         if (!industryName) {
             console.warn('No industry name provided in request');
             return NextResponse.json(
-                { 
-                    success: false, 
-                    error: '请输入产业链名称',
-                    data: null
-                },
+                { success: false, error: '请输入产业链名称', data: null },
                 { status: 400, headers }
             );
         }
 
         try {
-            // 检查是否是预设产业
-            const presetIndustry = PRESET_INDUSTRIES.flatMap(category => 
-                category.industries
-            ).find(ind => ind.name === industryName || ind.id === industryName);
+            console.log('Calling OpenRouter API for:', industryName);
+            
+            const rawData = await generateGraphWithOpenRouter(industryName);
+            console.log('Successfully received raw data from OpenRouter');
+            
+            // 如果能运行到这里，说明rawData已经通过了isValidRawData验证
+            const transformedData = transformToTree(rawData);
+            console.log('Successfully transformed data to tree structure');
 
-            let data;
-            if (presetIndustry) {
-                console.log('Loading preset data for:', presetIndustry.id);
-                data = await loadIndustryChainData(presetIndustry.id);
-                console.log('Successfully loaded preset data');
-            } else {
-                console.log('Calling OpenRouter API for:', industryName);
-                data = await generateGraphWithOpenRouter(industryName);
-                console.log('Successfully received and transformed OpenRouter API response');
-            }
-
-            // 验证返回的数据结构
-            if (!data || typeof data !== 'object' || !data.name || !Array.isArray(data.children)) {
-                console.error('Invalid data structure returned:', data);
+            // 验证转换后的数据
+            if (!transformedData || typeof transformedData !== 'object' || !transformedData.name || !Array.isArray(transformedData.children)) {
+                console.error('Invalid transformed data structure returned:', transformedData);
                 throw new Error('生成的数据结构无效，请稍后重试');
             }
 
-            return NextResponse.json({ 
-                success: true, 
-                data: data
-            }, { headers });
+            return NextResponse.json({ success: true, data: transformedData }, { headers });
+            
         } catch (error) {
-            console.error('Error processing data:', error);
+            console.error('Error generating graph data:', error);
             const errorMessage = error instanceof Error ? error.message : '生成产业链图谱时出现错误，请稍后重试';
             
-            // 对于某些特定错误，返回更友好的错误信息
             const userFriendlyMessage = errorMessage.includes('API Key not configured') 
                 ? '系统配置错误，请联系管理员'
                 : errorMessage;
@@ -511,20 +419,16 @@ export async function POST(request: NextRequest) {
                 data: {
                     name: industryName,
                     children: [{
-                        name: '暂无数据',
+                        name: '生成失败',
                         children: []
                     }]
                 }
-            }, { status: 200, headers });
+            }, { status: 500, headers });
         }
     } catch (error) {
-        console.error('Error processing request:', error);
+        console.error('Error processing graph request body:', error);
         return NextResponse.json(
-            { 
-                success: false, 
-                error: '请求处理失败，请检查输入格式是否正确',
-                data: null
-            },
+            { success: false, error: '请求处理失败，请检查输入格式是否正确', data: null },
             { status: 400, headers }
         );
     }

@@ -2,32 +2,43 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { generateCompanyAnalysisPrompt } from '@/prompts/companyAnalysis';
 import fetch, { RequestInit } from 'node-fetch';
-import { redis } from '@/lib/redis';
 
 // OpenRouter配置
 const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || "https://openrouter.ai/api/v1/chat/completions";
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-// 从环境变量获取模型配置
-const COMPANY_ANALYSIS_MODEL = process.env.COMPANY_ANALYSIS_MODEL || "google/gemini-2.5-pro-exp-03-25:free";
+
+// 添加多个模型选项
+const MODELS = [
+  process.env.COMPANY_ANALYSIS_MODEL || "google/gemini-2.5-pro-exp-03-25:free",
+  "anthropic/claude-3-haiku-20240307",
+  "anthropic/claude-3-sonnet-20240229",
+  "openai/gpt-3.5-turbo"
+];
+
 // 从环境变量获取温度配置
-const COMPANY_ANALYSIS_TEMPERATURE = parseFloat(process.env.COMPANY_ANALYSIS_TEMPERATURE || "0.7");
+const COMPANY_ANALYSIS_TEMPERATURE = parseFloat(process.env.COMPANY_ANALYSIS_TEMPERATURE || "0.5");
 
 // 响应类型定义
 interface OpenRouterResponse {
-  choices: Array<{
+  choices?: Array<{
     message: {
       content: string;
     };
     index: number;
     finish_reason: string;
   }>;
-  model: string;
-  id: string;
-  usage: {
+  model?: string;
+  id?: string;
+  usage?: {
     prompt_tokens: number;
     completion_tokens: number;
     total_tokens: number;
   };
+  error?: {
+    message: string;
+    code: number;
+  };
+  [key: string]: unknown; // 允许其他可能的字段
 }
 
 // 分析结果类型定义
@@ -64,38 +75,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 生成缓存键
-    const analysisCacheKey = `analysis:${companyName}:${industryName || ''}`;
-    
-    // 检查KV缓存 - 使用自定义redis客户端
-    try {
-      const cachedAnalysis = await redis.get<AnalysisResult>(analysisCacheKey);
-      if (cachedAnalysis) {
-        console.log('📦 命中分析结果缓存！');
-        return NextResponse.json({
-          success: true,
-          data: cachedAnalysis,
-          fromCache: true
-        });
-      }
-    } catch (kvError) {
-      console.error('⚠️ Redis缓存检索错误:', kvError);
-      // 继续流程，不中断
-    }
-
     console.log('🚀 开始生成企业分析...');
     const analysisResult = await generateCompanyAnalysis(companyName, industryName);
     console.log('✅ 企业分析生成完成\n');
-    
-    // 缓存分析结果 - 使用自定义redis客户端
-    try {
-      // 设置KV缓存，15天过期
-      await redis.set(analysisCacheKey, analysisResult, { ex: 60 * 60 * 24 * 15 });
-      console.log('📦 分析结果已缓存到Redis存储（15天有效期）');
-    } catch (kvError) {
-      console.error('⚠️ Redis缓存存储错误:', kvError);
-      // 继续流程，不中断
-    }
     
     return NextResponse.json({
       success: true,
@@ -121,162 +103,176 @@ async function generateCompanyAnalysis(companyName: string, industryName?: strin
   const maxRetries = 3;
   const baseDelay = 2000;
 
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      if (attempt > 0) {
-        const delay = baseDelay * Math.pow(2, attempt);
-        console.log(`重试第 ${attempt + 1} 次, 等待 ${delay}ms`);
-        await new Promise(resolve => setTimeout(resolve, delay));
-      }
+  // 尝试不同的模型
+  for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
+    const model = MODELS[modelIndex];
+    console.log(`尝试使用模型 (${modelIndex + 1}/${MODELS.length}): ${model}`);
 
-      const headers = {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
-        "HTTP-Referer": "https://industry-chain-map.vercel.app",
-        "X-Title": "Industry Chain Map",
-        "X-Organization-ID": "industry-chain-map"
-      };
-      
-      const prompt = generateCompanyAnalysisPrompt({ companyName, industryName });
-      console.log('生成的prompt长度:', prompt.length);
-
-      const payload = {
-        "model": COMPANY_ANALYSIS_MODEL,
-        "messages": [
-          {
-            "role": "user",
-            "content": prompt
-          }
-        ],
-        "temperature": COMPANY_ANALYSIS_TEMPERATURE,
-        "top_p": 1,
-        "frequency_penalty": 0,
-        "presence_penalty": 0,
-        "stream": false
-      };
-
-      console.log('准备发送OpenRouter请求:', {
-        url: OPENROUTER_API_URL,
-        model: payload.model,
-        temperature: payload.temperature,
-        promptLength: prompt.length,
-        maxTokens: 8000,
-        headers: {
-          ...headers,
-          "Authorization": "Bearer [HIDDEN]"
-        }
-      });
-
-      const fetchOptions: RequestInit = {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(payload),
-        redirect: 'follow'
-      };
-
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
       try {
-        console.log('开始请求OpenRouter API...');
-        const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => reject(new Error('OpenRouter API请求超时')), 5 * 60 * 1000); // 5分钟超时
+        if (attempt > 0) {
+          const delay = baseDelay * Math.pow(2, attempt);
+          console.log(`模型 ${model} 重试第 ${attempt + 1} 次, 等待 ${delay}ms`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+        }
+
+        const headers = {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+          "HTTP-Referer": "https://industry-chain-map.vercel.app",
+          "X-Title": "Industry Chain Map",
+          "X-Organization-ID": "industry-chain-map"
+        };
+        
+        // 直接使用用户提供的参数，由模型自行判断处理行业信息
+        const prompt = generateCompanyAnalysisPrompt({ 
+          companyName, 
+          industryName 
+        });
+        console.log('生成的prompt长度:', prompt.length);
+
+        const payload = {
+          "model": model,
+          "messages": [
+            {
+              "role": "user",
+              "content": prompt
+            }
+          ],
+          "temperature": COMPANY_ANALYSIS_TEMPERATURE,
+          "top_p": 1,
+          "frequency_penalty": 0,
+          "presence_penalty": 0,
+          "stream": false
+        };
+
+        console.log('准备发送OpenRouter请求:', {
+          url: OPENROUTER_API_URL,
+          model: payload.model,
+          temperature: payload.temperature,
+          promptLength: prompt.length,
+          maxTokens: 10000,
+          headers: {
+            ...headers,
+            "Authorization": "Bearer [HIDDEN]"
+          }
         });
 
-        const fetchPromise = fetch(OPENROUTER_API_URL, fetchOptions);
-        const response = await Promise.race([fetchPromise, timeoutPromise]) as Response;
+        const fetchOptions: RequestInit = {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(payload),
+          redirect: 'follow'
+        };
 
-        console.log('收到OpenRouter响应:', {
-          status: response.status,
-          statusText: response.statusText
-        });
+        try {
+          console.log('开始请求OpenRouter API...');
+          const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('OpenRouter API请求超时')), 5 * 60 * 1000); // 5分钟超时
+          });
 
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error('OpenRouter API错误:', {
+          const fetchPromise = fetch(OPENROUTER_API_URL, fetchOptions);
+          const response = await Promise.race([fetchPromise, timeoutPromise]) as Response;
+
+          console.log('收到OpenRouter响应:', {
             status: response.status,
-            statusText: response.statusText,
-            headers: Object.fromEntries(response.headers.entries()),
-            errorText,
-            attempt: attempt + 1
+            statusText: response.statusText
+          });
+
+          // 获取响应内容（无论成功或失败）
+          const responseText = await response.text();
+          let responseData: OpenRouterResponse;
+
+          // 尝试解析JSON响应
+          try {
+            responseData = JSON.parse(responseText) as OpenRouterResponse;
+            console.log('成功解析API响应为JSON');
+          } catch (parseError) {
+            console.error('无法解析API响应为JSON:', parseError);
+            console.error('原始响应:', responseText);
+            throw new Error(`无法解析API响应: ${responseText.substring(0, 200)}...`);
+          }
+
+          // 检查是否有错误
+          if (!response.ok) {
+            console.error('OpenRouter API错误:', {
+              status: response.status,
+              statusText: response.statusText,
+              error: responseData.error || '未知错误',
+              errorDetails: JSON.stringify(responseData)
+            });
+            
+            // 构建详细的错误消息
+            let errorMessage = `OpenRouter API请求失败: ${response.status} - `;
+            if (responseData.error && responseData.error.message) {
+              errorMessage += responseData.error.message;
+            } else {
+              errorMessage += JSON.stringify(responseData);
+            }
+            
+            if (attempt === maxRetries - 1) {
+              throw new Error(errorMessage);
+            }
+            continue;
+          }
+
+          // 现在responseData是成功解析的JSON
+          console.log('OpenRouter响应数据:', {
+            model: responseData.model || '未知',
+            usage: responseData.usage || '未知',
+            finishReason: responseData.choices && responseData.choices.length > 0 
+              ? responseData.choices[0].finish_reason 
+              : 'N/A',
+            choicesCount: responseData.choices ? responseData.choices.length : 0
           });
           
-          if (attempt === maxRetries - 1) {
-            throw new Error(`OpenRouter API请求失败: ${response.status} - ${errorText}`);
+          // 检查响应是否包含所需的字段
+          if (!responseData.choices || responseData.choices.length === 0 || !responseData.choices[0].message?.content) {
+            console.error('无效的API响应结构或内容为空:', responseData);
+            
+            if (responseData.error) {
+              throw new Error(`API返回错误: ${JSON.stringify(responseData.error)}`);
+            } else {
+              throw new Error('API响应格式错误或内容为空');
+            }
           }
-          continue;
-        }
 
-        // 使用更安全的方式处理JSON响应
-        let responseText = '';
-        try {
-          responseText = await response.text();
-          console.log('收到的响应文本长度:', responseText.length);
-          console.log('响应文本前100个字符:', responseText.substring(0, 100));
-        } catch (textError) {
-          console.error('读取响应文本失败:', textError);
-          throw new Error('无法读取API响应内容');
+          const analysisText = responseData.choices[0].message.content;
+          console.log('成功获取分析文本，长度:', analysisText.length);
+          
+          // 记录原始文本的前200个字符，帮助调试
+          console.log('分析文本前200个字符:', analysisText.substring(0, 200));
+          
+          const processedResult = processAnalysisResult(analysisText);
+          console.log('处理完成，sections数量:', processedResult.sections.length);
+          
+          // 记录提取的章节标题，帮助调试
+          if (processedResult.sections.length > 0) {
+            console.log('提取的章节标题:', processedResult.sections.map(s => s.title));
+          }
+          
+          return processedResult;
+        } catch (error) {
+          console.error('OpenRouter请求错误:', error);
+          throw error;
         }
-        
-        let responseData;
-        try {
-          responseData = JSON.parse(responseText) as OpenRouterResponse;
-        } catch (jsonError) {
-          console.error('JSON解析失败:', jsonError);
-          console.error('响应文本前200个字符:', responseText.substring(0, 200));
-          throw new Error('API返回了无效的JSON');
-        }
-        
-        // 更安全地检查响应结构
-        if (!responseData) {
-          console.error('API响应为空');
-          throw new Error('API响应为空');
-        }
-        
-        // 检查choices是否存在
-        if (!responseData.choices || !Array.isArray(responseData.choices) || responseData.choices.length === 0) {
-          console.error('API响应中没有choices数组或为空:', responseData);
-          throw new Error('API响应中缺少choices数据');
-        }
-        
-        // 检查第一个choice是否有效
-        const firstChoice = responseData.choices[0];
-        if (!firstChoice || !firstChoice.message || typeof firstChoice.message.content !== 'string') {
-          console.error('API响应中的第一个choice无效:', firstChoice);
-          throw new Error('API响应中的消息内容无效');
-        }
-
-        console.log('OpenRouter响应数据:', {
-          model: responseData.model || 'unknown',
-          usage: responseData.usage || 'unknown',
-          finishReason: firstChoice.finish_reason || 'unknown'
-        });
-        
-        const analysisText = firstChoice.message.content;
-        console.log('成功获取分析文本，长度:', analysisText.length);
-        
-        // 记录原始文本的前200个字符，帮助调试
-        console.log('分析文本前200个字符:', analysisText.substring(0, 200));
-        
-        const processedResult = processAnalysisResult(analysisText);
-        console.log('处理完成，sections数量:', processedResult.sections.length);
-        
-        // 记录提取的章节标题，帮助调试
-        if (processedResult.sections.length > 0) {
-          console.log('提取的章节标题:', processedResult.sections.map(s => s.title));
-        }
-        
-        return processedResult;
       } catch (error) {
-        console.error('OpenRouter请求错误:', error);
-        throw error;
-      }
-    } catch (error) {
-      console.error(`第 ${attempt + 1} 次尝试失败:`, error);
-      if (attempt === maxRetries - 1) {
-        throw error;
+        console.error(`模型 ${model} 第 ${attempt + 1} 次尝试失败:`, error);
+        if (attempt === maxRetries - 1) {
+          // 如果当前模型的所有尝试都失败了，继续尝试下一个模型
+          console.log(`模型 ${model} 的所有尝试都失败了，将尝试下一个模型`);
+          // 如果是最后一个模型，则抛出错误
+          if (modelIndex === MODELS.length - 1) {
+            throw new Error(`所有模型都失败了: ${error instanceof Error ? error.message : String(error)}`);
+          }
+          // 否则继续尝试下一个模型
+          break;
+        }
       }
     }
   }
   
-  throw new Error('所有重试都失败了');
+  throw new Error('所有模型和重试尝试都失败了');
 }
 
 function processAnalysisResult(markdownText: string): AnalysisResult {

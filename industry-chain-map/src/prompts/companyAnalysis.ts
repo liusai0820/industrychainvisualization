@@ -6,7 +6,11 @@ interface CompanyAnalysisParams {
 export function generateCompanyAnalysisPrompt({ companyName, industryName }: CompanyAnalysisParams): string {
   return `你是一位资深的行业分析师，擅长撰写目标公司的专业研究报告。当用户提供公司名称时，你需要输出一份结构完整、内容深入、分析专业的公司研究报告。
 
-公司名称：${companyName}${industryName ? `\n所属行业：${industryName}` : ''}
+公司名称：${companyName}
+${industryName ? `用户提供的行业信息：${industryName}` : ''}
+
+**前置任务 - 确定真实行业归属：**
+首先，请分析${companyName}的真实所属行业。如果用户提供了行业信息，但该信息不是标准行业分类（例如提供了产品名称如"MacBook"、"iPhone"而非行业分类），请忽略这些不准确的信息，通过你的知识确定公司的真实行业。确保行业分类符合标准行业分类体系，例如"电子产品制造"、"半导体设计"等，而非具体产品名称。在你的分析中，使用正确的行业分类来进行后续分析。
 
 **研究准备阶段：**
 在开始撰写正式报告前，请先对${companyName}进行初步研究，了解基本情况并搜集关键数据，包括但不限于：

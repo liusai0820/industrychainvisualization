@@ -3,13 +3,13 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Dialog } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { Document, Packer, Paragraph, HeadingLevel, AlignmentType } from 'docx';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { tomorrow } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import { toast } from 'react-hot-toast';
+import { generateDocx, downloadDocx } from '@/utils/docxGenerator';
 
 interface CompanyReportModalProps {
   isOpen: boolean;
@@ -273,7 +273,6 @@ export default function CompanyReportModal({
   const [downloadingDocx, setDownloadingDocx] = useState(false);
   const [generatingHTML, setGeneratingHTML] = useState(false);
   const reportRef = useRef<HTMLDivElement>(null);
-  const requestIdRef = useRef<string>('');
   const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   
   // 添加进度模拟功能
@@ -444,7 +443,10 @@ export default function CompanyReportModal({
         // 设置模拟的进度更新
         startProgressSimulation();
         
-        const response = await fetch('/api/company-analysis', {
+        // 直接使用company-analysis API，不再使用旧的submit/status流程
+        console.log('开始请求企业分析API，公司名称:', companyName);
+        
+        const analysisResponse = await fetch('/api/company-analysis', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -455,36 +457,40 @@ export default function CompanyReportModal({
           }),
         });
         
-        if (!response.ok) {
-          throw new Error(`请求失败, 状态码: ${response.status}`);
+        if (!analysisResponse.ok) {
+          const errorData = await analysisResponse.json();
+          throw new Error(errorData.error || `请求失败, 状态码: ${analysisResponse.status}`);
         }
         
-        const data = await response.json();
+        const responseData = await analysisResponse.json();
         
-        if (!data.success) {
-          throw new Error(data.error || '分析生成失败');
+        if (!responseData.success) {
+          throw new Error(responseData.error || '分析请求失败');
         }
 
-        // 检查是否从缓存获取
-        if (data.fromCache) {
-          toast.success('已从缓存加载分析结果', { 
-            duration: 3000,
-            icon: '📦'
-          });
-          console.log(`分析结果来自缓存`);
-          
-          // 立即设置进度为100%并完成
-          setProgress(100);
-          setGenerationStage('complete');
-          stopProgressSimulation();
-        }
+        // 停止进度模拟
+        stopProgressSimulation();
         
-        setAnalysisResult(data.data);
+        // 设置结果
+        setAnalysisResult(responseData.data);
+        
+        // 更新UI状态
+        setProgress(100);
+        setGenerationStage('complete');
+        
+        console.log('✅ 企业分析完成！');
+        toast.success('企业分析完成！', {
+          duration: 3000,
+          icon: '✨'
+        });
         
       } catch (err) {
         console.error('获取分析失败:', err);
         setError(err instanceof Error ? err.message : '获取分析失败，请稍后重试');
         toast.error(`获取企业分析失败: ${err instanceof Error ? err.message : '未知错误'}`);
+        
+        // 停止进度模拟
+        stopProgressSimulation();
       } finally {
         // 确保进度模拟停止
         if (progressIntervalRef.current) {
@@ -505,84 +511,21 @@ export default function CompanyReportModal({
     };
   }, [companyName, industryName, toast, startProgressSimulation, stopProgressSimulation]);
 
-  // 初始化时获取公司分析
+  // 模拟消息更新，为用户提供更好的反馈
   useEffect(() => {
-    if (isOpen && !analysisResult && !loading) {
-      fetchCompanyAnalysis();
-    }
-  }, [isOpen, fetchCompanyAnalysis, analysisResult, loading]);
-
-  // 重置状态
-  useEffect(() => {
-    if (!isOpen) {
-      setAnalysisResult(null);
-      setError(null);
-      setGenerationStage('collecting');
-      setProgress(0);
-      setStageMessage('');
-      // 重置请求ID
-      requestIdRef.current = '';
-    }
-  }, [isOpen]);
-  
-  // 添加调试代码
-  useEffect(() => {
-    if (analysisResult) {
-      console.log('分析结果:', analysisResult);
-      console.log('章节数量:', analysisResult.sections?.length || 0);
-      console.log('章节标题:', analysisResult.sections?.map(s => s.title) || []);
-    }
-  }, [analysisResult]);
-  
-  // 处理进度条动画
-  useEffect(() => {
-    if (!loading || generationStage === 'complete') return;
+    if (!loading) return;
     
     const currentStage = stages[generationStage];
-    
-    // 确保消息不会循环重复
-    // 计算每条消息的显示时间，确保所有消息在阶段结束前都能显示
-    const messageCount = currentStage.messages.length;
-    const messageInterval = currentStage.duration / messageCount;
-    
-    // 更新消息 - 每条消息只显示一次
+    const messages = currentStage.messages;
     let messageIndex = 0;
-    const messageTimer = setInterval(() => {
-      if (messageIndex < messageCount) {
-        setStageMessage(currentStage.messages[messageIndex]);
-        messageIndex++;
-      } else {
-        clearInterval(messageTimer);
-      }
-    }, messageInterval);
     
-    // 更新进度 - 平滑过渡
-    const progressRange = currentStage.progressEnd - currentStage.progressStart;
-    const progressSteps = 100; // 将进度条分为100个小步骤，使动画更平滑
-    const stepInterval = currentStage.duration / progressSteps;
-    const progressIncrement = progressRange / progressSteps;
-    
-    let stepCount = 0;
-    const progressTimer = setInterval(() => {
-      if (stepCount < progressSteps) {
-        const newProgress = currentStage.progressStart + (progressIncrement * stepCount);
-        setProgress(Math.round(newProgress));
-        stepCount++;
-      } else {
-        clearInterval(progressTimer);
-        
-        // 进入下一阶段
-        const stagesList: ReportGenerationStage[] = ['collecting', 'analyzing', 'drafting', 'reviewing', 'finalizing', 'complete'];
-        const currentIndex = stagesList.indexOf(generationStage);
-        if (currentIndex < stagesList.length - 1) {
-          setGenerationStage(stagesList[currentIndex + 1]);
-        }
-      }
-    }, stepInterval);
+    const messageInterval = setInterval(() => {
+      setStageMessage(messages[messageIndex]);
+      messageIndex = (messageIndex + 1) % messages.length;
+    }, Math.floor(currentStage.duration / messages.length));
     
     return () => {
-      clearInterval(messageTimer);
-      clearInterval(progressTimer);
+      clearInterval(messageInterval);
     };
   }, [loading, generationStage, stages]);
 
@@ -592,179 +535,27 @@ export default function CompanyReportModal({
     setDownloadingDocx(true);
     
     try {
-      // 创建文档对象
-      const doc = new Document({
-        sections: [{
-          properties: {},
-          children: [
-            // 添加标题
-            new Paragraph({
-              text: `${companyName} 公司研究报告`,
-              heading: HeadingLevel.TITLE,
-              alignment: AlignmentType.CENTER
-            }),
-            
-            // 添加行业信息
-            new Paragraph({
-              text: `行业: ${industryName || '未指定'}`,
-              alignment: AlignmentType.CENTER,
-              spacing: {
-                before: 120,
-                after: 120
-              }
-            }),
-            
-            // 添加日期
-            new Paragraph({
-              text: `报告日期: ${new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}`,
-              alignment: AlignmentType.CENTER,
-              spacing: {
-                before: 120,
-                after: 240
-              }
-            }),
-            
-            // 添加目录标题
-            new Paragraph({
-              text: "目录",
-              heading: HeadingLevel.HEADING_1,
-              spacing: {
-                before: 240,
-                after: 120
-              }
-            }),
-            
-            // 添加目录内容
-            ...analysisResult.sections.map((section, index) => 
-              new Paragraph({
-                text: `${index + 1}. ${section.title}`,
-                spacing: {
-                  before: 80,
-                  after: 80
-                }
-              })
-            ),
-            
-            // 添加分页符
-            new Paragraph({
-              text: "",
-              pageBreakBefore: true
-            }),
-            
-            // 添加报告内容
-            ...analysisResult.sections.flatMap((section, index) => {
-              const cleanedContent = cleanMarkdownForDocx(section.content);
-              const paragraphs = splitContentIntoParagraphs(cleanedContent);
-              
-              return [
-                // 添加章节标题
-                new Paragraph({
-                  text: `${index + 1}. ${section.title.replace(/^\d+\.\s*/, '')}`,
-                  heading: HeadingLevel.HEADING_1,
-                  spacing: {
-                    before: 240,
-                    after: 120
-                  }
-                }),
-                
-                // 添加章节内容
-                ...paragraphs
-              ];
-            })
-          ]
-        }]
+      // 使用新的docxGenerator工具生成Word文档
+      const docBlob = await generateDocx({
+        companyName,
+        industryName,
+        analysisResult
       });
       
-      // 生成并下载文档
-      Packer.toBlob(doc).then(blob => {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${companyName}-公司研究报告.docx`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+      // 下载生成的文档
+      downloadDocx(companyName, docBlob);
+      
+      toast.success('Word文档生成成功！', {
+        duration: 3000,
+        icon: '📄'
       });
+      
     } catch (error) {
       console.error('Word文档生成失败:', error);
-      alert('Word文档生成失败，请稍后重试');
+      toast.error('Word文档生成失败，请稍后重试');
     } finally {
       setDownloadingDocx(false);
     }
-  };
-  
-  // 增强Markdown清理函数，确保完全移除所有Markdown标记
-  const cleanMarkdownForDocx = (markdown: string): string => {
-    return markdown
-      .replace(/\*\*(.*?)\*\*/g, '$1')  // 移除加粗标记
-      .replace(/\*(.*?)\*/g, '$1')      // 移除斜体标记
-      .replace(/~~(.*?)~~/g, '$1')      // 移除删除线标记
-      .replace(/`(.*?)`/g, '$1')        // 移除行内代码标记
-      .replace(/```[\s\S]*?```/g, '')   // 移除代码块
-      .replace(/\[(.*?)\]\((.*?)\)/g, '$1') // 移除链接，只保留文本
-      .replace(/!\[(.*?)\]\((.*?)\)/g, '图片：$1') // 将图片替换为文本描述
-      .replace(/#{1,6}\s+(.*?)$/gm, '$1') // 移除标题标记
-      .replace(/^\s*[-*+]\s+/gm, '• ')  // 将无序列表项转换为简单的项目符号
-      .replace(/^\s*\d+\.\s+/gm, '• ')  // 将有序列表项转换为简单的项目符号
-      .replace(/\|/g, ' ')              // 移除表格分隔符
-      .replace(/\n\s*\n/g, '\n\n')      // 保留段落间的空行
-      .replace(/\n---+\n/g, '\n\n')     // 移除水平分隔线
-      .replace(/&gt;/g, '')             // 移除引用符号
-      .replace(/&lt;/g, '<')            // 转换HTML实体
-      .replace(/&gt;/g, '>')
-      .replace(/&amp;/g, '&');
-  };
-  
-  // 将内容分割为段落并转换为Word段落对象
-  const splitContentIntoParagraphs = (content: string): Paragraph[] => {
-    // 按空行分割段落
-    const paragraphTexts = content.split(/\n\s*\n/).filter(p => p.trim() !== '');
-    
-    return paragraphTexts.map(text => {
-      // 处理Markdown格式
-      const cleanedText = text
-        .replace(/\*\*(.*?)\*\*/g, '$1')  // 移除加粗标记
-        .replace(/\*(.*?)\*/g, '$1')      // 移除斜体标记
-        .replace(/`(.*?)`/g, '$1')        // 移除代码标记
-        .replace(/\[(.*?)\]\((.*?)\)/g, '$1') // 移除链接，只保留文本
-        .trim();
-      
-      // 检查是否为表格行（简单检测）
-      if (cleanedText.includes('|') && cleanedText.trim().startsWith('|')) {
-        // 将表格行转换为普通文本
-        return new Paragraph({
-          text: cleanedText.replace(/\|/g, ' ').trim(),
-          spacing: {
-            before: 120,
-            after: 120
-          }
-        });
-      }
-      
-      // 检查是否为项目符号列表
-      if (cleanedText.trim().startsWith('• ')) {
-        return new Paragraph({
-          text: cleanedText.trim(),
-          bullet: {
-            level: 0
-          },
-          spacing: {
-            before: 120,
-            after: 120
-          }
-        });
-      }
-      
-      // 普通段落
-      return new Paragraph({
-        text: cleanedText,
-        spacing: {
-          before: 120,
-          after: 120
-        }
-      });
-    });
   };
 
   const generateHTMLReport = async () => {
@@ -884,6 +675,34 @@ export default function CompanyReportModal({
       setGeneratingHTML(false);
     }
   };
+
+  // 添加回初始化和重置的useEffect
+  // 初始化时获取公司分析
+  useEffect(() => {
+    if (isOpen && !analysisResult && !loading) {
+      fetchCompanyAnalysis();
+    }
+  }, [isOpen, fetchCompanyAnalysis, analysisResult, loading]);
+
+  // 重置状态
+  useEffect(() => {
+    if (!isOpen) {
+      setAnalysisResult(null);
+      setError(null);
+      setGenerationStage('collecting');
+      setProgress(0);
+      setStageMessage('');
+    }
+  }, [isOpen]);
+  
+  // 添加调试代码
+  useEffect(() => {
+    if (analysisResult) {
+      console.log('分析结果:', analysisResult);
+      console.log('章节数量:', analysisResult.sections?.length || 0);
+      console.log('章节标题:', analysisResult.sections?.map(s => s.title) || []);
+    }
+  }, [analysisResult]);
 
   return (
     <Dialog

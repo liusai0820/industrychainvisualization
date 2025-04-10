@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特斯拉 企业深度研究报告</title>
+    
+    <!-- 引入必要的CDN资源 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #e82127;
+            --secondary-color: #000000;
+            --accent-color: #3b82f6;
+            --background-color: #f8fafc;
+            --text-color: #1e293b;
+            --spacing-unit: 8px;
+            --content-width: min(1200px, 90vw);
+            --section-spacing: calc(var(--spacing-unit) * 8);
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+        }
+        body {
+            font-family: 'Noto Sans SC', system-ui, sans-serif;
+            line-height: 1.8;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        .logo {
+            height: 80px;
+            margin-bottom: 2rem;
+        }
+        .chart-container {
+            height: 400px;
+            margin: 2rem 0;
+        }
+        .kpi-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease;
+        }
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        .swot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .swot-item {
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: white;
+            box-shadow: var(--shadow-sm);
+        }
+        .swot-strengths {
+            border-top: 5px solid #10b981;
+        }
+        .swot-weaknesses {
+            border-top: 5px solid #ef4444;
+        }
+        .swot-opportunities {
+            border-top: 5px solid #3b82f6;
+        }
+        .swot-threats {
+            border-top: 5px solid #f59e0b;
+        }
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 2rem auto;
+        }
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--primary-color);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        .left {
+            left: 0;
+            text-align: right;
+        }
+        .right {
+            left: 50%;
+        }
+        .content {
+            padding: 20px 30px;
+            background-color: white;
+            position: relative;
+            border-radius: 6px;
+            box-shadow: var(--shadow-sm);
+        }
+        @media screen and (max-width: 768px) {
+            .timeline::after {
+                left: 31px;
+            }
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            .left, .right {
+                left: 0;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://logo.clearbit.com/tesla.com" alt="特斯拉logo" class="logo">
+        <h1 class="text-4xl font-bold">特斯拉深度研究报告</h1>
+        <p class="mt-4 text-xl">加速世界向可持续能源转型</p>
+        <p class="mt-2">2024年最新版</p>
+    </div>
+
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-center">核心指标概览</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="kpi-card">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold">2023年营收</h3>
+                        <i class="fas fa-dollar-sign text-blue-500 text-xl"></i>
+                    </div>
+                    <p class="mt-4 text-3xl font-bold">968.4亿<span class="text-sm">美元</span></p>
+                    <p class="mt-2 text-sm text-gray-600">同比增长19%</p>
+                </div>
+                <div class="kpi-card">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold">全球交付量</h3>
+                        <i class="fas fa-car text-red-500 text-xl"></i>
+                    </div>
+                    <p class="mt-4 text-3xl font-bold">180万<span class="text-sm">辆</span></p>
+                    <p class="mt-2 text-sm text-gray-600">市场份额19%</p>
+                </div>
+                <div class="kpi-card">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold">毛利率</h3>
+                        <i class="fas fa-chart-line text-green-500 text-xl"></i>
+                    </div>
+                    <p class="mt-4 text-3xl font-bold">19.1<span class="text-sm">%</span></p>
+                    <p class="mt-2 text-sm text-gray-600">行业领先水平</p>
+                </div>
+                <div class="kpi-card">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold">超级充电站</h3>
+                        <i class="fas fa-charging-station text-yellow-500 text-xl"></i>
+                    </div>
+                    <p class="mt-4 text-3xl font-bold">5万<span class="text-sm">+</span></p>
+                    <p class="mt-2 text-sm text-gray-600">全球最大网络</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6">财务表现趋势</h2>
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div class="chart-container">
+                        <canvas id="profitabilityChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="deliveryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6">SWOT分析</h2>
+            <div class="swot-grid">
+                <div class="swot-item swot-strengths">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-arrow-up text-green-500 mr-2 text-xl"></i>
+                        <h3 class="text-xl font-semibold">优势</h3>
+                    </div>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>全球领先的电动汽车品牌</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>垂直整合的商业模式</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>先进的自动驾驶技术</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>全球最大的快速充电网络</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="swot-item swot-weaknesses">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-arrow-down text-red-500 mr-2 text-xl"></i>
+                        <h3 class="text-xl font-semibold">劣势</h3>
+                    </div>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-circle text-red-500 mt-1 mr-2"></i>
+                            <span>产品组合相对有限</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-circle text-red-500 mt-1 mr-2"></i>
+                            <span>质量控制问题时有发生</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-circle text-red-500 mt-1 mr-2"></i>
+                            <span>过度依赖马斯克的个人品牌</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-circle text-red-500 mt-1 mr-2"></i>
+                            <span>售后服务网络仍需扩展</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="swot-item swot-opportunities">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-bullseye text-blue-500 mr-2 text-xl"></i>
+                        <h3 class="text-xl font-semibold">机遇</h3>
+                    </div>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-lightbulb text-blue-500 mt-1 mr-2"></i>
+                            <span>全球电动车渗透率提升</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-lightbulb text-blue-500 mt-1 mr-2"></i>
+                            <span>能源业务潜在市场巨大</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-lightbulb text-blue-500 mt-1 mr-2"></i>
+                            <span>FSD软件订阅服务增长</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-lightbulb text-blue-500 mt-1 mr-2"></i>
+                            <span>商用车领域潜在突破</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="swot-item swot-threats">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-shield-alt text-yellow-500 mr-2 text-xl"></i>
+                        <h3 class="text-xl font-semibold">威胁</h3>
+                    </div>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 mt-1 mr-2"></i>
+                            <span>传统车企加速电动化转型</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 mt-1 mr-2"></i>
+                            <span>中国本土品牌激烈竞争</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 mt-1 mr-2"></i>
+                            <span>自动驾驶法规不确定性</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 mt-1 mr-2"></i>
+                            <span>原材料价格波动</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6">产品矩阵</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-xl overflow-hidden shadow-md">
+                    <img src="https://digitalassets.tesla.com/tesla-contents/image/upload/f_auto,q_auto/Model-3-Homepage-Desktop-LHD.jpeg" alt="Model 3" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold">Model 3</h3>
+                        <p class="text-gray-600 mt-2">最畅销的电动轿车，续航502km，0-100km/h加速3.3秒</p>
+                        <div class="mt-4 flex justify-between items-center">
+                            <span class="text-lg font-semibold">¥231,900起</span>
+                            <span class="text-sm bg-green-100 text-green-800 px-2 py-1 rounded">销量冠军</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl overflow-hidden shadow-md">
+                    <img src="https://digitalassets.tesla.com/tesla-contents/image/upload/f_auto,q_auto/Model-Y-Homepage-Desktop-Global.jpeg" alt="Model Y" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold">Model Y</h3>
+                        <p class="text-gray-600 mt-2">中型电动SUV，续航533km，0-100km/h加速3.7秒</p>
+                        <div class="mt-4 flex justify-between items-center">
+                            <span class="text-lg font-semibold">¥263,900起</span>
+                            <span class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">全球热销</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl overflow-hidden shadow-md">
+                    <img src="https://digitalassets.tesla.com/tesla-contents/image/upload/f_auto,q_auto/Cybertruck-Homepage-Desktop-Global.jpeg" alt="Cybertruck" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold">Cybertruck</h3>
+                        <p class="text-gray-600 mt-2">电动皮卡，续航最高755km，0-100km/h加速2.9秒</p>
+                        <div class="mt-4 flex justify-between items-center">
+                            <span class="text-lg font-semibold">¥429,900起</span>
+                            <span class="text-sm bg-purple-100 text-purple-800 px-2 py-1 rounded">创新设计</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6">竞争格局</h2>
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <div class="chart-container">
+                    <canvas id="marketShareChart"></canvas>
+                </div>
+                <div class="mt-8">
+                    <h3 class="text-xl font-semibold mb-4">主要竞争对手对比</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">对比维度</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">特斯拉</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">比亚迪</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">大众</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">蔚来</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">市场份额</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">19%</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">17%</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">8%</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3%</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">产品性能</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">续航和加速领先</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">性价比突出</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">传统工艺扎实</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">豪华体验出色</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">价格策略</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">动态定价相对高端</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">全面价格覆盖</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">中端为主</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">高端定位</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">技术实力</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">电池和自动驾驶领先</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">刀片电池技术强</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">转型较快</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">换电技术独特</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6">发展历程</h2>
+            <div class="timeline">
+                <div class="timeline-item left">
+                    <div class="content">
+                        <h3 class="font-bold">2003年</h3>
+                        <p>特斯拉公司成立</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="content">
+                        <h3 class="font-bold">2008年</h3>
+                        <p>推出首款电动车Roadster</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="content">
+                        <h3 class="font-bold">2012年</h3>
+                        <p>Model S开始交付</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="content">
+                        <h3 class="font-bold">2017年</h3>
+                        <p>Model 3开始量产</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="content">
+                        <h3 class="font-bold">2020年</h3>
+                        <p>上海超级工厂投产</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="content">
+                        <h3 class="font-bold">2023年</h3>
+                        <p>Cybertruck开始交付</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6">未来展望</h2>
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">增长预测</h3>
+                        <p class="text-gray-700 mb-4">预计到2026年，特斯拉年销量有望达到300万辆，全球市场份额维持在15-20%之间。能源业务规模可能突破200亿美元，成为第二大收入来源。</p>
+                        <div class="chart-container">
+                            <canvas id="growthChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">战略方向</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>下一代平台开发，目标生产成本降低50%</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>全自动驾驶技术实现L4级别</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>能源业务重点发展储能产品和太阳能屋顶</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>全球工厂网络扩展，提高本地化生产能力</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // 营收图表
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        const revenueChart = new Chart(revenueCtx, {
+            type: 'bar',
+            data: {
+                labels: ['2019', '2020', '2021', '2022', '2023'],
+                datasets: [{
+                    label: '营收(十亿美元)',
+                    data: [24.6, 31.5, 53.8, 81.5, 96.8],
+                    backgroundColor: '#e82127',
+                    borderColor: '#e82127',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '特斯拉年度营收增长(2019-2023)',
+                        font: {
+                            size: 16
+                        }
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // 盈利能力图表
+        const profitabilityCtx = document.getElementById('profitabilityChart').getContext('2d');
+        const profitabilityChart = new Chart(profitabilityCtx, {
+            type: 'line',
+            data: {
+                labels: ['2019', '2020', '2021', '2022', '2023'],
+                datasets: [
+                    {
+                        label: '毛利率(%)',
+                        data: [16.6, 21.0, 25.3, 25.6, 19.1],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 2,
+                        fill: true
+                    },
+                    {
+                        label: '净利率(%)',
+                        data: [-3.5, 2.3, 10.3, 15.4, 10.0],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 2,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '盈利能力趋势(2019-2023)',
+                        font: {
+                            size: 16
+                        }
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // 交付量图表
+        const deliveryCtx = document.getElementById('deliveryChart').getContext('2d');
+        const deliveryChart = new Chart(deliveryCtx, {
+            type: 'line',
+            data: {
+                labels: ['2019', '2020', '2021', '2022', '2023'],
+                datasets: [{
+                    label: '交付量(万辆)',
+                    data: [36.8, 49.9, 93.6, 131.4, 180.0],
+                    borderColor: '#e82127',
+                    backgroundColor: 'rgba(232, 33, 39, 0.1)',
+                    borderWidth: 2,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '全球交付量增长(2019-2023)',
+                        font: {
+                            size: 16
+                        }
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // 市场份额图表
+        const marketShareCtx = document.getElementById('marketShareChart').getContext('2d');
+        const marketShareChart = new Chart(marketShareCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['特斯拉', '比亚迪', '大众', '蔚来', '其他'],
+                datasets: [{
+                    data: [19, 17, 8, 3, 53],
+                    backgroundColor: [
+                        '#e82127',
+                        '#005ea6',
+                        '#1d70b8',
+                        '#0b0c0c',
+                        '#b1b4b6'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '2023年全球电动车市场份额',
+                        font: {
+                            size: 16
+                        }
+                    },
+                    legend: {
+                        position: 'right'
+                    }
+                }
+            }
+        });
+
+        // 增长预测图表
+        const growthCtx = document.getElementById('growthChart').getContext('2d');
+        const growthChart = new Chart(growthCtx, {
+            type: 'line',
+            data: {
+                labels: ['2021', '2022', '2023', '2024E', '2025E', '2026E'],
+                datasets: [{
+                    label: '交付量(万辆)',
+                    data: [93.6, 131.4, 180.0, 220.0, 260.0, 300.0],
+                    borderColor: '#e82127',
+                    backgroundColor: 'rgba(232, 33, 39, 0.1)',
+                    borderWidth: 2,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
