@@ -1,0 +1,31 @@
+## 项目架构概览
+
+本项目是一个基于 Next.js 的产业图谱生成和展示应用，**通过 OpenRouter 进行 AI 模型调用**。其主要架构如下：
+
+- **`src/app`**: Next.js 应用核心目录。
+    - **`page.tsx`**: 应用主页面。
+    - **`graph/[id]/page.tsx`**: 图谱展示页面。
+    - **`api/`**: 后端 API 路由。
+        - **`submit/route.ts`**: (已部分弃用) 建议前端调整。
+        - **`status/route.ts`**: 查询后台任务状态 (Redis)。
+        - **`graph/route.ts`**: 获取图谱数据 (Redis)。
+        - **`company-analysis/route.ts`**: 调用 OpenRouter 生成 JSON/MD 分析。
+        - **`company-analysis-html/route.ts`**: 调用 OpenRouter 生成 HTML 分析 (含缓存)。
+        - **`feedback/route.ts`**: 处理用户反馈。
+        - **`webhook/route.ts`**: (已禁用)。
+- **`src/components`**: 可复用 React 组件。
+    - `IndustryChainChart.tsx`, `CompanyReportModal.tsx`, `ProgressBar.tsx`, `FeedbackButton.tsx`, `PresetIndustryCard.tsx`, `PresetIndustrySection.tsx`, `OfflineNotice.tsx`
+- **`src/lib`**: 核心库和客户端。
+    - **`redis.ts`**: Redis 客户端。
+    - *(可能包含用于调用 OpenRouter 的客户端或辅助函数)*
+- **`src/prompts`**: AI 模型 Prompt 模板。
+    - `industryGraph.ts`, `companyAnalysis.ts`, `companyAnalysisHTML.ts`
+- **`src/types`**: TypeScript 类型定义。
+- **`src/utils`**: 通用工具函数。
+    - `layoutCalculator.ts`: (推断) 用于计算图谱节点布局。
+    - `docxGenerator.ts`: (推断) 用于生成 Word 文档。
+    - `industryStyles.ts`: (推断) 定义行业相关的样式。
+- **`public/`**: 静态资源。
+- **`scripts/`**: (推断) 辅助脚本。
+- **`.env.*`**: 环境变量配置文件 (含 OpenRouter Keys, 模型名, Redis 配置)。
+- **`next.config.mjs`, `tailwind.config.ts`, `tsconfig.json`**: 项目配置文件。
