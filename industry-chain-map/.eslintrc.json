@@ -1,4 +1,11 @@
 {
   "extends": "next/core-web-vitals",
-  "root": true
+  "root": true,
+  "rules": {},
+  "ignorePatterns": ["node_modules/", ".next/", "out/"],
+  "settings": {
+    "next": {
+      "rootDir": "."
+    }
+  }
 } 
