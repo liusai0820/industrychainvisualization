@@ -163,8 +163,8 @@ const transformData = (rawData: RawIndustryData): IndustryChainData => {
     }
 };
 
-// 从 Dify API 获取数据
-const fetchFromDifyApi = async (industryName: string): Promise<IndustryChainData> => {
+// 从本地API获取数据
+const fetchFromLocalApi = async (industryName: string): Promise<IndustryChainData> => {
     const maxRetries = 3;
     const baseDelay = 3000; // 增加到3秒
 
@@ -285,9 +285,9 @@ export const loadIndustryChainData = async (industryNameOrId: string): Promise<I
             
             return transformedData;
         } else {
-            // 非预设产业，调用 Dify API
-            console.log('Generating data from Dify API:', industryNameOrId);
-            return await fetchFromDifyApi(industryNameOrId);
+            // 非预设产业，调用本地API
+            console.log('Generating data from local API:', industryNameOrId);
+            return await fetchFromLocalApi(industryNameOrId);
         }
     } catch (error) {
         console.error('Error loading industry data:', error);
