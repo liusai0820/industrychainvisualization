@@ -1,0 +1,214 @@
+{
+  "产业链": "细胞与基因技术",
+  "环节": [
+    {
+      "环节名称": "上游：基础研究、试剂、耗材与设备",
+      "子环节": [
+        {
+          "子环节名称": "基础研究",
+          "子-子环节": [
+            {
+              "子-子环节名称": "基因编辑技术",
+              "代表公司": ["CRISPR Therapeutics", "Editas Medicine", "Intellia Therapeutics", "Beam Therapeutics", "Sangamo Therapeutics"]
+            },
+            {
+              "子-子环节名称": "病毒载体技术",
+              "代表公司": ["Oxford Biomedica", "uniQure", "REGENXBIO", "Voyager Therapeutics", "Adverum Biotechnologies"]
+            },
+            {
+              "子-子环节名称": "细胞培养技术",
+              "代表公司": ["Thermo Fisher Scientific", "Merck Millipore", "Lonza", "Cytiva (formerly GE Healthcare Life Sciences)", "BD Biosciences"]
+            },
+            {
+              "子-子环节名称": "细胞分离与分析技术",
+              "代表公司": ["Miltenyi Biotec", "Thermo Fisher Scientific", "BD Biosciences", "Beckman Coulter", "Bio-Rad"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "试剂与耗材",
+          "子-子环节": [
+            {
+              "子-子环节名称": "细胞培养基",
+              "代表公司": ["Thermo Fisher Scientific", "Merck Millipore", "Lonza", "Cytiva (formerly GE Healthcare Life Sciences)", "BD Biosciences"]
+            },
+            {
+              "子-子环节名称": "病毒载体生产用试剂",
+              "代表公司": ["Thermo Fisher Scientific", "Merck Millipore", "Lonza", "Takara Bio", "Cytiva"]
+            },
+            {
+              "子-子环节名称": "基因编辑工具",
+              "代表公司": ["IDT", "Thermo Fisher Scientific", "Synthego", "Horizon Discovery", "GenScript"]
+            },
+            {
+              "子-子环节名称": "细胞培养耗材",
+              "代表公司": ["Corning", "Thermo Fisher Scientific", "Greiner Bio-One", "Eppendorf", "Sarstedt"]
+            },
+            {
+              "子-子环节名称": "一次性生物反应袋",
+              "代表公司": ["Sartorius Stedim Biotech", "Thermo Fisher Scientific", "Merck Millipore", "Cytiva", "Pall Corporation"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "仪器设备",
+          "子-子环节": [
+            {
+              "子-子环节名称": "生物反应器",
+              "代表公司": ["Sartorius", "Eppendorf", "Thermo Fisher Scientific", "Cytiva (formerly GE Healthcare Life Sciences)", "Applikon Biotechnology"]
+            },
+            {
+              "子-子环节名称": "细胞处理系统",
+              "代表公司": ["Miltenyi Biotec", "Lonza", "Thermo Fisher Scientific", "Cytiva", "Fresenius Kabi"]
+            },
+            {
+              "子-子环节名称": "流式细胞仪",
+              "代表公司": ["BD Biosciences", "Beckman Coulter", "Thermo Fisher Scientific", "Miltenyi Biotec", "Sysmex"]
+            },
+            {
+              "子-子环节名称": "基因测序仪",
+              "代表公司": ["Illumina", "Thermo Fisher Scientific", "Pacific Biosciences", "Oxford Nanopore Technologies", "BGI"]
+            },
+            {
+              "子-子环节名称": "基因编辑设备",
+              "代表公司": ["Lonza (Nucleofector)", "MaxCyte", "Bio-Rad", "Thermo Fisher Scientific", "Mirus Bio"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "中游：研发、生产与服务",
+      "子环节": [
+        {
+          "子环节名称": "细胞治疗",
+          "子-子环节": [
+            {
+              "子-子环节名称": "CAR-T细胞治疗",
+              "代表公司": ["Novartis (Kymriah)", "Gilead Sciences (Yescarta, Tecartus)", "Bristol Myers Squibb (Breyanzi, Abecma)", "JW Therapeutics", "复星凯特 (Fosun Kite)"]
+            },
+            {
+              "子-子环节名称": "TCR-T细胞治疗",
+              "代表公司": ["Adaptimmune", "Immunocore", "TCR2 Therapeutics", "Immatics", "PACT Pharma"]
+            },
+            {
+              "子-子环节名称": "干细胞治疗",
+              "代表公司": ["Mesoblast", "Athersys", "Pluristem Therapeutics", "TiGenix (Takeda)", "Vericel"]
+            },
+            {
+              "子-子环节名称": "肿瘤浸润淋巴细胞 (TIL) 治疗",
+              "代表公司": ["Iovance Biotherapeutics", "Obsidian Therapeutics", "Instil Bio", "Turnstone Biologics", "Achilles Therapeutics"]
+            },
+            {
+              "子-子环节名称": "NK细胞治疗",
+              "代表公司": ["Nkarta Therapeutics", "Fate Therapeutics", "Glycostem Therapeutics", "Affimed", "Innate Pharma"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "基因治疗",
+          "子-子环节": [
+            {
+              "子-子环节名称": "体内基因治疗",
+              "代表公司": ["Novartis (Zolgensma)", "Spark Therapeutics (Luxturna, Roche)", "Sarepta Therapeutics", "BioMarin Pharmaceutical", "uniQure"]
+            },
+            {
+              "子-子环节名称": "体外基因治疗",
+              "代表公司": ["Bluebird Bio", "Orchard Therapeutics", "Avrobio", "Homology Medicines", "Freeline Therapeutics"]
+            },
+            {
+              "子-子环节名称": "基因编辑治疗",
+              "代表公司": ["CRISPR Therapeutics", "Editas Medicine", "Intellia Therapeutics", "Beam Therapeutics", "Sangamo Therapeutics"]
+            },
+            {
+              "子-子环节名称": "RNA疗法",
+              "代表公司": ["Alnylam Pharmaceuticals", "Moderna", "BioNTech", "Ionis Pharmaceuticals", "Arcturus Therapeutics"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "CDMO/CRO",
+          "子-子环节": [
+            {
+              "子-子环节名称": "病毒载体CDMO",
+              "代表公司": ["Lonza", "Catalent", "Oxford Biomedica", "Brammer Bio (Thermo Fisher Scientific)", "WuXi AppTec"]
+            },
+            {
+              "子-子环节名称": "细胞治疗CDMO",
+              "代表公司": ["Lonza", "Catalent", "Hitachi Chemical", "WuXi AppTec", "Samsung Biologics"]
+            },
+            {
+              "子-子环节名称": "临床CRO",
+              "代表公司": ["IQVIA", "Parexel", "PPD", "ICON plc", "Syneos Health"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "下游：应用与终端",
+      "子环节": [
+        {
+          "子环节名称": "医疗机构",
+          "子-子环节": [
+            {
+              "子-子环节名称": "医院",
+              "代表公司": ["Mayo Clinic", "Cleveland Clinic", "Massachusetts General Hospital", "Johns Hopkins Hospital", "MD Anderson Cancer Center"]
+            },
+            {
+              "子-子环节名称": "细胞治疗中心",
+              "代表公司": ["City of Hope", "Memorial Sloan Kettering Cancer Center", "Dana-Farber Cancer Institute", "Fred Hutchinson Cancer Research Center", "Stanford Health Care"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "患者",
+          "子-子环节": [
+            {
+              "子-子环节名称": "肿瘤患者",
+              "代表公司": ["无特定公司，患者遵医嘱使用"]
+            },
+            {
+              "子-子环节名称": "罕见病患者",
+              "代表公司": ["无特定公司，患者遵医嘱使用"]
+            },
+            {
+              "子-子环节名称": "遗传病患者",
+              "代表公司": ["无特定公司，患者遵医嘱使用"]
+            },
+            {
+              "子-子环节名称": "自身免疫性疾病患者",
+              "代表公司": ["无特定公司，患者遵医嘱使用"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "支付方",
+          "子-子环节": [
+            {
+              "子-子环节名称": "医保机构",
+              "代表公司": ["国家医疗保障局 (National Healthcare Security Administration)", "美国医疗保险和医疗补助服务中心 (CMS)", "英国国民保健署 (NHS)", "德国法定医疗保险 (GKV)", "日本厚生劳动省 (MHLW)"]
+            },
+            {
+              "子-子环节名称": "商业保险",
+              "代表公司": ["UnitedHealth Group", "Anthem", "Aetna (CVS Health)", "Cigna", "Humana"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "科研机构",
+          "子-子环节": [
+            {
+              "子-子环节名称": "大学",
+              "代表公司": ["Harvard University", "Stanford University", "MIT", "University of California, Berkeley", "University of Oxford"]
+            },
+            {
+              "子-子环节名称": "研究所",
+              "代表公司": ["National Institutes of Health (NIH)", "Broad Institute", "Wellcome Sanger Institute", "Max Planck Institutes", "Chinese Academy of Sciences"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

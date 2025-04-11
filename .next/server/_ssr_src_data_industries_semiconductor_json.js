@@ -1,0 +1,25 @@
+"use strict";
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+exports.id = "_ssr_src_data_industries_semiconductor_json";
+exports.ids = ["_ssr_src_data_industries_semiconductor_json"];
+exports.modules = {
+
+/***/ "(ssr)/./src/data/industries/semiconductor.json":
+/*!************************************************!*\
+  !*** ./src/data/industries/semiconductor.json ***!
+  \************************************************/
+/***/ ((module) => {
+
+module.exports = /*#__PURE__*/JSON.parse('{"产业链":"半导体与集成电路","环节":[{"环节名称":"上游：原材料供应与研发设计","子环节":[{"子环节名称":"半导体材料","子-子环节":[{"子-子环节名称":"硅片","代表公司":["信越化学","SUMCO","环球晶圆","Siltronic","SK Siltron","GlobalWafers","沪硅产业"]},{"子-子环节名称":"光刻胶","代表公司":["JSR株式会社","东京应化","信越化学","陶氏公司","富士胶片","住友化学","LG化学"]},{"子-子环节名称":"特种气体","代表公司":["林德集团","空气化工产品","液化空气集团","昭和电工","SK Materials","关东特殊气体","Versum Materials"]},{"子-子环节名称":"化学试剂","代表公司":["陶氏公司","默克","亚什兰","Entegris","Kanto Chemical","Honeywell","富士胶片"]},{"子-子环节名称":"靶材","代表公司":["日矿金属","JX金属","东曹","普莱克斯","爱发科","贺利氏","江丰电子"]},{"子-子环节名称":"CMP抛光材料","代表公司":["陶氏公司","Cabot Microelectronics","Versum Materials","富士胶片","3M","SKC solmics"]}]},{"子环节名称":"半导体设备","子-子环节":[{"子-子环节名称":"光刻设备","代表公司":["ASML"]},{"子-子环节名称":"刻蚀设备","代表公司":["泛林集团","东京电子","应用材料","科磊","北方华创"]},{"子-子环节名称":"薄膜沉积设备","代表公司":["应用材料","泛林集团","东京电子","科磊","北方华创"]},{"子-子环节名称":"离子注入设备","代表公司":["应用材料","Axcelis Technologies","Varian Semiconductor Equipment"]},{"子-子环节名称":"清洗设备","代表公司":["东京电子","SCREEN","应用材料","Lam Research","盛美上海"]},{"子-子环节名称":"涂胶显影设备","代表公司":["东京电子","SCREEN","ASML"]},{"子-子环节名称":"过程控制设备","代表公司":["科磊","应用材料","东京电子","Onto Innovation","Rudolph Technologies"]},{"子-子环节名称":"封装设备","代表公司":["ASM Pacific Technology","Kulicke & Soffa","BE Semiconductor Industries","DISCO"]},{"子-子环节名称":"测试设备","代表公司":["泰瑞达","爱德万测试","科休","Advantest","Chroma ATE","SPEA"]}]},{"子环节名称":"EDA工具","子-子环节":[{"子-子环节名称":"电子设计自动化软件","代表公司":["Synopsys","Cadence Design Systems","Mentor Graphics","Ansys","Keysight Technologies"]}]},{"子环节名称":"IP授权","子-子环节":[{"子-子环节名称":"知识产权授权","代表公司":["ARM","Synopsys","Cadence Design Systems","Imagination Technologies","CEVA"]}]}]},{"环节名称":"中游：制造与封测","子环节":[{"子环节名称":"晶圆制造","子-子环节":[{"子-子环节名称":"晶圆代工","代表公司":["台积电","三星电子","格罗方德","联华电子","中芯国际","华虹半导体","力积电"]},{"子-子环节名称":"IDM","代表公司":["英特尔","三星电子","德州仪器","SK海力士","美光科技","英飞凌","意法半导体"]}]},{"子环节名称":"封装测试","子-子环节":[{"子-子环节名称":"集成电路封装","代表公司":["日月光","安靠科技","长电科技","力成科技","矽品精密","天水华天","通富微电"]},{"子-子环节名称":"集成电路测试","代表公司":["日月光","安靠科技","长电科技","京元电子","矽品精密","力成科技","南茂科技"]}]}]},{"环节名称":"下游：应用与终端","子环节":[{"子环节名称":"芯片设计","子-子环节":[{"子-子环节名称":"CPU/GPU","代表公司":["英特尔","英伟达","AMD","高通","苹果","博通"]},{"子-子环节名称":"存储芯片","代表公司":["三星电子","SK海力士","美光科技","西部数据","铠侠","长江存储"]},{"子-子环节名称":"模拟芯片","代表公司":["德州仪器","亚德诺半导体","英飞凌","意法半导体","恩智浦","ADI","Skyworks Solutions"]},{"子-子环节名称":"功率半导体","代表公司":["英飞凌","意法半导体","安森美半导体","三菱电机","富士电机","Vishay","东芝"]},{"子-子环节名称":"SoC芯片","代表公司":["高通","联发科","苹果","三星电子","海思","紫光展锐"]},{"子-子环节名称":"FPGA","代表公司":["赛灵思","英特尔","莱迪思半导体","Microchip Technology"]},{"子-子环节名称":"驱动芯片","代表公司":["联咏科技","瑞昱半导体","奇景光电","Novatek","敦泰电子"]}]},{"子环节名称":"终端应用","子-子环节":[{"子-子环节名称":"消费电子","代表公司":["苹果","三星电子","华为","小米","OPPO","vivo","索尼"]},{"子-子环节名称":"通信","代表公司":["华为","中兴通讯","爱立信","诺基亚","中国移动","中国联通","中国电信"]},{"子-子环节名称":"汽车电子","代表公司":["博世","大陆集团","电装","采埃孚","英飞凌","恩智浦","瑞萨电子"]},{"子-子环节名称":"工业控制","代表公司":["西门子","施耐德电气","罗克韦尔自动化","ABB","三菱电机","发那科","欧姆龙"]},{"子-子环节名称":"人工智能","代表公司":["英伟达","谷歌","百度","阿里巴巴","腾讯","寒武纪","地平线"]},{"子-子环节名称":"云计算","代表公司":["亚马逊","微软","谷歌","阿里云","腾讯云","华为云","浪潮"]}]},{"子环节名称":"分销与销售","子-子环节":[{"子-子环节名称":"半导体分销商","代表公司":["艾睿电子","安富利","贸泽电子","Digi-Key Electronics","文晔科技","世平集团","儒卓力"]}]}]}]}');
+
+/***/ })
+
+};
+;

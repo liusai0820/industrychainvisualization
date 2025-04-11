@@ -1,0 +1,227 @@
+{
+  "产业链": "合成生物",
+  "环节": [
+    {
+      "环节名称": "上游：基因工具与底层技术",
+      "子环节": [
+        {
+          "子环节名称": "基因测序",
+          "子-子环节": [
+            {
+              "子-子环节名称": "二代测序（NGS）",
+              "代表公司": ["Illumina", "赛默飞世尔科技（Thermo Fisher Scientific）", "华大基因（BGI）", "诺禾致源（Novogene）", "贝瑞基因（Berry Genomics）"]
+            },
+            {
+              "子-子环节名称": "三代测序",
+              "代表公司": ["太平洋生物科学（Pacific Biosciences）", "牛津纳米孔（Oxford Nanopore Technologies）"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "基因合成与编辑",
+          "子-子环节": [
+            {
+              "子-子环节名称": "DNA合成",
+              "代表公司": ["金斯瑞生物科技（GenScript）", "拓然生物（Twist Bioscience）", "艾吉析科技（IDT）", "赛默飞世尔科技（Thermo Fisher Scientific）", "吉玛基因（GenePharma）"]
+            },
+            {
+              "子-子环节名称": "基因编辑工具（CRISPR等）",
+              "代表公司": ["CRISPR Therapeutics", "Intellia Therapeutics", "Editas Medicine", "Beam Therapeutics", "张锋（Broad Institute）"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "生物信息学与软件",
+          "子-子环节": [
+            {
+              "子-子环节名称": "基因组学数据分析",
+              "代表公司": ["DNAnexus", "Seven Bridges Genomics", "Genedata", "QIAGEN Bioinformatics", "华大基因（BGI）"]
+            },
+            {
+              "子-子环节名称": "生物软件设计工具",
+              "代表公司": ["Autodesk", "Ginkgo Bioworks", "Benchling", "Zymergen", "TeselaGen"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "细胞与生物元件库",
+          "子-子环节": [
+            {
+              "子-子环节名称": "标准生物部件库（BioBricks）",
+              "代表公司": ["iGEM Foundation", "Addgene", "ATCC", "DSMZ", "JBEI"]
+            },
+            {
+              "子-子环节名称": "细胞系与菌株库",
+              "代表公司": ["ATCC", "DSMZ", "NITE Biological Resource Center (NBRC)", "CCTCC", "CGMCC"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "中游：生物设计、合成与测试",
+      "子环节": [
+        {
+          "子环节名称": "生物设计与自动化平台",
+          "子-子环节": [
+            {
+              "子-子环节名称": "自动化生物铸造厂（Biofoundry）",
+              "代表公司": ["Ginkgo Bioworks", "Zymergen", "Amyris", "Genomatica", "Conagen"]
+            },
+            {
+              "子-子环节名称": "高通量筛选平台",
+              "代表公司": ["Berkeley Lights", "Amyris", "Ginkgo Bioworks", "Zymergen", "Evonetix"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "细胞工厂构建与优化",
+          "子-子环节": [
+            {
+              "子-子环节名称": "代谢工程",
+              "代表公司": ["Amyris", "Genomatica", "LanzaTech", "Gevo", "科汉森（Chr. Hansen）"]
+            },
+            {
+              "子-子环节名称": "酶工程",
+              "代表公司": ["诺维信（Novozymes）", "帝斯曼（DSM）", "巴斯夫（BASF）", "杜邦（DuPont）", "Codexis"]
+            },
+            {
+              "子-子环节名称": "发酵工艺优化",
+              "代表公司": ["Sartorius Stedim Biotech", "Eppendorf", "Thermo Fisher Scientific", "GE Healthcare Life Sciences", "ABEC"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "生物测试与表征",
+          "子-子环节": [
+            {
+              "子-子环节名称": "代谢组学分析",
+              "代表公司": ["Agilent Technologies", "Waters Corporation", "赛默飞世尔科技（Thermo Fisher Scientific）", "布鲁克（Bruker）", "岛津（Shimadzu）"]
+            },
+            {
+              "子-子环节名称": "蛋白质组学分析",
+              "代表公司": ["赛默飞世尔科技（Thermo Fisher Scientific）", "Agilent Technologies", "布鲁克（Bruker）", "Waters Corporation", "AB Sciex"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "下游：产品应用与服务",
+      "子环节": [
+        {
+          "子环节名称": "生物医药",
+          "子-子环节": [
+            {
+              "子-子环节名称": "新型药物发现（小分子、抗体、疫苗等）",
+              "代表公司": ["Moderna", "BioNTech", "CureVac", "Ginkgo Bioworks", "Zymergen"]
+            },
+            {
+              "子-子环节名称": "生物制造（抗体、酶、细胞治疗等）",
+              "代表公司": ["Lonza", "Samsung Biologics", "Boehringer Ingelheim", "Catalent", "药明生物（WuXi Biologics）"]
+            },
+            {
+              "子-子环节名称": "基因治疗",
+              "代表公司": ["Bluebird Bio", "Spark Therapeutics", "Novartis Gene Therapies", "uniQure", "Sarepta Therapeutics"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "生物材料",
+          "子-子环节": [
+            {
+              "子-子环节名称": "生物塑料",
+              "代表公司": ["NatureWorks (Cargill)", "BASF", "Total Corbion PLA", "Novamont", "Braskem"]
+            },
+            {
+              "子-子环节名称": "生物纤维（蜘蛛丝、纤维素等）",
+              "代表公司": ["Bolt Threads", "Spiber", "AMSilk", "Modern Meadow", "Spinnova"]
+            },
+            {
+              "子-子环节名称": "生物基化学品",
+              "代表公司": ["Amyris", "Genomatica", "Gevo", "LanzaTech", "Evolva"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "农业生物技术",
+          "子-子环节": [
+            {
+              "子-子环节名称": "生物农药",
+              "代表公司": ["拜耳（Bayer CropScience）", "先正达（Syngenta）", "巴斯夫（BASF）", "科迪华（Corteva Agriscience）", "住友化学（Sumitomo Chemical）"]
+            },
+            {
+              "子-子环节名称": "生物肥料",
+              "代表公司": ["Novozymes", "BASF", "Adisseo", "Lallemand", "Biomax"]
+            },
+            {
+              "子-子环节名称": "作物改良",
+              "代表公司": ["拜耳（Bayer CropScience）", "先正达（Syngenta）", "科迪华（Corteva Agriscience）", "隆平高科（Longping High-Tech）", "登海种业（Denghai Seeds）"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "能源化工",
+          "子-子环节": [
+            {
+              "子-子环节名称": "生物燃料（乙醇、生物柴油等）",
+              "代表公司": ["POET", "Valero", "ADM", "Green Plains", "Renewable Energy Group"]
+            },
+            {
+              "子-子环节名称": "生物基化学品",
+              "代表公司": ["Amyris", "Genomatica", "Gevo", "LanzaTech", "Evolva"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "食品与营养",
+          "子-子环节": [
+            {
+              "子-子环节名称": "食品添加剂（香精、色素、甜味剂等）",
+              "代表公司": ["Givaudan", "Firmenich", "IFF", "Symrise", "DSM"]
+            },
+            {
+              "子-子环节名称": "人造肉",
+              "代表公司": ["Impossible Foods", "Beyond Meat", "Memphis Meats", "Mosa Meat", "Aleph Farms"]
+            },
+            {
+              "子-子环节名称": "功能性食品",
+              "代表公司": ["科汉森（Chr. Hansen）", "杜邦营养与生物科技（DuPont Nutrition & Biosciences）", "帝斯曼（DSM）", "Kerry Group", "Arla Foods Ingredients"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "环境科学",
+          "子-子环节": [
+            {
+              "子-子环节名称": "生物修复",
+              "代表公司": ["Veolia", "SUEZ", "ERM", "Arcadis", "AECOM"]
+            },
+            {
+              "子-子环节名称": "生物降解材料",
+              "代表公司": ["NatureWorks (Cargill)", "BASF", "Total Corbion PLA", "Novamont", "FKuR Kunststoff GmbH"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "其他应用",
+          "子-子环节": [
+            {
+              "子-子环节名称": "生物传感器",
+              "代表公司": ["Abbott", "Roche", "Siemens Healthineers", "Medtronic", "Dexcom"]
+            },
+            {
+              "子-子环节名称": "生物计算",
+              "代表公司": ["微软（Microsoft）", "IBM", "Intel", "D-Wave Systems", "Rigetti Computing"]
+            },
+            {
+              "子-子环节名称": "DNA存储",
+              "代表公司": ["微软（Microsoft）", "Twist Bioscience", "Catalog Technologies", "Iridia", "Helixworks Technologies"]
+            }
+
+          ]
+        }
+      ]
+    }
+  ]
+}

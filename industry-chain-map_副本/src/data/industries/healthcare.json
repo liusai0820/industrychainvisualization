@@ -1,0 +1,272 @@
+{
+  "产业链": "大健康产业",
+  "环节": [
+    {
+      "环节名称": "上游：研发、生产与制造",
+      "子环节": [
+        {
+          "子环节名称": "医药制造",
+          "子-子环节": [
+            {
+              "子-子环节名称": "化学制药",
+              "代表公司": ["辉瑞 (Pfizer)", "罗氏 (Roche)", "强生 (Johnson & Johnson)", "诺华 (Novartis)", "默沙东 (Merck)"]
+            },
+            {
+              "子-子环节名称": "生物制药",
+              "代表公司": ["安进 (Amgen)", "基因泰克 (Genentech)", "百健 (Biogen)", "赛诺菲 (Sanofi)", "吉利德科学 (Gilead Sciences)"]
+            },
+            {
+              "子-子环节名称": "中药",
+              "代表公司": ["云南白药", "同仁堂", "片仔癀", "天士力", "广药集团"]
+            },
+            {
+              "子-子环节名称": "疫苗",
+              "代表公司": ["Moderna", "BioNTech", "阿斯利康 (AstraZeneca)", "葛兰素史克 (GSK)", "赛诺菲巴斯德 (Sanofi Pasteur)"]
+            },
+            {
+              "子-子环节名称": "原料药",
+              "代表公司":["巴斯夫 (BASF)", "帝斯曼 (DSM)", "Lonza", "康龙化成", "药明康德"]
+            },
+            {
+              "子-子环节名称":"医药研发外包（CRO）",
+              "代表公司":["IQVIA", "Labcorp", "Parexel", "ICON plc", "Syneos Health"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "医疗器械制造",
+          "子-子环节": [
+            {
+              "子-子环节名称": "诊断设备",
+              "代表公司": ["西门子医疗 (Siemens Healthineers)", "通用电气医疗 (GE Healthcare)", "飞利浦医疗 (Philips Healthcare)", "罗氏诊断 (Roche Diagnostics)", "雅培诊断 (Abbott Diagnostics)"]
+            },
+            {
+              "子-子环节名称": "治疗设备",
+              "代表公司": ["美敦力 (Medtronic)", "史赛克 (Stryker)", "波士顿科学 (Boston Scientific)", "BD (Becton, Dickinson and Company)", "Intuitive Surgical"]
+            },
+            {
+              "子-子环节名称": "监护设备",
+              "代表公司": ["飞利浦医疗 (Philips Healthcare)", "通用电气医疗 (GE Healthcare)", "迈瑞医疗", "理邦仪器", "宝莱特"]
+            },
+            {
+              "子-子环节名称": "植介入器械",
+              "代表公司": ["美敦力 (Medtronic)", "雅培 (Abbott)", "波士顿科学 (Boston Scientific)", "强生 (Johnson & Johnson)", "爱德华生命科学 (Edwards Lifesciences)"]
+            },
+            {
+              "子-子环节名称": "体外诊断试剂(IVD)",
+              "代表公司": ["罗氏诊断 (Roche Diagnostics)", "雅培诊断 (Abbott Diagnostics)", "丹纳赫 (Danaher)", "西门子医疗 (Siemens Healthineers)", "赛默飞世尔 (Thermo Fisher Scientific)"]
+            },
+            {
+               "子-子环节名称": "医用耗材",
+               "代表公司":["3M", "BD", "Cardinal Health", "Medline Industries", "Smith & Nephew"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "保健品/膳食补充剂制造",
+          "子-子环节": [
+            {
+              "子-子环节名称": "维生素/矿物质补充剂",
+              "代表公司": ["辉瑞 (Pfizer)", "拜耳 (Bayer)", "安利 (Amway)", "康宝莱 (Herbalife)", "GNC"]
+            },
+            {
+              "子-子环节名称": "草本/植物提取物",
+              "代表公司": ["Nature's Bounty", "Swisse", "Blackmores", "NOW Foods", "Gaia Herbs"]
+            },
+            {
+              "子-子环节名称": "功能性食品",
+              "代表公司": ["雀巢 (Nestlé)", "达能 (Danone)", "联合利华 (Unilever)", "通用磨坊 (General Mills)", "卡夫亨氏 (Kraft Heinz)"]
+            }
+          ]
+        },
+        {
+          "子环节名称":"健康家居/智能硬件",
+          "子-子环节":
+          [
+            {
+              "子-子环节名称":"智能可穿戴设备",
+              "代表公司":["Apple", "Fitbit (Google)", "Garmin", "Samsung", "小米"]
+            },
+            {
+              "子-子环节名称":"健康监测设备",
+              "代表公司":["欧姆龙 (Omron)", "飞利浦 (Philips)", "Withings", "iHealth", "ResMed"]
+            },
+            {
+              "子-子环节名称":"智能家居健康设备",
+              "代表公司":["海尔智家", "美的", "格力", "小米", "华为"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "中游：流通与渠道",
+      "子环节": [
+        {
+          "子环节名称": "医药流通",
+          "子-子环节": [
+            {
+              "子-子环节名称": "医药批发",
+              "代表公司": ["国药控股", "上海医药", "华润医药", "九州通", "嘉事堂"]
+            },
+            {
+              "子-子环节名称": "医药零售",
+              "代表公司": ["CVS Health", "Walgreens Boots Alliance", "Rite Aid", "大参林", "益丰药房"]
+            },
+            {
+              "子-子环节名称": "医药电商",
+              "代表公司": ["阿里健康", "京东健康", "平安好医生", "1药网", "叮当快药"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "医疗器械流通",
+          "子-子环节": [
+            {
+              "子-子环节名称": "医疗器械经销商",
+              "代表公司": ["亨利 Schein (Henry Schein)", "McKesson", "Cardinal Health", "Medline Industries", "Owens & Minor"]
+            },
+             {
+              "子-子环节名称": "医疗器械电商",
+              "代表公司": ["Amazon Business", "Alibaba", "JD.com", "eBay", "Global Industrial"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "下游：健康服务与应用",
+      "子环节": [
+        {
+          "子环节名称": "医疗服务",
+          "子-子环节": [
+            {
+              "子-子环节名称": "公立医院",
+              "代表公司": ["中国医学科学院北京协和医院", "四川大学华西医院", "复旦大学附属中山医院", "上海交通大学医学院附属瑞金医院", "北京大学第一医院"]
+            },
+            {
+              "子-子环节名称": "民营医院",
+              "代表公司": ["爱尔眼科", "美年大健康", "通策医疗", "和睦家医疗", "慈铭体检"]
+            },
+            {
+              "子-子环节名称": "基层医疗机构",
+              "代表公司": ["社区卫生服务中心", "乡镇卫生院", "村卫生室", "诊所", "药店"]
+            },
+            {
+              "子-子环节名称":"互联网医疗平台",
+              "代表公司":["阿里健康", "京东健康", "平安好医生", "微医", "丁香园"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "健康管理",
+          "子-子环节": [
+            {
+              "子-子环节名称": "体检中心",
+              "代表公司": ["美年大健康", "慈铭体检", "爱康国宾", "瑞慈医疗", "普惠体检"]
+            },
+            {
+              "子-子环节名称": "健康咨询",
+              "代表公司": ["春雨医生", "好大夫在线", "丁香医生", "微医", "平安好医生"]
+            },
+            {
+              "子-子环节名称": "健康管理机构",
+              "代表公司": ["Life Time Fitness", "Anytime Fitness", "Equinox", "24 Hour Fitness", "Gold's Gym"]
+            },
+            {
+              "子-子环节名称": "慢病管理",
+              "代表公司":["Livongo", "Omada Health", "Virta Health", "Noom", "Vida Health"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "康复护理",
+          "子-子环节": [
+            {
+              "子-子环节名称": "康复医院",
+              "代表公司": ["中国康复研究中心", "上海市第一康复医院", "广东省工伤康复医院", "北京博爱医院", "南京医科大学附属康复医院"]
+            },
+            {
+              "子-子环节名称": "护理院/康养中心",
+              "代表公司": ["泰康之家", "燕达金色年华健康养护中心", "九如城", "亲和源", "乐成养老"]
+            },
+            {
+              "子-子环节名称": "居家护理",
+              "代表公司": ["Home Instead Senior Care", "Visiting Angels", "Right at Home", "Comfort Keepers", "BrightStar Care"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "养老服务",
+          "子-子环节": [
+            {
+              "子-子环节名称": "养老机构",
+              "代表公司": ["Brookdale Senior Living", "Sunrise Senior Living", "Five Star Senior Living", "Atria Senior Living", "Enlivant"]
+            },
+            {
+              "子-子环节名称": "社区居家养老",
+              "代表公司": ["泰康之家", "保利地产", "万科", "绿城", "远洋"]
+            },
+            {
+              "子-子环节名称":"智慧养老",
+              "代表公司":["华为", "阿里", "腾讯", "百度", "京东"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "健康旅游",
+          "子-子环节":
+          [
+            {
+              "子-子环节名称":"医疗旅游",
+              "代表公司":["Asklepios Kliniken", "Raffles Medical Group", "Apollo Hospitals", "Bumrungrad International Hospital", "Gleneagles Hospital"]
+            },
+            {
+              "子-子环节名称":"康养旅游",
+              "代表公司":["Club Med", "Six Senses", "Chiva-Som", "Ananda in the Himalayas", "Miraval Resorts"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "健康保险",
+          "子-子环节": [
+            {
+              "子-子环节名称": "商业健康险",
+              "代表公司": ["中国平安", "中国人寿", "中国太保", "新华保险", "泰康保险"]
+            },
+            {
+              "子-子环节名称": "医疗保险",
+              "代表公司": ["UnitedHealth Group", "Anthem", "Cigna", "Aetna (CVS Health)", "Humana"]
+            },
+            {
+              "子-子环节名称":"健康险科技平台",
+              "代表公司":["Collective Health", "Oscar Health", "Clover Health", "Bright HealthCare", "Alan"]
+            }
+          ]
+        },
+        {
+          "子环节名称":"体育健身",
+          "子-子环节":
+          [
+            {
+               "子-子环节名称":"健身俱乐部",
+               "代表公司":["威尔仕健身 (Will's)", "一兆韦德 (Tera Wellness)", "中体倍力 (Physical)", "乐刻运动", "超级猩猩"]
+            },
+            {
+              "子-子环节名称":"运动器材制造商",
+              "代表公司":["力健 (Life Fitness)", "必确 (Precor)", "泰诺健 (Technogym)", "星驰 (Star Trac)", "诺德士 (Nautilus)"]
+            },
+            {
+              "子-子环节名称":"运动服饰品牌",
+              "代表公司":["耐克 (Nike)", "阿迪达斯 (Adidas)", "安德玛 (Under Armour)", "露露柠檬 (Lululemon)", "彪马 (Puma)"]
+            },
+             {
+              "子-子环节名称":"运动APP",
+              "代表公司":["Keep", "咕咚", "悦跑圈", "薄荷健康", "FitTime"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

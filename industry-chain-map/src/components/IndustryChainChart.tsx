@@ -1,6 +1,7 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback, useReducer } from 'react';
+import { createPortal } from 'react-dom';
 import { IndustryChainData, MainSection, SubSection, SubSubSection, Company } from '@/types';
 import { calculateOptimalLayout, LayoutConfig } from '@/utils/layoutCalculator';
 import html2canvas from 'html2canvas';
@@ -34,11 +35,141 @@ const MobileHeader = ({ title, onBackClick }: { title: string; onBackClick: () =
   </div>
 );
 
-// 移动端视图组件
-const MobileView = ({ data, onCompanyClick }: { data: IndustryChainData; onCompanyClick: (name: string) => void }) => {
+// 全局单例模式处理模态框状态，避免组件重渲染导致的多次触发
+type ModalState = {
+  isOpen: boolean;
+  companyName: string;
+  industryName: string;
+} | null;
+
+// 使用单例存储模态框状态
+const globalModalState = {
+  current: null as ModalState,
+  pendingUpdate: false, // 防止重复更新
+  setModalState(state: ModalState) {
+    // 如果当前有打开的模态框且试图打开另一个，忽略请求
+    if (this.current?.isOpen && state?.isOpen) {
+      console.log('已有模态框打开，忽略打开请求');
+      return;
+    }
+    
+    // 如果状态没有变化，忽略请求
+    if (JSON.stringify(this.current) === JSON.stringify(state)) {
+      return;
+    }
+    
+    // 更新状态并通知监听器
+    this.current = state;
+    // 使用setTimeout确保React事件循环完成
+    setTimeout(() => {
+      globalModalListeners.forEach(listener => listener(state));
+    }, 0);
+  },
+  getModalState() {
+    return this.current;
+  }
+};
+
+// 全局监听器，用于模态框组件外部通信
+const globalModalListeners: ((state: ModalState) => void)[] = [];
+
+// 简化的点击处理 - 我们过度优化了导致出问题
+// 记录上次点击的公司名称和时间戳
+let lastClickInfo = { companyName: '', timestamp: 0 };
+const CLICK_COOLDOWN = 500; // 500ms冷却时间
+
+// 全局点击处理函数，与React组件生命周期完全分离
+const safeOpenCompanyModal = (companyName: string, industryName: string) => {
+  const now = Date.now();
+  
+  // 如果是同一家公司且点击间隔小于冷却时间，则忽略
+  if (lastClickInfo.companyName === companyName && 
+      now - lastClickInfo.timestamp < CLICK_COOLDOWN) {
+    console.log('点击冷却中，忽略重复点击:', companyName);
+    return;
+  }
+  
+  // 更新上次点击信息
+  lastClickInfo = { companyName, timestamp: now };
+  
+  // 设置模态框状态 - 这会触发模态框打开
+  globalModalState.setModalState({
+    isOpen: true,
+    companyName,
+    industryName
+  });
+  
+  console.log('触发企业分析:', companyName, industryName);
+};
+
+// 确保模态框在DOM准备好时才渲染的Portal组件
+const ModalPortal = ({ children }: { children: React.ReactNode }) => {
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+  
+  return mounted ? createPortal(children, document.body) : null;
+};
+
+// 解耦的模态框控制器组件
+const CompanyModalController = () => {
+  const [modalState, setModalState] = useState<ModalState>(null);
+  
+  useEffect(() => {
+    // 订阅全局模态框状态变化
+    const handleModalChange = (newState: ModalState) => {
+      setModalState(newState);
+    };
+    
+    // 添加监听器
+    globalModalListeners.push(handleModalChange);
+    
+    // 初始化时检查全局状态
+    const initialState = globalModalState.getModalState();
+    if (initialState) {
+      setModalState(initialState);
+    }
+    
+    return () => {
+      // 移除监听器
+      const index = globalModalListeners.indexOf(handleModalChange);
+      if (index !== -1) {
+        globalModalListeners.splice(index, 1);
+      }
+    };
+  }, []);
+  
+  // 处理模态框关闭
+  const handleClose = useCallback(() => {
+    globalModalState.setModalState(null);
+  }, []);
+  
+  // 无模态框状态则不渲染
+  if (!modalState || !modalState.isOpen) {
+    return null;
+  }
+  
+  // 使用Portal渲染模态框，避免被父组件重渲染影响
+  return (
+    <ModalPortal>
+      <CompanyReportModal
+        isOpen={true}
+        onClose={handleClose}
+        companyName={modalState.companyName}
+        industryName={modalState.industryName}
+      />
+    </ModalPortal>
+  );
+};
+
+// 移动端视图组件重构
+const MobileView = ({ data }: { data: IndustryChainData }) => {
   const [expandedSections, setExpandedSections] = useState<number[]>([]);
   const [expandedSubSections, setExpandedSubSections] = useState<string[]>([]);
-
+  
   const getBackgroundColor = (index: number) => {
     switch (index) {
       case 0: return 'bg-indigo-50';
@@ -76,6 +207,15 @@ const MobileView = ({ data, onCompanyClick }: { data: IndustryChainData; onCompa
         return [...prev, key];
       }
     });
+  };
+  
+  // 使用原生DOM事件处理点击，而非React合成事件
+  const handleCompanyClick = (e: React.MouseEvent, companyName: string) => {
+    // 阻止事件冒泡
+    e.stopPropagation();
+    
+    // 使用全局处理函数打开模态框
+    safeOpenCompanyModal(companyName, data.name);
   };
 
   return (
@@ -117,7 +257,7 @@ const MobileView = ({ data, onCompanyClick }: { data: IndustryChainData; onCompa
                             <div 
                               key={company.name}
                               className="text-xs p-1 bg-gray-50 rounded text-blue-600 truncate"
-                              onClick={() => onCompanyClick(company.name)}
+                              onClick={(e) => handleCompanyClick(e, company.name)}
                             >
                               {company.name}
                             </div>
@@ -136,13 +276,59 @@ const MobileView = ({ data, onCompanyClick }: { data: IndustryChainData; onCompa
   );
 };
 
+// 防抖函数增强版，添加立即执行选项和拒绝期
+const debounce = (fn: Function, ms = 300, options: { leading?: boolean, trailing?: boolean } = {}) => {
+  let timeoutId: ReturnType<typeof setTimeout>;
+  let lastExecTime = 0;
+  const { leading = false, trailing = true } = options;
+  
+  return function(this: any, ...args: any[]) {
+    const now = Date.now();
+    const shouldCallNow = leading && (now - lastExecTime > ms);
+    
+    clearTimeout(timeoutId);
+    
+    if (shouldCallNow) {
+      lastExecTime = now;
+      return fn.apply(this, args);
+    }
+    
+    if (trailing) {
+      timeoutId = setTimeout(() => {
+        lastExecTime = Date.now();
+        fn.apply(this, args);
+      }, ms);
+    }
+  };
+};
+
+// 全局点击锁定状态
+let isClickLocked = false;
+const GLOBAL_CLICK_LOCK_DURATION = 1000; // 1秒全局锁定
+
+// 全局点击锁定函数
+const withClickLock = (fn: Function) => {
+  return function(this: any, ...args: any[]) {
+    if (isClickLocked) {
+      console.log('全局点击锁定中，忽略点击');
+      return;
+    }
+    
+    isClickLocked = true;
+    setTimeout(() => {
+      isClickLocked = false;
+    }, GLOBAL_CLICK_LOCK_DURATION);
+    
+    return fn.apply(this, args);
+  };
+};
+
 export default function IndustryChainChart({ data, options = {} }: IndustryChainChartProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [error] = useState<string | null>(null);
     const [, setLayout] = useState<LayoutConfig[]>([]);
-    const [selectedCompany, setSelectedCompany] = useState<{name: string, industryName: string} | null>(null);
     const [isMobile, setIsMobile] = useState(false);
-
+    
     // 检测设备尺寸
     useEffect(() => {
         const checkMobile = () => {
@@ -344,13 +530,21 @@ export default function IndustryChainChart({ data, options = {} }: IndustryChain
             `}</style>
 
             {isMobile ? (
-                <MobileView 
-                    data={data}
-                    onCompanyClick={(name) => setSelectedCompany({
-                        name,
-                        industryName: data.name
-                    })} 
-                />
+                <>
+                    <MobileHeader 
+                        title={data.name + "产业链图谱"} 
+                        onBackClick={() => {
+                            if (typeof window !== 'undefined') {
+                                if (window.history.length > 1) {
+                                    window.history.back();
+                                } else {
+                                    window.location.href = '/';
+                                }
+                            }
+                        }} 
+                    />
+                    <MobileView data={data} />
+                </>
             ) : (
                 <div className="min-h-screen bg-white pt-16">
                     <div 
@@ -382,10 +576,6 @@ export default function IndustryChainChart({ data, options = {} }: IndustryChain
                                         'bg-red-50'
                                     }`}
                                     options={options}
-                                    onCompanyClick={(companyName) => setSelectedCompany({
-                                        name: companyName,
-                                        industryName: data.name
-                                    })}
                                 />
                             ))}
                         </div>
@@ -393,15 +583,8 @@ export default function IndustryChainChart({ data, options = {} }: IndustryChain
                 </div>
             )}
 
-            {/* 企业画像报告模态框 */}
-            {selectedCompany && (
-                <CompanyReportModal
-                    isOpen={!!selectedCompany}
-                    onClose={() => setSelectedCompany(null)}
-                    companyName={selectedCompany.name}
-                    industryName={selectedCompany.industryName}
-                />
-            )}
+            {/* 使用分离的模态框控制器组件 */}
+            <CompanyModalController />
         </>
     );
 }
@@ -411,10 +594,9 @@ interface MainSectionCardProps {
     index: number;
     className?: string;
     options?: IndustryChainChartProps['options'];
-    onCompanyClick: (companyName: string) => void;
 }
 
-function MainSectionCard({ section, index, className = '', options, onCompanyClick }: Omit<MainSectionCardProps, 'industryName'>) {
+function MainSectionCard({ section, index, className = '', options }: MainSectionCardProps) {
     const borderColor = index === 0 ? 'border-indigo-200' :
                        index === 1 ? 'border-green-200' :
                        'border-red-200';
@@ -441,7 +623,6 @@ function MainSectionCard({ section, index, className = '', options, onCompanyCli
                         subSection={subSection} 
                         index={index}
                         options={options}
-                        onCompanyClick={onCompanyClick}
                     />
                 ))}
             </div>
@@ -453,10 +634,9 @@ interface SubSectionCardProps {
     subSection: SubSection;
     index: number;
     options?: IndustryChainChartProps['options'];
-    onCompanyClick: (companyName: string) => void;
 }
 
-function SubSectionCard({ subSection, index, options, onCompanyClick }: Omit<SubSectionCardProps, 'industryName'>) {
+function SubSectionCard({ subSection, index, options }: SubSectionCardProps) {
     const borderColor = index === 0 ? 'border-indigo-200' :
                        index === 1 ? 'border-green-200' :
                        'border-red-200';
@@ -484,7 +664,6 @@ function SubSectionCard({ subSection, index, options, onCompanyClick }: Omit<Sub
                         subSubSection={subSubSection} 
                         isCompact={isCompact}
                         options={options}
-                        onCompanyClick={onCompanyClick}
                     />
                 ))}
             </div>
@@ -496,10 +675,9 @@ interface SubSubSectionCardProps {
     subSubSection: SubSubSection;
     isCompact: boolean;
     options?: IndustryChainChartProps['options'];
-    onCompanyClick: (companyName: string) => void;
 }
 
-function SubSubSectionCard({ subSubSection, isCompact, options, onCompanyClick }: Omit<SubSubSectionCardProps, 'industryName'>) {
+function SubSubSectionCard({ subSubSection, isCompact, options }: SubSubSectionCardProps) {
     const companiesCount = subSubSection.children?.length || 0;
     
     // 简化卡片样式
@@ -526,7 +704,6 @@ function SubSubSectionCard({ subSubSection, isCompact, options, onCompanyClick }
                         company={company}
                         isSingle={companiesCount === 1}
                         options={options}
-                        onCompanyClick={onCompanyClick}
                     />
                 ))}
             </div>
@@ -538,15 +715,26 @@ interface CompanyItemProps {
     company: Company;
     isSingle?: boolean;
     options?: IndustryChainChartProps['options'];
-    onCompanyClick: (companyName: string) => void;
 }
 
-function CompanyItem({ company, isSingle = false, options, onCompanyClick }: Pick<CompanyItemProps, 'company' | 'isSingle' | 'options' | 'onCompanyClick'>) {
+function CompanyItem({ company, isSingle = false, options }: Omit<CompanyItemProps, 'onCompanyClick'>) {
     const showTooltip = options?.tooltip?.show ?? true;
+    
+    // 简化点击处理函数
+    const handleItemClick = (e: React.MouseEvent) => {
+        // 阻止冒泡
+        e.stopPropagation();
+        
+        // 获取当前显示的产业链图谱名称
+        const chartName = window.location.pathname.split('/').pop() || '';
+        
+        // 使用全局处理函数
+        safeOpenCompanyModal(company.name, chartName);
+    };
     
     return (
         <div 
-            onClick={() => onCompanyClick(company.name)}
+            onClick={handleItemClick}
             className={`text-[11px] text-gray-600 relative h-7 flex items-center
                      transition-colors duration-200 hover:text-blue-600 group
                      ${isSingle ? 'text-center justify-center font-medium' : ''} 

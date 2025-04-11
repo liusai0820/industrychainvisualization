@@ -1,0 +1,231 @@
+{
+  "产业链": "新材料",
+  "环节": [
+    {
+      "环节名称": "上游：原材料与基础化工",
+      "子环节": [
+        {
+          "子环节名称": "矿产资源开采与加工",
+          "子-子环节": [
+            {
+              "子-子环节名称": "稀土矿开采与分离",
+              "代表公司": ["中国北方稀土 (China Northern Rare Earth)", "中国南方稀土 (China Southern Rare Earth)", "盛和资源 (Shenghe Resources)", "Lynas Rare Earths (Lynas Rare Earths)", "MP Materials (MP Materials)"]
+            },
+            {
+              "子-子环节名称": "锂矿开采与加工",
+              "代表公司": ["天齐锂业 (Tianqi Lithium)", "赣锋锂业 (Ganfeng Lithium)", "雅保 (Albemarle)", "智利矿业化工 (SQM)", "Pilbara Minerals (Pilbara Minerals)"]
+            },
+            {
+              "子-子环节名称": "石墨矿开采与加工",
+              "代表公司": ["贝特瑞 (BTR)", "杉杉股份 (Shanshan Corporation)", "紫宸科技 (Zichen Technology)", "翔丰华 (XFH Technology)", "三菱化学 (Mitsubishi Chemical)"]
+            },
+            {
+              "子-子环节名称": "钛矿开采与加工",
+              "代表公司": ["攀钢钒钛 (Pangang Group Vanadium Titanium & Resources)", "龙蟒佰利 (Lomon Billions)", "科慕 (Chemours)", "康诺斯 (Kronos Worldwide)", "特诺 (Tronox)"]
+            },
+            {
+              "子-子环节名称": "硅矿开采与加工",
+              "代表公司": ["合盛硅业 (Hesheng Silicon)", "信义光能 (Xinyi Solar)", "通威股份 (Tongwei)", "大全能源 (Daqo New Energy)", "瓦克化学 (Wacker Chemie)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "基础化工原料生产",
+          "子-子环节": [
+            {
+              "子-子环节名称": "石油化工",
+              "代表公司": ["中国石化 (Sinopec)", "中国石油 (PetroChina)", "埃克森美孚 (ExxonMobil)", "壳牌 (Shell)", "巴斯夫 (BASF)"]
+            },
+            {
+              "子-子环节名称": "无机化工",
+              "代表公司": ["万华化学 (Wanhua Chemical)", "云天化 (Yuntianhua Group)", "兴发集团 (Xingfa Group)", "华鲁恒升 (Hualu-Hengsheng Chemical)", "新安股份 (Wynca Group)"]
+            },
+            {
+              "子-子环节名称": "有机化工",
+              "代表公司": ["万华化学 (Wanhua Chemical)", "荣盛石化 (Rongsheng Petrochemical)", "恒力石化 (Hengli Petrochemical)", "东方盛虹 (Eastern Shenghong)", "巴斯夫 (BASF)"]
+            },
+            {
+              "子-子环节名称": "精细化工",
+              "代表公司": ["雅克科技 (JEC Group)", "新和成 (NHU)", "国瓷材料 (Sinocera)", "万润股份 (Wanrun)", "陶氏化学 (Dow Chemical)"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "中游：新材料制备与加工",
+      "子环节": [
+        {
+          "子环节名称": "先进金属材料",
+          "子-子环节": [
+            {
+              "子-子环节名称": "特种钢材",
+              "代表公司": ["宝武钢铁 (China Baowu Steel Group)", "中信特钢 (CITIC Pacific Special Steel)", "日本制铁 (Nippon Steel)", "浦项制铁 (POSCO)", "安赛乐米塔尔 (ArcelorMittal)"]
+            },
+            {
+              "子-子环节名称": "高性能铝合金",
+              "代表公司": ["中国铝业 (Aluminum Corporation of China)", "南山铝业 (Nanshan Aluminum)", "宏桥集团 (China Hongqiao Group)", "力拓 (Rio Tinto)", "美铝 (Alcoa)"]
+            },
+            {
+              "子-子环节名称": "钛合金",
+              "代表公司": ["宝钛股份 (Baoji Titanium Industry)", "西部超导 (Western Superconducting Technologies)", "VSMPO-AVISMA (VSMPO-AVISMA)", "阿勒格尼技术 (Allegheny Technologies Incorporated)", "Howmet Aerospace (Howmet Aerospace)"]
+            },
+            {
+              "子-子环节名称": "高温合金",
+              "代表公司": ["钢研高纳 (CISRI Gaona)", "抚顺特钢 (Fushun Special Steel)", "卡彭特科技 (Carpenter Technology)", "VDM Metals (VDM Metals)", "海恩斯国际 (Haynes International)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "先进高分子材料",
+          "子-子环节": [
+            {
+              "子-子环节名称": "工程塑料",
+              "代表公司": ["金发科技 (Kingfa Sci. & Tech.)", "普利特 (Pret Composites)", "银禧科技 (Silver Basis Technology)", "巴斯夫 (BASF)", "科思创 (Covestro)"]
+            },
+            {
+              "子-子环节名称": "特种橡胶",
+              "代表公司": ["中化国际 (Sinochem International)", "三角轮胎 (Triangle Tyre)", "玲珑轮胎 (Linglong Tyre)", "米其林 (Michelin)", "普利司通 (Bridgestone)"]
+            },
+            {
+              "子-子环节名称": "高性能纤维",
+              "代表公司": ["泰和新材 (Taihe New Materials)", "恒神股份 (Hengshen)", "中复神鹰 (Zhongfu Shenying Carbon Fiber)", "东丽 (Toray)", "帝人 (Teijin)"]
+            },
+            {
+              "子-子环节名称": "功能性膜材料",
+              "代表公司": ["星源材质 (Senior Technology Material)", "恩捷股份 (Yunnan Energy New Material)", "沧州明珠 (Cangzhou Mingzhu Plastic)", "东丽 (Toray)", "旭化成 (Asahi Kasei)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "先进无机非金属材料",
+          "子-子环节": [
+            {
+              "子-子环节名称": "先进陶瓷",
+              "代表公司": ["国瓷材料 (Sinocera)", "三环集团 (Chaozhou Three-Circle)", "京瓷 (Kyocera)", "村田制作所 (Murata Manufacturing)", "CoorsTek (CoorsTek)"]
+            },
+            {
+              "子-子环节名称": "特种玻璃",
+              "代表公司": ["福耀玻璃 (Fuyao Glass)", "南玻A (CSG Holding)", "旗滨集团 (Kibing Group)", "肖特 (Schott)", "康宁 (Corning)"]
+            },
+            {
+              "子-子环节名称": "碳基材料",
+              "代表公司": ["方大炭素 (Fangda Carbon)", "中科电气 (Sinoma Science & Technology)", "贝特瑞 (BTR)", "杉杉股份 (Shanshan Corporation)", "东丽 (Toray)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "复合材料",
+          "子-子环节": [
+            {
+              "子-子环节名称": "树脂基复合材料",
+              "代表公司": ["中材科技 (Sinoma Science & Technology)", "光威复材 (Guangwei Composites)", "中简科技 (Zhongjian Technology)", "赫氏 (Hexcel)", "西格里 (SGL Carbon)"]
+            },
+            {
+              "子-子环节名称": "金属基复合材料",
+              "代表公司": ["西部超导 (Western Superconducting Technologies)", "铂力特 (Bright Laser Technologies)", "有研粉材 (Gripm Advanced Materials)", "Materion (Materion)", "CPS Technologies (CPS Technologies)"]
+            },
+            {
+              "子-子环节名称": "陶瓷基复合材料",
+              "代表公司": ["山东国瓷 (Sinocera)", "火炬电子 (Torch Electron)", "赛隆 (CeramTec)", "CoorsTek (CoorsTek)", "3M (3M)"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "下游：应用领域",
+      "子环节": [
+        {
+          "子环节名称": "新能源",
+          "子-子环节": [
+            {
+              "子-子环节名称": "锂电池材料",
+              "代表公司": ["宁德时代 (CATL)", "比亚迪 (BYD)", "LG新能源 (LG Energy Solution)", "松下 (Panasonic)", "三星SDI (Samsung SDI)"]
+            },
+            {
+              "子-子环节名称": "太阳能电池材料",
+              "代表公司": ["隆基绿能 (LONGi Green Energy Technology)", "晶科能源 (Jinko Solar)", "天合光能 (Trina Solar)", "阿特斯 (Canadian Solar)", "韩华Q CELLS (Hanwha Q CELLS)"]
+            },
+            {
+              "子-子环节名称": "燃料电池材料",
+              "代表公司": ["亿华通 (SinoHytec)", "潍柴动力 (Weichai Power)", "巴拉德动力系统 (Ballard Power Systems)", "丰田 (Toyota)", "现代汽车 (Hyundai Motor)"]
+            },
+            {
+              "子-子环节名称": "风电叶片材料",
+              "代表公司": ["中材科技 (Sinoma Science & Technology)", "时代新材 (Times New Material Technology)", "维斯塔斯 (Vestas)", "西门子歌美飒 (Siemens Gamesa)", "通用电气 (GE Renewable Energy)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "电子信息",
+          "子-子环节": [
+            {
+              "子-子环节名称": "半导体材料",
+              "代表公司": ["中芯国际 (SMIC)", "沪硅产业 (National Silicon Industry Group)", "东京应化 (Tokyo Ohka Kogyo)", "信越化学 (Shin-Etsu Chemical)", "SUMCO (SUMCO)"]
+            },
+            {
+              "子-子环节名称": "显示材料",
+              "代表公司": ["京东方 (BOE)", "TCL华星 (CSOT)", "三星显示 (Samsung Display)", "LG显示 (LG Display)", "友达光电 (AU Optronics)"]
+            },
+            {
+              "子-子环节名称": "电子陶瓷材料",
+              "代表公司": ["三环集团 (Chaozhou Three-Circle)", "风华高科 (Fenghua Advanced Technology)", "村田制作所 (Murata Manufacturing)", "京瓷 (Kyocera)", "TDK (TDK)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "航空航天",
+          "子-子环节": [
+            {
+              "子-子环节名称": "航空发动机材料",
+              "代表公司": ["航发动力 (AECC Aero-Engine Control)", "中国航发 (AECC)", "罗尔斯·罗伊斯 (Rolls-Royce)", "普拉特·惠特尼 (Pratt & Whitney)", "通用电气航空 (GE Aviation)"]
+            },
+            {
+              "子-子环节名称": "机身结构材料",
+              "代表公司": ["中航西飞 (AVIC XAC Commercial Aircraft)", "中航沈飞 (AVIC SAC Commercial Aircraft)", "波音 (Boeing)", "空客 (Airbus)", "庞巴迪 (Bombardier)"]
+            },
+            {
+              "子-子环节名称": "航天器材料",
+              "代表公司": ["中国航天科技集团 (CASC)", "中国航天科工集团 (CASIC)", "SpaceX (SpaceX)", "波音 (Boeing)", "洛克希德·马丁 (Lockheed Martin)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "生物医疗",
+          "子-子环节": [
+            {
+              "子-子环节名称": "医用高分子材料",
+              "代表公司": ["迈瑞医疗 (Mindray)", "乐普医疗 (Lepu Medical)", "威高股份 (Weigao Group)", "强生 (Johnson & Johnson)", "美敦力 (Medtronic)"]
+            },
+            {
+              "子-子环节名称": "生物陶瓷材料",
+              "代表公司": ["爱尔创 (Upcera)", "义获嘉伟瓦登特 (Ivoclar Vivadent)", "登士柏西诺德 (Dentsply Sirona)", "3M (3M)", "Zimmer Biomet (Zimmer Biomet)"]
+            },
+            {
+              "子-子环节名称": "金属植入物材料",
+              "代表公司": ["大博医疗 (Double Medical)", "凯利泰 (Kinetec)", "强生 (Johnson & Johnson)", "史赛克 (Stryker)", "捷迈邦美 (Zimmer Biomet)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "其他领域",
+          "子-子环节": [
+            {
+              "子-子环节名称": "汽车轻量化材料",
+              "代表公司": ["宝钢股份 (Baoshan Iron & Steel)", "鞍钢股份 (Ansteel Group)", "诺贝丽斯 (Novelis)", "海德鲁 (Norsk Hydro)", "肯联铝业 (Constellium)"]
+            },
+            {
+              "子-子环节名称": "建筑节能材料",
+              "代表公司": ["北新建材 (BNBM Group)", "金隅集团 (BBMG Group)", "中国建材 (China National Building Material)", "圣戈班 (Saint-Gobain)", "欧文斯科宁 (Owens Corning)"]
+            },
+            {
+              "子-子环节名称": "环保材料",
+              "代表公司": ["龙净环保 (Longking)", "菲达环保 (Feida Environmental Protection)", "苏伊士 (Suez)", "威立雅 (Veolia)", "艺康 (Ecolab)"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

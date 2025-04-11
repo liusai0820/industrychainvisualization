@@ -1,0 +1,181 @@
+{
+  "产业链": "数字创意产业",
+  "环节": [
+    {
+      "环节名称": "上游：内容与IP源头",
+      "子环节": [
+        {
+          "子环节名称": "文学创作与出版",
+          "子-子环节": [
+            {
+              "子-子环节名称": "网络文学平台",
+              "代表公司": ["阅文集团 (China Literature)", "掌阅科技 (iReader Technology)", "中文在线 (COL)", "晋江文学城 (JJWXC)", "起点中文网 (Qidian)", "纵横中文网 (Zongheng)", "咪咕阅读 (Migu Reading)"]
+            },
+            {
+              "子-子环节名称": "传统出版机构",
+              "代表公司": ["中信出版集团 (CITIC Press Group)", "人民文学出版社 (People's Literature Publishing House)", "企鹅兰登书屋 (Penguin Random House)", "桦榭集团 (Hachette Livre)", "西蒙与舒斯特 (Simon & Schuster)", "麦克米伦出版公司 (Macmillan Publishers)", "学乐集团 (Scholastic Corporation)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "动漫与漫画创作",
+          "子-子环节": [
+            {
+              "子-子环节名称": "动漫制作公司",
+              "代表公司": ["吉卜力工作室 (Studio Ghibli)", "东映动画 (Toei Animation)", "京都动画 (Kyoto Animation)", "皮克斯动画工作室 (Pixar Animation Studios)", "迪士尼动画工作室 (Walt Disney Animation Studios)", "梦工厂动画 (DreamWorks Animation)", "绘梦动画 (Haoliners Animation League)"]
+            },
+            {
+              "子-子环节名称": "漫画平台",
+              "代表公司": ["快看漫画 (Kuaikan Manhua)", "腾讯动漫 (Tencent Animation & Comics)", "哔哩哔哩漫画 (Bilibili Comics)", "集英社 (Shueisha)", "讲谈社 (Kodansha)", "小学馆 (Shogakukan)", "漫威漫画 (Marvel Comics)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "游戏IP开发",
+          "子-子环节": [
+            {
+              "子-子环节名称": "游戏开发商",
+              "代表公司": ["腾讯游戏 (Tencent Games)", "网易游戏 (NetEase Games)", "动视暴雪 (Activision Blizzard)", "艺电 (Electronic Arts)", "任天堂 (Nintendo)", "索尼互动娱乐 (Sony Interactive Entertainment)", "育碧 (Ubisoft)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "影视IP开发",
+          "子-子环节": [
+            {
+              "子-子环节名称": "影视制作公司",
+              "代表公司": ["华纳兄弟 (Warner Bros.)", "迪士尼影业 (Walt Disney Studios)", "环球影业 (Universal Pictures)", "索尼影业 (Sony Pictures Entertainment)", "派拉蒙影业 (Paramount Pictures)", "传奇影业 (Legendary Entertainment)", "华谊兄弟 (Huayi Brothers Media)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "原创IP孵化",
+          "子-子环节": [
+            {
+              "子-子环节名称": "IP孵化平台",
+              "代表公司": ["猫片 (Mopian)", "有妖气 (U17)", "工夫影业 (CKF Pictures)", "坏猴子影业 (Dirty Monkey Films Group)", "开心麻花 (Mahua FunAge)", "新丽传媒 (New Classics Media)"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "中游：数字内容制作与技术服务",
+      "子环节": [
+        {
+          "子环节名称": "数字内容制作",
+          "子-子环节": [
+            {
+              "子-子环节名称": "影视特效制作",
+              "代表公司": ["工业光魔 (Industrial Light & Magic)", "维塔数码 (Weta Digital)", "数字王国 (Digital Domain)", "Framestore", "Moving Picture Company (MPC)", "Base FX", "More VFX"]
+            },
+            {
+              "子-子环节名称": "游戏引擎开发",
+              "代表公司": ["Unity Technologies (Unity)", "Epic Games (Unreal Engine)", "Crytek (CryEngine)", "Amazon (Lumberyard)", "Cocos (Cocos2d-x)", "Godot Engine (Godot)"]
+            },
+            {
+              "子-子环节名称": "动画渲染",
+              "代表公司": ["RenderMan (Pixar)", "Arnold (Autodesk)", "V-Ray (Chaos Group)", "Redshift (Maxon)", "OctaneRender (OTOY)", "Cycles (Blender)"]
+            },
+            {
+              "子-子环节名称": "音频制作",
+              "代表公司": ["杜比实验室 (Dolby Laboratories)", "DTS, Inc.", "Waves Audio", "Avid Technology (Pro Tools)", "Steinberg (Cubase, Nuendo)", "Universal Audio"]
+            },
+            {
+              "子-子环节名称": "虚拟现实/增强现实内容制作",
+              "代表公司": ["Magic Leap", "Oculus (Meta)", "HTC Vive", "Within", "Felix & Paul Studios", "Baobab Studios"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "技术服务",
+          "子-子环节": [
+            {
+              "子-子环节名称": "云计算服务",
+              "代表公司": ["亚马逊云科技 (Amazon Web Services)", "微软 Azure (Microsoft Azure)", "谷歌云 (Google Cloud Platform)", "阿里云 (Alibaba Cloud)", "腾讯云 (Tencent Cloud)", "华为云 (Huawei Cloud)"]
+            },
+            {
+              "子-子环节名称": "大数据分析",
+              "代表公司": ["Palantir Technologies", "Splunk", "Tableau Software", "Qlik", "SAS Institute", "IBM (Cognos Analytics)", "Oracle (Oracle Analytics Cloud)"]
+            },
+            {
+              "子-子环节名称": "人工智能技术",
+              "代表公司": ["OpenAI", "Google (DeepMind)", "Microsoft", "Amazon", "IBM", "百度 (Baidu)", "商汤科技 (SenseTime)"]
+            },
+            {
+              "子-子环节名称": "区块链技术",
+              "代表公司": ["ConsenSys", "R3", "Digital Asset", "Chainlink", "Ripple", "蚂蚁链 (AntChain)", "趣链科技 (Hyperchain)"]
+            },
+            {
+              "子-子环节名称": "数字版权保护",
+              "代表公司": ["Verisign", "Digimarc", "MarkMonitor", "OpSec Security", "SafeNet (Thales)", "中国版权保护中心 (Copyright Protection Center of China)"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "环节名称": "下游：数字内容分发与应用",
+      "子环节": [
+        {
+          "子环节名称": "数字内容分发",
+          "子-子环节": [
+            {
+              "子-子环节名称": "在线视频平台",
+              "代表公司": ["Netflix", "YouTube", "Amazon Prime Video", "Disney+", "爱奇艺 (iQIYI)", "腾讯视频 (Tencent Video)", "优酷 (Youku)"]
+            },
+            {
+              "子-子环节名称": "游戏分发平台",
+              "代表公司": ["Steam (Valve)", "Epic Games Store", "PlayStation Store (Sony)", "Xbox Games Store (Microsoft)", "Nintendo eShop", "App Store (Apple)", "Google Play (Google)"]
+            },
+            {
+              "子-子环节名称": "数字音乐平台",
+              "代表公司": ["Spotify", "Apple Music", "Amazon Music", "YouTube Music", "QQ音乐 (QQ Music)", "网易云音乐 (NetEase Cloud Music)", "酷狗音乐 (Kugou Music)"]
+            },
+            {
+              "子-子环节名称": "数字阅读平台",
+              "代表公司": ["Amazon Kindle", "Apple Books", "Google Play Books", "Kobo", "掌阅 (iReader)", "微信读书 (WeRead)"]
+            },
+            {
+              "子-子环节名称": "社交媒体平台",
+              "代表公司": ["Facebook (Meta)", "Instagram (Meta)", "Twitter", "TikTok (Bytedance)", "微信 (WeChat)", "微博 (Weibo)"]
+            }
+          ]
+        },
+        {
+          "子环节名称": "应用场景",
+          "子-子环节": [
+            {
+              "子-子环节名称": "数字娱乐",
+              "代表公司": ["电子竞技俱乐部 (各种)", "直播平台 (斗鱼, 虎牙, Bilibili)", "VR/AR 游戏公司", "主题公园 (迪士尼, 环球影城)"]
+            },
+            {
+              "子-子环节名称": "数字教育",
+              "代表公司": ["Coursera", "edX", "Udacity", "可汗学院 (Khan Academy)", "新东方在线 (Koolearn)", "好未来 (TAL Education)", "猿辅导 (Yuanfudao)"]
+            },
+            {
+              "子-子环节名称": "数字营销",
+              "代表公司": ["Google Ads", "Facebook Ads", "程序化广告平台 (The Trade Desk, MediaMath)", "营销自动化平台 (HubSpot, Marketo)", "数据分析公司 (Nielsen, comScore)"]
+            },
+            {
+              "子-子环节名称": "数字文旅",
+              "代表公司": ["故宫博物院 (数字故宫)", "敦煌研究院 (数字敦煌)", "博物馆/美术馆线上展览平台", "虚拟旅游平台", "智慧景区解决方案提供商"]
+            },
+            {
+              "子-子环节名称": "数字会展",
+              "代表公司": ["虚拟会议平台 (Zoom, Microsoft Teams)", "线上展览平台", "3D 虚拟展厅技术提供商"]
+            },
+            {
+              "子-子环节名称": "智能制造",
+              "代表公司": ["西门子 (Siemens)", "通用电气 (GE)", "达索系统 (Dassault Systèmes)", "PTC", "罗克韦尔自动化 (Rockwell Automation)"]
+            },
+            {
+              "子-子环节名称": "智慧城市",
+              "代表公司": ["华为 (Huawei)", "阿里巴巴 (Alibaba)", "腾讯 (Tencent)", "中兴 (ZTE)", "海康威视 (Hikvision)", "大华股份 (Dahua Technology)"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

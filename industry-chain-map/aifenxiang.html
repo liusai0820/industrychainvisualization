@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI产业链图谱工具介绍</title>
+<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<style>
+:root {
+  --primary-color: #4361ee;
+  --primary-light: #a8c7fa;
+  --primary-dark: #2f3699;
+  --secondary-color: #48cae4;
+  --accent-color: #ff6b6b;
+  --dark-gray: #333333;
+  --light-gray: #f5f5f5;
+  --mid-gray: #888888;
+  --text-color: #333333;
+  --light-text: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Noto Sans SC', Tahoma, Arial, Roboto, "Droid Sans", "Helvetica Neue", "Droid Sans Fallback", "Heiti SC", "Hiragino Sans GB", Simsun, sans-self;
+  color: var(--text-color);
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 600;
+  color: var(--dark-gray);
+  margin-bottom: 0.5em;
+}
+
+.slide-container {
+  width: 1280px;
+  height: 720px;
+  background-color: #fff;
+  position: relative;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+  display: grid;
+  grid-template-rows: 60px 1fr 40px;
+  grid-template-areas:
+    "header"
+    "content"
+    "footer";
+  padding: 20px;
+  background: linear-gradient(to bottom, #f9f9f9, #fff);
+  overflow: hidden;
+  transition: opacity 0.5s ease;
+  max-height: 720px; /* 确保高度固定 */
+}
+
+.header {
+  grid-area: header;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e8e8e8;
+  padding-bottom: 10px;
+}
+
+.logo {
+  font-weight: 700;
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+}
+
+.logo i {
+  margin-right: 8px;
+  font-size: 1.2em;
+}
+
+.content-area {
+  grid-area: content;
+  padding: 15px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.footer {
+  grid-area: footer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8em;
+  color: var(--mid-gray);
+  border-top: 1px solid #e8e8e8;
+  padding-top: 10px;
+}
+
+.page-number {
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+/* 特定页面样式 */
+.two-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  height: 100%;
+}
+
+.value-prop {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(67, 97, 238, 0.05);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-left: 4px solid var(--primary-color);
+}
+
+.value-prop h3 {
+  color: var(--primary-color);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.value-prop h3 i {
+  margin-right: 8px;
+  font-size: 1.2em;
+}
+
+.value-prop p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.workflow-container {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.workflow-step {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.step-number {
+  background-color: var(--primary-color);
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-content h3 {
+  margin-bottom: 5px;
+  color: var(--primary-dark);
+}
+
+.step-content p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.feature-card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+}
+
+.feature-icon {
+  width: 50px;
+  height: 50px;
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 15px;
+  font-size: 1.5em;
+}
+
+.feature-text {
+  flex: 1;
+}
+
+.feature-text h3 {
+  margin-bottom: 5px;
+  color: var(--primary-dark);
+}
+
+.feature-text p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.graph-preview {
+  background-color: #f5f7ff;
+  border-radius: 10px;
+  padding: 10px;
+  height: calc(100% - 50px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+
+.graph-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.company-analysis {
+  position: absolute;
+  right: 30px;
+  bottom: 30px;
+  width: 280px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+  padding: 15px;
+  border-top: 5px solid var(--accent-color);
+}
+
+.company-analysis h4 {
+  margin-bottom: 8px;
+  color: var(--accent-color);
+  display: flex;
+  align-items: center;
+}
+
+.company-analysis h4 i {
+  margin-right: 8px;
+}
+
+.company-analysis ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.company-analysis li {
+  margin-bottom: 5px;
+  line-height: 1.4;
+}
+
+.company-analysis-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  width: 700px;
+  height: 500px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 15px;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-content {
+  flex: 1;
+  padding: 20px;
+  overflow: auto;
+}
+
+@media print {
+  .slide-container {
+    width: 1280px !important;
+    height: 720px !important;
+    page-break-after: always;
+    margin: 0;
+    padding: 20px;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .slide-container {
+    transform: scale(0.8);
+    transform-origin: center center;
+  }
+}
+
+/* 导航控件样式 */
+.slide-nav {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  z-index: 100;
+}
+
+.nav-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.nav-button:hover {
+  background-color: var(--primary-dark);
+  transform: scale(1.1);
+}
+
+.pagination {
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ccc;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.dot.active {
+  background-color: var(--primary-color);
+  transform: scale(1.2);
+}
+
+/* 页码控制样式 */
+.page-controls {
+  display: inline-flex;
+  margin-left: 10px;
+  gap: 5px;
+}
+
+.page-control {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.3s;
+  padding: 0;
+}
+
+.page-control:hover {
+  background-color: var(--primary-dark);
+}
+
+/* 幻灯片切换动画 */
+.slide-container.active {
+  opacity: 1;
+}
+</style>
+<script>
+// 全局可访问的函数，用于页面导航按钮点击
+function nextSlide() {
+  const slides = document.querySelectorAll('.slide-container');
+  const totalSlides = slides.length;
+  let currentIndex = -1;
+  
+  slides.forEach((slide, index) => {
+    if (slide.style.display === 'grid' || getComputedStyle(slide).display === 'grid') {
+      currentIndex = index;
+    }
+  });
+  
+  if (currentIndex === -1) currentIndex = 0;
+  
+  const nextIndex = (currentIndex + 1) % totalSlides;
+  
+  slides.forEach((slide, index) => {
+    if (index === nextIndex) {
+      slide.style.display = 'grid';
+    } else {
+      slide.style.display = 'none';
+    }
+  });
+  
+  updatePagination(nextIndex);
+}
+
+function prevSlide() {
+  const slides = document.querySelectorAll('.slide-container');
+  const totalSlides = slides.length;
+  let currentIndex = -1;
+  
+  slides.forEach((slide, index) => {
+    if (slide.style.display === 'grid' || getComputedStyle(slide).display === 'grid') {
+      currentIndex = index;
+    }
+  });
+  
+  if (currentIndex === -1) currentIndex = 0;
+  
+  const prevIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+  
+  slides.forEach((slide, index) => {
+    if (index === prevIndex) {
+      slide.style.display = 'grid';
+    } else {
+      slide.style.display = 'none';
+    }
+  });
+  
+  updatePagination(prevIndex);
+}
+
+function updatePagination(activeIndex) {
+  const dots = document.querySelectorAll('.dot');
+  if (dots.length > 0) {
+    dots.forEach((dot, index) => {
+      if (index === activeIndex) {
+        dot.classList.add('active');
+      } else {
+        dot.classList.remove('active');
+      }
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  // 获取所有幻灯片和导航按钮
+  const slides = document.querySelectorAll('.slide-container');
+  const totalSlides = slides.length;
+  let currentSlideIndex = 0;
+  
+  // 初始化时只显示第一张幻灯片
+  function initSlides() {
+    slides.forEach((slide, index) => {
+      if (index === 0) {
+        slide.style.display = 'grid';
+      } else {
+        slide.style.display = 'none';
+      }
+    });
+  }
+  
+  // 显示指定索引的幻灯片
+  function showSlide(index) {
+    if (index < 0) {
+      index = totalSlides - 1;
+    } else if (index >= totalSlides) {
+      index = 0;
+    }
+    
+    slides.forEach((slide, i) => {
+      if (i === index) {
+        slide.style.display = 'grid';
+        slide.classList.add('active');
+      } else {
+        slide.style.display = 'none';
+        slide.classList.remove('active');
+      }
+    });
+    
+    currentSlideIndex = index;
+    updatePagination(index);
+  }
+  
+  // 创建导航按钮
+  function createNavButtons() {
+    const navContainer = document.createElement('div');
+    navContainer.className = 'slide-nav';
+    
+    const prevButton = document.createElement('button');
+    prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+    prevButton.className = 'nav-button prev-button';
+    prevButton.addEventListener('click', prevSlide);
+    
+    const nextButton = document.createElement('button');
+    nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+    nextButton.className = 'nav-button next-button';
+    nextButton.addEventListener('click', nextSlide);
+    
+    navContainer.appendChild(prevButton);
+    
+    // 添加页码指示器
+    const paginationContainer = document.createElement('div');
+    paginationContainer.className = 'pagination';
+    
+    for (let i = 0; i < totalSlides; i++) {
+      const dot = document.createElement('span');
+      dot.className = i === 0 ? 'dot active' : 'dot';
+      dot.addEventListener('click', () => {
+        showSlide(i);
+      });
+      paginationContainer.appendChild(dot);
+    }
+    
+    navContainer.appendChild(paginationContainer);
+    navContainer.appendChild(nextButton);
+    document.body.appendChild(navContainer);
+  }
+  
+  // 添加键盘导航
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'ArrowRight') {
+      nextSlide();
+    } else if (event.key === 'ArrowLeft') {
+      prevSlide();
+    }
+  });
+  
+  // 初始化函数
+  function init() {
+    initSlides();
+    createNavButtons();
+  }
+  
+  // 执行初始化
+  init();
+});
+</script>
+</head>
+<body>
+
+<!-- 第1页：应用概述 -->
+<div class="slide-container">
+  <div class="header">
+    <div class="logo"><i class="fas fa-project-diagram"></i> AI产业链图谱助手</div>
+    <div class="subtitle">解放研究人员，让产业分析更高效</div>
+  </div>
+  
+  <div class="content-area">
+    <h1 style="text-align: center; margin-bottom: 30px; color: var(--primary-color);">
+      <i class="fas fa-robot"></i> 产业图谱生成与展示应用
+    </h1>
+    
+    <div class="two-column">
+      <div>
+        <h2 style="margin-bottom: 20px;">我是什么？</h2>
+        <p style="font-size: 18px; line-height: 1.6; margin-bottom: 25px;">
+          我是一位<strong>智能化产业分析助手</strong>，通过先进AI模型，能够自动构建涵盖上游、中游、下游全环节的产业链图谱，并提供详细的企业分析报告。
+        </p>
+        
+        <div class="value-prop">
+          <h3><i class="fas fa-tachometer-alt"></i> 效率提升</h3>
+          <p>将传统2周的产业研究工作压缩至几分钟，节省90%研究时间</p>
+        </div>
+        
+        <div class="value-prop">
+          <h3><i class="fas fa-search"></i> 深度洞察</h3>
+          <p>提供结构化的产业链视图，帮助快速理解产业格局和关键节点</p>
+        </div>
+        
+        <div class="value-prop">
+          <h3><i class="fas fa-exchange-alt"></i> 灵活选择</h3>
+          <p>通过OpenRouter可以方便地切换多种先进AI模型</p>
+        </div>
+        
+        <div class="value-prop">
+          <h3><i class="fas fa-hand-pointer"></i> 便捷交互</h3>
+          <p>直观的可视化界面和便捷的公司深度分析入口</p>
+        </div>
+      </div>
+      
+      <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <div style="background-color: #f5f7ff; border-radius: 15px; padding: 20px; text-align: center; width: 100%;">
+          <i class="fas fa-project-diagram" style="font-size: 80px; color: var(--primary-color); margin-bottom: 20px;"></i>
+          <h3 style="margin-bottom: 15px; color: var(--primary-dark);">一键生成完整产业链图谱</h3>
+          <p style="font-style: italic; color: var(--mid-gray);">"只需输入产业名称，我就能为您梳理出完整产业链关系"</p>
+          
+          <div style="margin-top: 30px; background-color: white; border-radius: 8px; padding: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.08);">
+            <p style="margin-bottom: 10px; font-weight: 500;">适用场景:</p>
+            <ul style="text-align: left; list-style-type: none; padding: 0;">
+              <li style="margin-bottom: 8px; padding-left: 25px; position: relative;">
+                <i class="fas fa-check" style="color: var(--primary-color); position: absolute; left: 0; top: 3px;"></i>
+                产业研究与市场分析
+              </li>
+              <li style="margin-bottom: 8px; padding-left: 25px; position: relative;">
+                <i class="fas fa-check" style="color: var(--primary-color); position: absolute; left: 0; top: 3px;"></i>
+                投资决策支持
+              </li>
+              <li style="margin-bottom: 8px; padding-left: 25px; position: relative;">
+                <i class="fas fa-check" style="color: var(--primary-color); position: absolute; left: 0; top: 3px;"></i>
+                竞争对手分析
+              </li>
+              <li style="padding-left: 25px; position: relative;">
+                <i class="fas fa-check" style="color: var(--primary-color); position: absolute; left: 0; top: 3px;"></i>
+                战略规划与商业拓展
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <div>AI赋能工作效率提升实践分享</div>
+    <div class="page-number">
+      <span class="current-page">1</span>/<span class="total-pages">3</span>
+      <div class="page-controls">
+        <button class="page-control" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+        <button class="page-control" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 第2页：功能与流程 -->
+<div class="slide-container">
+  <div class="header">
+    <div class="logo"><i class="fas fa-project-diagram"></i> AI产业链图谱助手</div>
+    <div class="subtitle">解放研究人员，让产业分析更高效</div>
+  </div>
+  
+  <div class="content-area">
+    <h2 style="margin-bottom: 20px;">我是如何工作的？</h2>
+    
+    <div class="workflow-container">
+      <div class="workflow-step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>用户提交产业名称</h3>
+          <p>您只需在界面中输入想要研究的产业名称（如"新能源汽车"、"人工智能"），点击生成按钮</p>
+        </div>
+      </div>
+      
+      <div class="workflow-step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>启动后台智能分析</h3>
+          <p>我会立即创建异步任务，调用OpenRouter提供的先进AI模型，开始分析产业链关系</p>
+        </div>
+      </div>
+      
+      <div class="workflow-step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>实时进度反馈</h3>
+          <p>您可以看到任务进度条，了解分析进展情况，通常只需1-3分钟即可完成</p>
+        </div>
+      </div>
+      
+      <div class="workflow-step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h3>呈现产业链全景</h3>
+          <p>分析完成后，我会自动呈现上游、中游、下游完整产业链结构，并支持导出和分享</p>
+        </div>
+      </div>
+      
+      <div class="workflow-step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+          <h3>深入企业分析</h3>
+          <p>点击任何企业节点，我会立即为您生成该企业的详细分析报告，包括企业概况、核心业务、竞争优势等</p>
+        </div>
+      </div>
+      
+      <div style="text-align: center; margin-top: 20px; padding: 15px; background-color: #f0f4ff; border-radius: 10px;">
+        <p style="font-style: italic; color: var(--primary-dark);">
+          "我将传统2-3周的产业研究工作压缩至几分钟，让您的决策更快、更准"
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <div>AI赋能工作效率提升实践分享</div>
+    <div class="page-number">
+      <span class="current-page">2</span>/<span class="total-pages">3</span>
+      <div class="page-controls">
+        <button class="page-control" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+        <button class="page-control" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 第3页：功能展示与应用案例 -->
+<div class="slide-container">
+  <div class="header">
+    <div class="logo"><i class="fas fa-project-diagram"></i> AI产业链图谱助手</div>
+    <div class="subtitle">解放研究人员，让产业分析更高效</div>
+  </div>
+  
+  <div class="content-area">
+    <h2 style="margin-bottom: 10px;">我能为您做什么？</h2>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; height: calc(100% - 35px); overflow: hidden;">
+      <!-- 左侧：原有示意图 -->
+      <div style="display: flex; flex-direction: column;">
+        <div class="graph-preview" style="height: 220px; padding: 5px; margin-bottom: 10px;">
+          <!-- 这里是产业链图谱示意图 -->
+          <div style="position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+            <!-- 上游 -->
+            <div style="position: absolute; top: 10px; left: 40px; text-align: center;">
+              <div style="background-color: #e6f7ff; padding: 5px; border-radius: 8px; margin-bottom: 5px; font-weight: bold; color: #0066cc; font-size: 0.85em;">上游原材料</div>
+              <div style="display: flex; flex-direction: column; gap: 3px;">
+                <div style="background-color: white; padding: 4px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); font-size: 0.8em;">锂矿开采</div>
+                <div style="background-color: white; padding: 4px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); font-size: 0.8em;">石墨提炼</div>
+                <div style="background-color: white; padding: 4px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); font-size: 0.8em;">钴、镍、锰</div>
+              </div>
+            </div>
+            
+            <!-- 中游 -->
+            <div style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); text-align: center;">
+              <div style="background-color: #e6ffe6; padding: 5px; border-radius: 8px; margin-bottom: 5px; font-weight: bold; color: #006600; font-size: 0.85em;">中游制造</div>
+              <div style="display: flex; flex-direction: column; gap: 3px;">
+                <div style="background-color: white; padding: 4px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); font-size: 0.8em;">电池材料</div>
+                <div style="background-color: white; padding: 4px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 2px solid var(--accent-color); cursor: pointer; font-size: 0.8em;">宁德时代</div>
+                <div style="background-color: white; padding: 4px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); font-size: 0.8em;">电机系统</div>
+              </div>
+            </div>
+            
+            <!-- 下游 -->
+            <div style="position: absolute; top: 10px; right: 40px; text-align: center;">
+              <div style="background-color: #ffe6e6; padding: 5px; border-radius: 8px; margin-bottom: 5px; font-weight: bold; color: #cc0000; font-size: 0.85em;">下游应用</div>
+              <div style="display: flex; flex-direction: column; gap: 3px;">
+                <div style="background-color: white; padding: 4px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); font-size: 0.8em;">特斯拉</div>
+                <div style="background-color: white; padding: 4px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); font-size: 0.8em;">比亚迪</div>
+                <div style="background-color: white; padding: 4px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); font-size: 0.8em;">蔚来汽车</div>
+              </div>
+            </div>
+            
+            <!-- 连接线 -->
+            <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;">
+              <line x1="100" y1="70" x2="220" y2="70" style="stroke: #0066cc; stroke-width: 1.5;" />
+              <line x1="220" y1="70" x2="340" y2="70" style="stroke: #006600; stroke-width: 1.5;" />
+            </svg>
+          </div>
+          
+          <!-- 公司分析弹窗 -->
+          <div class="company-analysis" style="right: 15px; bottom: 10px; width: 180px; padding: 10px;">
+            <h4 style="font-size: 0.85em; margin-bottom: 5px;"><i class="fas fa-building"></i> 宁德时代分析报告</h4>
+            <ul style="font-size: 0.75em; padding-left: 15px;">
+              <li><strong>市场地位</strong>: 全球动力电池龙头</li>
+              <li><strong>核心业务</strong>: 锂电池研发与制造</li>
+              <li><strong>主要客户</strong>: 特斯拉、大众、宝马</li>
+              <li><strong>技术优势</strong>: CTP技术领先全球</li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- 功能卡片 -->
+        <div style="display: flex; justify-content: space-between; margin-top: 8px; gap: 10px;">
+          <div class="feature-card" style="flex: 1; padding: 10px;">
+            <div class="feature-icon" style="width: 40px; height: 40px;">
+              <i class="fas fa-bolt"></i>
+            </div>
+            <div class="feature-text">
+              <h3 style="font-size: 14px; margin-bottom: 2px;">异步任务处理</h3>
+              <p style="font-size: 12px;">后台智能分析，实时进度反馈</p>
+            </div>
+          </div>
+          
+          <div class="feature-card" style="flex: 1; padding: 10px;">
+            <div class="feature-icon" style="width: 40px; height: 40px;">
+              <i class="fas fa-download"></i>
+            </div>
+            <div class="feature-text">
+              <h3 style="font-size: 14px; margin-bottom: 2px;">一键导出分享</h3>
+              <p style="font-size: 12px;">支持图谱下载和报告导出</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 右侧：添加实物图 -->
+      <div style="display: flex; flex-direction: column; height: 100%; gap: 10px; overflow: hidden;">
+        <!-- AR眼镜产业链图 -->
+        <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.15); flex: 2;">
+          <div style="background-color: var(--primary-color); color: white; padding: 6px 10px; font-weight: 500; text-align: center; font-size: 14px;">
+            AR眼镜产业链全景图谱示例
+          </div>
+          <div style="padding: 5px; background-color: white; height: calc(100% - 30px); overflow: hidden;">
+            <img src="AR眼镜产业链产业链全景图谱.png" alt="AR眼镜产业链全景图谱" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+        </div>
+        
+        <!-- 智绘链图 -->
+        <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.15); flex: 1;">
+          <div style="background-color: var(--primary-color); color: white; padding: 6px 10px; font-weight: 500; text-align: center; font-size: 14px;">
+            智能产业分析界面示例
+          </div>
+          <div style="padding: 5px; background-color: white; height: calc(100% - 30px); overflow: hidden;">
+            <img src="image.png" alt="智绘链图展示" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <div>AI赋能工作效率提升实践分享</div>
+    <div class="page-number">
+      <span class="current-page">3</span>/<span class="total-pages">3</span>
+      <div class="page-controls">
+        <button class="page-control" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+        <button class="page-control" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,333 @@
+{
+    "产业链": "工业母机",
+    "环节": [
+      {
+        "环节名称": "上游：核心零部件与基础材料",
+        "子环节": [
+          {
+            "子环节名称": "数控系统",
+            "子-子环节": [
+              {
+                "子-子环节名称": "高端数控系统",
+                "代表公司": ["西门子（Siemens）", "发那科（FANUC）", "海德汉（HEIDENHAIN）", "三菱电机（Mitsubishi Electric）", "广州数控（GSK）"]
+              },
+              {
+                "子-子环节名称": "中低端数控系统",
+                "代表公司": ["华中数控（HuazhongCNC）", "广州数控（GSK）", "科德数控（KND）", "大连光洋（Dalian Guanyang）", "埃斯顿（ESTUN）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "伺服系统",
+            "子-子环节": [
+              {
+                "子-子环节名称": "伺服电机",
+                "代表公司": ["发那科（FANUC）", "西门子（Siemens）", "安川电机（Yaskawa）", "三菱电机（Mitsubishi Electric）", "松下（Panasonic）"]
+              },
+              {
+                "子-子环节名称": "伺服驱动器",
+                "代表公司": ["发那科（FANUC）", "西门子（Siemens）", "安川电机（Yaskawa）", "三菱电机（Mitsubishi Electric）", "汇川技术（Inovance）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "传动系统",
+            "子-子环节": [
+              {
+                "子-子环节名称": "滚珠丝杠",
+                "代表公司": ["THK", "NSK", "上银科技（HIWIN）", "南京工艺（Nanjing Gongyi）", "汉江机床（Hanzhong Machine Tool）"]
+              },
+              {
+                "子-子环节名称": "直线导轨",
+                "代表公司": ["THK", "NSK", "上银科技（HIWIN）", "博世力士乐（Bosch Rexroth）", "舍弗勒（Schaeffler）"]
+              },
+              {
+                "子-子环节名称": "齿轮",
+                "代表公司": ["格里森（Gleason）", "利勃海尔（Liebherr）", "卡帕耐尔斯（KAPP NILES）", "住友重机械（Sumitomo Heavy Industries）", "秦川机床（Qinchuan Machine Tool）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "主轴",
+            "子-子环节": [
+              {
+                "子-子环节名称": "电主轴",
+                "代表公司": ["Fischer Precise", "Step-Tec", "IBAG", "GMN", "西门子（Siemens）"]
+              },
+              {
+                "子-子环节名称": "机械主轴",
+                "代表公司": ["Kessler", "Weiss Spindeltechnologie", "Alfred Jäger", "HSD", "昊志机电（Haozhi Electromechanical）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "刀具",
+            "子-子环节": [
+              {
+                "子-子环节名称": "硬质合金刀具",
+                "代表公司": ["山特维克（Sandvik）", "肯纳金属（Kennametal）", "伊斯卡（ISCAR）", "三菱综合材料（Mitsubishi Materials）", "株洲钻石（Zhuzhou Cemented Carbide）"]
+              },
+              {
+                "子-子环节名称": "高速钢刀具",
+                "代表公司": ["山特维克（Sandvik）", "钴领（Guhring）", "欧士机（OSG）", "瓦尔特（Walter）", "天工国际（Tiangong International）"]
+              },
+              {
+                "子-子环节名称": "超硬刀具（金刚石、CBN）",
+                "代表公司": ["元素六（Element Six）", "迪思科（DISCO）", "住友电工（Sumitomo Electric）", "圣戈班（Saint-Gobain）", "郑州钻石（Zhengzhou Diamond）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "传感器",
+            "子-子环节": [
+              {
+                "子-子环节名称": "位置传感器",
+                "代表公司": ["海德汉（HEIDENHAIN）", "雷尼绍（Renishaw）", "发那科（FANUC）", "西门子（Siemens）", "三丰（Mitutoyo）"]
+              },
+              {
+                "子-子环节名称": "力/扭矩传感器",
+                "代表公司": ["HBM", "Kistler", "FUTEK", "PCB Piezotronics", "ME-Meßsysteme"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "功能部件",
+            "子-子环节": [
+              {
+                "子-子环节名称": "转台",
+                "代表公司": ["Nikken Kosakusho Works", "Tsudakoma", "Kitagawa", "Hofmann", "pL LEHMANN"]
+              },
+              {
+                "子-子环节名称": "刀库",
+                "代表公司": ["欧科亿（OK-VISE）", "德大机械（Detron）", "北钜精机（PARKSON）", "圣杰（SJR）", "潭兴精工（TANSHING）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "铸件/床身",
+            "子-子环节": [
+              {
+                "子-子环节名称": "大型铸件",
+                "代表公司": ["共享集团（KOCEL）", "大连华锐重工（DHHI）", "中国一重（CFHI）", "中信重工（CITIC Heavy Industries）", "太原重工（TYHI）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "工业软件",
+            "子-子环节": [
+              {
+                "子-子环节名称": "CAD/CAM/CAE软件",
+                "代表公司": ["达索系统（Dassault Systèmes）", "西门子（Siemens）", "Autodesk", "PTC", "Hexagon"]
+              },
+              {
+                "子-子环节名称": "仿真软件",
+                "代表公司": ["ANSYS", "达索系统（Dassault Systèmes）", "西门子（Siemens）", "COMSOL", "Altair"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "中游：机床设备",
+        "子环节": [
+          {
+            "子环节名称": "金属切削机床",
+            "子-子环节": [
+              {
+                "子-子环节名称": "数控车床",
+                "代表公司": ["DMG MORI", "马扎克（Yamazaki Mazak）", "大隈（Okuma）", "哈斯（Haas）", "沈阳机床（Shenyang Machine Tool）"]
+              },
+              {
+                "子-子环节名称": "数控铣床",
+                "代表公司": ["DMG MORI", "马扎克（Yamazaki Mazak）", "哈斯（Haas）", "通快（TRUMPF）", "牧野（Makino）"]
+              },
+              {
+                "子-子环节名称": "加工中心（立式、卧式、龙门）",
+                "代表公司": ["DMG MORI", "马扎克（Yamazaki Mazak）", "哈斯（Haas）", "大隈（Okuma）", "牧野（Makino）"]
+              },
+              {
+                "子-子环节名称": "磨床",
+                "代表公司": ["联合磨削集团（UNITED GRINDING Group）", "冈本（Okamoto）", "Junker", "Kellenberger", "Studer"]
+              },
+              {
+                "子-子环节名称": "齿轮加工机床",
+                "代表公司": ["格里森（Gleason）", "利勃海尔（Liebherr）", "卡帕耐尔斯（KAPP NILES）", "三菱重工（Mitsubishi Heavy Industries）", "秦川机床（Qinchuan Machine Tool）"]
+              },
+              {
+                "子-子环节名称": "钻床",
+                "代表公司": ["DMG MORI", "马扎克（Yamazaki Mazak）", "哈斯（Haas）", "百超（Bystronic）", "通快（TRUMPF）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "金属成形机床",
+            "子-子环节": [
+              {
+                "子-子环节名称": "激光加工设备",
+                "代表公司": ["通快（TRUMPF）", "大族激光（Han's Laser）", "华工科技（HGTECH）", "奔腾激光（Penta-Chutian）", "IPG Photonics"]
+              },
+              {
+                "子-子环节名称": "冲床",
+                "代表公司": ["金丰（Chin Fong）", "协易（SEYI）", "AIDA", "小松（Komatsu）", "扬力集团（Yangli Group）"]
+              },
+              {
+                "子-子环节名称": "压力机",
+                "代表公司": ["舒勒（Schuler）", "AIDA", "小松（Komatsu）", "SMS group", "济南二机床（JIER Machine Tool）"]
+              },
+              {
+                "子-子环节名称": "折弯机",
+                "代表公司": ["百超（Bystronic）", "通快（TRUMPF）", "天田（Amada）", "萨瓦尼尼（Salvagnini）", "亚威股份（Yawei Machine Tool）"]
+              },
+              {
+                "子-子环节名称": "剪板机",
+                "代表公司": ["百超（Bystronic）", "通快（TRUMPF）", "天田（Amada）", "亚威股份（Yawei Machine Tool）", "南通锻压（Nantong Forging Equipment）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "特种加工机床",
+            "子-子环节": [
+              {
+                "子-子环节名称": "电火花机床（EDM）",
+                "代表公司": ["三菱电机（Mitsubishi Electric）", "沙迪克（Sodick）", "GF Machining Solutions", "牧野（Makino）", "庆鸿（CHMER）"]
+              },
+              {
+                "子-子环节名称": "线切割机床（WEDM）",
+                "代表公司": ["沙迪克（Sodick）", "三菱电机（Mitsubishi Electric）", "GF Machining Solutions", "牧野（Makino）", "苏州三光（Suzhou SanGuang）"]
+              },
+              {
+                "子-子环节名称": "电化学加工机床（ECM）",
+                "代表公司": ["EMAG", "PEMTec", "Extrude Hone", "Chemoform", "泰珂洛（Tungaloy）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "增材制造装备（3D打印）",
+            "子-子环节": [
+              {
+                "子-子环节名称": "金属3D打印",
+                "代表公司": ["GE Additive", "EOS", "3D Systems", "SLM Solutions", "Renishaw"]
+              },
+              {
+                "子-子环节名称": "非金属3D打印",
+                "代表公司": ["Stratasys", "3D Systems", "HP", "Materialise", "Formlabs"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "下游：应用领域",
+        "子环节": [
+          {
+            "子环节名称": "航空航天",
+            "子-子环节": [
+              {
+                "子-子环节名称": "飞机制造",
+                "代表公司": ["波音（Boeing）", "空客（Airbus）", "中国商飞（COMAC）", "洛克希德·马丁（Lockheed Martin）", "达索航空（Dassault Aviation）"]
+              },
+              {
+                "子-子环节名称": "发动机制造",
+                "代表公司": ["通用电气（GE Aviation）", "普拉特·惠特尼（Pratt & Whitney）", "罗尔斯·罗伊斯（Rolls-Royce）", "赛峰（Safran）", "中国航发（AECC）"]
+              },
+              {
+                "子-子环节名称": "航天器制造",
+                "代表公司": ["波音（Boeing）", "洛克希德·马丁（Lockheed Martin）", "SpaceX", "Northrop Grumman", "中国航天科技集团（CASC）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "汽车制造",
+            "子-子环节": [
+              {
+                "子-子环节名称": "整车制造",
+                "代表公司": ["大众汽车（Volkswagen）", "丰田汽车（Toyota）", "通用汽车（General Motors）", "现代汽车（Hyundai）", "比亚迪（BYD）"]
+              },
+              {
+                "子-子环节名称": "发动机制造",
+                "代表公司": ["康明斯（Cummins）", "潍柴动力（Weichai Power）", "玉柴机器（Yuchai Machinery）", "菲亚特动力科技（FPT Industrial）", "道依茨（DEUTZ）"]
+              },
+              {
+                "子-子环节名称": "零部件制造",
+                "代表公司": ["博世（Bosch）", "大陆集团（Continental）", "电装（Denso）", "麦格纳（Magna）", "采埃孚（ZF Friedrichshafen）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "能源装备",
+            "子-子环节": [
+              {
+                "子-子环节名称": "发电设备制造",
+                "代表公司": ["通用电气（GE）", "西门子（Siemens）", "三菱重工（Mitsubishi Heavy Industries）", "东方电气（DEC）", "上海电气（SEC）"]
+              },
+              {
+                "子-子环节名称": "石油化工装备制造",
+                "代表公司": ["国民油井华高（National Oilwell Varco）", "斯伦贝谢（Schlumberger）", "贝克休斯（Baker Hughes）", "哈里伯顿（Halliburton）", "中石化石油机械（Sinopec Oilfield Equipment）"]
+              },
+              {
+                "子-子环节名称": "核电设备制造",
+                "代表公司":["Areva", "Westinghouse Electric Company", "Rosatom", "中国核工业集团（CNNC）", "中国广核集团（CGN）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "工程机械",
+            "子-子环节": [
+              {
+                "子-子环节名称": "挖掘机",
+                "代表公司": ["卡特彼勒（Caterpillar）", "小松（Komatsu）", "日立建机（Hitachi Construction Machinery）", "三一重工（SANY）", "徐工集团（XCMG）"]
+              },
+              {
+                "子-子环节名称": "起重机",
+                "代表公司": ["特雷克斯（Terex）", "利勃海尔（Liebherr）", "马尼托瓦克（Manitowoc）", "中联重科（Zoomlion）", "徐工集团（XCMG）"]
+              },
+              {
+                "子-子环节名称": "装载机",
+                "代表公司": ["卡特彼勒（Caterpillar）", "小松（Komatsu）", "沃尔沃建筑设备（Volvo Construction Equipment）", "柳工（LiuGong）", "龙工（Lonking）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "轨道交通",
+            "子-子环节": [
+              {
+                "子-子环节名称": "高铁/动车组制造",
+                "代表公司": ["中国中车（CRRC）", "西门子（Siemens）", "阿尔斯通（Alstom）", "庞巴迪（Bombardier）", "日立（Hitachi）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "船舶制造",
+             "子-子环节": [
+                {
+                  "子-子环节名称": "船舶制造",
+                  "代表公司": ["现代重工（Hyundai Heavy Industries）", "大宇造船海洋（Daewoo Shipbuilding & Marine Engineering）", "三星重工（Samsung Heavy Industries）", "中国船舶集团（CSSC）", "日本联合造船（Japan Marine United）"]
+                }
+             ]
+          },
+          {
+            "子环节名称": "电子制造",
+            "子-子环节": [
+              {
+                "子-子环节名称": "SMT设备",
+                "代表公司": ["ASM Pacific Technology", "富士（Fuji）", "松下（Panasonic）", "雅马哈（Yamaha）", "Mycronic"]
+              },
+              {
+                "子-子环节名称": "半导体封装测试设备",
+                "代表公司": ["ASM Pacific Technology", "库力索法（Kulicke and Soffa）", "Besi", "东京精密（Tokyo Seimitsu）", "泰瑞达（Teradyne）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "模具制造",
+            "子-子环节": [
+              {
+                "子-子环节名称": "模具制造",
+                "代表公司": ["DMG MORI", "GF Machining Solutions", "牧野（Makino）", "沙迪克（Sodick）", "海天精工（Haitian Precision）"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

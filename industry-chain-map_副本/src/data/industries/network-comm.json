@@ -1,0 +1,250 @@
+{
+    "产业链": "网络与通信产业",
+    "环节": [
+      {
+        "环节名称": "上游：基础元器件与软件",
+        "子环节": [
+          {
+            "子环节名称": "芯片",
+            "子-子环节": [
+              {
+                "子-子环节名称": "网络处理器",
+                "代表公司": ["博通 (Broadcom)", "英特尔 (Intel)", "Marvell", "Cavium (Marvell)", "NXP"]
+              },
+              {
+                "子-子环节名称": "交换芯片",
+                "代表公司": ["博通 (Broadcom)", "Marvell", "Innovium (Marvell)", "Barefoot Networks (Intel)", "Centec Networks"]
+              },
+              {
+                "子-子环节名称": "光模块芯片",
+                "代表公司": ["博通 (Broadcom)", "Inphi (Marvell)", "MACOM", "Applied Optoelectronics", "Acacia Communications (Cisco)"]
+              },
+              {
+                "子-子环节名称": "射频芯片",
+                "代表公司": ["高通 (Qualcomm)", "Skyworks Solutions", "Qorvo", "Broadcom", "Murata"]
+              },
+              {
+                "子-子环节名称": "基带芯片",
+                "代表公司": ["高通 (Qualcomm)", "联发科 (MediaTek)", "三星 (Samsung)", "华为海思 (HiSilicon)", "紫光展锐 (Unisoc)"]
+              },
+              {
+                "子-子环节名称": "FPGA",
+                "代表公司": ["赛灵思 (Xilinx, AMD)", "英特尔 (Intel)", "Lattice Semiconductor", "Microchip Technology", "Achronix"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "光器件",
+            "子-子环节": [
+              {
+                "子-子环节名称": "光模块",
+                "代表公司": ["Finisar (II-VI)", "Lumentum", "Sumitomo Electric", "Fujitsu Optical Components", "Source Photonics"]
+              },
+              {
+                "子-子环节名称": "光纤光缆",
+                "代表公司": ["康宁 (Corning)", "长飞 (YOFC)", "亨通光电 (Hengtong Optic-Electric)", "富通 (Futong)", "烽火通信 (Fiberhome)"]
+              },
+              {
+                "子-子环节名称": "光放大器",
+                "代表公司": ["IPG Photonics", "Lumentum", "Finisar (II-VI)", "Coherent", "nLIGHT"]
+              },
+              {
+                "子-子环节名称": "无源光器件",
+                "代表公司": ["Molex", "Amphenol", "TE Connectivity", "CommScope", "3M"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "电子元器件",
+            "子-子环节": [
+              {
+                "子-子环节名称": "PCB",
+                "代表公司": ["TTM Technologies", "欣兴电子 (Unimicron)", "健鼎科技 (Tripod Technology)", "揖斐电 (Ibiden)", "深南电路 (SCC)"]
+              },
+              {
+                "子-子环节名称": "连接器",
+                "代表公司": ["TE Connectivity", "Amphenol", "Molex", "Foxconn (Hon Hai)", "Luxshare Precision"]
+              },
+              {
+                "子-子环节名称": "电源",
+                "代表公司": ["Delta Electronics", "Lite-On Technology", "Mean Well", "TDK-Lambda", "Murata Power Solutions"]
+              },
+              {
+                "子-子环节名称": "天线",
+                "代表公司": ["Amphenol", "Molex", "CommScope", "Pulse Electronics", "Laird Connectivity"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "基础软件",
+            "子-子环节": [
+              {
+                "子-子环节名称": "网络操作系统",
+                "代表公司": ["思科 (Cisco IOS)", "瞻博网络 (Juniper Junos)", "Arista Networks (EOS)", "华为 (Huawei VRP)", "Nokia (SR OS)"]
+              },
+              {
+                "子-子环节名称": "SDN/NFV软件",
+                "代表公司": ["VMware", "Cisco", "Juniper Networks", "Nokia", "Red Hat"]
+              },
+              {
+                "子-子环节名称": "网络管理软件",
+                "代表公司": ["SolarWinds", "ManageEngine", "Paessler PRTG", "Nagios", "Zabbix"]
+              },
+              {
+                "子-子环节名称": "嵌入式操作系统",
+                "代表公司": ["Wind River", "Green Hills Software", "QNX (BlackBerry)", "SYSGO", "Enea"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "中游：设备制造与系统集成",
+        "子环节": [
+          {
+            "子环节名称": "通信设备制造",
+            "子-子环节": [
+              {
+                "子-子环节名称": "无线接入网设备 (RAN)",
+                "代表公司": ["华为 (Huawei)", "爱立信 (Ericsson)", "诺基亚 (Nokia)", "中兴 (ZTE)", "三星 (Samsung)"]
+              },
+              {
+                "子-子环节名称": "核心网设备",
+                "代表公司": ["华为 (Huawei)", "爱立信 (Ericsson)", "诺基亚 (Nokia)", "中兴 (ZTE)", "思科 (Cisco)"]
+              },
+              {
+                "子-子环节名称": "传输网设备",
+                "代表公司": ["华为 (Huawei)", "诺基亚 (Nokia)", "Ciena", "Infinera", "烽火通信 (Fiberhome)"]
+              },
+              {
+                "子-子环节名称": "数据通信设备",
+                "代表公司": ["思科 (Cisco)", "华为 (Huawei)", "瞻博网络 (Juniper Networks)", "H3C", "Arista Networks"]
+              },
+              {
+                "子-子环节名称": "光通信设备",
+                "代表公司": ["华为 (Huawei)", "诺基亚 (Nokia)", "Ciena", "Infinera", "烽火通信 (Fiberhome)"]
+              },
+              {
+                "子-子环节名称": "卫星通信设备",
+                "代表公司": ["ViaSat", "Hughes Network Systems", "Iridium Communications", "Globalstar", "Inmarsat"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "终端设备制造",
+            "子-子环节": [
+              {
+                "子-子环节名称": "智能手机",
+                "代表公司": ["苹果 (Apple)", "三星 (Samsung)", "华为 (Huawei)", "小米 (Xiaomi)", "OPPO"]
+              },
+              {
+                "子-子环节名称": "路由器/交换机",
+                "代表公司": ["思科 (Cisco)", "华为 (Huawei)", "TP-Link", "NETGEAR", "D-Link"]
+              },
+              {
+                "子-子环节名称": "调制解调器 (Modem)",
+                "代表公司": ["NETGEAR", "ARRIS (CommScope)", "TP-Link", "Zoom Telephonics", "Motorola"]
+              },
+              {
+                "子-子环节名称": "物联网终端",
+                "代表公司": ["Sierra Wireless", "Telit", "Quectel", "Gemalto (Thales)", "U-blox"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "系统集成与服务",
+            "子-子环节": [
+              {
+                "子-子环节名称": "网络规划设计",
+                "代表公司": ["埃森哲 (Accenture)", "IBM", "华为 (Huawei)", "爱立信 (Ericsson)", "诺基亚 (Nokia)"]
+              },
+              {
+                "子-子环节名称": "网络工程建设",
+                "代表公司": ["中国移动 (China Mobile)", "中国电信 (China Telecom)", "中国联通 (China Unicom)", "AT&T", "Verizon"]
+              },
+              {
+                "子-子环节名称": "网络优化与维护",
+                "代表公司": ["华为 (Huawei)", "爱立信 (Ericsson)", "诺基亚 (Nokia)", "中兴 (ZTE)", "中国通信服务 (China Communications Services)"]
+              },
+              {
+                "子-子环节名称": "网络安全服务",
+                "代表公司": ["Palo Alto Networks", "Fortinet", "Check Point", "思科 (Cisco)", "Symantec (Broadcom)"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "下游：应用与服务",
+        "子环节": [
+          {
+            "子环节名称": "电信运营商",
+            "子-子环节": [
+              {
+                "子-子环节名称": "移动通信服务",
+                "代表公司": ["中国移动 (China Mobile)", "中国电信 (China Telecom)", "中国联通 (China Unicom)", "AT&T", "Verizon"]
+              },
+              {
+                "子-子环节名称": "固定通信服务",
+                "代表公司": ["中国电信 (China Telecom)", "中国联通 (China Unicom)", "AT&T", "Verizon", "Comcast"]
+              },
+              {
+                "子-子环节名称": "宽带接入服务",
+                "代表公司": ["中国电信 (China Telecom)", "中国联通 (China Unicom)", "Comcast", "Charter Communications", "AT&T"]
+              },
+              {
+                "子-子环节名称": "专线服务",
+                "代表公司": ["中国电信 (China Telecom)", "中国联通 (China Unicom)", "AT&T", "Verizon", "CenturyLink"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "互联网服务",
+            "子-子环节": [
+              {
+                "子-子环节名称": "云计算服务",
+                "代表公司": ["亚马逊 (Amazon Web Services)", "微软 (Microsoft Azure)", "谷歌 (Google Cloud Platform)", "阿里云 (Alibaba Cloud)", "腾讯云 (Tencent Cloud)"]
+              },
+              {
+                "子-子环节名称": "数据中心服务",
+                "代表公司": ["Equinix", "Digital Realty", "China Telecom", "China Unicom", "China Mobile"]
+              },
+              {
+                "子-子环节名称": "内容分发网络 (CDN)",
+                "代表公司": ["Akamai", "Cloudflare", "Fastly", "Limelight Networks", "Amazon CloudFront"]
+              },
+              {
+                "子-子环节名称": "物联网服务",
+                "代表公司": ["Sierra Wireless", "Telit", "Quectel", "Gemalto (Thales)", "U-blox"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "行业应用",
+            "子-子环节": [
+              {
+                "子-子环节名称": "工业互联网",
+                "代表公司": ["西门子 (Siemens)", "通用电气 (GE)", "施耐德电气 (Schneider Electric)", "霍尼韦尔 (Honeywell)", "罗克韦尔自动化 (Rockwell Automation)"]
+              },
+              {
+                "子-子环节名称": "车联网",
+                "代表公司": ["高通 (Qualcomm)", "华为 (Huawei)", "大唐电信 (Datang Telecom)", "Autotalks", "Savari"]
+              },
+              {
+                "子-子环节名称": "智慧城市",
+                "代表公司": ["华为 (Huawei)", "阿里巴巴 (Alibaba)", "中兴 (ZTE)", "海康威视 (Hikvision)", "大华股份 (Dahua Technology)"]
+              },
+              {
+                "子-子环节名称": "远程医疗",
+                "代表公司": ["Teladoc Health", "Amwell", "MDLIVE", "Doctor On Demand", "平安好医生 (Ping An Good Doctor)"]
+              },
+              {
+                "子-子环节名称": "远程教育",
+                "代表公司": ["Coursera", "edX", "Udacity", "学堂在线", "猿辅导"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

@@ -1,0 +1,293 @@
+{
+    "产业链": "高端医疗器械",
+    "环节": [
+      {
+        "环节名称": "上游：核心零部件与原材料",
+        "子环节": [
+          {
+            "子环节名称": "医用原材料",
+            "子-子环节": [
+              {
+                "子-子环节名称": "医用高分子材料",
+                "代表公司": ["杜邦（DuPont）", "巴斯夫（BASF）", "拜耳（Bayer）", "塞拉尼斯（Celanese）", "伊士曼（Eastman）"]
+              },
+              {
+                "子-子环节名称": "医用金属材料",
+                "代表公司": ["阿勒格尼技术（Allegheny Technologies）", "卡彭特（Carpenter Technology）", "阿斯麦（ASML）", "山特维克（Sandvik）", "韦尔斯通（Valbruna Stainless）"]
+              },
+              {
+                "子-子环节名称": "医用陶瓷材料",
+                "代表公司": ["摩根先进材料（Morgan Advanced Materials）", "CoorsTek", "CeramTec", "京瓷（Kyocera）", "爱尔创（Upcera）"]
+              },
+              {
+                "子-子环节名称": "医用生物活性材料",
+                "代表公司": ["赢创（Evonik）", "帝斯曼（DSM）", "巴斯夫（BASF）", "Corbion", "NatureWorks"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "核心零部件",
+            "子-子环节": [
+              {
+                "子-子环节名称": "医学影像设备核心部件",
+                "代表公司": [
+                  "瓦里安（Varian）",
+                  "西门子医疗（Siemens Healthineers）",
+                  "飞利浦医疗（Philips Healthcare）",
+                  "佳能医疗（Canon Medical Systems）",
+                  "岛津（Shimadzu）"
+                ]
+              },
+              {
+                "子-子环节名称": "高端传感器",
+                "代表公司": ["霍尼韦尔（Honeywell）", "泰科电子（TE Connectivity）", "艾迈斯半导体（ams AG）", "意法半导体（STMicroelectronics）", "博世（Bosch Sensortec）"]
+              },
+              {
+                "子-子环节名称": "芯片",
+                "代表公司": ["德州仪器（Texas Instruments）", "亚德诺半导体（Analog Devices）", "英特尔（Intel）", "英伟达（NVIDIA）", "高通（Qualcomm）"]
+              },
+              {
+                "子-子环节名称": "光学元件",
+                "代表公司": ["蔡司（Zeiss）", "徕卡（Leica）", "奥林巴斯（Olympus）", "尼康（Nikon）", "滨松光子学（Hamamatsu Photonics）"]
+              },
+              {
+                "子-子环节名称": "精密机械部件",
+                "代表公司": ["THK", "NSK", "SMC Corporation", "米思米（MISUMI）", "麦克马斯特-卡尔（McMaster-Carr）"]
+              },
+              {
+                "子-子环节名称": "高性能电池",
+                "代表公司": ["松下（Panasonic）", "三星SDI（Samsung SDI）", "LG化学（LG Chem）", "宁德时代（CATL）", "比亚迪（BYD）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "关键软件",
+            "子-子环节": [
+              {
+                "子-子环节名称": "医学影像处理软件",
+                "代表公司": ["西门子医疗（Siemens Healthineers）", "飞利浦医疗（Philips Healthcare）", "GE医疗（GE Healthcare）", "锐珂医疗（Carestream Health）", "IntelliSpace Portal"]
+              },
+              {
+                "子-子环节名称": "手术导航与规划软件",
+                "代表公司": ["Brainlab", "Medtronic", "Stryker", "Zimmer Biomet", "Smith & Nephew"]
+              },
+              {
+                "子-子环节名称": "设备控制软件",
+                "代表公司": ["西门子医疗（Siemens Healthineers）", "飞利浦医疗（Philips Healthcare）", "GE医疗（GE Healthcare）","迈瑞医疗(Mindray)", "联影医疗（United Imaging）"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "中游：医疗器械制造",
+        "子环节": [
+          {
+            "子环节名称": "医学影像设备",
+            "子-子环节": [
+              {
+                "子-子环节名称": "X射线成像设备（DR、CT、DSA）",
+                "代表公司": ["西门子医疗（Siemens Healthineers）", "飞利浦医疗（Philips Healthcare）", "GE医疗（GE Healthcare）", "佳能医疗（Canon Medical Systems）", "岛津（Shimadzu）"]
+              },
+              {
+                "子-子环节名称": "磁共振成像设备（MRI）",
+                "代表公司": ["西门子医疗（Siemens Healthineers）", "飞利浦医疗（Philips Healthcare）", "GE医疗（GE Healthcare）", "佳能医疗（Canon Medical Systems）", "联影医疗（United Imaging）"]
+              },
+              {
+                "子-子环节名称": "超声成像设备",
+                "代表公司": ["GE医疗（GE Healthcare）", "飞利浦医疗（Philips Healthcare）", "西门子医疗（Siemens Healthineers）", "佳能医疗（Canon Medical Systems）", "日立医疗（Hitachi Healthcare）"]
+              },
+              {
+                "子-子环节名称": "核医学成像设备（PET、SPECT）",
+                "代表公司": ["西门子医疗（Siemens Healthineers）", "飞利浦医疗（Philips Healthcare）", "GE医疗（GE Healthcare）", "岛津（Shimadzu）", "联影医疗（United Imaging）"]
+              },
+              {
+                "子-子环节名称": "内窥镜",
+                "代表公司": ["奥林巴斯（Olympus）", "卡尔史托斯（Karl Storz）", "史赛克（Stryker）", "富士胶片（Fujifilm）", "宾得医疗（Pentax Medical）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "体外诊断设备（IVD）",
+            "子-子环节": [
+              {
+                "子-子环节名称": "生化分析仪",
+                "代表公司": ["罗氏诊断（Roche Diagnostics）", "贝克曼库尔特（Beckman Coulter）", "西门子医疗（Siemens Healthineers）", "雅培诊断（Abbott Diagnostics）", "日立诊断（Hitachi High-Tech Diagnostics）"]
+              },
+              {
+                "子-子环节名称": "免疫分析仪",
+                "代表公司": ["罗氏诊断（Roche Diagnostics）", "雅培诊断（Abbott Diagnostics）", "西门子医疗（Siemens Healthineers）", "贝克曼库尔特（Beckman Coulter）", "生物梅里埃（bioMérieux）"]
+              },
+              {
+                "子-子环节名称": "血液分析仪",
+                "代表公司": ["Sysmex", "贝克曼库尔特（Beckman Coulter）", "雅培诊断（Abbott Diagnostics）", "西门子医疗（Siemens Healthineers）", "迈瑞医疗（Mindray）"]
+              },
+              {
+                "子-子环节名称": "分子诊断设备",
+                "代表公司": ["罗氏诊断（Roche Diagnostics）", "雅培诊断（Abbott Diagnostics）", "凯杰（Qiagen）", "赛默飞世尔科技（Thermo Fisher Scientific）", "达安基因（DaAn Gene）"]
+              },
+              {
+                "子-子环节名称": "微生物分析仪",
+                "代表公司": ["生物梅里埃（bioMérieux）", "贝克曼库尔特（Beckman Coulter）", "布鲁克（Bruker）", "赛默飞世尔科技（Thermo Fisher Scientific）", "梅里埃诊断（Merieux）"]
+              },
+              {
+                "子-子环节名称": "POCT（即时检测）设备",
+                "代表公司": ["罗氏诊断（Roche Diagnostics）", "雅培诊断（Abbott Diagnostics）", "西门子医疗（Siemens Healthineers）", "美艾利尔（Alere）", "万孚生物（Wondfo）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "治疗设备",
+            "子-子环节": [
+              {
+                "子-子环节名称": "放射治疗设备",
+                "代表公司": ["瓦里安（Varian）", "医科达（Elekta）", "Accuray", "新华医疗（Shinva Medical）", "东软医疗（Neusoft Medical Systems）"]
+              },
+              {
+                "子-子环节名称": "手术机器人",
+                "代表公司": ["直观外科（Intuitive Surgical）", "美敦力（Medtronic）", "史赛克（Stryker）", "Zimmer Biomet", "强生（Johnson & Johnson）"]
+              },
+              {
+                "子-子环节名称": "高强度聚焦超声（HIFU）",
+                "代表公司": ["海扶医疗（Haifu Medical）", "重庆超声医疗（Chongqing Haifu Technology）", "飞利浦医疗（Philips Healthcare）", "SonaCare Medical", "EDAP TMS"]
+              },
+              {
+                "子-子环节名称": "神经外科设备",
+                "代表公司": ["美敦力（Medtronic）", "史赛克（Stryker）", "Integra LifeSciences", "Brainlab", "Carl Zeiss Meditec"]
+              },
+              {
+                "子-子环节名称": "心血管介入设备",
+                "代表公司": ["美敦力（Medtronic）", "波士顿科学（Boston Scientific）", "雅培（Abbott）", "爱德华生命科学（Edwards Lifesciences）", "泰尔茂（Terumo）"]
+              },
+              {
+                "子-子环节名称": "骨科植入设备",
+                "代表公司": ["史赛克（Stryker）", "强生（Johnson & Johnson）- DePuy Synthes", "捷迈邦美（Zimmer Biomet）", "美敦力（Medtronic）", "施乐辉（Smith & Nephew）"]
+              },
+              {
+                "子-子环节名称": "眼科设备",
+                "代表公司": ["爱尔康（Alcon）", "蔡司（Zeiss）", "博士伦（Bausch + Lomb）", "强生（Johnson & Johnson）- Vision", "Nidek"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "生命支持设备",
+            "子-子环节": [
+              {
+                "子-子环节名称": "呼吸机",
+                "代表公司": ["德尔格（Dräger）", "飞利浦伟康（Philips Respironics）", "GE医疗（GE Healthcare）", "迈柯唯（Maquet）", "美敦力（Medtronic）"]
+              },
+              {
+                "子-子环节名称": "麻醉机",
+                "代表公司": ["德尔格（Dräger）", "GE医疗（GE Healthcare）", "迈柯唯（Maquet）", "飞利浦医疗（Philips Healthcare）", "迈瑞医疗（Mindray）"]
+              },
+              {
+                "子-子环节名称": "心肺复苏设备",
+                "代表公司": ["飞利浦医疗（Philips Healthcare）", "ZOLL Medical", "Physio-Control (Stryker)", "Cardiac Science", "Nihon Kohden"]
+              },
+              {
+                "子-子环节名称": "除颤器",
+                "代表公司": ["飞利浦医疗（Philips Healthcare）", "ZOLL Medical", "Physio-Control (Stryker)", "Cardiac Science", "Nihon Kohden"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "康复设备",
+            "子-子环节": [
+              {
+                "子-子环节名称": "物理治疗设备",
+                "代表公司": ["DJO Global", "BTL", "Enovis", "Chattanooga", "EMS Physio"]
+              },
+              {
+                "子-子环节名称": "康复机器人",
+                "代表公司": ["Hocoma", "Ekso Bionics", "ReWalk Robotics", "Tyromotion", "Fourier Intelligence"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "环节名称": "下游：应用场景",
+        "子环节": [
+          {
+            "子环节名称": "医院",
+            "子-子环节": [
+              {
+                "子-子环节名称": "影像科",
+                "代表公司": ["医院影像科"]
+              },
+              {
+                "子-子环节名称": "检验科",
+                "代表公司": ["医院检验科"]
+              },
+              {
+                "子-子环节名称": "外科",
+                "代表公司": ["医院外科"]
+              },
+              {
+                "子-子环节名称": "内科",
+                "代表公司": ["医院内科"]
+              },
+              {
+                "子-子环节名称": "ICU（重症监护室）",
+                "代表公司": ["医院ICU"]
+              },
+              {
+                "子-子环节名称": "康复科",
+                "代表公司": ["医院康复科"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "体检中心",
+            "子-子环节": [
+              {
+                "子-子环节名称": "专业体检机构",
+                "代表公司": ["美年大健康（Meinian Onehealth）", "爱康国宾（iKang Healthcare）", "慈铭体检（Ciming Checkup）", "瑞慈医疗（Rui Ci Healthcare）", "普惠体检（Puhui Health）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "第三方医学检验机构",
+            "子-子环节": [
+              {
+                "子-子环节名称": "独立医学实验室",
+                "代表公司": ["金域医学（KingMed Diagnostics）", "迪安诊断（Dian Diagnostics）", "艾迪康（Adicon）", "达安基因（DaAn Gene）", "华大基因（BGI）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "家庭医疗",
+            "子-子环节": [
+              {
+                "子-子环节名称": "家用医疗器械",
+                "代表公司": ["欧姆龙（Omron）", "鱼跃医疗（Yuwell）", "三诺生物（Sinocare）", "强生（Johnson & Johnson）", "飞利浦（Philips）"]
+              }
+            ]
+          },
+          {
+            "子环节名称": "科研机构",
+            "子-子环节": [
+              {
+                "子-子环节名称": "大学与研究所",
+                "代表公司": [
+                  "上海交通大学（生物医学工程）",
+                  "清华大学（生物医学工程）",
+                  "北京大学（生物医学工程）",
+                  "浙江大学（生物医学工程）",
+                  "华中科技大学（生物医学工程）",
+                  "东南大学（生物医学工程）",
+                  "复旦大学（生物医学工程）",
+                  "中国科学院（相关研究所，如苏州生物医学工程技术研究所）",
+                  "哈佛大学（Harvard University）（生物医学工程）",
+                  "麻省理工学院（MIT）（生物医学工程）",
+                  "斯坦福大学（Stanford University）（生物医学工程）",
+                  "约翰霍普金斯大学（Johns Hopkins University）（生物医学工程）",
+                  "加州大学伯克利分校（University of California, Berkeley）（生物医学工程）"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
