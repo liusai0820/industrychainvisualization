@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Dialog } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import ReactMarkdown from 'react-markdown';
@@ -10,6 +10,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { tomorrow } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import { toast } from 'react-hot-toast';
 import { generateDocx, downloadDocx } from '@/utils/docxGenerator';
+import { getFromCache, saveToCache } from '@/utils/cacheUtils';
 
 interface CompanyReportModalProps {
   isOpen: boolean;
@@ -27,15 +28,6 @@ interface AnalysisResult {
   rawMarkdown: string;
   sections: AnalysisSection[];
 }
-
-// 报告生成阶段
-type ReportGenerationStage = 
-  | 'collecting' 
-  | 'analyzing' 
-  | 'drafting' 
-  | 'reviewing' 
-  | 'finalizing' 
-  | 'complete';
 
 // 检测是否为SWOT分析章节
 const isSwotSection = (title: string): boolean => {
@@ -258,179 +250,508 @@ interface MarkdownComponentProps {
   [key: string]: unknown; // 使用unknown代替any
 }
 
-export default function CompanyReportModal({ 
-  isOpen, 
-  onClose, 
-  companyName,
-  industryName
-}: CompanyReportModalProps) {
+// 类型声明 (添加或移动到文件上部)
+type GenerationStage = 'collecting' | 'analyzing' | 'drafting' | 'reviewing' | 'finalizing' | 'complete';
+
+interface Stage {
+  title: string;
+  messages: string[];
+  duration: number;
+  progressStart: number;
+  progressEnd: number;
+}
+
+// 拆分出加载状态显示组件
+const LoadingState = ({ 
+  progress, 
+  stageMessage, 
+  stages, 
+  generationStage 
+}: { 
+  progress: number; 
+  stageMessage: string; 
+  stages: Record<string, Stage>; 
+  generationStage: GenerationStage; 
+}) => {
+  return (
+    <div className="flex flex-col items-center justify-center py-16">
+      {/* 精美的进度指示器 */}
+      <div className="w-full max-w-md mb-8">
+        <div className="relative pt-1">
+          <div className="flex items-center justify-between mb-2">
+            <div className="text-lg font-bold text-indigo-700">
+              {stages[generationStage].title}
+            </div>
+            <div className="text-right">
+              <span className="text-sm font-semibold inline-block text-indigo-700">
+                {progress}%
+              </span>
+            </div>
+          </div>
+          <div className="overflow-hidden h-2 mb-4 text-xs flex rounded-full bg-gray-200">
+            <div 
+              style={{ width: `${progress}%` }} 
+              className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-indigo-500 to-purple-600 transition-all duration-500"
+            ></div>
+          </div>
+        </div>
+        <div className="text-center text-indigo-600 font-medium">
+          {stageMessage}
+        </div>
+      </div>
+      <div className="animate-pulse flex space-x-4 items-center">
+        <div className="rounded-full bg-indigo-100 h-12 w-12 flex items-center justify-center">
+          <svg className="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        <div>
+          <div className="h-4 bg-indigo-100 rounded w-48"></div>
+          <div className="h-3 bg-indigo-50 rounded w-32 mt-2"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// 拆分出错误状态显示组件
+const ErrorState = ({ 
+  error, 
+  fetchCompanyAnalysis 
+}: { 
+  error: string | null; 
+  fetchCompanyAnalysis: () => void; 
+}) => {
+  return (
+    <div className="flex flex-col items-center justify-center py-16">
+      <div className="text-red-500 mb-4">
+        <svg className="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <h3 className="text-xl font-bold text-gray-800 mb-2">生成报告时出错</h3>
+      <p className="text-gray-600 mb-6 text-center max-w-md">{error}</p>
+      <button
+        onClick={() => {
+          fetchCompanyAnalysis();
+        }}
+        className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+      >
+        重试
+      </button>
+    </div>
+  );
+};
+
+// 拆分出报告目录组件
+const TableOfContents = ({ sections }: { sections: AnalysisSection[] }) => {
+  if (!sections || sections.length === 0) return null;
+  
+  return (
+    <div className="report-toc mb-12 bg-gray-50 p-6 rounded-lg max-w-3xl mx-auto">
+      <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">目录</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <ul className="space-y-2">
+          {sections.slice(0, Math.ceil(sections.length / 2)).map((section, index) => (
+            <li key={index} className="flex items-center">
+              <span className="w-8 h-8 flex items-center justify-center bg-indigo-600 text-white rounded-full mr-2 text-sm font-bold">
+                {index + 1}
+              </span>
+              <a 
+                href={`#section-${index}`} 
+                className="text-indigo-600 hover:text-indigo-800 hover:underline"
+              >
+                {section.title.replace(/^\d+\.\s*/, '')}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <ul className="space-y-2">
+          {sections.slice(Math.ceil(sections.length / 2)).map((section, index) => (
+            <li key={index + Math.ceil(sections.length / 2)} className="flex items-center">
+              <span className="w-8 h-8 flex items-center justify-center bg-indigo-600 text-white rounded-full mr-2 text-sm font-bold">
+                {index + 1 + Math.ceil(sections.length / 2)}
+              </span>
+              <a 
+                href={`#section-${index + Math.ceil(sections.length / 2)}`} 
+                className="text-indigo-600 hover:text-indigo-800 hover:underline"
+              >
+                {section.title.replace(/^\d+\.\s*/, '')}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+// 拆分出报告内容组件
+const ReportContent = ({ sections }: { sections: AnalysisSection[] }) => {
+  return (
+    <div className="report-content mx-8 mb-12 font-kai">
+      {sections?.map((section, index) => (
+        <ReportSection key={index} section={section} index={index} />
+      ))}
+    </div>
+  );
+};
+
+// 拆分出报告章节组件
+const ReportSection = ({ section, index }: { section: AnalysisSection; index: number }) => {
+  return (
+    <div id={`section-${index}`} className="mb-12">
+      <div className="flex items-center mb-4">
+        <div className="w-10 h-10 flex items-center justify-center bg-indigo-600 text-white rounded-full mr-3 text-lg font-bold shadow-md">
+          {index + 1}
+        </div>
+        <h2 className="text-2xl font-bold text-gray-800">
+          {section.title.replace(/^#+\s*/, '').replace(/^\d+\.\s*/, '')}
+        </h2>
+      </div>
+      <div className="pl-14">
+        <div className="prose prose-lg prose-indigo max-w-none font-kai">
+          {/* 检测并显示竞争分析 */}
+          {isCompetitionAnalysisSection(section.title) && (
+            <CompetitionAnalysis content={section.content} />
+          )}
+          
+          {/* 检测并显示SWOT分析 */}
+          {isSwotSection(section.title) && (
+            <>
+              <h3 className="text-xl font-bold text-center mb-4">SWOT分析</h3>
+              <SwotAnalysis content={section.content} />
+            </>
+          )}
+          
+          {/* 显示原始内容 */}
+          <MarkdownRenderer content={section.content} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// 拆分出Markdown渲染组件
+const MarkdownRenderer = ({ content }: { content: string }) => {
+  return (
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      rehypePlugins={[rehypeRaw]}
+      components={{
+        // @ts-expect-error - ReactMarkdown类型定义问题
+        table: ({...props}: MarkdownComponentProps) => (
+          <div className="overflow-x-auto my-6 rounded-lg shadow-md border border-gray-200">
+            <table className="min-w-full divide-y divide-gray-300" {...props} />
+          </div>
+        ),
+        // @ts-expect-error - ReactMarkdown类型定义问题
+        thead: ({...props}: MarkdownComponentProps) => (
+          <thead className="bg-indigo-50" {...props} />
+        ),
+        // @ts-expect-error - ReactMarkdown类型定义问题
+        th: ({...props}: MarkdownComponentProps) => (
+          <th className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 border-r last:border-r-0" {...props} />
+        ),
+        // @ts-expect-error - ReactMarkdown类型定义问题
+        tr: ({...props}: MarkdownComponentProps) => (
+          <tr className="border-b last:border-b-0 hover:bg-gray-50" {...props} />
+        ),
+        // @ts-expect-error - ReactMarkdown类型定义问题
+        td: ({...props}: MarkdownComponentProps) => (
+          <td className="px-4 py-3 text-sm text-gray-500 border-r last:border-r-0" {...props} />
+        ),
+        // @ts-expect-error - ReactMarkdown类型定义问题
+        code: ({inline, className, children, ...props}: MarkdownComponentProps) => {
+          const match = /language-(\w+)/.exec(className || '');
+          return !inline && match ? (
+            <SyntaxHighlighter
+              style={tomorrow}
+              language={match[1]}
+              PreTag="div"
+              className="rounded-lg shadow-sm my-4"
+              {...props}
+            >
+              {String(children).replace(/\n$/, '')}
+            </SyntaxHighlighter>
+          ) : (
+            <code className={`${className} px-1.5 py-0.5 bg-gray-100 text-indigo-700 rounded text-sm`} {...props}>
+              {children}
+            </code>
+          );
+        },
+        // @ts-expect-error - ReactMarkdown类型定义问题
+        p: ({...props}: MarkdownComponentProps) => (
+          <p className="my-4 leading-relaxed text-gray-700 font-kai" {...props} />
+        ),
+        // @ts-expect-error - ReactMarkdown类型定义问题
+        h3: ({...props}: MarkdownComponentProps) => (
+          <h3 className="text-xl font-bold text-gray-800 mt-6 mb-3" {...props} />
+        ),
+        // @ts-expect-error - ReactMarkdown类型定义问题
+        h4: ({...props}: MarkdownComponentProps) => (
+          <h4 className="text-lg font-semibold text-gray-800 mt-5 mb-2" {...props} />
+        ),
+        // @ts-expect-error - ReactMarkdown类型定义问题
+        ul: ({...props}: MarkdownComponentProps) => (
+          <ul className="list-disc pl-6 my-4 space-y-2 text-gray-700" {...props} />
+        ),
+        // @ts-expect-error - ReactMarkdown类型定义问题
+        ol: ({...props}: MarkdownComponentProps) => (
+          <ol className="list-decimal pl-6 my-4 space-y-2 text-gray-700" {...props} />
+        ),
+        // @ts-expect-error - ReactMarkdown类型定义问题
+        li: ({...props}: MarkdownComponentProps) => (
+          <li className="pl-1 py-0.5 font-kai" {...props} />
+        ),
+        // @ts-expect-error - ReactMarkdown类型定义问题
+        blockquote: ({...props}: MarkdownComponentProps) => (
+          <blockquote className="border-l-4 border-indigo-300 pl-4 py-1 my-4 text-gray-600 italic font-kai" {...props} />
+        ),
+        // @ts-expect-error - ReactMarkdown类型定义问题
+        a: ({...props}: MarkdownComponentProps) => (
+          <a className="text-indigo-600 hover:text-indigo-800 hover:underline" {...props} />
+        ),
+        // @ts-expect-error - ReactMarkdown类型定义问题
+        strong: ({...props}: MarkdownComponentProps) => (
+          <strong className="font-bold text-indigo-700" {...props} />
+        )
+      }}
+    >
+      {content.replace(/^\d+\.\s*/, '')}
+    </ReactMarkdown>
+  );
+};
+
+// 修改 ReportHeader 组件接受非空字符串
+const ReportHeader = ({ companyName }: { companyName: string }) => {
+  return (
+    <div className="report-header mb-12 text-center">
+      <h1 className="text-3xl font-bold text-gray-900 mb-4">
+        {companyName} 公司研究报告
+      </h1>
+      <p className="text-gray-500">
+        报告生成日期: {new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+      </p>
+    </div>
+  );
+};
+
+// 创建全局请求记录，确保同一个公司不会重复请求
+// 但不要拦截有效的首次请求
+const requestedCompanies = new Map<string, {
+  timestamp: number,
+  result: any
+}>();
+
+// 添加锁定和清理机制，防止数据持续累积
+setInterval(() => {
+  const now = Date.now();
+  for (const [key, value] of requestedCompanies.entries()) {
+    // 清理超过1小时的请求记录
+    if (now - value.timestamp > 60 * 60 * 1000) {
+      requestedCompanies.delete(key);
+    }
+  }
+}, 5 * 60 * 1000); // 每5分钟清理一次
+
+// 抽离为自定义hook，管理报告生成状态和进度模拟
+const useReportGeneration = (companyName: string, industryName: string, toastApi: typeof toast) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
-  const [generationStage, setGenerationStage] = useState<ReportGenerationStage>('collecting');
   const [stageMessage, setStageMessage] = useState('');
+  const [generationStage, setGenerationStage] = useState<GenerationStage>('collecting');
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
-  const [downloadingDocx, setDownloadingDocx] = useState(false);
-  const [generatingHTML, setGeneratingHTML] = useState(false);
-  const reportRef = useRef<HTMLDivElement>(null);
-  const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   
-  // 添加进度模拟功能
-  const startProgressSimulation = useCallback(() => {
-    // 停止任何现有的模拟
-    if (progressIntervalRef.current) {
-      clearInterval(progressIntervalRef.current);
-      progressIntervalRef.current = null;
-    }
-    
-    // 设置初始阶段和进度
-    setProgress(0);
-    setGenerationStage('collecting');
-    let currentProgress = 0;
-    
-    // 创建进度模拟定时器
-    progressIntervalRef.current = setInterval(() => {
-      // 根据不同阶段设置不同的进度增加速度
-      let increment = 0;
-      
-      if (currentProgress < 25) {
-        // 收集阶段 (0-25%)
-        increment = 0.5;
-        setGenerationStage('collecting');
-      } else if (currentProgress < 50) {
-        // 分析阶段 (25-50%)
-        increment = 0.3;
-        setGenerationStage('analyzing');
-      } else if (currentProgress < 75) {
-        // 草拟阶段 (50-75%)
-        increment = 0.2;
-        setGenerationStage('drafting');
-      } else if (currentProgress < 90) {
-        // 审查阶段 (75-90%)
-        increment = 0.1;
-        setGenerationStage('reviewing');
-      } else if (currentProgress < 99) {
-        // 完成阶段 (90-99%)
-        increment = 0.05;
-        setGenerationStage('finalizing');
-      } else {
-        // 保持在99%，等待实际完成
-        if (progressIntervalRef.current) {
-          clearInterval(progressIntervalRef.current);
-          progressIntervalRef.current = null;
-        }
-      }
-      
-      currentProgress = Math.min(currentProgress + increment, 99);
-      setProgress(Math.round(currentProgress));
-    }, 200);
-  }, []);
+  const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const apiResponseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
-  const stopProgressSimulation = useCallback(() => {
-    if (progressIntervalRef.current) {
-      clearInterval(progressIntervalRef.current);
-      progressIntervalRef.current = null;
-    }
-  }, []);
-  
-  // 报告生成阶段状态
-  const stages = useMemo(() => ({
+  // 定义报告生成阶段
+  const stages = useMemo<Record<string, Stage>>(() => ({
     collecting: {
       title: '收集数据',
-      messages: [
-        '正在收集公司基础信息...',
-        '搜索相关新闻和公告...',
-        '获取行业数据...',
-        '分析市场趋势...',
-        '整合竞争对手信息...'
-      ],
-      duration: 8000, // 8秒
+      messages: ['正在收集公司基本信息...', '检索行业数据...', '获取市场动态...', '分析企业财务状况...'],
+      duration: 10000, // 增加持续时间
       progressStart: 0,
-      progressEnd: 20
+      progressEnd: 15
     },
     analyzing: {
       title: '分析数据',
-      messages: [
-        '正在分析公司业务模式...',
-        '正在评估竞争优势...',
-        '正在分析市场地位...',
-        '正在评估技术实力...',
-        '正在分析财务状况...'
-      ],
-      duration: 10000,  // 10秒
-      progressStart: 20,
-      progressEnd: 40
+      messages: ['进行SWOT分析...', '分析企业竞争态势...', '评估公司商业模式...', '审视企业发展战略...'],
+      duration: 15000, // 增加持续时间
+      progressStart: 15,
+      progressEnd: 30
     },
     drafting: {
-      title: '撰写报告',
-      messages: [
-        '正在撰写公司概览...',
-        '正在撰写业务分析...',
-        '正在撰写产品评估...',
-        '正在撰写财务分析...',
-        '正在撰写风险评估...'
-      ],
-      duration: 15000,  // 15秒
-      progressStart: 40,
-      progressEnd: 70
+      title: '起草报告',
+      messages: ['撰写公司概况...', '整理运营分析...', '汇总财务数据...', '编写发展战略报告...'],
+      duration: 20000, // 增加持续时间
+      progressStart: 30,
+      progressEnd: 50
     },
     reviewing: {
       title: '审核内容',
-      messages: [
-        '正在校对数据准确性...',
-        '正在优化报告结构...',
-        '正在完善分析逻辑...',
-        '正在补充关键信息...',
-        '正在检查专业术语...'
-      ],
-      duration: 10000,  // 10秒
-      progressStart: 70,
-      progressEnd: 85
+      messages: ['检查信息准确性...', '校对分析结论...', '优化报告结构...', '完善数据呈现...'],
+      duration: 30000, // 增加持续时间
+      progressStart: 50,
+      progressEnd: 70
     },
     finalizing: {
-      title: '完善报告',
+      title: '等待AI响应',
       messages: [
-        '正在格式化报告...',
-        '正在生成图表...',
-        '正在添加参考资料...',
-        '正在优化排版...',
-        '正在最终检查...'
+        '等待AI生成报告内容...',
+        '报告生成中，请耐心等待...',
+        '大型模型正在处理您的请求...',
+        '生成详细分析可能需要一些时间...',
+        '正在等待AI响应，这可能需要几分钟...'
       ],
-      duration: 8000,  // 8秒
-      progressStart: 85,
-      progressEnd: 100
+      duration: 60000, // 延长最后阶段的持续时间
+      progressStart: 70,
+      progressEnd: 95 // 最大只到95%，留出一点空间
     },
     complete: {
       title: '报告完成',
       messages: ['报告已生成完毕'],
       duration: 0,
-      progressStart: 100,
+      progressStart: 95,
       progressEnd: 100
     }
   }), []);
-
-  // 添加全局CSS样式
-  useEffect(() => {
-    // 添加楷体字体样式
-    const style = document.createElement('style');
-    style.textContent = `
-      @font-face {
-        font-family: 'Kai';
-        src: local('KaiTi'), local('楷体'), local('STKaiti');
-      }
-      .font-kai {
-        font-family: 'Kai', KaiTi, 楷体, STKaiti, serif;
-      }
-    `;
-    document.head.appendChild(style);
+  
+  // 开始进度模拟
+  const startProgressSimulation = useCallback(() => {
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+    }
     
-    return () => {
-      document.head.removeChild(style);
-    };
+    let currentStage: GenerationStage = 'collecting';
+    let startTime = Date.now();
+    let stageIndex = 0;
+    const stageOrder: GenerationStage[] = ['collecting', 'analyzing', 'drafting', 'reviewing', 'finalizing'];
+    
+    progressIntervalRef.current = setInterval(() => {
+      const currentTime = Date.now();
+      const stageDuration = stages[currentStage].duration;
+      const elapsedTime = currentTime - startTime;
+      
+      // 如果当前阶段已完成，进入下一阶段
+      if (elapsedTime >= stageDuration && currentStage !== 'finalizing') {
+        stageIndex++;
+        if (stageIndex < stageOrder.length) {
+          currentStage = stageOrder[stageIndex];
+          setGenerationStage(currentStage);
+          startTime = currentTime;
+        }
+      }
+      
+      // 计算当前阶段的进度百分比，但对于finalizing阶段，限制最大进度
+      const stageProgress = Math.min(elapsedTime / stageDuration, currentStage === 'finalizing' ? 0.9 : 1);
+      const startProgress = stages[currentStage].progressStart;
+      const endProgress = stages[currentStage].progressEnd;
+      const currentProgress = startProgress + (endProgress - startProgress) * stageProgress;
+      
+      setProgress(Math.floor(currentProgress));
+    }, 200);
+    
+    // 设置安全超时，如果4分钟后仍无响应，显示提示消息
+    apiResponseTimeoutRef.current = setTimeout(() => {
+      if (progressIntervalRef.current) {
+        // 更新消息，告知用户API响应延迟
+        setStageMessage('AI响应较慢，请继续等待...');
+        toastApi('生成报告需要较长时间，请耐心等待', {
+          duration: 5000,
+          icon: '⏳'
+        });
+      }
+    }, 240000); // 4分钟
+  }, [stages, toastApi]);
+  
+  // 停止进度模拟
+  const stopProgressSimulation = useCallback(() => {
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+      progressIntervalRef.current = null;
+    }
+    
+    if (apiResponseTimeoutRef.current) {
+      clearTimeout(apiResponseTimeoutRef.current);
+      apiResponseTimeoutRef.current = null;
+    }
+    
+    // 设置为"complete"阶段
+    setGenerationStage('complete');
+    // 确保进度达到100%
+    setProgress(100);
   }, []);
-
+  
   // 定义获取公司分析的函数
   const fetchCompanyAnalysis = useCallback(async () => {
+    // 创建请求标识符
+    const requestKey = `${companyName}:${industryName || ''}`;
+    
+    // 先检查本地存储缓存
+    const cachedData = getFromCache<AnalysisResult>(requestKey);
+    if (cachedData) {
+      console.log('从本地存储使用缓存的企业分析结果:', requestKey);
+      
+      // 设置结果但仍显示简短的加载状态，以提供更好的用户体验
+      setLoading(true);
+      setError('');
+      setGenerationStage('collecting');
+      setProgress(0);
+      
+      // 模拟简短的加载过程
+      startProgressSimulation();
+      
+      // 短暂延迟后显示结果
+      setTimeout(() => {
+        stopProgressSimulation();
+        setAnalysisResult(cachedData);
+        setProgress(100);
+        setGenerationStage('complete');
+        setLoading(false);
+        
+        toastApi.success('快速加载企业分析完成！', {
+          duration: 3000,
+          icon: '⚡'
+        });
+      }, 500);
+      
+      return;
+    }
+    
+    // 检查是否有内存缓存结果
+    const cachedRequest = requestedCompanies.get(requestKey);
+    if (cachedRequest?.result) {
+      console.log('使用内存缓存的企业分析结果:', requestKey);
+      
+      // 设置结果但仍显示简短的加载状态
+      setLoading(true);
+      setError('');
+      setGenerationStage('collecting');
+      setProgress(0);
+      
+      // 模拟简短的加载过程
+      startProgressSimulation();
+      
+      // 短暂延迟后显示结果
+      setTimeout(() => {
+        stopProgressSimulation();
+        setAnalysisResult(cachedRequest.result);
+        setProgress(100);
+        setGenerationStage('complete');
+        setLoading(false);
+        
+        toastApi.success('快速加载企业分析完成！', {
+          duration: 3000,
+          icon: '⚡'
+        });
+      }, 500);
+      
+      return;
+    }
+    
     const fetchAnalysis = async () => {
       if (!companyName) return;
       
@@ -438,6 +759,13 @@ export default function CompanyReportModal({
       setError('');
       setGenerationStage('collecting');
       setProgress(0);
+
+      // 前端请求级别的超时保护
+      const timeoutPromise = new Promise<void>((_, reject) => {
+        setTimeout(() => {
+          reject(new Error('请求超时，服务器响应时间过长'));
+        }, 60 * 1000); // 60秒超时
+      });
       
       try {
         // 设置模拟的进度更新
@@ -445,49 +773,149 @@ export default function CompanyReportModal({
         
         // 直接使用company-analysis API，不再使用旧的submit/status流程
         console.log('开始请求企业分析API，公司名称:', companyName);
-        
-        const analysisResponse = await fetch('/api/company-analysis', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            companyName,
-            industryName
-          }),
-        });
-        
-        if (!analysisResponse.ok) {
-          const errorData = await analysisResponse.json();
-          throw new Error(errorData.error || `请求失败, 状态码: ${analysisResponse.status}`);
-        }
-        
-        const responseData = await analysisResponse.json();
-        
-        if (!responseData.success) {
-          throw new Error(responseData.error || '分析请求失败');
-        }
 
-        // 停止进度模拟
-        stopProgressSimulation();
+        // 添加随机查询参数防止浏览器缓存
+        const cacheBuster = Date.now();
         
-        // 设置结果
-        setAnalysisResult(responseData.data);
+        // 创建fetch请求，可以被超时中断
+        const fetchPromise = (async () => {
+          const analysisResponse = await fetch(`/api/company-analysis?_=${cacheBuster}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Cache-Control': 'no-cache, no-store',
+              'X-Request-ID': `${Date.now()}-${Math.random().toString(36).substring(2, 10)}`
+            },
+            body: JSON.stringify({
+              companyName: companyName || '',
+              industryName: industryName || ''
+            }),
+          });
+          
+          const responseData = await analysisResponse.json();
+          
+          // 处理429状态码 (请求过多)
+          if (analysisResponse.status === 429) {
+            console.warn('⚠️ 请求频率过高:', responseData);
+            
+            // 如果返回了锁定时间，显示具体的等待时间
+            const lockTimeLeft = responseData.lockTimeLeft || 5;
+            const errorMessage = responseData.error || `请求频率过高，请等待${lockTimeLeft}秒后再试`;
+            
+            // 停止进度模拟
+            stopProgressSimulation();
+            setProgress(0);
+            setError(errorMessage);
+            
+            // 显示友好的提示
+            toastApi.error(errorMessage, {
+              duration: 5000,
+              icon: '⏱️'
+            });
+            
+            // 如果锁定时间较长，显示一个倒计时
+            if (lockTimeLeft > 5) {
+              toastApi(`将在${lockTimeLeft}秒后自动重试`, {
+                duration: lockTimeLeft * 1000,
+                icon: '⌛'
+              });
+              
+              // 设置自动重试定时器
+              setTimeout(() => {
+                toastApi.success('正在重新尝试获取分析结果', {
+                  duration: 3000,
+                  icon: '🔄'
+                });
+                fetchCompanyAnalysis();
+              }, lockTimeLeft * 1000);
+            }
+            
+            setLoading(false);
+            return;
+          }
+          
+          // 检查是否是备用结果
+          const isFallback = analysisResponse.headers.get('X-Fallback') === 'true' || responseData.fallbackReason;
+          
+          if (!analysisResponse.ok) {
+            const errorMessage = responseData.error || `请求失败, 状态码: ${analysisResponse.status}`;
+            throw new Error(errorMessage);
+          }
+          
+          if (!responseData.success) {
+            throw new Error(responseData.error || '分析请求失败');
+          }
+
+          // 停止进度模拟
+          stopProgressSimulation();
+          
+          // 同时更新内存缓存和本地存储缓存
+          requestedCompanies.set(requestKey, {
+            timestamp: Date.now(),
+            result: responseData.data
+          });
+          
+          // 保存到本地存储以便持久化
+          saveToCache(requestKey, responseData.data);
+          
+          // 设置结果
+          setAnalysisResult(responseData.data);
+          
+          // 更新UI状态
+          setProgress(100);
+          setGenerationStage('complete');
+          
+          console.log('✅ 企业分析完成！');
+          
+          // 显示不同的成功消息
+          if (isFallback) {
+            // 对于备用结果显示特殊提示
+            toastApi.success('已生成简要分析，点击刷新可重试完整分析', {
+              duration: 5000,
+              icon: '📝'
+            });
+          } else if (responseData.reused) {
+            toastApi.success('快速加载企业分析完成！', {
+              duration: 3000,
+              icon: '⚡'
+            });
+          } else {
+            toastApi.success('企业分析完成！', {
+              duration: 3000,
+              icon: '✨'
+            });
+          }
+        })();
         
-        // 更新UI状态
-        setProgress(100);
-        setGenerationStage('complete');
-        
-        console.log('✅ 企业分析完成！');
-        toast.success('企业分析完成！', {
-          duration: 3000,
-          icon: '✨'
-        });
+        // 竞争fetch和超时
+        await Promise.race([fetchPromise, timeoutPromise]);
         
       } catch (err) {
         console.error('获取分析失败:', err);
-        setError(err instanceof Error ? err.message : '获取分析失败，请稍后重试');
-        toast.error(`获取企业分析失败: ${err instanceof Error ? err.message : '未知错误'}`);
+        
+        // 尝试创建一个本地备用结果，以确保UI可用
+        const localFallbackResult: AnalysisResult = {
+          rawMarkdown: `# ${companyName}临时分析报告\n\n无法连接服务器，这是本地生成的临时报告。\n\n## 基本信息\n${companyName}是${industryName || '行业'}中的企业。\n\n## 请重试\n请点击刷新按钮重新获取完整分析。`,
+          sections: [
+            { title: '基本信息', content: `${companyName}是${industryName || '行业'}中的企业。无法从服务器获取完整信息，这是本地生成的临时数据。` },
+            { title: '请重试', content: '请点击刷新按钮重新获取完整分析。' }
+          ]
+        };
+        
+        // 如果是超时错误，提供临时分析结果而不是显示错误
+        if (err.message.includes('超时')) {
+          setAnalysisResult(localFallbackResult);
+          setGenerationStage('complete');
+          setProgress(100);
+          
+          toastApi.warning('服务器响应超时，已生成简要信息，请点击刷新重试', {
+            duration: 5000,
+            icon: '⏱️'
+          });
+        } else {
+          setError(err instanceof Error ? err.message : '获取分析失败，请稍后重试');
+          toastApi.error(`获取企业分析失败: ${err instanceof Error ? err.message : '未知错误'}`);
+        }
         
         // 停止进度模拟
         stopProgressSimulation();
@@ -496,6 +924,10 @@ export default function CompanyReportModal({
         if (progressIntervalRef.current) {
           clearInterval(progressIntervalRef.current);
           progressIntervalRef.current = null;
+        }
+        if (apiResponseTimeoutRef.current) {
+          clearTimeout(apiResponseTimeoutRef.current);
+          apiResponseTimeoutRef.current = null;
         }
         setLoading(false);
       }
@@ -508,9 +940,13 @@ export default function CompanyReportModal({
         clearInterval(progressIntervalRef.current);
         progressIntervalRef.current = null;
       }
+      if (apiResponseTimeoutRef.current) {
+        clearTimeout(apiResponseTimeoutRef.current);
+        apiResponseTimeoutRef.current = null;
+      }
     };
-  }, [companyName, industryName, toast, startProgressSimulation, stopProgressSimulation]);
-
+  }, [companyName, industryName, toastApi, startProgressSimulation, stopProgressSimulation]);
+  
   // 模拟消息更新，为用户提供更好的反馈
   useEffect(() => {
     if (!loading) return;
@@ -522,13 +958,32 @@ export default function CompanyReportModal({
     const messageInterval = setInterval(() => {
       setStageMessage(messages[messageIndex]);
       messageIndex = (messageIndex + 1) % messages.length;
-    }, Math.floor(currentStage.duration / messages.length));
+    }, Math.floor(currentStage.duration / (messages.length * 2))); // 更频繁地更新消息
     
     return () => {
       clearInterval(messageInterval);
     };
   }, [loading, generationStage, stages]);
+  
+  return {
+    loading,
+    error,
+    setError,
+    progress,
+    stageMessage,
+    generationStage,
+    analysisResult,
+    setAnalysisResult,
+    stages,
+    fetchCompanyAnalysis
+  };
+};
 
+// 抽离为自定义hook，管理下载和HTML生成功能
+const useReportExport = (companyName: string, industryName: string, analysisResult: AnalysisResult | null, toastApi: typeof toast) => {
+  const [downloadingDocx, setDownloadingDocx] = useState(false);
+  const [generatingHTML, setGeneratingHTML] = useState(false);
+  
   const downloadAsDocx = async () => {
     if (!analysisResult) return;
     
@@ -545,14 +1000,14 @@ export default function CompanyReportModal({
       // 下载生成的文档
       downloadDocx(companyName, docBlob);
       
-      toast.success('Word文档生成成功！', {
+      toastApi.success('Word文档生成成功！', {
         duration: 3000,
         icon: '📄'
       });
       
     } catch (error) {
       console.error('Word文档生成失败:', error);
-      toast.error('Word文档生成失败，请稍后重试');
+      toastApi.error('Word文档生成失败，请稍后重试');
     } finally {
       setDownloadingDocx(false);
     }
@@ -564,7 +1019,7 @@ export default function CompanyReportModal({
       
       // 检查是否有分析结果
       if (!analysisResult || analysisResult.sections.length === 0) {
-        toast.error('无法生成报告：分析结果为空');
+        toastApi.error('无法生成报告：分析结果为空');
         setGeneratingHTML(false);
         return;
       }
@@ -576,8 +1031,8 @@ export default function CompanyReportModal({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          companyName,
-          industryName,
+          companyName: companyName || '',
+          industryName: industryName || '',
           analysisResult
         }),
       });
@@ -597,19 +1052,19 @@ export default function CompanyReportModal({
         const cacheType = result.cacheSource === 'memory' ? '本地内存' : '云端';
         const cacheDate = new Date(result.cachedAt).toLocaleString();
         
-        toast.success(`已从${cacheType}缓存加载报告`, { 
+        toastApi.success(`已从${cacheType}缓存加载报告`, { 
           duration: 3000,
           icon: '📦'
         });
         console.log(`报告来自${cacheType}缓存，生成于: ${cacheDate}`);
       } else if (result.fallback) {
         // 如果使用了备选方案，通知用户
-        toast.error('使用了模板生成报告（API生成失败）', {
+        toastApi.error('使用了模板生成报告（API生成失败）', {
           duration: 5000,
           icon: '⚠️'
         });
       } else {
-        toast.success('报告生成成功！', {
+        toastApi.success('报告生成成功！', {
           duration: 3000
         });
       }
@@ -624,11 +1079,11 @@ export default function CompanyReportModal({
           newWindow.document.write(htmlContent);
           newWindow.document.close();
         } else {
-          toast.error('无法打开新窗口，请检查您的浏览器是否阻止了弹出窗口');
+          toastApi.error('无法打开新窗口，请检查您的浏览器是否阻止了弹出窗口');
         }
       } catch (error) {
         console.error('打开新窗口显示HTML失败:', error);
-        toast.error('无法显示HTML报告，请检查浏览器设置');
+        toastApi.error('无法显示HTML报告，请检查浏览器设置');
       }
       
       // 自动下载HTML文件
@@ -654,13 +1109,13 @@ export default function CompanyReportModal({
         document.body.removeChild(downloadLink);
         URL.revokeObjectURL(downloadLink.href);
         
-        toast.success(`HTML报告已下载为: ${fileName}`, {
+        toastApi.success(`HTML报告已下载为: ${fileName}`, {
           duration: 4000,
           icon: '💾'
         });
       } catch (downloadError) {
         console.error('下载HTML文件失败:', downloadError);
-        toast.error('无法下载HTML文件');
+        toastApi.error('无法下载HTML文件');
       }
       
     } catch (error) {
@@ -670,30 +1125,155 @@ export default function CompanyReportModal({
                           error.message.includes('Premature close') ? 
                           '网络连接中断，请检查您的网络并重试' : 
                           `生成HTML报告失败: ${error instanceof Error ? error.message : '未知错误'}`;
-      toast.error(errorMessage);
+      toastApi.error(errorMessage);
     } finally {
       setGeneratingHTML(false);
     }
   };
+  
+  return {
+    downloadingDocx,
+    generatingHTML,
+    downloadAsDocx,
+    generateHTMLReport
+  };
+};
 
-  // 添加回初始化和重置的useEffect
+// 拆分出操作按钮组件
+const ActionButtons = ({ 
+  generateHTMLReport, 
+  downloadAsDocx, 
+  generatingHTML, 
+  downloadingDocx 
+}: { 
+  generateHTMLReport: () => void;
+  downloadAsDocx: () => void;
+  generatingHTML: boolean;
+  downloadingDocx: boolean;
+}) => {
+  // 渲染报告操作按钮
+  return (
+    <div className="flex space-x-2">
+      <button
+        onClick={generateHTMLReport}
+        disabled={generatingHTML}
+        className="flex items-center px-3 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-md hover:from-green-700 hover:to-green-800 transition-all shadow-sm hover:shadow disabled:opacity-50 disabled:shadow-none"
+        title="生成可视化报告"
+      >
+        {generatingHTML ? (
+          <>
+            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            生成中...
+          </>
+        ) : (
+          <>
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+            </svg>
+            可视化报告
+          </>
+        )}
+      </button>
+      
+      <button
+        onClick={downloadAsDocx}
+        disabled={downloadingDocx}
+        className="flex items-center px-3 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-md hover:from-green-700 hover:to-green-800 transition-all shadow-sm hover:shadow disabled:opacity-50 disabled:shadow-none"
+        title="下载Word文档"
+      >
+        {downloadingDocx ? (
+          <>
+            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            处理中...
+          </>
+        ) : (
+          <>
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+            </svg>
+            下载Word文档
+          </>
+        )}
+      </button>
+    </div>
+  );
+};
+
+// 主组件，现在更精简
+const CompanyReportModal: React.FC<CompanyReportModalProps> = ({
+  isOpen,
+  onClose,
+  companyName,
+  industryName,
+}) => {
+  // 确保companyName和industryName不为undefined
+  const safeCompanyName = companyName || '';
+  const safeIndustryName = industryName || '';
+  const reportRef = useRef<HTMLDivElement>(null);
+  
+  // 使用自定义hooks
+  const {
+    loading,
+    error,
+    setError,
+    progress,
+    stageMessage,
+    generationStage,
+    analysisResult,
+    setAnalysisResult,
+    stages,
+    fetchCompanyAnalysis
+  } = useReportGeneration(safeCompanyName, safeIndustryName, toast);
+  
+  const {
+    downloadingDocx,
+    generatingHTML,
+    downloadAsDocx,
+    generateHTMLReport
+  } = useReportExport(safeCompanyName, safeIndustryName, analysisResult, toast);
+
+  // 添加全局CSS样式
+  useEffect(() => {
+    // 添加楷体字体样式
+    const style = document.createElement('style');
+    style.textContent = `
+      @font-face {
+        font-family: 'Kai';
+        src: local('KaiTi'), local('楷体'), local('STKaiti');
+      }
+      .font-kai {
+        font-family: 'Kai', KaiTi, 楷体, STKaiti, serif;
+      }
+    `;
+    document.head.appendChild(style);
+    
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+  
   // 初始化时获取公司分析
   useEffect(() => {
+    // 仅在模态框打开且没有结果和不在加载中时请求
     if (isOpen && !analysisResult && !loading) {
+      console.log('模态框打开，开始获取分析:', safeCompanyName);
       fetchCompanyAnalysis();
     }
-  }, [isOpen, fetchCompanyAnalysis, analysisResult, loading]);
+  }, [isOpen, analysisResult, loading, fetchCompanyAnalysis, safeCompanyName]);
 
   // 重置状态
   useEffect(() => {
     if (!isOpen) {
       setAnalysisResult(null);
       setError(null);
-      setGenerationStage('collecting');
-      setProgress(0);
-      setStageMessage('');
     }
-  }, [isOpen]);
+  }, [isOpen, setAnalysisResult, setError]);
   
   // 添加调试代码
   useEffect(() => {
@@ -716,60 +1296,17 @@ export default function CompanyReportModal({
         <Dialog.Panel className="w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-xl bg-white shadow-xl">
           <div className="flex justify-between items-center border-b border-gray-200 px-6 py-4">
             <Dialog.Title className="text-xl font-semibold text-gray-900">
-              {companyName} 企业画像
+              {safeCompanyName} 企业画像
             </Dialog.Title>
             
             <div className="flex items-center space-x-4">
               {analysisResult && !loading && (
-                <div className="flex space-x-2">
-                  <button
-                    onClick={generateHTMLReport}
-                    disabled={generatingHTML}
-                    className="flex items-center px-3 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-md hover:from-green-700 hover:to-green-800 transition-all shadow-sm hover:shadow disabled:opacity-50 disabled:shadow-none"
-                    title="生成可视化报告"
-                  >
-                    {generatingHTML ? (
-                      <>
-                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        生成中...
-                      </>
-                    ) : (
-                      <>
-                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                        </svg>
-                        可视化报告
-                      </>
-                    )}
-                  </button>
-                  
-                  <button
-                    onClick={downloadAsDocx}
-                    disabled={downloadingDocx}
-                    className="flex items-center px-3 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-md hover:from-green-700 hover:to-green-800 transition-all shadow-sm hover:shadow disabled:opacity-50 disabled:shadow-none"
-                    title="下载Word文档"
-                  >
-                    {downloadingDocx ? (
-                      <>
-                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        处理中...
-                      </>
-                    ) : (
-                      <>
-                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                        </svg>
-                        下载Word文档
-                      </>
-                    )}
-                  </button>
-                </div>
+                <ActionButtons 
+                  generateHTMLReport={generateHTMLReport}
+                  downloadAsDocx={downloadAsDocx}
+                  generatingHTML={generatingHTML}
+                  downloadingDocx={downloadingDocx}
+                />
               )}
               
               <button
@@ -783,231 +1320,22 @@ export default function CompanyReportModal({
           
           <div className="overflow-y-auto p-6 max-h-[calc(90vh-80px)]">
             {loading ? (
-              <div className="flex flex-col items-center justify-center py-16">
-                {/* 精美的进度指示器 */}
-                <div className="w-full max-w-md mb-8">
-                  <div className="relative pt-1">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="text-lg font-bold text-indigo-700">
-                        {stages[generationStage].title}
-                      </div>
-                      <div className="text-right">
-                        <span className="text-sm font-semibold inline-block text-indigo-700">
-                          {progress}%
-                        </span>
-                      </div>
-                    </div>
-                    <div className="overflow-hidden h-2 mb-4 text-xs flex rounded-full bg-gray-200">
-                      <div 
-                        style={{ width: `${progress}%` }} 
-                        className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-indigo-500 to-purple-600 transition-all duration-500"
-                      ></div>
-                    </div>
-                  </div>
-                  <div className="text-center text-indigo-600 font-medium">
-                    {stageMessage}
-                  </div>
-                </div>
-                <div className="animate-pulse flex space-x-4 items-center">
-                  <div className="rounded-full bg-indigo-100 h-12 w-12 flex items-center justify-center">
-                    <svg className="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <div className="h-4 bg-indigo-100 rounded w-48"></div>
-                    <div className="h-3 bg-indigo-50 rounded w-32 mt-2"></div>
-                  </div>
-                </div>
-              </div>
+              <LoadingState 
+                progress={progress} 
+                stageMessage={stageMessage}
+                stages={stages}
+                generationStage={generationStage}
+              />
             ) : error ? (
-              <div className="flex flex-col items-center justify-center py-16">
-                <div className="text-red-500 mb-4">
-                  <svg className="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-2">生成报告时出错</h3>
-                <p className="text-gray-600 mb-6 text-center max-w-md">{error}</p>
-                <button
-                  onClick={() => {
-                    setError(null);
-                    fetchCompanyAnalysis();
-                  }}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
-                >
-                  重试
-                </button>
-              </div>
+              <ErrorState 
+                error={error} 
+                fetchCompanyAnalysis={fetchCompanyAnalysis}
+              />
             ) : analysisResult ? (
               <div ref={reportRef} className="report-container">
-                {/* 报告头部 */}
-                <div className="report-header mb-12 text-center">
-                  <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                    {companyName} 公司研究报告
-                  </h1>
-                  <p className="text-gray-500">
-                    报告生成日期: {new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
-                  </p>
-                </div>
-                
-                {/* 目录 */}
-                <div className="report-toc mb-12 bg-gray-50 p-6 rounded-lg max-w-3xl mx-auto">
-                  <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">目录</h2>
-                  {analysisResult?.sections && analysisResult.sections.length > 0 && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <ul className="space-y-2">
-                        {analysisResult.sections.slice(0, Math.ceil(analysisResult.sections.length / 2)).map((section, index) => (
-                          <li key={index} className="flex items-center">
-                            <span className="w-8 h-8 flex items-center justify-center bg-indigo-600 text-white rounded-full mr-2 text-sm font-bold">
-                              {index + 1}
-                            </span>
-                            <a 
-                              href={`#section-${index}`} 
-                              className="text-indigo-600 hover:text-indigo-800 hover:underline"
-                            >
-                              {section.title.replace(/^\d+\.\s*/, '')}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                      <ul className="space-y-2">
-                        {analysisResult.sections.slice(Math.ceil(analysisResult.sections.length / 2)).map((section, index) => (
-                          <li key={index + Math.ceil(analysisResult.sections.length / 2)} className="flex items-center">
-                            <span className="w-8 h-8 flex items-center justify-center bg-indigo-600 text-white rounded-full mr-2 text-sm font-bold">
-                              {index + 1 + Math.ceil(analysisResult.sections.length / 2)}
-                            </span>
-                            <a 
-                              href={`#section-${index + Math.ceil(analysisResult.sections.length / 2)}`} 
-                              className="text-indigo-600 hover:text-indigo-800 hover:underline"
-                            >
-                              {section.title.replace(/^\d+\.\s*/, '')}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-                
-                {/* 报告内容 */}
-                <div className="report-content mx-8 mb-12 font-kai">
-                  {analysisResult?.sections?.map((section, index) => (
-                    <div key={index} id={`section-${index}`} className="mb-12">
-                      <div className="flex items-center mb-4">
-                        <div className="w-10 h-10 flex items-center justify-center bg-indigo-600 text-white rounded-full mr-3 text-lg font-bold shadow-md">
-                          {index + 1}
-                        </div>
-                        <h2 className="text-2xl font-bold text-gray-800">
-                          {section.title.replace(/^#+\s*/, '').replace(/^\d+\.\s*/, '')}
-                        </h2>
-                      </div>
-                      <div className="pl-14">
-                        <div className="prose prose-lg prose-indigo max-w-none font-kai">
-                          {/* 检测并显示竞争分析 */}
-                          {isCompetitionAnalysisSection(section.title) && (
-                            <CompetitionAnalysis content={section.content} />
-                          )}
-                          
-                          {/* 检测并显示SWOT分析 */}
-                          {isSwotSection(section.title) && (
-                            <>
-                              <h3 className="text-xl font-bold text-center mb-4">SWOT分析</h3>
-                              <SwotAnalysis content={section.content} />
-                            </>
-                          )}
-                          
-                          {/* 显示原始内容 */}
-                          <ReactMarkdown
-                            remarkPlugins={[remarkGfm]}
-                            rehypePlugins={[rehypeRaw]}
-                            components={{
-                              // @ts-expect-error - ReactMarkdown类型定义问题
-                              table: ({...props}: MarkdownComponentProps) => (
-                                <div className="overflow-x-auto my-6 rounded-lg shadow-md border border-gray-200">
-                                  <table className="min-w-full divide-y divide-gray-300" {...props} />
-                                </div>
-                              ),
-                              // @ts-expect-error - ReactMarkdown类型定义问题
-                              thead: ({...props}: MarkdownComponentProps) => (
-                                <thead className="bg-indigo-50" {...props} />
-                              ),
-                              // @ts-expect-error - ReactMarkdown类型定义问题
-                              th: ({...props}: MarkdownComponentProps) => (
-                                <th className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 border-r last:border-r-0" {...props} />
-                              ),
-                              // @ts-expect-error - ReactMarkdown类型定义问题
-                              tr: ({...props}: MarkdownComponentProps) => (
-                                <tr className="border-b last:border-b-0 hover:bg-gray-50" {...props} />
-                              ),
-                              // @ts-expect-error - ReactMarkdown类型定义问题
-                              td: ({...props}: MarkdownComponentProps) => (
-                                <td className="px-4 py-3 text-sm text-gray-500 border-r last:border-r-0" {...props} />
-                              ),
-                              // @ts-expect-error - ReactMarkdown类型定义问题
-                              code: ({inline, className, children, ...props}: MarkdownComponentProps) => {
-                                const match = /language-(\w+)/.exec(className || '');
-                                return !inline && match ? (
-                                  <SyntaxHighlighter
-                                    style={tomorrow}
-                                    language={match[1]}
-                                    PreTag="div"
-                                    className="rounded-lg shadow-sm my-4"
-                                    {...props}
-                                  >
-                                    {String(children).replace(/\n$/, '')}
-                                  </SyntaxHighlighter>
-                                ) : (
-                                  <code className={`${className} px-1.5 py-0.5 bg-gray-100 text-indigo-700 rounded text-sm`} {...props}>
-                                    {children}
-                                  </code>
-                                );
-                              },
-                              // @ts-expect-error - ReactMarkdown类型定义问题
-                              p: ({...props}: MarkdownComponentProps) => (
-                                <p className="my-4 leading-relaxed text-gray-700 font-kai" {...props} />
-                              ),
-                              // @ts-expect-error - ReactMarkdown类型定义问题
-                              h3: ({...props}: MarkdownComponentProps) => (
-                                <h3 className="text-xl font-bold text-gray-800 mt-6 mb-3" {...props} />
-                              ),
-                              // @ts-expect-error - ReactMarkdown类型定义问题
-                              h4: ({...props}: MarkdownComponentProps) => (
-                                <h4 className="text-lg font-semibold text-gray-800 mt-5 mb-2" {...props} />
-                              ),
-                              // @ts-expect-error - ReactMarkdown类型定义问题
-                              ul: ({...props}: MarkdownComponentProps) => (
-                                <ul className="list-disc pl-6 my-4 space-y-2 text-gray-700" {...props} />
-                              ),
-                              // @ts-expect-error - ReactMarkdown类型定义问题
-                              ol: ({...props}: MarkdownComponentProps) => (
-                                <ol className="list-decimal pl-6 my-4 space-y-2 text-gray-700" {...props} />
-                              ),
-                              // @ts-expect-error - ReactMarkdown类型定义问题
-                              li: ({...props}: MarkdownComponentProps) => (
-                                <li className="pl-1 py-0.5 font-kai" {...props} />
-                              ),
-                              // @ts-expect-error - ReactMarkdown类型定义问题
-                              blockquote: ({...props}: MarkdownComponentProps) => (
-                                <blockquote className="border-l-4 border-indigo-300 pl-4 py-1 my-4 text-gray-600 italic font-kai" {...props} />
-                              ),
-                              // @ts-expect-error - ReactMarkdown类型定义问题
-                              a: ({...props}: MarkdownComponentProps) => (
-                                <a className="text-indigo-600 hover:text-indigo-800 hover:underline" {...props} />
-                              ),
-                              // @ts-expect-error - ReactMarkdown类型定义问题
-                              strong: ({...props}: MarkdownComponentProps) => (
-                                <strong className="font-bold text-indigo-700" {...props} />
-                              )
-                            }}
-                          >
-                            {section.content.replace(/^\d+\.\s*/, '')}
-                          </ReactMarkdown>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <ReportHeader companyName={safeCompanyName} />
+                <TableOfContents sections={analysisResult.sections} />
+                <ReportContent sections={analysisResult.sections} />
               </div>
             ) : null}
           </div>
@@ -1015,4 +1343,6 @@ export default function CompanyReportModal({
       </div>
     </Dialog>
   );
-} 
+};
+
+export default CompanyReportModal; 
