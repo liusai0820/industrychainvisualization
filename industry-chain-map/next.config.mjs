@@ -18,6 +18,11 @@ const nextConfig = {
         destination: '/src/data/industries/:path*'
       }
     ];
+  },
+  // 禁用默认的ESLint配置，使用我们自己的.eslintrc.json
+  eslint: {
+    ignoreDuringBuilds: false, // 不忽略ESLint错误
+    dirs: ['src'] // 只检查src目录
   }
 };
 
