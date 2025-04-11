@@ -10,6 +10,13 @@ export const runtime = 'edge';
 const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || "https://openrouter.ai/api/v1/chat/completions";
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
+// 定义超时配置
+const API_TIMEOUT_SETTINGS = {
+  ROUTE_TIMEOUT: 580 * 1000,  // 路由级别超时，9分40秒（接近Vercel Edge的10分钟限制）
+  API_CALL_TIMEOUT: 15 * 60 * 1000, // API调用总超时，15分钟
+  MODEL_TIMEOUT: 5 * 60 * 1000  // 单个模型请求超时，5分钟
+};
+
 // 添加多个模型选项
 const MODELS = [
   process.env.COMPANY_ANALYSIS_MODEL || "google/gemini-2.5-pro-exp-03-25:free",
@@ -155,7 +162,7 @@ export async function POST(request: NextRequest) {
             'X-Fallback': 'true'
           }
         }));
-      }, 50 * 1000); // 50秒路由超时，确保在Vercel 60秒限制前返回
+      }, API_TIMEOUT_SETTINGS.ROUTE_TIMEOUT);
     });
     
     // 实际处理逻辑
@@ -405,7 +412,7 @@ async function generateCompanyAnalysis(companyName: string, industryName?: strin
     setTimeout(() => {
       console.warn(`⚠️ API调用全局超时，使用备用结果: ${companyName}`);
       resolve(generateFallbackResult(companyName, industryName));
-    }, 3.5 * 60 * 1000); // 3.5分钟最大超时，确保在Vercel 60秒之前返回
+    }, API_TIMEOUT_SETTINGS.API_CALL_TIMEOUT);
   });
 
   // 创建实际API调用的Promise
@@ -478,7 +485,7 @@ async function generateCompanyAnalysis(companyName: string, industryName?: strin
               
               // 单个模型请求的超时时间更短，确保有机会尝试其他模型
               const modelTimeoutPromise = new Promise((_, reject) => {
-                setTimeout(() => reject(new Error('单次模型请求超时')), 90 * 1000); // 90秒模型超时
+                setTimeout(() => reject(new Error('单次模型请求超时')), API_TIMEOUT_SETTINGS.MODEL_TIMEOUT);
               });
 
               const fetchPromise = fetch(OPENROUTER_API_URL, fetchOptions);

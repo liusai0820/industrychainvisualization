@@ -10,7 +10,51 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { tomorrow } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import { toast } from 'react-hot-toast';
 import { generateDocx, downloadDocx } from '@/utils/docxGenerator';
-import { getFromCache, saveToCache } from '@/utils/cacheUtils';
+
+// 内联缓存工具函数，避免依赖外部模块
+const CACHE_KEY_PREFIX = 'industry-chain-map:company-analysis:';
+const CACHE_EXPIRY = 60 * 60 * 1000; // 1小时过期
+
+function saveToCache<T>(key: string, data: T): void {
+  try {
+    const cacheKey = `${CACHE_KEY_PREFIX}${key}`;
+    const cacheItem = {
+      timestamp: Date.now(),
+      data
+    };
+    
+    localStorage.setItem(cacheKey, JSON.stringify(cacheItem));
+    console.log(`缓存数据已保存: ${key}`);
+  } catch (error) {
+    console.warn('保存缓存失败:', error);
+    // 静默失败 - 缓存失败不应影响主要功能
+  }
+}
+
+function getFromCache<T>(key: string): T | null {
+  try {
+    const cacheKey = `${CACHE_KEY_PREFIX}${key}`;
+    const cachedValue = localStorage.getItem(cacheKey);
+    
+    if (!cachedValue) return null;
+    
+    const cacheItem = JSON.parse(cachedValue) as {timestamp: number, data: T};
+    const now = Date.now();
+    
+    // 检查是否过期
+    if (now - cacheItem.timestamp > CACHE_EXPIRY) {
+      console.log(`缓存已过期: ${key}`);
+      localStorage.removeItem(cacheKey);
+      return null;
+    }
+    
+    console.log(`使用缓存数据: ${key}`);
+    return cacheItem.data;
+  } catch (error) {
+    console.warn('读取缓存失败:', error);
+    return null;
+  }
+}
 
 interface CompanyReportModalProps {
   isOpen: boolean;
@@ -572,28 +616,28 @@ const useReportGeneration = (companyName: string, industryName: string, toastApi
     collecting: {
       title: '收集数据',
       messages: ['正在收集公司基本信息...', '检索行业数据...', '获取市场动态...', '分析企业财务状况...'],
-      duration: 10000, // 增加持续时间
+      duration: 15000, // 增加持续时间
       progressStart: 0,
       progressEnd: 15
     },
     analyzing: {
       title: '分析数据',
       messages: ['进行SWOT分析...', '分析企业竞争态势...', '评估公司商业模式...', '审视企业发展战略...'],
-      duration: 15000, // 增加持续时间
+      duration: 20000, // 增加持续时间
       progressStart: 15,
       progressEnd: 30
     },
     drafting: {
       title: '起草报告',
       messages: ['撰写公司概况...', '整理运营分析...', '汇总财务数据...', '编写发展战略报告...'],
-      duration: 20000, // 增加持续时间
+      duration: 30000, // 增加持续时间
       progressStart: 30,
       progressEnd: 50
     },
     reviewing: {
       title: '审核内容',
       messages: ['检查信息准确性...', '校对分析结论...', '优化报告结构...', '完善数据呈现...'],
-      duration: 30000, // 增加持续时间
+      duration: 40000, // 增加持续时间
       progressStart: 50,
       progressEnd: 70
     },
@@ -604,9 +648,12 @@ const useReportGeneration = (companyName: string, industryName: string, toastApi
         '报告生成中，请耐心等待...',
         '大型模型正在处理您的请求...',
         '生成详细分析可能需要一些时间...',
-        '正在等待AI响应，这可能需要几分钟...'
+        '正在等待AI响应，这可能需要几分钟...',
+        '长时间处理中，复杂的分析可能需要5-10分钟...',
+        '仍在等待模型响应，请耐心等待...',
+        '生成深度分析需要更多时间，请继续等待...'
       ],
-      duration: 60000, // 延长最后阶段的持续时间
+      duration: 480000, // 延长最后阶段的持续时间到8分钟
       progressStart: 70,
       progressEnd: 95 // 最大只到95%，留出一点空间
     },
@@ -665,6 +712,17 @@ const useReportGeneration = (companyName: string, industryName: string, toastApi
         });
       }
     }, 240000); // 4分钟
+    
+    // 设置更长的超时提示，如果8分钟后仍无响应
+    setTimeout(() => {
+      if (progressIntervalRef.current) {
+        setStageMessage('复杂分析正在进行中，可能需要10分钟...');
+        toastApi('复杂分析可能需要较长时间（5-10分钟），我们仍在等待结果', {
+          duration: 8000,
+          icon: '⏳'
+        });
+      }
+    }, 480000); // 8分钟
   }, [stages, toastApi]);
   
   // 停止进度模拟
@@ -764,7 +822,7 @@ const useReportGeneration = (companyName: string, industryName: string, toastApi
       const timeoutPromise = new Promise<void>((_, reject) => {
         setTimeout(() => {
           reject(new Error('请求超时，服务器响应时间过长'));
-        }, 60 * 1000); // 60秒超时
+        }, 10 * 60 * 1000); // 提高到10分钟超时
       });
       
       try {
@@ -890,8 +948,8 @@ const useReportGeneration = (companyName: string, industryName: string, toastApi
         // 竞争fetch和超时
         await Promise.race([fetchPromise, timeoutPromise]);
         
-      } catch (err) {
-        console.error('获取分析失败:', err);
+      } catch (error: unknown) {
+        console.error('获取分析失败:', error);
         
         // 尝试创建一个本地备用结果，以确保UI可用
         const localFallbackResult: AnalysisResult = {
@@ -903,18 +961,19 @@ const useReportGeneration = (companyName: string, industryName: string, toastApi
         };
         
         // 如果是超时错误，提供临时分析结果而不是显示错误
-        if (err.message.includes('超时')) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        if (errorMessage.includes('超时')) {
           setAnalysisResult(localFallbackResult);
           setGenerationStage('complete');
           setProgress(100);
           
-          toastApi.warning('服务器响应超时，已生成简要信息，请点击刷新重试', {
+          toastApi.error('服务器响应超时，已生成简要信息，请点击刷新重试', {
             duration: 5000,
             icon: '⏱️'
           });
         } else {
-          setError(err instanceof Error ? err.message : '获取分析失败，请稍后重试');
-          toastApi.error(`获取企业分析失败: ${err instanceof Error ? err.message : '未知错误'}`);
+          setError(error instanceof Error ? error.message : '获取分析失败，请稍后重试');
+          toastApi.error(`获取企业分析失败: ${error instanceof Error ? error.message : '未知错误'}`);
         }
         
         // 停止进度模拟
