@@ -87,7 +87,7 @@ function transformToTree(data: RawData): TransformedData {
 
         // 创建根节点
         const transformed: TransformedData = {
-            name: data.产业链,
+            name: data.产业链.replace(/产业链$/, ''),
             children: []
         };
 

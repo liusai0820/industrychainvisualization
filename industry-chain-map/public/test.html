@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>村田制作所 (Murata Manufacturing) - 公司研究报告</title>
+    <script src="https://cdn.tailwindcss.com/3.4.3"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+
+    <style>
+        /* === CSS Reset & Global Settings === */
+        *, ::before, ::after {
+            box-sizing: border-box;
+            border-width: 0;
+            border-style: solid;
+            /* Corrected Tailwind theme usage */
+            border-color: theme('borderColor.DEFAULT', 'currentColor');
+        }
+        html {
+            line-height: 1.5;
+            -webkit-text-size-adjust: 100%;
+            tab-size: 4;
+            font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            scroll-behavior: smooth; /* Smooth scrolling for directory links */
+        }
+        body {
+            margin: 0;
+            line-height: inherit;
+        }
+        img, video, svg, canvas {
+            display: block;
+            vertical-align: middle;
+            max-width: 100%;
+            height: auto;
+        }
+        /* Global Text Handling */
+        p, h1, h2, h3, h4, h5, h6, li, td, th, div, span {
+             overflow-wrap: break-word;
+             word-wrap: break-word;
+             /* word-break: keep-all; */ /* Might be too strict, causes overflow. Rely on wrap. */
+             line-height: 1.7;
+             hyphens: auto;
+        }
+
+        /* === Base Presentation Styles === */
+        :root {
+            /* Default Professional Theme (as industry was unspecified) */
+            --primary-color: #2957a4;
+            --secondary-color: #4a7ac9;
+            --accent-color: #ff7d4d;
+            --bg-light: #FFFFFF;
+            --text-light: #1f2937; /* Darker gray for better contrast */
+            --bg-dark: #111827;   /* Dark blue/gray */
+            --text-dark: #e5e7eb;  /* Light gray */
+            --border-light: #e5e7eb;
+            --border-dark: #4b5563;
+            --card-bg-light: #f9fafb;
+            --card-bg-dark: #1f2937;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-light);
+        }
+        /* Apply dark mode styles when .dark class is present on html */
+        .dark body {
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+        }
+        .dark .dark\:bg-dark-card { background-color: var(--card-bg-dark); }
+        .dark .dark\:text-dark-text { color: var(--text-dark); }
+        .dark .dark\:border-dark-border { border-color: var(--border-dark); }
+        .dark .dark\:placeholder-dark::placeholder { color: var(--border-dark); }
+        /* Explicit dark mode styles for elements not using Tailwind prefixes */
+        .dark .sidebar { background-color: #1f2937; /* Example: Darker sidebar */ }
+        .dark .toc-link { color: #d1d5db; /* Example: Lighter gray link */ }
+        .dark .toc-link:hover { color: var(--secondary-color); }
+        .dark .toc-link.active { color: var(--secondary-color); border-left-color: var(--secondary-color); }
+        .dark #company-logo-container { background-color: #374151; color: #9ca3af; }
+        .dark .report-section { background-color: var(--card-bg-dark); border-color: var(--border-dark); }
+        .dark h1, .dark h2, .dark h3, .dark h4, .dark .text-gray-800 { color: var(--text-dark); }
+        .dark p, .dark li, .dark .text-gray-700, .dark .text-gray-600, .dark .text-gray-500 { color: #d1d5db; } /* Adjust text colors */
+        .dark .border-gray-200 { border-color: var(--border-dark); }
+        .dark .bg-gray-50 { background-color: #374151; }
+        .dark .bg-gray-100 { background-color: #374151; }
+        .dark .bg-blue-50 { background-color: rgba(59, 130, 246, 0.1); }
+        .dark .text-blue-800 { color: #93c5fd; }
+        .dark .text-blue-900 { color: #bfdbfe; }
+        .dark .text-blue-600 { color: #60a5fa; }
+        .dark .border-blue-200 { border-color: #3b82f6; }
+        .dark .bg-green-50 { background-color: rgba(16, 185, 129, 0.1); }
+        .dark .text-green-800 { color: #6ee7b7; }
+        .dark .text-green-900 { color: #a7f3d0; }
+        .dark .text-green-600 { color: #34d399; }
+        .dark .border-green-200 { border-color: #10b981; }
+        .dark .bg-yellow-50 { background-color: rgba(245, 158, 11, 0.1); }
+        .dark .text-yellow-800 { color: #fcd34d; }
+        .dark .text-yellow-600 { color: #fbbf24; }
+        .dark .border-yellow-200 { border-color: #f59e0b; }
+        .dark .bg-red-50 { background-color: rgba(239, 68, 68, 0.1); }
+        .dark .text-red-800 { color: #fca5a5; }
+        .dark .text-red-600 { color: #f87171; }
+        .dark .border-red-200 { border-color: #ef4444; }
+        .dark .bg-orange-50 { background-color: rgba(249, 115, 22, 0.1); }
+        .dark .text-orange-800 { color: #fdba74; }
+        .dark .text-orange-600 { color: #fb923c; }
+        .dark .border-orange-200 { border-color: #f97316; }
+        .dark .bg-purple-50 { background-color: rgba(139, 92, 246, 0.1); }
+        .dark .text-purple-800 { color: #c4b5fd; }
+        .dark .text-purple-600 { color: #a78bfa; }
+        .dark .border-purple-200 { border-color: #8b5cf6; }
+        .dark .bg-indigo-50 { background-color: rgba(99, 102, 241, 0.1); }
+        .dark .text-indigo-800 { color: #a5b4fc; }
+        .dark .text-indigo-600 { color: #818cf8; }
+        .dark .border-indigo-200 { border-color: #6366f1; }
+        .dark .bg-pink-50 { background-color: rgba(236, 72, 153, 0.1); }
+        .dark .text-pink-800 { color: #f9a8d4; }
+        .dark .text-pink-600 { color: #f472b6; }
+        .dark .border-pink-200 { border-color: #ec4899; }
+        .dark .border { border-color: var(--border-dark); }
+        .dark .divide-gray-200 > :not([hidden]) ~ :not([hidden]) { border-color: var(--border-dark); }
+        .dark .text-gray-400 { color: #9ca3af; }
+        .dark .text-gray-300 { color: #d1d5db; }
+        .dark .bg-gray-700 { background-color: #374151; }
+        .dark .hover\:bg-gray-600:hover { background-color: #4b5563; }
+        .dark strong { color: var(--accent-color); } /* Ensure strong text stands out */
+
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            /* Custom scrollbar for sidebar */
+            scrollbar-width: thin;
+            scrollbar-color: var(--secondary-color) transparent;
+        }
+        .sidebar::-webkit-scrollbar { width: 5px; }
+        .sidebar::-webkit-scrollbar-track { background: transparent; }
+        .sidebar::-webkit-scrollbar-thumb { background-color: var(--secondary-color); border-radius: 10px; }
+
+
+        /* Directory Highlight */
+        .toc-link.active {
+            color: var(--primary-color);
+            font-weight: 600;
+            border-left-width: 2px; /* Ensure border width is set */
+            border-left-color: var(--primary-color);
+            background-color: rgba(41, 87, 164, 0.05); /* Subtle background */
+        }
+        .dark .toc-link.active {
+             color: var(--secondary-color);
+             border-left-color: var(--secondary-color);
+             background-color: rgba(74, 122, 201, 0.1);
+        }
+
+        /* Chart Container Constraints */
+        .chart-container {
+            position: relative; /* Needed for Chart.js responsiveness */
+            max-height: 50vh;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (min-width: 768px) { /* md breakpoint */
+            .chart-container {
+                 max-width: 75%;
+            }
+        }
+
+        /* Comparison Card Specifics */
+        .comparison-card {
+            min-width: 250px; /* Adjusted min-width */
+            flex-basis: 1; /* Allow cards to grow */
+        }
+
+        /* Print Styles */
+        @media print {
+            html { scroll-behavior: auto !important; }
+            body {
+                background-color: white !important;
+                color: black !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .sidebar, #theme-toggle-button, #save-button, #page-number-display /* Ensure page number is hidden */ {
+                display: none !important;
+            }
+            main.main-content { /* Target main specifically */
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 10mm !important; /* Add some padding for print */
+                box-shadow: none !important;
+                overflow: visible !important; /* Allow content to flow */
+            }
+            section.report-section { /* Target section specifically */
+                page-break-inside: avoid !important;
+                margin-bottom: 20px !important;
+                box-shadow: none !important;
+                border: 1px solid #ccc !important;
+                padding: 15px !important;
+                overflow: visible !important; /* Allow content to flow */
+            }
+            h1, h2, h3 {
+                 page-break-after: avoid !important;
+            }
+            .chart-container {
+                max-height: none !important;
+                max-width: 100% !important;
+                width: 95% !important; /* Slightly less than 100% for better fit */
+                margin: 10px auto !important;
+                page-break-inside: avoid !important;
+            }
+            canvas {
+                max-width: 100% !important;
+            }
+            .grid, .flex { /* Ensure grid/flex items print correctly */
+                display: block !important; /* Simplify layout for print */
+            }
+            .comparison-card {
+                 width: 100% !important; /* Stack cards in print */
+                 margin-bottom: 10px !important;
+                 page-break-inside: avoid !important;
+            }
+
+            * {
+                background-color: transparent !important;
+                color: #000 !important;
+                box-shadow: none !important;
+                border-color: #ccc !important; /* Use a consistent border color */
+            }
+            a { text-decoration: none !important; color: #000 !important; }
+            /* Hide icons in print if needed */
+            i.fa-solid {
+                /* display: none !important; */ /* Uncomment to hide icons */
+                color: #000 !important; /* Ensure icons are black */
+            }
+            strong { color: #000 !important; font-weight: bold; } /* Ensure strong text is just bold */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="flex flex-col md:flex-row min-h-screen">
+
+        <nav class="sidebar w-full md:w-64 lg:w-72 bg-white dark:bg-gray-800 p-4 md:p-6 shadow-md md:shadow-lg flex-shrink-0 print:hidden border-r border-gray-200 dark:border-gray-700 flex flex-col">
+            <div class="mb-6 text-center flex-shrink-0">
+                <div id="company-logo-container" class="h-16 w-16 mx-auto mb-2 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-full text-gray-500 dark:text-gray-400 overflow-hidden text-xl font-bold">
+                    <i class="fa-solid fa-building text-2xl"></i>
+                </div>
+                <h1 class="text-lg font-semibold text-gray-800 dark:text-white truncate" title="村田制作所 (Murata Manufacturing)">村田制作所</h1>
+                <p class="text-sm text-gray-500 dark:text-gray-400 truncate" title="Murata Manufacturing">Murata Manufacturing</p>
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">行业: 未指定</p>
+            </div>
+
+            <div class="mb-6 overflow-y-auto flex-grow">
+                <h2 class="text-sm font-semibold uppercase text-gray-500 dark:text-gray-400 mb-3 tracking-wider sticky top-0 bg-white dark:bg-gray-800 py-1">目录</h2>
+                <ul id="table-of-contents" class="space-y-1">
+                    <li><a href="#section-1" class="toc-link block text-sm text-gray-600 dark:text-gray-300 hover:text-[var(--primary-color)] dark:hover:text-[var(--secondary-color)] transition-colors duration-200 border-l-2 border-transparent pl-3 py-1 rounded-r-md">一、公司概览</a></li>
+                    <li><a href="#section-2" class="toc-link block text-sm text-gray-600 dark:text-gray-300 hover:text-[var(--primary-color)] dark:hover:text-[var(--secondary-color)] transition-colors duration-200 border-l-2 border-transparent pl-3 py-1 rounded-r-md">二、行业格局</a></li>
+                    <li><a href="#section-3" class="toc-link block text-sm text-gray-600 dark:text-gray-300 hover:text-[var(--primary-color)] dark:hover:text-[var(--secondary-color)] transition-colors duration-200 border-l-2 border-transparent pl-3 py-1 rounded-r-md">三、盈利模式</a></li>
+                    <li><a href="#section-4" class="toc-link block text-sm text-gray-600 dark:text-gray-300 hover:text-[var(--primary-color)] dark:hover:text-[var(--secondary-color)] transition-colors duration-200 border-l-2 border-transparent pl-3 py-1 rounded-r-md">四、核心产品</a></li>
+                    <li><a href="#section-5" class="toc-link block text-sm text-gray-600 dark:text-gray-300 hover:text-[var(--primary-color)] dark:hover:text-[var(--secondary-color)] transition-colors duration-200 border-l-2 border-transparent pl-3 py-1 rounded-r-md">五、技术实力</a></li>
+                    <li><a href="#section-6" class="toc-link block text-sm text-gray-600 dark:text-gray-300 hover:text-[var(--primary-color)] dark:hover:text-[var(--secondary-color)] transition-colors duration-200 border-l-2 border-transparent pl-3 py-1 rounded-r-md">六、竞争分析</a></li>
+                    <li><a href="#section-7" class="toc-link block text-sm text-gray-600 dark:text-gray-300 hover:text-[var(--primary-color)] dark:hover:text-[var(--secondary-color)] transition-colors duration-200 border-l-2 border-transparent pl-3 py-1 rounded-r-md">七、客户结构</a></li>
+                    <li><a href="#section-8" class="toc-link block text-sm text-gray-600 dark:text-gray-300 hover:text-[var(--primary-color)] dark:hover:text-[var(--secondary-color)] transition-colors duration-200 border-l-2 border-transparent pl-3 py-1 rounded-r-md">八、战略合作</a></li>
+                    <li><a href="#section-9" class="toc-link block text-sm text-gray-600 dark:text-gray-300 hover:text-[var(--primary-color)] dark:hover:text-[var(--secondary-color)] transition-colors duration-200 border-l-2 border-transparent pl-3 py-1 rounded-r-md">九、竞争策略</a></li>
+                    <li><a href="#section-10" class="toc-link block text-sm text-gray-600 dark:text-gray-300 hover:text-[var(--primary-color)] dark:hover:text-[var(--secondary-color)] transition-colors duration-200 border-l-2 border-transparent pl-3 py-1 rounded-r-md">十、财务分析</a></li>
+                    <li><a href="#section-11" class="toc-link block text-sm text-gray-600 dark:text-gray-300 hover:text-[var(--primary-color)] dark:hover:text-[var(--secondary-color)] transition-colors duration-200 border-l-2 border-transparent pl-3 py-1 rounded-r-md">十一、风险评估</a></li>
+                    <li><a href="#section-12" class="toc-link block text-sm text-gray-600 dark:text-gray-300 hover:text-[var(--primary-color)] dark:hover:text-[var(--secondary-color)] transition-colors duration-200 border-l-2 border-transparent pl-3 py-1 rounded-r-md">十二、总结展望</a></li>
+                </ul>
+            </div>
+
+             <div class="mt-auto space-y-3 pt-4 border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
+                 <button id="theme-toggle-button" aria-label="切换深色/浅色模式" class="w-full flex items-center justify-center px-4 py-2 text-sm text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200">
+                     <i id="theme-icon" class="fa-solid fa-sun mr-2 w-4 text-center"></i> <span id="theme-text">浅色模式</span>
+                 </button>
+                 <button id="save-button" aria-label="保存报告到本地" class="w-full flex items-center justify-center px-4 py-2 text-sm text-white bg-[var(--primary-color)] rounded-md hover:opacity-90 transition-opacity duration-200">
+                     <i class="fa-solid fa-download mr-2 w-4 text-center"></i>
+                     保存报告
+                 </button>
+            </div>
+        </nav>
+
+        <main class="main-content flex-1 p-4 md:p-8 lg:p-10 overflow-y-auto bg-gray-50 dark:bg-gray-900">
+
+            <header class="mb-8 md:mb-12 pb-4 border-b border-gray-200 dark:border-gray-700">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">村田制作所 (Murata Manufacturing)</h1>
+                <p class="text-xl text-gray-600 dark:text-gray-300">公司研究报告</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">报告日期: 2025年4月11日</p>
+            </header>
+
+            <section id="section-1" class="report-section mb-10 md:mb-16 p-6 bg-white dark:bg-dark-card rounded-lg shadow-lg overflow-hidden">
+                <h2 class="text-2xl font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700 flex items-center text-gray-800 dark:text-white">
+                    <i class="fa-solid fa-circle-info mr-3 text-[var(--primary-color)] w-5 text-center"></i>
+                    <span>一、公司概览</span>
+                </h2>
+                <div class="space-y-4 text-gray-700 dark:text-dark-text">
+                    <p>村田制作所 (Murata Manufacturing Co., Ltd.) 成立于1944年，是一家总部位于日本京都的全球领先电子元器件制造商。公司由村田昭和创立，经过70多年的发展，已从最初的陶瓷电容器制造商成长为全球 <strong class="text-[var(--accent-color)] font-semibold">被动元件市场的领导者</strong>。目前由村田直树担任董事长，公司在全球拥有超过75,000名员工，业务遍及30多个国家和地区。</p>
+                    <p>村田制作所的核心业务主要围绕 <strong class="text-[var(--accent-color)] font-semibold">电子元器件的研发、生产和销售</strong>，特别专注于陶瓷电容器、压电元件、电感器、滤波器等被动元件，以及传感器、通信模块等功能型元件。公司在多个细分领域拥有 <strong class="text-[var(--accent-color)] font-semibold">全球第一的市场份额</strong>，尤其在多层陶瓷电容器(MLCC)领域，市场占有率高达 <strong class="text-[var(--accent-color)] font-semibold">40%以上</strong>，是全球最大的供应商。</p>
+                    <p>公司的长期战略愿景聚焦于"通过创新的产品和解决方案，为社会的可持续发展做出贡献"。村田制作所坚持"技术为本、客户为先"的理念，持续投入研发，不断开拓5G通信、汽车电子、物联网、能源管理等新兴应用领域，以保持其在电子元器件行业的领先地位。</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+                        <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg border border-blue-200 dark:border-blue-800 dark:border-opacity-50 shadow-sm">
+                            <h4 class="font-semibold text-blue-800 dark:text-blue-300 mb-1 text-sm uppercase tracking-wider">2022财年营收</h4>
+                            <p class="text-2xl font-bold text-blue-900 dark:text-blue-200">约 1.8万亿日元</p>
+                            <p class="text-sm text-blue-600 dark:text-blue-400">(约合160亿美元)</p>
+                        </div>
+                        <div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg border border-green-200 dark:border-green-800 dark:border-opacity-50 shadow-sm">
+                            <h4 class="font-semibold text-green-800 dark:text-green-300 mb-1 text-sm uppercase tracking-wider">2022财年净利润</h4>
+                            <p class="text-2xl font-bold text-green-900 dark:text-green-200">约 3,500亿日元</p>
+                            <p class="text-sm text-green-600 dark:text-green-400">(约合31亿美元)</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section-2" class="report-section mb-10 md:mb-16 p-6 bg-white dark:bg-dark-card rounded-lg shadow-lg overflow-hidden">
+                <h2 class="text-2xl font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700 flex items-center text-gray-800 dark:text-white">
+                    <i class="fa-solid fa-chart-pie mr-3 text-[var(--primary-color)] w-5 text-center"></i>
+                    <span>二、行业格局</span>
+                </h2>
+                <div class="space-y-4 text-gray-700 dark:text-dark-text">
+                    <p>村田制作所所处的电子元器件行业，尤其是被动元件细分市场，呈现出 <strong class="text-[var(--accent-color)] font-semibold">高度集中</strong> 的竞争格局。全球被动元件市场规模2022年约为 <strong class="text-[var(--accent-color)] font-semibold">350亿美元</strong>，预计到2027年将增长至 <strong class="text-[var(--accent-color)] font-semibold">450亿美元</strong>，年复合增长率(CAGR)约为 <strong class="text-[var(--accent-color)] font-semibold">5.2%</strong>。这一增长主要受到 <strong class="text-[var(--accent-color)] font-semibold">智能手机、汽车电子化、5G基础设施</strong> 和 <strong class="text-[var(--accent-color)] font-semibold">物联网设备普及</strong> 等因素的推动。</p>
+                     <div class="my-6 chart-container">
+                         <canvas id="market-size-chart"></canvas>
+                     </div>
+                     <h3 class="font-semibold text-lg mt-6 mb-2 text-gray-800 dark:text-white">宏观趋势与变革:</h3>
+                     <ul class="list-disc list-inside space-y-1 pl-4">
+                         <li>电子设备<strong class="text-[var(--secondary-color)] font-medium">小型化、轻量化、高性能化</strong>需求持续提升。</li>
+                         <li><strong class="text-[var(--secondary-color)] font-medium">汽车电气化和智能化</strong>趋势明显，元件需求量倍增。</li>
+                         <li><strong class="text-[var(--secondary-color)] font-medium">5G网络建设</strong>全球加速，高频元件需求激增。</li>
+                     </ul>
+                     <h3 class="font-semibold text-lg mt-6 mb-2 text-gray-800 dark:text-white">市场渗透与分布:</h3>
+                     <p>MLCC渗透率接近100%，但单设备用量持续增加 (5G手机增30-50%)。亚太地区是主要生产基地 (>70%产能)，中国是最大消费市场 (约45%)。</p>
+                     <h3 class="font-semibold text-lg mt-6 mb-2 text-gray-800 dark:text-white">政策环境:</h3>
+                     <p>各国加强产业支持（日/美/欧芯片法案等）。贸易摩擦促使供应链区域多元化。</p>
+                 </div>
+            </section>
+
+            <section id="section-3" class="report-section mb-10 md:mb-16 p-6 bg-white dark:bg-dark-card rounded-lg shadow-lg overflow-hidden">
+                <h2 class="text-2xl font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700 flex items-center text-gray-800 dark:text-white">
+                    <i class="fa-solid fa-hand-holding-dollar mr-3 text-[var(--primary-color)] w-5 text-center"></i>
+                    <span>三、盈利模式</span>
+                </h2>
+                 <div class="space-y-4 text-gray-700 dark:text-dark-text">
+                    <p>村田制作所的盈利模式建立在 <strong class="text-[var(--accent-color)] font-semibold">高附加值产品研发</strong>、<strong class="text-[var(--accent-color)] font-semibold">规模化生产</strong> 和 <strong class="text-[var(--accent-color)] font-semibold">多元化客户结构</strong> 三大支柱之上。</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border dark:border-gray-600 shadow-sm">
+                            <h4 class="font-semibold mb-2 text-gray-800 dark:text-white">收入结构 (主要来源)</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm">
+                                <li>MLCC: 约 45% (定价能力强)</li>
+                                <li>压电元件 & 滤波器: 约 25%</li>
+                                <li>其他 (电感器、传感器等): 约 30%</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border dark:border-gray-600 shadow-sm">
+                             <h4 class="font-semibold mb-2 text-gray-800 dark:text-white">毛利率水平</h4>
+                             <p class="text-3xl font-bold text-[var(--primary-color)] dark:text-[var(--secondary-color)]">40-45%</p>
+                             <p class="text-sm text-gray-600 dark:text-gray-400">高端MLCC > 50%, MEMS > 60%</p>
+                        </div>
+                    </div>
+                     <h3 class="font-semibold text-lg mt-6 mb-2 text-gray-800 dark:text-white">盈利增长驱动因素:</h3>
+                     <ol class="list-decimal list-inside space-y-1 pl-4">
+                         <li><strong class="text-[var(--secondary-color)] font-medium">单位产品价值提升</strong>: 高性能、小型化新产品提高均价。</li>
+                         <li><strong class="text-[var(--secondary-color)] font-medium">产能扩张与规模效应</strong>: 自动化投资提升效率。</li>
+                         <li><strong class="text-[var(--secondary-color)] font-medium">客户结构优化</strong>: 增加汽车电子、工业等高毛利领域比重。</li>
+                     </ol>
+                     <h3 class="font-semibold text-lg mt-6 mb-2 text-gray-800 dark:text-white">成本控制:</h3>
+                     <p>通过<strong class="text-[var(--secondary-color)] font-medium">垂直整合</strong>和<strong class="text-[var(--secondary-color)] font-medium">自动化</strong> (日本工厂 >80%) 控制成本。</p>
+                     <h3 class="font-semibold text-lg mt-6 mb-2 text-gray-800 dark:text-white">面临挑战:</h3>
+                     <p>原材料价格波动、汇率风险。通过技术创新和全球化布局应对。</p>
+                 </div>
+            </section>
+
+            <section id="section-4" class="report-section mb-10 md:mb-16 p-6 bg-white dark:bg-dark-card rounded-lg shadow-lg overflow-hidden">
+                <h2 class="text-2xl font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700 flex items-center text-gray-800 dark:text-white">
+                     <i class="fa-solid fa-cubes mr-3 text-[var(--primary-color)] w-5 text-center"></i>
+                     <span>四、核心产品</span>
+                 </h2>
+                 <div class="space-y-6 text-gray-700 dark:text-dark-text">
+                     <div>
+                         <h3 class="text-xl font-semibold mb-2 text-[var(--secondary-color)]">1. 多层陶瓷电容器 (MLCC)</h3>
+                         <p>公司<strong class="text-[var(--accent-color)] font-semibold">最具代表性产品</strong> (占收入~45%)。基础元件，应用广泛。</p>
+                         <ul class="list-disc list-inside space-y-1 pl-4 mt-2 text-sm">
+                             <li>尺寸覆盖广：从 01005 (0.4×0.2mm) 到大型功率电容。</li>
+                             <li><strong class="text-[var(--accent-color)] font-semibold">全球最小商用</strong>: 0201 (0.25×0.125mm)，用于超小型设备。</li>
+                             <li>高端应用：高容量、低ESR产品用于手机、服务器、汽车。</li>
+                         </ul>
+                     </div>
+                     <div>
+                         <h3 class="text-xl font-semibold mb-2 text-[var(--secondary-color)]">2. 射频(RF)滤波器和通信模块</h3>
+                         <p>第二大产品线 (~25%)。受益于5G普及。</p>
+                         <ul class="list-disc list-inside space-y-1 pl-4 mt-2 text-sm">
+                             <li>SAW/BAW滤波器：确保无线通信质量。</li>
+                             <li><strong class="text-[var(--accent-color)] font-semibold">超小型SAW</strong>: 1.0×0.5mm，用于5G毫米波。</li>
+                             <li>集成化RFFM：节省空间，提高效率。</li>
+                         </ul>
+                     </div>
+                     <div>
+                         <h3 class="text-xl font-semibold mb-2 text-[var(--secondary-color)]">3. 传感器和功能性元件</h3>
+                         <p>近年重点发展。MEMS传感器（加速度、陀螺仪等）应用广泛。</p>
+                         <ul class="list-disc list-inside space-y-1 pl-4 mt-2 text-sm">
+                             <li><strong class="text-[var(--accent-color)] font-semibold">超低功耗MEMS</strong>: 微瓦级别，用于可穿戴/IoT。</li>
+                             <li>创新非接触式心率传感器 (压电技术)。</li>
+                         </ul>
+                     </div>
+                      <div>
+                         <h3 class="text-xl font-semibold mb-2 text-[var(--secondary-color)]">4. 新兴领域布局</h3>
+                         <ul class="list-disc list-inside space-y-1 pl-4 mt-2 text-sm">
+                             <li>车载毫米波雷达模块 (77GHz)。</li>
+                             <li>固态电池 (计划2025小规模商用)。</li>
+                             <li>智能工厂传感系统。</li>
+                         </ul>
+                         <p class="mt-2">产品矩阵向更高集成度、更小尺寸、更低功耗、更高可靠性发展。</p>
+                     </div>
+                 </div>
+            </section>
+
+            <section id="section-5" class="report-section mb-10 md:mb-16 p-6 bg-white dark:bg-dark-card rounded-lg shadow-lg overflow-hidden">
+                 <h2 class="text-2xl font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700 flex items-center text-gray-800 dark:text-white">
+                     <i class="fa-solid fa-flask-vial mr-3 text-[var(--primary-color)] w-5 text-center"></i>
+                     <span>五、技术实力</span>
+                 </h2>
+                 <div class="space-y-4 text-gray-700 dark:text-dark-text">
+                    <p>核心竞争力源自<strong class="text-[var(--accent-color)] font-semibold">深厚技术积累</strong>和<strong class="text-[var(--accent-color)] font-semibold">持续创新投入</strong>。研发投入占营收稳定在 <strong class="text-[var(--accent-color)] font-semibold">7-8%</strong> (2022财年1350亿日元)。</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+                         <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border dark:border-gray-600 text-center shadow-sm">
+                             <i class="fa-solid fa-scroll text-4xl text-[var(--primary-color)] mb-2"></i>
+                             <h4 class="font-semibold mb-1 text-gray-800 dark:text-white">全球专利累计</h4>
+                             <p class="text-2xl font-bold">> 40,000 件</p>
+                             <p class="text-sm text-gray-600 dark:text-gray-400">(有效专利 ~25,000件)</p>
+                         </div>
+                         <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border dark:border-gray-600 text-center shadow-sm">
+                             <i class="fa-solid fa-microchip text-4xl text-[var(--primary-color)] mb-2"></i>
+                             <h4 class="font-semibold mb-1 text-gray-800 dark:text-white">2022年新申请</h4>
+                             <p class="text-2xl font-bold">~ 2,800 项</p>
+                             <p class="text-sm text-gray-600 dark:text-gray-400">(65%为海外专利)</p>
+                         </div>
+                     </div>
+                     <h3 class="font-semibold text-lg mt-6 mb-2 text-gray-800 dark:text-white">核心技术优势领域:</h3>
+                     <ul class="list-disc list-inside space-y-2 pl-4">
+                         <li><strong class="text-[var(--secondary-color)] font-medium">材料科学 (电子陶瓷)</strong>: 掌握从分子设计到合成核心技术 (如X8R高温材料)。</li>
+                         <li><strong class="text-[var(--secondary-color)] font-medium">微细加工技术</strong>: 纳米级加工能力 (MLCC电极厚度0.3μm, >1000层叠加)。</li>
+                         <li><strong class="text-[var(--secondary-color)] font-medium">高频通信技术</strong>: TC-SAW滤波器 (温度稳定性x3), 39GHz毫米波组件。</li>
+                         <li><strong class="text-[var(--secondary-color)] font-medium">传感技术</strong>: 压电MEMS技术 (节能>40%)。</li>
+                     </ul>
+                     <h3 class="font-semibold text-lg mt-6 mb-2 text-gray-800 dark:text-white">技术转化与开放创新:</h3>
+                     <p>拥有16个研发中心和24个生产基地，"材料-工艺-设备-产品"一体化研发模式，新技术量产周期短 (如滤波器18个月)。通过与大学合作及并购 (如Aito触觉反馈技术) 拓展技术边界。</p>
+                 </div>
+            </section>
+
+            <section id="section-6" class="report-section mb-10 md:mb-16 p-6 bg-white dark:bg-dark-card rounded-lg shadow-lg overflow-hidden">
+                 <h2 class="text-2xl font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700 flex items-center text-gray-800 dark:text-white">
+                     <i class="fa-solid fa-chess-board mr-3 text-[var(--primary-color)] w-5 text-center"></i>
+                     <span>六、竞争分析</span>
+                 </h2>
+                 <div class="space-y-6 text-gray-700 dark:text-dark-text">
+                     <p>村田在全球市场处于领先地位，但竞争激烈。主要竞争领域及对手如下：</p>
+                     <ul class="list-disc list-inside space-y-1 pl-4 text-sm">
+                         <li><strong>MLCC</strong>: 三星电机, 太阳诱电, 国巨 (村田份额~40%, 优势在高阶产品和技术)。</li>
+                         <li><strong>射频元件</strong>: 博通, 高通, 思佳讯 (村田SAW份额~30%, 优势在产品多元化和垂直整合)。</li>
+                     </ul>
+
+                     <h3 class="text-xl font-semibold mt-6 mb-3 text-gray-800 dark:text-white">主要竞争对手关键指标对比 (2022数据概览)</h3>
+                     <div class="flex flex-wrap gap-4 justify-center">
+                         <div class="comparison-card flex-1 bg-blue-50 dark:bg-gray-800 p-4 rounded-lg border border-blue-200 dark:border-blue-700 shadow-md hover:shadow-lg transition-shadow duration-200">
+                             <h4 class="text-lg font-semibold mb-3 text-center text-blue-800 dark:text-blue-300 border-b pb-2 border-blue-200 dark:border-blue-700">村田制作所</h4>
+                             <ul class="space-y-2 text-sm mt-3">
+                                 <li class="flex items-start"><i class="fa-solid fa-dollar-sign w-5 text-center mr-2 text-blue-600 dark:text-blue-400 pt-1"></i><span>营收: ~160 亿美元</span></li>
+                                 <li class="flex items-start"><i class="fa-solid fa-chart-pie w-5 text-center mr-2 text-blue-600 dark:text-blue-400 pt-1"></i><span>MLCC份额: ~40%</span></li>
+                                 <li class="flex items-start"><i class="fa-solid fa-percent w-5 text-center mr-2 text-blue-600 dark:text-blue-400 pt-1"></i><span>毛利率: ~43%</span></li>
+                                 <li class="flex items-start"><i class="fa-solid fa-flask w-5 text-center mr-2 text-blue-600 dark:text-blue-400 pt-1"></i><span>研发占比: ~7.5%</span></li>
+                                 <li class="flex items-start"><i class="fa-solid fa-boxes-stacked w-5 text-center mr-2 text-blue-600 dark:text-blue-400 pt-1"></i><span>产品线丰富度: 非常高</span></li>
+                                 <li class="flex items-start"><i class="fa-solid fa-robot w-5 text-center mr-2 text-blue-600 dark:text-blue-400 pt-1"></i><span>自动化水平: 非常高</span></li>
+                             </ul>
+                         </div>
+                         <div class="comparison-card flex-1 bg-green-50 dark:bg-gray-800 p-4 rounded-lg border border-green-200 dark:border-green-700 shadow-md hover:shadow-lg transition-shadow duration-200">
+                             <h4 class="text-lg font-semibold mb-3 text-center text-green-800 dark:text-green-300 border-b pb-2 border-green-200 dark:border-green-700">三星电机</h4>
+                              <ul class="space-y-2 text-sm mt-3">
+                                 <li class="flex items-start"><i class="fa-solid fa-dollar-sign w-5 text-center mr-2 text-green-600 dark:text-green-400 pt-1"></i><span>营收: ~78 亿美元</span></li>
+                                 <li class="flex items-start"><i class="fa-solid fa-chart-pie w-5 text-center mr-2 text-green-600 dark:text-green-400 pt-1"></i><span>MLCC份额: ~25%</span></li>
+                                 <li class="flex items-start"><i class="fa-solid fa-percent w-5 text-center mr-2 text-green-600 dark:text-green-400 pt-1"></i><span>毛利率: ~32%</span></li>
+                                 <li class="flex items-start"><i class="fa-solid fa-flask w-5 text-center mr-2 text-green-600 dark:text-green-400 pt-1"></i><span>研发占比: ~6.2%</span></li>
+                                 <li class="flex items-start"><i class="fa-solid fa-boxes-stacked w-5 text-center mr-2 text-green-600 dark:text-green-400 pt-1"></i><span>产品线丰富度: 高</span></li>
+                                 <li class="flex items-start"><i class="fa-solid fa-robot w-5 text-center mr-2 text-green-600 dark:text-green-400 pt-1"></i><span>自动化水平: 高</span></li>
+                             </ul>
+                         </div>
+                         <div class="comparison-card flex-1 bg-yellow-50 dark:bg-gray-800 p-4 rounded-lg border border-yellow-200 dark:border-yellow-700 shadow-md hover:shadow-lg transition-shadow duration-200">
+                             <h4 class="text-lg font-semibold mb-3 text-center text-yellow-800 dark:text-yellow-300 border-b pb-2 border-yellow-200 dark:border-yellow-700">太阳诱电</h4>
+                              <ul class="space-y-2 text-sm mt-3">
+                                 <li class="flex items-start"><i class="fa-solid fa-dollar-sign w-5 text-center mr-2 text-yellow-600 dark:text-yellow-400 pt-1"></i><span>营收: ~27 亿美元</span></li>
+                                 <li class="flex items-start"><i class="fa-solid fa-chart-pie w-5 text-center mr-2 text-yellow-600 dark:text-yellow-400 pt-1"></i><span>MLCC份额: ~10%</span></li>
+                                 <li class="flex items-start"><i class="fa-solid fa-percent w-5 text-center mr-2 text-yellow-600 dark:text-yellow-400 pt-1"></i><span>毛利率: ~35%</span></li>
+                                 <li class="flex items-start"><i class="fa-solid fa-flask w-5 text-center mr-2 text-yellow-600 dark:text-yellow-400 pt-1"></i><span>研发占比: ~5.8%</span></li>
+                                 <li class="flex items-start"><i class="fa-solid fa-boxes-stacked w-5 text-center mr-2 text-yellow-600 dark:text-yellow-400 pt-1"></i><span>产品线丰富度: 中</span></li>
+                                 <li class="flex items-start"><i class="fa-solid fa-robot w-5 text-center mr-2 text-yellow-600 dark:text-yellow-400 pt-1"></i><span>自动化水平: 中高</span></li>
+                             </ul>
+                         </div>
+                          <div class="comparison-card flex-1 bg-red-50 dark:bg-gray-800 p-4 rounded-lg border border-red-200 dark:border-red-700 shadow-md hover:shadow-lg transition-shadow duration-200">
+                             <h4 class="text-lg font-semibold mb-3 text-center text-red-800 dark:text-red-300 border-b pb-2 border-red-200 dark:border-red-700">国巨</h4>
+                              <ul class="space-y-2 text-sm mt-3">
+                                 <li class="flex items-start"><i class="fa-solid fa-dollar-sign w-5 text-center mr-2 text-red-600 dark:text-red-400 pt-1"></i><span>营收: ~33 亿美元</span></li>
+                                 <li class="flex items-start"><i class="fa-solid fa-chart-pie w-5 text-center mr-2 text-red-600 dark:text-red-400 pt-1"></i><span>MLCC份额: ~8%</span></li>
+                                 <li class="flex items-start"><i class="fa-solid fa-percent w-5 text-center mr-2 text-red-600 dark:text-red-400 pt-1"></i><span>毛利率: ~38%</span></li>
+                                 <li class="flex items-start"><i class="fa-solid fa-flask w-5 text-center mr-2 text-red-600 dark:text-red-400 pt-1"></i><span>研发占比: ~3.5%</span></li>
+                                 <li class="flex items-start"><i class="fa-solid fa-boxes-stacked w-5 text-center mr-2 text-red-600 dark:text-red-400 pt-1"></i><span>产品线丰富度: 中</span></li>
+                                 <li class="flex items-start"><i class="fa-solid fa-robot w-5 text-center mr-2 text-red-600 dark:text-red-400 pt-1"></i><span>自动化水平: 中</span></li>
+                             </ul>
+                         </div>
+                     </div>
+
+                     <h3 class="text-xl font-semibold mt-8 mb-4 text-gray-800 dark:text-white">SWOT 分析</h3>
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                         <div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg border border-green-200 dark:border-green-800 dark:border-opacity-50 shadow-sm">
+                             <h4 class="font-semibold text-green-800 dark:text-green-300 mb-2 flex items-center"><i class="fa-solid fa-thumbs-up mr-2 w-5 text-center"></i>优势 (Strengths)</h4>
+                             <ul class="list-disc list-inside space-y-1 text-sm ml-5">
+                                 <li>技术领先 (材料科学, 微细加工)</li>
+                                 <li>产品多元化 (被动+功能型元件)</li>
+                                 <li>优质客户资源 (苹果, 丰田等)</li>
+                                 <li>垂直整合能力</li>
+                             </ul>
+                         </div>
+                         <div class="bg-red-50 dark:bg-red-900/30 p-4 rounded-lg border border-red-200 dark:border-red-800 dark:border-opacity-50 shadow-sm">
+                             <h4 class="font-semibold text-red-800 dark:text-red-300 mb-2 flex items-center"><i class="fa-solid fa-thumbs-down mr-2 w-5 text-center"></i>劣势 (Weaknesses)</h4>
+                             <ul class="list-disc list-inside space-y-1 text-sm ml-5">
+                                 <li>日本本土生产成本较高</li>
+                                 <li>对消费电子依赖度高</li>
+                                 <li>BAW滤波器技术相对落后</li>
+                             </ul>
+                         </div>
+                         <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg border border-blue-200 dark:border-blue-800 dark:border-opacity-50 shadow-sm">
+                             <h4 class="font-semibold text-blue-800 dark:text-blue-300 mb-2 flex items-center"><i class="fa-solid fa-lightbulb mr-2 w-5 text-center"></i>机会 (Opportunities)</h4>
+                             <ul class="list-disc list-inside space-y-1 text-sm ml-5">
+                                 <li>汽车电子化/电动化</li>
+                                 <li>5G基础设施建设</li>
+                                 <li>物联网(IoT)发展</li>
+                             </ul>
+                         </div>
+                         <div class="bg-yellow-50 dark:bg-yellow-900/30 p-4 rounded-lg border border-yellow-200 dark:border-yellow-800 dark:border-opacity-50 shadow-sm">
+                             <h4 class="font-semibold text-yellow-800 dark:text-yellow-300 mb-2 flex items-center"><i class="fa-solid fa-triangle-exclamation mr-2 w-5 text-center"></i>威胁 (Threats)</h4>
+                             <ul class="list-disc list-inside space-y-1 text-sm ml-5">
+                                 <li>地缘政治与供应链风险</li>
+                                 <li>低成本竞争 (中国厂商)</li>
+                                 <li>技术替代风险</li>
+                             </ul>
+                         </div>
+                     </div>
+                     <p class="mt-4 text-sm italic text-gray-600 dark:text-gray-400">总体而言，村田凭借技术、多元化和质量保持领先，需应对成本和新兴市场竞争挑战。</p>
+                 </div>
+            </section>
+
+            <section id="section-7" class="report-section mb-10 md:mb-16 p-6 bg-white dark:bg-dark-card rounded-lg shadow-lg overflow-hidden">
+                 <h2 class="text-2xl font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700 flex items-center text-gray-800 dark:text-white">
+                     <i class="fa-solid fa-users-line mr-3 text-[var(--primary-color)] w-5 text-center"></i>
+                     <span>七、客户结构</span>
+                 </h2>
+                 <div class="space-y-4 text-gray-700 dark:text-dark-text">
+                    <p>客户结构多元化，覆盖消费电子、汽车电子、工业、医疗等领域，分散风险。</p>
+                    <div class="my-6 chart-container">
+                         <canvas id="customer-revenue-chart"></canvas>
+                    </div>
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                         <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border dark:border-gray-600 shadow-sm">
+                             <h4 class="font-semibold mb-2 text-gray-800 dark:text-white">主要客户群体 (收入占比):</h4>
+                             <ul class="list-disc list-inside space-y-1 pl-4">
+                                 <li>消费电子: ~50% (智能手机 ~30% - 苹果 ~15%, 三星 ~10%)</li>
+                                 <li>汽车电子: ~20% (增长最快, 目标25-30%)</li>
+                                 <li>工业 & 医疗: ~15% (高毛利)</li>
+                                 <li>通信基础设施: ~10%</li>
+                             </ul>
+                         </div>
+                         <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border dark:border-gray-600 shadow-sm">
+                              <h4 class="font-semibold mb-2 text-gray-800 dark:text-white">客户粘性与价值:</h4>
+                             <ul class="list-disc list-inside space-y-1 pl-4">
+                                 <li>高留存率 (汽车 >95%, 消费电子平均合作 >12年)。</li>
+                                 <li>汽车客户CLV是消费电子的 ~2.5倍。</li>
+                             </ul>
+                         </div>
+                     </div>
+                     <h3 class="font-semibold text-lg mt-6 mb-2 text-gray-800 dark:text-white">地域分布 (收入贡献):</h3>
+                     <p class="text-sm">亚太 70% (中国大陆+港台 40%, 日本 15%, 韩国 10%), 北美 15%, 欧洲 12%, 其他 3%。</p>
+                     <p class="mt-4">战略目标：到2025年将汽车电子和工业医疗收入占比提升至40%，优化结构。</p>
+                 </div>
+            </section>
+
+             <section id="section-8" class="report-section mb-10 md:mb-16 p-6 bg-white dark:bg-dark-card rounded-lg shadow-lg overflow-hidden">
+                 <h2 class="text-2xl font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700 flex items-center text-gray-800 dark:text-white">
+                     <i class="fa-solid fa-handshake mr-3 text-[var(--primary-color)] w-5 text-center"></i>
+                     <span>八、战略合作</span>
+                 </h2>
+                 <div class="space-y-4 text-gray-700 dark:text-dark-text">
+                     <p>通过多层次战略合作网络强化市场地位、获取技术、开拓市场、优化供应链。</p>
+                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 text-sm">
+                         <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg border dark:border-gray-600 shadow-sm">
+                             <h4 class="font-semibold mb-1 flex items-center text-gray-800 dark:text-white"><i class="fa-solid fa-flask w-4 mr-2 text-[var(--secondary-color)]"></i>技术研发合作</h4>
+                             <p>与京都大学(固态电池)、东京工业大学(5G)、MIT(AI传感)等合作，年产~50项新专利。</p>
+                         </div>
+                         <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg border dark:border-gray-600 shadow-sm">
+                             <h4 class="font-semibold mb-1 flex items-center text-gray-800 dark:text-white"><i class="fa-solid fa-link w-4 mr-2 text-[var(--secondary-color)]"></i>产业链合作</h4>
+                             <p>与东京电子(设备)、住友化学(材料)、丰田通商(稀土)等合作，保障供应与成本。</p>
+                         </div>
+                         <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg border dark:border-gray-600 shadow-sm">
+                             <h4 class="font-semibold mb-1 flex items-center text-gray-800 dark:text-white"><i class="fa-solid fa-bullhorn w-4 mr-2 text-[var(--secondary-color)]"></i>市场拓展合作</h4>
+                             <p>与苹果(核心供应商)、博世(汽车电子)等深度合作，共同开发解决方案。</p>
+                         </div>
+                         <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg border dark:border-gray-600 shadow-sm">
+                             <h4 class="font-semibold mb-1 flex items-center text-gray-800 dark:text-white"><i class="fa-solid fa-puzzle-piece w-4 mr-2 text-[var(--secondary-color)]"></i>新兴领域合作</h4>
+                             <p>与欧姆龙(工业IoT)、飞利浦医疗(医疗电子)等跨界合作，开拓新增长点。</p>
+                         </div>
+                         <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg border dark:border-gray-600 shadow-sm">
+                             <h4 class="font-semibold mb-1 flex items-center text-gray-800 dark:text-white"><i class="fa-solid fa-rocket w-4 mr-2 text-[var(--secondary-color)]"></i>战略投资与初创合作</h4>
+                             <p>通过CVC投资15家初创企业(AI、能源、生物传感等)，如Vayyar(3D雷达)。</p>
+                         </div>
+                     </div>
+                     <p class="mt-4">合作价值：加速创新 (周期缩短30%)，扩大市场 (新产品贡献~20%收入)，优化供应链。</p>
+                 </div>
+            </section>
+
+            <section id="section-9" class="report-section mb-10 md:mb-16 p-6 bg-white dark:bg-dark-card rounded-lg shadow-lg overflow-hidden">
+                 <h2 class="text-2xl font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700 flex items-center text-gray-800 dark:text-white">
+                     <i class="fa-solid fa-bullseye mr-3 text-[var(--primary-color)] w-5 text-center"></i>
+                     <span>九、竞争策略</span>
+                 </h2>
+                 <div class="space-y-4 text-gray-700 dark:text-dark-text">
+                     <h3 class="text-xl font-semibold text-[var(--primary-color)] dark:text-[var(--secondary-color)]">核心策略: "高端引领，全面覆盖"</h3>
+                     <p>通过技术创新保持高端领先，同时规模化生产覆盖中端市场。</p>
+                     <h3 class="font-semibold text-lg mt-4 mb-2 text-gray-800 dark:text-white">产品策略: "核心产品 + 解决方案"</h3>
+                     <p>深耕MLCC/滤波器等优势产品，拓展模块化解决方案 (如RFFM)，提升附加值 (均价5年提升25%)。</p>
+                     <h3 class="font-semibold text-lg mt-4 mb-2 text-gray-800 dark:text-white">市场策略 (差异化):</h3>
+                     <ul class="list-disc list-inside space-y-1 pl-4 text-sm">
+                         <li><strong>消费电子</strong>: 与头部品牌深度合作，"设计入驻"模式。</li>
+                         <li><strong>汽车电子</strong>: "高可靠性、全生命周期支持"策略 (>15年支持)。</li>
+                         <li><strong>新兴市场</strong>: "本地化 + 全球标准"策略 (如中国设技术中心)。</li>
+                     </ul>
+                     <h3 class="font-semibold text-lg mt-4 mb-2 text-gray-800 dark:text-white">应对价格竞争:</h3>
+                     <p>不打价格战，依靠<strong class="text-[var(--accent-color)] font-semibold">技术差异化</strong> (高端产品壁垒) 和<strong class="text-[var(--accent-color)] font-semibold">全方位服务</strong>。</p>
+                     <h3 class="font-semibold text-lg mt-4 mb-2 text-gray-800 dark:text-white">全球化布局:</h3>
+                     <p>"核心技术日本研发、全球分工生产"策略，优化成本与供应链韧性。</p>
+                     <p class="mt-4">未来五年重点布局 5G/6G、新能源汽车、工业IoT，计划投入5000亿日元研发与扩产。</p>
+                 </div>
+            </section>
+
+             <section id="section-10" class="report-section mb-10 md:mb-16 p-6 bg-white dark:bg-dark-card rounded-lg shadow-lg overflow-hidden">
+                 <h2 class="text-2xl font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700 flex items-center text-gray-800 dark:text-white">
+                     <i class="fa-solid fa-chart-line mr-3 text-[var(--primary-color)] w-5 text-center"></i>
+                     <span>十、财务分析</span>
+                 </h2>
+                 <div class="space-y-6 text-gray-700 dark:text-dark-text">
+                     <p>财务表现稳健，盈利能力强。</p>
+                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 my-4">
+                         <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg text-center border dark:border-gray-600 shadow-sm">
+                             <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">2022财年营收</h4>
+                             <p class="text-xl font-bold mt-1 text-gray-800 dark:text-white">1.82万亿日元</p>
+                             <p class="text-xs text-green-600 dark:text-green-400">(+11.3% YoY)</p>
+                         </div>
+                         <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg text-center border dark:border-gray-600 shadow-sm">
+                             <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">营业利润率</h4>
+                             <p class="text-xl font-bold mt-1 text-gray-800 dark:text-white">25.4%</p>
+                         </div>
+                         <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg text-center border dark:border-gray-600 shadow-sm">
+                             <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">净利润率</h4>
+                             <p class="text-xl font-bold mt-1 text-gray-800 dark:text-white">19.2%</p>
+                         </div>
+                          <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg text-center border dark:border-gray-600 shadow-sm">
+                             <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">资产负债率</h4>
+                             <p class="text-xl font-bold mt-1 text-gray-800 dark:text-white">25.2%</p>
+                             <p class="text-xs text-gray-500 dark:text-gray-400">(财务稳健)</p>
+                         </div>
+                     </div>
+
+                     <div class="chart-container my-6">
+                         <canvas id="revenue-growth-chart"></canvas>
+                     </div>
+
+                     <h3 class="font-semibold text-lg mt-6 mb-2 text-gray-800 dark:text-white">盈利能力趋势 (关键比率)</h3>
+                     <div class="chart-container my-6">
+                         <canvas id="profitability-chart"></canvas>
+                     </div>
+                     <h3 class="font-semibold text-lg mt-6 mb-2 text-gray-800 dark:text-white">关键财务比率一览</h3>
+                    <div class="overflow-x-auto shadow-sm rounded-lg border dark:border-gray-600">
+                        <div class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <div class="grid grid-cols-4 bg-gray-50 dark:bg-gray-700 px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                <div>财务指标</div>
+                                <div class="text-right">2022财年</div>
+                                <div class="text-right">2021财年</div>
+                                <div class="text-right">2020财年</div>
+                            </div>
+                            <div class="divide-y divide-gray-200 dark:divide-gray-700 text-sm bg-white dark:bg-dark-card">
+                                <div class="grid grid-cols-4 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
+                                    <div class="font-medium">毛利率</div>
+                                    <div class="text-right">43.5%</div>
+                                    <div class="text-right">44.2%</div>
+                                    <div class="text-right">42.8%</div>
+                                </div>
+                                <div class="grid grid-cols-4 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
+                                    <div class="font-medium">营业利润率</div>
+                                    <div class="text-right">25.4%</div>
+                                    <div class="text-right">24.8%</div>
+                                    <div class="text-right">22.5%</div>
+                                </div>
+                                <div class="grid grid-cols-4 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
+                                    <div class="font-medium">净利润率</div>
+                                    <div class="text-right">19.2%</div>
+                                    <div class="text-right">18.5%</div>
+                                    <div class="text-right">16.9%</div>
+                                </div>
+                                <div class="grid grid-cols-4 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
+                                    <div class="font-medium">资产回报率(ROA)</div>
+                                    <div class="text-right">11.2%</div>
+                                    <div class="text-right">10.8%</div>
+                                    <div class="text-right">9.5%</div>
+                                </div>
+                                <div class="grid grid-cols-4 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
+                                    <div class="font-medium">股本回报率(ROE)</div>
+                                    <div class="text-right">15.0%</div>
+                                    <div class="text-right">14.5%</div>
+                                    <div class="text-right">13.2%</div>
+                                </div>
+                                 <div class="grid grid-cols-4 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
+                                    <div class="font-medium">存货周转率(次/年)</div>
+                                    <div class="text-right">3.8</div>
+                                    <div class="text-right">4.2</div>
+                                    <div class="text-right">3.9</div>
+                                </div>
+                                <div class="grid grid-cols-4 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
+                                    <div class="font-medium">应收账款周转率(次/年)</div>
+                                    <div class="text-right">4.5</div>
+                                    <div class="text-right">4.7</div>
+                                    <div class="text-right">4.3</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                     <h3 class="font-semibold text-lg mt-6 mb-2 text-gray-800 dark:text-white">现金流与投资:</h3>
+                     <p class="text-sm">经营现金流强劲 (5380亿日元)，持续高强度资本支出 (2850亿日元) 和研发投入 (1350亿日元)。自由现金流健康 (1460亿日元)。</p>
+                     <h3 class="font-semibold text-lg mt-6 mb-2 text-gray-800 dark:text-white">股东回报:</h3>
+                     <p class="text-sm">重视股东回报，股息支付率~35.8%，并实施股票回购。</p>
+                     <h3 class="font-semibold text-lg mt-6 mb-2 text-gray-800 dark:text-white">财务预测与风险:</h3>
+                     <p class="text-sm">预计未来3年收入年均增长7-10% (汽车电子>15%)，营业利润率稳定在25-27%。风险包括汇率波动、原材料成本、市场放缓、资本支出回报。</p>
+                     <p class="mt-4 font-semibold text-gray-800 dark:text-white">总体评价：财务卓越，基础坚实，支持长期发展和股东回报。</p>
+                 </div>
+            </section>
+
+            <section id="section-11" class="report-section mb-10 md:mb-16 p-6 bg-white dark:bg-dark-card rounded-lg shadow-lg overflow-hidden">
+                 <h2 class="text-2xl font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700 flex items-center text-gray-800 dark:text-white">
+                     <i class="fa-solid fa-triangle-exclamation mr-3 text-[var(--primary-color)] w-5 text-center"></i>
+                     <span>十一、风险评估</span>
+                 </h2>
+                 <div class="space-y-4 text-gray-700 dark:text-dark-text">
+                     <p>面临多维度风险，但公司风险应对能力较强。</p>
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                         <div class="border dark:border-gray-600 rounded-lg p-4 bg-red-50 dark:bg-red-900/30 shadow-sm">
+                             <h4 class="font-semibold text-red-800 dark:text-red-300 mb-1 flex items-center"><i class="fa-solid fa-store-slash mr-2 w-5 text-center"></i>市场风险</h4>
+                             <p class="text-sm">对消费电子(尤其手机)依赖 (~50%收入)，市场饱和与波动；大客户集中度风险 (苹果~15%)。 <strong class="block mt-1 text-red-600 dark:text-red-400 text-xs">[应对: 拓展汽车/工业]</strong></p>
+                         </div>
+                         <div class="border dark:border-gray-600 rounded-lg p-4 bg-yellow-50 dark:bg-yellow-900/30 shadow-sm">
+                             <h4 class="font-semibold text-yellow-800 dark:text-yellow-300 mb-1 flex items-center"><i class="fa-solid fa-microchip mr-2 w-5 text-center"></i>技术风险</h4>
+                             <p class="text-sm">技术迭代快，产品生命周期短；新材料/工艺替代风险；关键人才流失。 <strong class="block mt-1 text-yellow-600 dark:text-yellow-400 text-xs">[应对: 高研发投入, 多路线布局]</strong></p>
+                         </div>
+                         <div class="border dark:border-gray-600 rounded-lg p-4 bg-orange-50 dark:bg-orange-900/30 shadow-sm">
+                             <h4 class="font-semibold text-orange-800 dark:text-orange-300 mb-1 flex items-center"><i class="fa-solid fa-truck-ramp-box mr-2 w-5 text-center"></i>供应链风险</h4>
+                             <p class="text-sm">关键原材料价格波动 (钯, 镍)；地缘政治导致中断。 <strong class="block mt-1 text-orange-600 dark:text-orange-400 text-xs">[应对: 长协/库存, 全球化生产]</strong></p>
+                         </div>
+                         <div class="border dark:border-gray-600 rounded-lg p-4 bg-purple-50 dark:bg-purple-900/30 shadow-sm">
+                             <h4 class="font-semibold text-purple-800 dark:text-purple-300 mb-1 flex items-center"><i class="fa-solid fa-users-slash mr-2 w-5 text-center"></i>竞争风险</h4>
+                             <p class="text-sm">传统对手追赶；中国厂商价格竞争；客户自研趋势。 <strong class="block mt-1 text-purple-600 dark:text-purple-400 text-xs">[应对: 技术差异化, 服务, 成本效率]</strong></p>
+                         </div>
+                         <div class="border dark:border-gray-600 rounded-lg p-4 bg-indigo-50 dark:bg-indigo-900/30 shadow-sm">
+                             <h4 class="font-semibold text-indigo-800 dark:text-indigo-300 mb-1 flex items-center"><i class="fa-solid fa-scale-balanced mr-2 w-5 text-center"></i>政策与合规风险</h4>
+                             <p class="text-sm">贸易保护主义；环保标准提高 (RoHS, REACH)。 <strong class="block mt-1 text-indigo-600 dark:text-indigo-400 text-xs">[应对: 全球合规投入, 环保材料/工艺]</strong></p>
+                         </div>
+                         <div class="border dark:border-gray-600 rounded-lg p-4 bg-pink-50 dark:bg-pink-900/30 shadow-sm">
+                             <h4 class="font-semibold text-pink-800 dark:text-pink-300 mb-1 flex items-center"><i class="fa-solid fa-yen-sign mr-2 w-5 text-center"></i>汇率风险</h4>
+                             <p class="text-sm">海外收入占比高 (~85%)，日元汇率波动影响盈利。 <strong class="block mt-1 text-pink-600 dark:text-pink-400 text-xs">[应对: 自然对冲, 本地化采购, 金融衍生品]</strong></p>
+                         </div>
+                          <div class="border dark:border-gray-600 rounded-lg p-4 bg-gray-100 dark:bg-gray-700 shadow-sm">
+                             <h4 class="font-semibold text-gray-800 dark:text-gray-300 mb-1 flex items-center"><i class="fa-solid fa-house-flood-water mr-2 w-5 text-center"></i>自然灾害风险</h4>
+                             <p class="text-sm">地震、暴雨等影响生产设施。 <strong class="block mt-1 text-gray-600 dark:text-gray-400 text-xs">[应对: 分散生产网络, 备份产能, 灾害应对机制]</strong></p>
+                         </div>
+                     </div>
+                     <p class="mt-4 font-semibold text-gray-800 dark:text-white">风险应对能力：总体较强，现金储备充足 (7410亿日元)，低负债率 (25.2%)，有完善风险管理体系。业务转型有望优化风险结构。</p>
+                 </div>
+            </section>
+
+            <section id="section-12" class="report-section mb-10 md:mb-16 p-6 bg-white dark:bg-dark-card rounded-lg shadow-lg overflow-hidden">
+                 <h2 class="text-2xl font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700 flex items-center text-gray-800 dark:text-white">
+                     <i class="fa-solid fa-flag-checkered mr-3 text-[var(--primary-color)] w-5 text-center"></i>
+                     <span>十二、总结展望</span>
+                 </h2>
+                 <div class="space-y-4 text-gray-700 dark:text-dark-text">
+                     <p>村田制作所已成长为全球电子元器件领导者，凭借<strong class="text-[var(--accent-color)] font-semibold">技术壁垒、垂直整合、多元客户、稳健财务</strong>保持领先。</p>
+                     <h3 class="font-semibold text-lg mt-6 mb-2 text-gray-800 dark:text-white">未来增长机遇:</h3>
+                     <ul class="list-disc list-inside space-y-2 pl-4">
+                         <li><strong class="text-[var(--secondary-color)] font-medium">汽车电子化/电动化</strong>: 主要受益者，目标收入占比30% (年增>15%)。</li>
+                         <li><strong class="text-[var(--secondary-color)] font-medium">5G/6G通信</strong>: 持续拉动高频元件需求，具备长期优势。</li>
+                         <li><strong class="text-[var(--secondary-color)] font-medium">物联网/工业互联网</strong>: 创造大量新应用场景 (工业自动化, 智能医疗等)。</li>
+                     </ul>
+                      <h3 class="font-semibold text-lg mt-6 mb-2 text-gray-800 dark:text-white">面临挑战与应对:</h3>
+                      <p class="text-sm">挑战包括竞争加剧、供应链风险、技术替代。应对策略：持续创新、优化布局、产品多元化、数字化转型、可持续发展。</p>
+                      <h3 class="font-semibold text-lg mt-6 mb-2 text-gray-800 dark:text-white">投资价值展望:</h3>
+                      <p class="text-sm">具备可持续竞争优势和明确增长路径。市场地位稳固，积极布局未来。财务表现优异，注重股东回报 (股息率~35%)。</p>
+                      <p class="mt-4 font-semibold text-gray-800 dark:text-white">总体评价：行业领军，增长潜力明确，风险可控，长期价值值得期待。</p>
+                 </div>
+            </section>
+
+            <footer class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-center text-xs text-gray-500 dark:text-gray-400 print:hidden">
+                <p>版权所有 © <span id="current-year"></span> 智绘链图</p>
+                <p>报告生成时间: <span id="generation-time"></span></p>
+            </footer>
+
+        </main>
+    </div>
+
+    <script>
+        // Wrap all JS in DOMContentLoaded to ensure elements exist
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // === Theme Toggle ===
+            const themeToggleButton = document.getElementById('theme-toggle-button');
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+            const htmlElement = document.documentElement;
+
+            const applyTheme = (isDark) => {
+                htmlElement.classList.toggle('dark', isDark);
+                if (themeIcon && themeText) { // Check if elements exist
+                    if (isDark) {
+                        themeIcon.classList.remove('fa-sun');
+                        themeIcon.classList.add('fa-moon');
+                        themeText.textContent = '深色模式';
+                    } else {
+                        themeIcon.classList.remove('fa-moon');
+                        themeIcon.classList.add('fa-sun');
+                        themeText.textContent = '浅色模式';
+                    }
+                }
+            };
+
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            let isDarkMode = savedTheme ? savedTheme === 'dark' : prefersDark;
+
+            applyTheme(isDarkMode); // Apply initial theme
+
+            if (themeToggleButton) {
+                themeToggleButton.addEventListener('click', () => {
+                    isDarkMode = !isDarkMode;
+                    applyTheme(isDarkMode);
+                    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+                });
+            }
+
+            // === Directory Highlight ===
+            const mainContent = document.querySelector('.main-content');
+            const sections = document.querySelectorAll('.report-section');
+            const tocLinks = document.querySelectorAll('.toc-link');
+
+            if (mainContent && sections.length > 0 && tocLinks.length > 0) {
+                 const observerOptions = {
+                    root: mainContent,
+                    rootMargin: '0px 0px -70% 0px', // Highlight when section is ~30% from top
+                    threshold: 0
+                 };
+
+                 const observerCallback = (entries) => {
+                    let latestVisibleSectionId = null;
+                    let minTop = Infinity;
+
+                    entries.forEach(entry => {
+                        const rect = entry.boundingClientRect;
+                        // Check if it's intersecting AND its top is within the viewport top margin area
+                        if (entry.isIntersecting && rect.top >= 0 && rect.top < window.innerHeight * 0.3) {
+                             if (rect.top < minTop) {
+                                 minTop = rect.top;
+                                 latestVisibleSectionId = entry.target.id;
+                             }
+                        }
+                    });
+
+                    // Fallback: If nothing is in the top 30%, find the first one visible at all
+                    if (!latestVisibleSectionId) {
+                         for (const entry of entries) {
+                             if (entry.isIntersecting) {
+                                 latestVisibleSectionId = entry.target.id;
+                                 break; // Take the first one intersecting
+                             }
+                         }
+                    }
+
+                    // Fallback: If still nothing, check scroll position for first/last section
+                    if (!latestVisibleSectionId) {
+                        if (mainContent.scrollTop < 100) { // Near top
+                            latestVisibleSectionId = sections[0]?.id;
+                        } else if (mainContent.scrollHeight - mainContent.scrollTop - mainContent.clientHeight < 100) { // Near bottom
+                            latestVisibleSectionId = sections[sections.length - 1]?.id;
+                        }
+                    }
+
+
+                    tocLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (latestVisibleSectionId && link.getAttribute('href') === `#${latestVisibleSectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                 };
+
+
+                const observer = new IntersectionObserver(observerCallback, observerOptions);
+                sections.forEach(section => observer.observe(section));
+
+                // Initial highlight check in case the page loads scrolled
+                 setTimeout(() => { // Run after initial layout
+                    const initialEntries = [];
+                    sections.forEach(section => {
+                        const rect = section.getBoundingClientRect();
+                        const rootRect = mainContent.getBoundingClientRect();
+                        const isIntersecting = rect.top <= rootRect.top + (window.innerHeight * 0.3) && rect.bottom >= rootRect.top;
+                        initialEntries.push({ target: section, isIntersecting: isIntersecting, boundingClientRect: rect });
+                    });
+                    observerCallback(initialEntries);
+                 }, 100);
+
+            } else {
+                 console.warn("Directory highlighting elements not found.");
+            }
+
+
+            // === Chart.js Initialization ===
+            // Make sure Chart and ChartDataLabels are defined (check console if errors)
+            if (typeof Chart !== 'undefined' && typeof ChartDataLabels !== 'undefined') {
+                Chart.register(ChartDataLabels);
+                Chart.defaults.font.family = "'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif";
+                Chart.defaults.plugins.title.display = true;
+                Chart.defaults.plugins.title.font = { size: 16 };
+                Chart.defaults.plugins.title.color = isDarkMode ? 'rgb(229, 231, 235)' : 'rgb(31, 41, 55)'; // Adjust color based on theme
+                Chart.defaults.plugins.legend.labels.color = isDarkMode ? 'rgb(229, 231, 235)' : 'rgb(75, 85, 99)';
+                Chart.defaults.scale.ticks.color = isDarkMode ? 'rgb(156, 163, 175)' : 'rgb(107, 114, 128)';
+                Chart.defaults.scale.grid.color = isDarkMode ? 'rgba(75, 85, 99, 0.5)' : 'rgba(229, 231, 235, 0.8)';
+                Chart.defaults.plugins.datalabels.anchor = 'end';
+                Chart.defaults.plugins.datalabels.align = 'top';
+                Chart.defaults.plugins.datalabels.color = isDarkMode ? 'rgb(209, 213, 219)' : '#444'; // Adjust label color
+                Chart.defaults.plugins.datalabels.font = { size: 10 };
+                Chart.defaults.plugins.datalabels.formatter = (value) => value;
+
+
+                // --- Market Size Chart (Section 2) ---
+                const marketCtx = document.getElementById('market-size-chart');
+                if (marketCtx) {
+                    new Chart(marketCtx, {
+                        type: 'bar',
+                        data: { /* ... data ... */
+                            labels: ['2022年', '2027年 (预计)'],
+                            datasets: [{
+                                label: '全球被动元件市场规模 (亿美元)',
+                                data: [350, 450],
+                                backgroundColor: ['rgba(74, 122, 201, 0.6)', 'rgba(41, 87, 164, 0.6)'],
+                                borderColor: ['rgb(74, 122, 201)', 'rgb(41, 87, 164)'],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: { text: '全球被动元件市场规模趋势' },
+                                datalabels: { formatter: (value) => value + ' 亿美元' }
+                            },
+                            scales: { y: { beginAtZero: true, title: { display: true, text: '市场规模 (亿美元)' } } }
+                        }
+                    });
+                }
+
+                // --- Customer Revenue Chart (Section 7) ---
+                const customerCtx = document.getElementById('customer-revenue-chart');
+                if (customerCtx) {
+                    new Chart(customerCtx, {
+                        type: 'pie',
+                        data: { /* ... data ... */
+                            labels: ['消费电子', '汽车电子', '工业 & 医疗', '通信基础设施'],
+                            datasets: [{
+                                label: '收入占比 (%)',
+                                data: [50, 20, 15, 10],
+                                backgroundColor: [
+                                    'rgba(41, 87, 164, 0.7)',  // Primary
+                                    'rgba(255, 125, 77, 0.7)', // Accent
+                                    'rgba(74, 122, 201, 0.7)', // Secondary
+                                    'rgba(107, 114, 128, 0.7)' // Gray
+                                ],
+                                hoverOffset: 4
+                            }]
+                        },
+                        options: {
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: { text: '客户群体收入占比 (约)' },
+                                tooltip: { callbacks: { label: (context) => `${context.label}: ${context.raw}%` } },
+                                datalabels: {
+                                     formatter: (value, context) => {
+                                         let sum = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                         let percentage = (value * 100 / sum).toFixed(0) + "%";
+                                         // Only show label if percentage is large enough
+                                         return value > 5 ? percentage : '';
+                                     },
+                                     color: '#fff',
+                                     font: { weight: 'bold' }
+                                 }
+                            }
+                        }
+                    });
+                }
+
+                 // --- Revenue Growth Chart (Section 10) ---
+                 const revenueCtx = document.getElementById('revenue-growth-chart');
+                 if (revenueCtx) {
+                     new Chart(revenueCtx, {
+                         type: 'line',
+                         data: { /* ... data ... */
+                             labels: ['2020财年', '2021财年', '2022财年'],
+                             datasets: [{
+                                 label: '营业收入 (万亿日元)',
+                                 data: [1.5, 1.63, 1.82],
+                                 borderColor: 'rgb(41, 87, 164)',
+                                 backgroundColor: 'rgba(41, 87, 164, 0.1)',
+                                 fill: true,
+                                 tension: 0.1
+                             }]
+                         },
+                         options: {
+                             maintainAspectRatio: false,
+                             plugins: { title: { text: '营业收入增长趋势' } },
+                             scales: { y: { beginAtZero: false, title: { display: true, text: '万亿日元' } } }
+                         }
+                     });
+                 }
+
+                 // --- Profitability Chart (Section 10) ---
+                 const profitCtx = document.getElementById('profitability-chart');
+                 if (profitCtx) {
+                     new Chart(profitCtx, {
+                         type: 'bar',
+                         data: { /* ... data ... */
+                             labels: ['2020财年', '2021财年', '2022财年'],
+                             datasets: [
+                                 {
+                                     label: '毛利率 (%)',
+                                     data: [42.8, 44.2, 43.5],
+                                     backgroundColor: 'rgba(74, 122, 201, 0.7)', // Secondary
+                                     borderColor: 'rgb(74, 122, 201)',
+                                     borderWidth: 1
+                                 },
+                                 {
+                                     label: '营业利润率 (%)',
+                                     data: [22.5, 24.8, 25.4],
+                                     backgroundColor: 'rgba(41, 87, 164, 0.7)', // Primary
+                                     borderColor: 'rgb(41, 87, 164)',
+                                     borderWidth: 1
+                                 },
+                                 {
+                                     label: '净利润率 (%)',
+                                     data: [16.9, 18.5, 19.2],
+                                     backgroundColor: 'rgba(255, 125, 77, 0.7)', // Accent
+                                     borderColor: 'rgb(255, 125, 77)',
+                                     borderWidth: 1
+                                 }
+                             ]
+                         },
+                         options: {
+                             maintainAspectRatio: false,
+                             plugins: {
+                                 title: { text: '关键盈利比率趋势 (%)' },
+                                 datalabels: {
+                                     formatter: (value) => value.toFixed(1) + '%',
+                                      font: { size: 10 }
+                                 }
+                             },
+                             scales: {
+                                 y: { beginAtZero: true, title: { display: true, text: '百分比 (%)' } },
+                                 x: { ticks: { font: { size: 10 } } } // Smaller font for x-axis labels
+                             },
+                             indexAxis: 'x',
+                             grouped: true
+                         }
+                     });
+                 }
+            } else {
+                 console.error("Chart.js or ChartDataLabels not loaded.");
+            }
+
+
+            // === Clearbit Logo Fetch ===
+            const logoContainer = document.getElementById('company-logo-container');
+            const companyDomain = 'murata.com';
+
+            if (logoContainer && companyDomain) {
+                fetch(`https://logo.clearbit.com/${companyDomain}`)
+                    .then(response => {
+                        if (response.ok) {
+                            return response.blob();
+                        }
+                        throw new Error('Logo not found or Clearbit API error');
+                    })
+                    .then(blob => {
+                        const logoUrl = URL.createObjectURL(blob);
+                        logoContainer.innerHTML = `<img src="${logoUrl}" alt="村田制作所 Logo" class="object-contain h-full w-full">`;
+                    })
+                    .catch(error => {
+                        console.warn('Clearbit logo fetch failed:', error);
+                        const companyName = "村田制作所";
+                        const firstLetter = companyName ? companyName.charAt(0) : 'M'; // Default to M if name missing
+                         logoContainer.innerHTML = `<span class="text-2xl font-bold select-none">${firstLetter}</span>`;
+                    });
+            }
+
+            // === Save to Local Button ===
+            const saveButton = document.getElementById('save-button');
+            if (saveButton) {
+                saveButton.addEventListener('click', () => {
+                    try {
+                        const clonedDocElement = document.documentElement.cloneNode(true);
+                        const timeElement = clonedDocElement.querySelector('#generation-time');
+                        if (timeElement) {
+                            timeElement.textContent = new Date().toLocaleString('zh-CN');
+                        }
+
+                        // Remove the script controlling the save itself to avoid issues in saved file
+                        const selfScript = clonedDocElement.querySelector('script:last-of-type');
+                        // A more robust way might be needed if script order changes
+                        // if(selfScript) selfScript.remove();
+
+                        const htmlContent = "<!DOCTYPE html>\n" + clonedDocElement.outerHTML;
+                        const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        const today = new Date();
+                        const dateString = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
+                        link.download = `村田制作所-深度研究报告-${dateString}.html`;
+                        link.href = url;
+                        link.style.display = 'none';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
+                    } catch (error) {
+                        console.error("Failed to save report:", error);
+                        alert("无法保存报告。请检查浏览器权限或稍后再试。");
+                    }
+                });
+            }
+
+            // === Footer Info ===
+            const yearSpan = document.getElementById('current-year');
+            const timeSpan = document.getElementById('generation-time');
+            if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+            if (timeSpan) timeSpan.textContent = new Date().toLocaleString('zh-CN');
+
+        }); // End DOMContentLoaded
+    </script>
+
+</body>
+</html>

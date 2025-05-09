@@ -113,7 +113,7 @@ export function generateCompanyAnalysisHTMLPrompt({
   - 公司概述：\`fa-info-circle\`
   - 产品服务：\`fa-cube\`
   - 市场分析：\`fa-chart-line\`
-  - 竞争分析：\`fa-users\`
+  - 竞争分析与策略：\`fa-users\`
   - 财务分析：\`fa-dollar-sign\`
   - 风险分析：\`fa-exclamation-triangle\`
 

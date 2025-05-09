@@ -1,0 +1,1798 @@
+<html lang="zh-CN"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>罗克韦尔自动化 - 具身机器人行业深度研究报告</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* 基础样式 */
+        :root {
+            --primary: #3B82F6;
+            --secondary: #6366F1;
+            --accent: #EC4899;
+            --background: #F9FAFB;
+            --text: #1F2937;
+        }
+        
+        .dark {
+            --primary: #60A5FA;
+            --secondary: #818CF8;
+            --accent: #F472B6;
+            --background: #111827;
+            --text: #F9FAFB;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        /* 文本排版规则 */
+        p, h1, h2, h3, h4, h5, h6, li, div, span {
+            word-break: keep-all;
+            overflow-wrap: break-word;
+            text-align: justify;
+            hyphens: auto;
+            line-height: 1.6;
+        }
+
+        /* 滚动行为 */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* 目录项样式 */
+        .toc-item {
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            padding-left: 0.75rem;
+        }
+
+        .toc-item.active {
+            border-left: 3px solid var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* 卡片式比较组件 */
+        .comparison-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+        }
+
+        .comparison-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* 章节淡入动画 */
+        .section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 图标特效 */
+        .section-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .section:hover .section-icon {
+            transform: scale(1.2);
+        }
+
+        /* 加载动画 */
+        .loader {
+            border: 5px solid rgba(243, 244, 246, 0.3);
+            border-radius: 50%;
+            border-top: 5px solid var(--primary);
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* SWOT分析样式 */
+        .swot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .swot-item {
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            height: 100%;
+        }
+
+        .swot-s {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3B82F6;
+        }
+
+        .swot-w {
+            background-color: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #EF4444;
+        }
+
+        .swot-o {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10B981;
+        }
+
+        .swot-t {
+            background-color: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #F59E0B;
+        }
+
+        /* 图表容器 */
+        .chart-container {
+            position: relative;
+            max-height: 50vh;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 1024px) {
+            .chart-container {
+                max-width: 75%;
+            }
+        }
+
+        /* 深色模式切换 */
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* 比较卡片特殊样式 */
+        .compare-feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .compare-feature i {
+            margin-right: 0.75rem;
+            color: var(--primary);
+            min-width: 1.5rem;
+            text-align: center;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .swot-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(4, auto);
+            }
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <!-- 页面加载动画 -->
+    <div id="loader" class="fixed inset-0 flex items-center justify-center bg-white dark:bg-gray-900 z-50" style="opacity: 0; display: none;">
+        <div class="loader"></div>
+    </div>
+
+    <!-- 顶部导航 -->
+    <header class="sticky top-0 bg-white dark:bg-gray-900 shadow-md z-40 transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <img id="company-logo" src="https://logo.clearbit.com/rockwellautomation.com" alt="罗克韦尔自动化" class="h-10 mr-3" onerror="this.onerror=null; this.src=''; this.innerHTML='<i class=\'fas fa-building text-3xl text-blue-500\'></i>';">
+                <h1 class="text-xl font-bold text-gray-800 dark:text-white">罗克韦尔自动化 <span class="text-sm font-normal text-gray-500 dark:text-gray-400">具身机器人行业深度研究</span></h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="download-btn" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm flex items-center transition-all">
+                    <i class="fas fa-download mr-2"></i> 保存报告
+                </button>
+                <label class="theme-switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主体内容 -->
+    <div class="container mx-auto px-4 py-6 flex flex-col lg:flex-row">
+        <!-- 左侧目录 -->
+        <aside class="lg:w-1/4 lg:pr-6 mb-6 lg:mb-0">
+            <div class="sticky top-20">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-5 mb-6">
+                    <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-white flex items-center">
+                        <i class="fas fa-list-ul mr-2 text-blue-500"></i> 目录
+                    </h2>
+                    <ul class="space-y-2" id="toc">
+                        <li><a href="#company-overview" class="toc-item block text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">公司概览</a></li>
+                        <li><a href="#industry-landscape" class="toc-item block text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">行业格局</a></li>
+                        <li><a href="#business-model" class="toc-item block text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">盈利模式</a></li>
+                        <li><a href="#core-products" class="toc-item block text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">核心产品</a></li>
+                        <li><a href="#technical-strength" class="toc-item block text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">技术实力</a></li>
+                        <li><a href="#competitive-analysis" class="toc-item block text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">竞争分析</a></li>
+                        <li><a href="#customer-structure" class="toc-item block text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">客户结构</a></li>
+                        <li><a href="#strategic-partnerships" class="toc-item block text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 active">战略合作</a></li>
+                        <li><a href="#competitive-strategy" class="toc-item block text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">竞争策略</a></li>
+                        <li><a href="#financial-analysis" class="toc-item block text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">财务分析</a></li>
+                        <li><a href="#risk-assessment" class="toc-item block text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">风险评估</a></li>
+                        <li><a href="#conclusion" class="toc-item block text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">总结展望</a></li>
+                    </ul>
+                </div>
+                
+                <!-- 关键指标卡片 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-5">
+                    <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-white flex items-center">
+                        <i class="fas fa-chart-pie mr-2 text-blue-500"></i> 关键指标
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">股票代码</span>
+                            <span class="font-medium text-gray-800 dark:text-white">NYSE: ROK</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">年收入</span>
+                            <span class="font-medium text-gray-800 dark:text-white">90亿美元+</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">毛利率</span>
+                            <span class="font-medium text-gray-800 dark:text-white">~40%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">研发投入比例</span>
+                            <span class="font-medium text-gray-800 dark:text-white">5%-6%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">行业地位</span>
+                            <span class="font-medium text-blue-500">北美市场领先</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 右侧内容 -->
+        <main class="lg:w-3/4">
+            <!-- 公司概览 -->
+            <section id="company-overview" class="section bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 visible">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
+                    <i class="fas fa-info-circle mr-3 text-blue-500 section-icon"></i> 公司概览
+                </h2>
+                <p class="mb-4 text-gray-700 dark:text-gray-300">
+                    罗克韦尔自动化（Rockwell Automation, Inc., NYSE: ROK）是一家拥有超过百年历史的全球工业自动化和信息解决方案领导者。其前身可追溯至1903年，通过艾伦-布拉德利（Allen-Bradley）品牌奠定了在工业控制领域的坚实基础。现任董事长兼CEO <strong>Blake D. Moret</strong> 领导的核心团队，致力于推动公司的战略转型。核心业务涵盖<strong>智能设备（硬件）、软件和生命周期服务</strong>三大板块，旨在帮助全球制造商提高生产力、灵活性和可持续性。在行业内，罗克韦尔自动化以其高质量的硬件产品、领先的控制系统技术以及日益增强的软件和服务能力而闻名，尤其在北美市场占据<strong>主导地位</strong>。公司的长期战略愿景是实现<strong>"互联企业"（The Connected Enterprise）</strong>，通过整合OT与IT，赋能客户实现数据驱动的决策和智能制造，这使其成为推动包括<strong>具身机器人</strong>在内的先进自动化系统落地应用的关键技术提供商和集成伙伴。
+                </p>
+                <div class="chart-container">
+                    <canvas id="businessSegmentChart" width="1620" height="600" style="display: block; box-sizing: border-box; height: 300px; width: 810px;"></canvas>
+                </div>
+            </section>
+
+            <!-- 行业格局 -->
+            <section id="industry-landscape" class="section bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 visible">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
+                    <i class="fas fa-industry mr-3 text-blue-500 section-icon"></i> 行业格局
+                </h2>
+                <p class="mb-4 text-gray-700 dark:text-gray-300">
+                    罗克韦尔自动化主要服务于广阔的工业自动化市场，并处于向工业4.0和智能制造转型的核心地带。该行业正经历深刻变革，其宏观趋势包括<strong>数字化转型加速、对更高生产效率和柔性制造的需求、供应链韧性增强以及可持续发展压力增大</strong>。这些因素共同构成了行业的<strong>核心增长驱动力</strong>。全球工业自动化市场规模巨大，预计达到数千亿美元，并以<strong>年均复合增长率（CAGR）约7-9%</strong>的速度稳步增长（数据来源：多个市场研究机构，具体数值可能略有差异）。其中，与<strong>具身机器人</strong>相关的智能制造、工业物联网（IIoT）和自动化软件细分市场的增速预计<strong>更高</strong>。例如，全球工业机器人市场预计在未来五年将保持<strong>两位数</strong>的增长。当前的<strong>行业渗透率</strong>，特别是在中小企业和新兴经济体中，仍有巨大提升空间。各国政府（如美国的"制造业回流"倡议、中国的"智能制造2025"）推出的<strong>政策支持</strong>，如税收优惠、研发补贴等，进一步刺激了自动化和数字化技术的投资，为罗克韦尔自动化等领先企业创造了有利的发展环境和巨大的<strong>未来发展潜力</strong>。
+                </p>
+                <div class="chart-container">
+                    <canvas id="marketGrowthChart" width="1620" height="300" style="display: block; box-sizing: border-box; height: 150px; width: 810px;"></canvas>
+                </div>
+            </section>
+
+            <!-- 盈利模式 -->
+            <section id="business-model" class="section bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 visible">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
+                    <i class="fas fa-dollar-sign mr-3 text-blue-500 section-icon"></i> 盈利模式
+                </h2>
+                <p class="mb-6 text-gray-700 dark:text-gray-300">
+                    罗克韦尔自动化的盈利模式是多元化的，旨在通过提供整合的硬件、软件和服务解决方案来创造并捕获价值。其核心盈利来源包括：1) <strong>硬件产品销售</strong>：以Allen-Bradley品牌为主的控制器、驱动器、传感器等构成基础收入，这些产品往往具有较高的客户粘性，形成了庞大的<strong>装机基数</strong>，为后续的软件和服务销售奠定基础。2) <strong>软件授权与订阅</strong>：通过FactoryTalk套件、Plex云平台、Fiix CMMS等提供软件解决方案，近年来<strong>软件订阅收入占比显著提升</strong>，这部分业务通常具有更高的利润率和可预测性。例如，Plex平台的云原生特性带来了持续的订阅收入。3) <strong>生命周期服务</strong>：包括咨询、设计、集成、维护、培训和网络安全等，这些服务不仅增加了客户价值，也提升了<strong>客户生命周期总价值（CLTV）</strong>。关键的盈利驱动因素包括：<strong>扩大现有客户的钱包份额</strong>（通过交叉销售软件和服务）、<strong>获取新客户</strong>（特别是在高增长行业和地区）、<strong>提升软件和服务在高价值解决方案中的占比</strong>、以及通过<strong>卓越运营</strong>控制成本。数据显示，其软件和服务业务的增长速度通常<strong>快于</strong>硬件业务，对整体利润率的贡献日益重要。
+                </p>
+                <div class="chart-container">
+                    <canvas id="revenueModelChart" width="1620" height="300" style="display: block; box-sizing: border-box; height: 150px; width: 810px;"></canvas>
+                </div>
+            </section>
+
+            <!-- 核心产品 -->
+            <section id="core-products" class="section bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 visible">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
+                    <i class="fas fa-cube mr-3 text-blue-500 section-icon"></i> 核心产品
+                </h2>
+                <p class="mb-6 text-gray-700 dark:text-gray-300">
+                    罗克韦尔自动化的核心产品组合构成了其"互联企业"战略的基石，旨在覆盖从车间到企业级的自动化与信息需求。其产品矩阵主要分为：
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <!-- 智能设备卡片 -->
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-5 shadow transition-all hover:shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-microchip text-2xl text-blue-500 mr-3"></i>
+                            <h3 class="text-xl font-semibold text-gray-800 dark:text-white">智能设备（硬件）</h3>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            旗舰产品包括<strong>ControlLogix和CompactLogix系列可编程逻辑控制器（PLC）</strong>，它们被誉为工业自动化领域的"大脑"，负责精确控制机器和流程。PowerFlex系列交流变频器用于高效电机控制，PanelView系列人机界面（HMI）提供直观的操作监控界面。此外，还包括传感器、安全继电器、接触器等全面的控制元件。这些硬件以<strong>可靠性高、性能稳定</strong>著称，广泛应用于汽车、消费品、生命科学等几乎所有制造行业。
+                        </p>
+                    </div>
+                    
+                    <!-- 软件卡片 -->
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-5 shadow transition-all hover:shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-code text-2xl text-blue-500 mr-3"></i>
+                            <h3 class="text-xl font-semibold text-gray-800 dark:text-white">软件</h3>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            <strong>FactoryTalk软件套件</strong>是其核心软件平台，涵盖从设计（Studio 5000）、运营（MES, Historian）、维护（AssetCentre）到分析（Analytics）的全方位功能。<strong>Plex Systems</strong>是领先的云原生智能制造平台，提供强大的MES、ERP和供应链管理功能，特别适合需要高度灵活性和可扩展性的企业。<strong>Fiix</strong>提供基于云的CMMS，帮助客户优化维护策略。<strong>Emulate3D</strong>则是一款强大的动态数字孪生软件，用于在部署前对自动化系统（包括复杂的机器人单元）进行仿真和虚拟调试。
+                        </p>
+                    </div>
+                    
+                    <!-- 未来产品规划卡片 -->
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-5 shadow transition-all hover:shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-rocket text-2xl text-blue-500 mr-3"></i>
+                            <h3 class="text-xl font-semibold text-gray-800 dark:text-white">未来产品规划</h3>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            预计将继续加大在<strong>云技术、人工智能（AI）、机器学习（ML）、网络安全和数字孪生</strong>方面的投入，进一步增强软件平台的智能化水平和集成能力，使客户能够更轻松地部署和管理包括<strong>具身机器人</strong>在内的复杂自动化系统，实现预测性维护、自主优化等高级功能。
+                        </p>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="productEcosystemChart" width="1620" height="600" style="display: block; box-sizing: border-box; height: 300px; width: 810px;"></canvas>
+                </div>
+            </section>
+
+            <!-- 技术实力 -->
+            <section id="technical-strength" class="section bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 visible">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
+                    <i class="fas fa-cogs mr-3 text-blue-500 section-icon"></i> 技术实力
+                </h2>
+                <p class="mb-6 text-gray-700 dark:text-gray-300">
+                    罗克韦尔自动化的技术实力是其市场领导地位的关键支撑。公司持续投入大量资源进行研发，其<strong>研发投入占销售额的比例通常维持在5%-6%</strong>左右，这在工业自动化领域处于较高水平。技术创新的成果体现在其广泛的产品组合和强大的知识产权上，拥有<strong>数千项有效专利</strong>，尤其在控制理论、工业网络、安全系统和制造执行系统领域积累深厚。
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- 核心技术优势列表 -->
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-5 shadow-md">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white flex items-center">
+                            <i class="fas fa-star mr-2 text-yellow-500"></i> 核心技术优势
+                        </h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle mt-1 text-green-500 mr-2"></i>
+                                <div>
+                                    <span class="font-medium text-gray-800 dark:text-white">集成架构（Integrated Architecture）：</span>
+                                    <span class="text-gray-700 dark:text-gray-300">其核心理念是将控制和信息整合在统一的平台上，使用户能够无缝连接设备、共享数据并进行协同操作。这构成了其独特的<strong>技术壁垒</strong>，降低了系统复杂性和集成成本。</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle mt-1 text-green-500 mr-2"></i>
+                                <div>
+                                    <span class="font-medium text-gray-800 dark:text-white">Logix控制平台：</span>
+                                    <span class="text-gray-700 dark:text-gray-300">作为业界标杆，提供强大的处理能力、可扩展性和多规程支持（运动控制、过程控制、离散控制、安全控制）。</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle mt-1 text-green-500 mr-2"></i>
+                                <div>
+                                    <span class="font-medium text-gray-800 dark:text-white">EtherNet/IP网络技术：</span>
+                                    <span class="text-gray-700 dark:text-gray-300">作为ODVA（开放设备网络供应商协会）的创始成员之一，罗克韦尔是推动标准工业以太网应用的主要力量，实现了车间设备与企业系统的高效互联。</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle mt-1 text-green-500 mr-2"></i>
+                                <div>
+                                    <span class="font-medium text-gray-800 dark:text-white">软件与分析能力：</span>
+                                    <span class="text-gray-700 dark:text-gray-300">通过内生研发和战略收购（如Plex, Fiix），显著增强了在云平台、SaaS、MES、CMMS和数据分析方面的能力，使其能够提供更智能、更互联的解决方案。例如，利用AI/ML技术进行预测性维护和过程优化。</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- 技术雷达图 -->
+                    <div class="chart-container h-full">
+                        <canvas id="techRadarChart" width="600" height="875" style="display: block; box-sizing: border-box; height: 437px; width: 300px;"></canvas>
+                    </div>
+                </div>
+                
+                <p class="text-gray-700 dark:text-gray-300">
+                    这些技术实力共同构成了罗克韦尔的<strong>护城河</strong>，使其能够为客户提供高度可靠、高性能且易于集成的自动化解决方案，从而在赋能复杂系统（如包含具身机器人的生产线）方面具备显著优势。
+                </p>
+            </section>
+
+            <!-- 竞争分析 -->
+            <section id="competitive-analysis" class="section bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 visible">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
+                    <i class="fas fa-users mr-3 text-blue-500 section-icon"></i> 竞争分析
+                </h2>
+                <p class="mb-6 text-gray-700 dark:text-gray-300">
+                    罗克韦尔自动化在全球工业自动化市场面临激烈的竞争，主要对手包括西门子、ABB、施耐德电气等跨国巨头。
+                </p>
+                
+                <!-- 竞争对手卡片式比较 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    <!-- 罗克韦尔自动化卡片 -->
+                    <div class="comparison-card bg-white dark:bg-gray-700 rounded-lg shadow overflow-hidden">
+                        <div class="bg-blue-500 text-white p-4">
+                            <h3 class="text-lg font-bold">罗克韦尔自动化</h3>
+                            <p class="text-sm opacity-80">Rockwell Automation</p>
+                        </div>
+                        <div class="p-4">
+                            <div class="compare-feature">
+                                <i class="fas fa-chart-pie"></i>
+                                <span>北美领先，全球前列</span>
+                            </div>
+                            <div class="compare-feature">
+                                <i class="fas fa-boxes"></i>
+                                <span>自动化和信息解决方案为主</span>
+                            </div>
+                            <div class="compare-feature">
+                                <i class="fas fa-star"></i>
+                                <span>北美市场根基深厚，集成架构，PLC</span>
+                            </div>
+                            <div class="compare-feature">
+                                <i class="fas fa-code"></i>
+                                <span>快速增长 (FactoryTalk, Plex, Fiix)</span>
+                            </div>
+                            <div class="compare-feature">
+                                <i class="fas fa-tag"></i>
+                                <span>中高端定位</span>
+                            </div>
+                            <div class="compare-feature">
+                                <i class="fas fa-smile"></i>
+                                <span>硬件可靠性高，软件易用性持续提升</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 西门子卡片 -->
+                    <div class="comparison-card bg-white dark:bg-gray-700 rounded-lg shadow overflow-hidden">
+                        <div class="bg-indigo-500 text-white p-4">
+                            <h3 class="text-lg font-bold">西门子</h3>
+                            <p class="text-sm opacity-80">Siemens</p>
+                        </div>
+                        <div class="p-4">
+                            <div class="compare-feature">
+                                <i class="fas fa-chart-pie"></i>
+                                <span>全球领先，尤其在欧洲和亚洲</span>
+                            </div>
+                            <div class="compare-feature">
+                                <i class="fas fa-boxes"></i>
+                                <span>产品线极宽，覆盖工业、能源、医疗等</span>
+                            </div>
+                            <div class="compare-feature">
+                                <i class="fas fa-star"></i>
+                                <span>全集成自动化(TIA)，数字化企业套件</span>
+                            </div>
+                            <div class="compare-feature">
+                                <i class="fas fa-code"></i>
+                                <span>强大 (MindSphere, Teamcenter等)</span>
+                            </div>
+                            <div class="compare-feature">
+                                <i class="fas fa-tag"></i>
+                                <span>中高端定位</span>
+                            </div>
+                            <div class="compare-feature">
+                                <i class="fas fa-smile"></i>
+                                <span>集成度高，软件功能强大</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ABB卡片 -->
+                    <div class="comparison-card bg-white dark:bg-gray-700 rounded-lg shadow overflow-hidden">
+                        <div class="bg-red-500 text-white p-4">
+                            <h3 class="text-lg font-bold">ABB</h3>
+                            <p class="text-sm opacity-80">ABB Group</p>
+                        </div>
+                        <div class="p-4">
+                            <div class="compare-feature">
+                                <i class="fas fa-chart-pie"></i>
+                                <span>全球前列，机器人领域领先</span>
+                            </div>
+                            <div class="compare-feature">
+                                <i class="fas fa-boxes"></i>
+                                <span>自动化、电气、机器人、运动控制</span>
+                            </div>
+                            <div class="compare-feature">
+                                <i class="fas fa-star"></i>
+                                <span>机器人和过程自动化，电力技术</span>
+                            </div>
+                            <div class="compare-feature">
+                                <i class="fas fa-code"></i>
+                                <span>较强 (Ability平台)</span>
+                            </div>
+                            <div class="compare-feature">
+                                <i class="fas fa-tag"></i>
+                                <span>中高端定位</span>
+                            </div>
+                            <div class="compare-feature">
+                                <i class="fas fa-smile"></i>
+                                <span>机器人易用性强，工业软件体验尚可</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 施耐德电气卡片 -->
+                    <div class="comparison-card bg-white dark:bg-gray-700 rounded-lg shadow overflow-hidden">
+                        <div class="bg-green-500 text-white p-4">
+                            <h3 class="text-lg font-bold">施耐德电气</h3>
+                            <p class="text-sm opacity-80">Schneider Electric</p>
+                        </div>
+                        <div class="p-4">
+                            <div class="compare-feature">
+                                <i class="fas fa-chart-pie"></i>
+                                <span>全球前列，能源管理领域优势明显</span>
+                            </div>
+                            <div class="compare-feature">
+                                <i class="fas fa-boxes"></i>
+                                <span>能源管理和自动化，中低压产品强大</span>
+                            </div>
+                            <div class="compare-feature">
+                                <i class="fas fa-star"></i>
+                                <span>能源效率管理，EcoStruxure平台</span>
+                            </div>
+                            <div class="compare-feature">
+                                <i class="fas fa-code"></i>
+                                <span>较强 (AVEVA合作, EcoStruxure)</span>
+                            </div>
+                            <div class="compare-feature">
+                                <i class="fas fa-tag"></i>
+                                <span>中端为主，部分高端</span>
+                            </div>
+                            <div class="compare-feature">
+                                <i class="fas fa-smile"></i>
+                                <span>易用性较好，尤其在能源管理</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SWOT分析 -->
+                <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white flex items-center">
+                    <i class="fas fa-balance-scale mr-2 text-blue-500"></i> SWOT 分析
+                </h3>
+                <div class="swot-grid mb-6">
+                    <!-- 优势 -->
+                    <div class="swot-item swot-s">
+                        <h4 class="text-lg font-bold mb-3 text-blue-600 dark:text-blue-400 flex items-center">
+                            <i class="fas fa-plus-circle mr-2"></i> 优势 (Strengths)
+                        </h4>
+                        <ul class="space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-blue-500 mr-2 mt-1"></i>
+                                <span><strong>强大的品牌声誉和客户忠诚度</strong>（尤其Allen-Bradley品牌）</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-blue-500 mr-2 mt-1"></i>
+                                <span>在北美市场的<strong>领导地位</strong>和深厚的渠道网络</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-blue-500 mr-2 mt-1"></i>
+                                <span><strong>集成架构</strong>提供无缝的控制与信息整合能力</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-blue-500 mr-2 mt-1"></i>
+                                <span><strong>庞大的装机基础</strong>为服务和软件业务提供支撑</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-blue-500 mr-2 mt-1"></i>
+                                <span>通过收购<strong>显著增强了软件和云能力</strong></span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- 劣势 -->
+                    <div class="swot-item swot-w">
+                        <h4 class="text-lg font-bold mb-3 text-red-600 dark:text-red-400 flex items-center">
+                            <i class="fas fa-minus-circle mr-2"></i> 劣势 (Weaknesses)
+                        </h4>
+                        <ul class="space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-times text-red-500 mr-2 mt-1"></i>
+                                <span>相比西门子等对手，<strong>全球市场的地域覆盖</strong>可能不够均衡</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-times text-red-500 mr-2 mt-1"></i>
+                                <span>部分产品可能被认为<strong>价格偏高</strong></span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-times text-red-500 mr-2 mt-1"></i>
+                                <span>向软件和服务转型的过程中，可能面临<strong>内部整合与文化转变</strong>的挑战</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-times text-red-500 mr-2 mt-1"></i>
+                                <span>在某些新兴技术领域（如特定AI应用）可能<strong>不是最早的创新者</strong></span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- 机会 -->
+                    <div class="swot-item swot-o">
+                        <h4 class="text-lg font-bold mb-3 text-green-600 dark:text-green-400 flex items-center">
+                            <i class="fas fa-lightbulb mr-2"></i> 机会 (Opportunities)
+                        </h4>
+                        <ul class="space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-arrow-right text-green-500 mr-2 mt-1"></i>
+                                <span><strong>工业4.0和数字化转型</strong>带来的巨大市场需求</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-arrow-right text-green-500 mr-2 mt-1"></i>
+                                <span><strong>软件即服务（SaaS）和云解决方案</strong>的增长潜力</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-arrow-right text-green-500 mr-2 mt-1"></i>
+                                <span><strong>生命科学、电动汽车、物流</strong>等高增长垂直行业的拓展</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-arrow-right text-green-500 mr-2 mt-1"></i>
+                                <span>利用其技术<strong>赋能和集成先进机器人应用</strong>（契合"具身机器人"趋势）</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-arrow-right text-green-500 mr-2 mt-1"></i>
+                                <span><strong>可持续发展和能效管理</strong>解决方案的需求增长</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- 威胁 -->
+                    <div class="swot-item swot-t">
+                        <h4 class="text-lg font-bold mb-3 text-yellow-600 dark:text-yellow-400 flex items-center">
+                            <i class="fas fa-exclamation-triangle mr-2"></i> 威胁 (Threats)
+                        </h4>
+                        <ul class="space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-bolt text-yellow-500 mr-2 mt-1"></i>
+                                <span>来自<strong>西门子等主要竞争对手的激烈竞争</strong></span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-bolt text-yellow-500 mr-2 mt-1"></i>
+                                <span><strong>新兴软件公司</strong>在特定细分领域（如IIoT平台、AI分析）带来的挑战</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-bolt text-yellow-500 mr-2 mt-1"></i>
+                                <span><strong>全球宏观经济波动</strong>对客户资本支出的影响</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-bolt text-yellow-500 mr-2 mt-1"></i>
+                                <span><strong>网络安全风险</strong>日益增加</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-bolt text-yellow-500 mr-2 mt-1"></i>
+                                <span><strong>供应链中断</strong>的风险</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <p class="text-gray-700 dark:text-gray-300">
+                    罗克韦尔的竞争优势在于其深厚的行业知识、强大的集成能力和忠实的客户基础，尤其是在复杂的离散和过程自动化应用中。然而，它需要在保持硬件优势的同时，加速软件创新和全球市场拓展，以应对日益激烈的竞争格局。
+                </p>
+            </section>
+
+            <!-- 客户结构 -->
+            <section id="customer-structure" class="section bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 visible">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
+                    <i class="fas fa-user-tie mr-3 text-blue-500 section-icon"></i> 客户结构
+                </h2>
+                <p class="mb-6 text-gray-700 dark:text-gray-300">
+                    罗克韦尔自动化的客户基础广泛且多元化，覆盖了众多行业和不同规模的企业。主要客户群体可以细分为：
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- 按行业划分 -->
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-5 shadow">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white flex items-center">
+                            <i class="fas fa-industry mr-2 text-blue-500"></i> 按行业划分
+                        </h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-cog text-gray-500 mr-3 mt-1"></i>
+                                <div>
+                                    <strong class="text-gray-800 dark:text-white">离散自动化行业：</strong>
+                                    <span class="text-gray-700 dark:text-gray-300">汽车制造、半导体与电子、通用机械制造等。这是罗克韦尔的传统优势领域，贡献了<strong>相当大的收入比例</strong>。</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-flask text-gray-500 mr-3 mt-1"></i>
+                                <div>
+                                    <strong class="text-gray-800 dark:text-white">混合与过程自动化行业：</strong>
+                                    <span class="text-gray-700 dark:text-gray-300">食品饮料、生命科学（制药、医疗器械）、化工、石油天然气、矿业、水处理等。这些行业对可靠性、合规性和批次管理有高要求，罗克韦尔提供了专业的解决方案，<strong>生命科学和食品饮料是重要的增长引擎</strong>。</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-building text-gray-500 mr-3 mt-1"></i>
+                                <div>
+                                    <strong class="text-gray-800 dark:text-white">基础设施：</strong>
+                                    <span class="text-gray-700 dark:text-gray-300">如电力、交通等。</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- 按规模划分 -->
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-5 shadow">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white flex items-center">
+                            <i class="fas fa-ruler mr-2 text-blue-500"></i> 按规模划分
+                        </h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-building text-gray-500 mr-3 mt-1"></i>
+                                <div>
+                                    <strong class="text-gray-800 dark:text-white">大型跨国企业：</strong>
+                                    <span class="text-gray-700 dark:text-gray-300">这些客户通常拥有复杂的全球供应链和生产网络，对集成解决方案、全球支持和标准化有高需求，是罗克韦尔的<strong>核心收入来源</strong>。</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-store text-gray-500 mr-3 mt-1"></i>
+                                <div>
+                                    <strong class="text-gray-800 dark:text-white">中小型企业（SME）：</strong>
+                                    <span class="text-gray-700 dark:text-gray-300">随着云解决方案（如Plex）和更易用的产品的推出，以及通过分销商和系统集成商伙伴的覆盖，罗克韦尔正<strong>积极拓展SME市场</strong>，这部分客户群体具有<strong>较高的增长潜力</strong>。</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="customerStructureChart" width="1620" height="600" style="display: block; box-sizing: border-box; height: 300px; width: 810px;"></canvas>
+                </div>
+                
+                <p class="mt-4 text-gray-700 dark:text-gray-300">
+                    客户贡献方面，通常少数大型企业客户贡献了不成比例的收入，但客户群整体较为分散，降低了对单一客户的依赖。客户留存率普遍较高，这得益于其产品的<strong>高可靠性、深度集成以及由此产生的高转换成本</strong>。例如，一旦工厂的核心控制系统采用了罗克韦尔的平台，更换的成本和风险都非常高。公司通过提供全面的生命周期服务和不断升级的软件功能，致力于提升<strong>客户生命周期价值（CLTV）</strong>，将一次性硬件销售转变为长期的合作关系。
+                </p>
+            </section>
+
+            <!-- 战略合作 -->
+            <section id="strategic-partnerships" class="section bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 visible">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
+                    <i class="fas fa-handshake mr-3 text-blue-500 section-icon"></i> 战略合作
+                </h2>
+                <p class="mb-6 text-gray-700 dark:text-gray-300">
+                    战略合作是罗克韦尔自动化实现其"互联企业"愿景、扩展市场覆盖和增强技术能力的关键手段。重要的合作关系包括：
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- PTC合作 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow overflow-hidden">
+                        <div class="bg-blue-500 p-4 flex items-center">
+                            <i class="fas fa-puzzle-piece text-2xl text-white mr-3"></i>
+                            <h3 class="text-xl font-bold text-white">与PTC的战略联盟</h3>
+                        </div>
+                        <div class="p-5">
+                            <p class="text-gray-700 dark:text-gray-300 mb-3">
+                                这是罗克韦尔最重要的合作之一。双方共同开发和销售<strong>FactoryTalk InnovationSuite, powered by PTC</strong>，将罗克韦尔的自动化和信息专长与PTC的ThingWorx® IIoT平台、Kepware®互操作性解决方案以及Vuforia®增强现实（AR）技术相结合。
+                            </p>
+                            <p class="text-gray-700 dark:text-gray-300">
+                                这项合作极大地<strong>增强了罗克韦尔在IIoT、数据分析和AR领域的解决方案能力</strong>，为客户提供了更全面的数字化转型工具，带来了<strong>新的客户群体和增量收入</strong>。例如，联合解决方案可以帮助客户实现预测性维护和远程专家指导。
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- 微软合作 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow overflow-hidden">
+                        <div class="bg-indigo-500 p-4 flex items-center">
+                            <i class="fab fa-microsoft text-2xl text-white mr-3"></i>
+                            <h3 class="text-xl font-bold text-white">与微软（Microsoft）的合作</h3>
+                        </div>
+                        <div class="p-5">
+                            <p class="text-gray-700 dark:text-gray-300">
+                                利用Microsoft Azure云平台，罗克韦尔能够提供可扩展的云解决方案，如基于云的分析、数字孪生和远程监控。这<strong>加速了罗克韦尔云战略的落地</strong>，并使其能够服务于偏好微软生态系统的客户。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- 机器人制造商合作 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow overflow-hidden">
+                        <div class="bg-red-500 p-4 flex items-center">
+                            <i class="fas fa-robot text-2xl text-white mr-3"></i>
+                            <h3 class="text-xl font-bold text-white">与机器人制造商的合作</h3>
+                        </div>
+                        <div class="p-5">
+                            <p class="text-gray-700 dark:text-gray-300">
+                                罗克韦尔与<strong>FANUC、库卡（KUKA）</strong>等领先的机器人制造商建立了合作关系。虽然罗克韦尔不生产机器人本体，但其控制系统（如Logix平台）可以<strong>无缝集成和控制</strong>这些品牌的机器人，提供统一的编程和操作环境。这种合作使得罗克韦尔能够为客户提供包含机器人在内的<strong>完整自动化生产线解决方案</strong>，直接贡献于其在<strong>赋能具身机器人应用</strong>方面的能力。
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- 系统集成商和分销商网络 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow overflow-hidden">
+                        <div class="bg-green-500 p-4 flex items-center">
+                            <i class="fas fa-network-wired text-2xl text-white mr-3"></i>
+                            <h3 class="text-xl font-bold text-white">系统集成商（SI）和分销商网络</h3>
+                        </div>
+                        <div class="p-5">
+                            <p class="text-gray-700 dark:text-gray-300">
+                                罗克韦尔拥有庞大的合作伙伴生态系统，这些伙伴负责将罗克韦尔的产品和技术集成到具体的客户项目中，<strong>极大地扩展了其市场覆盖和服务能力</strong>，尤其是在中小型企业市场和特定区域市场。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="text-gray-700 dark:text-gray-300">
+                    这些战略合作关系使罗克韦尔能够专注于其核心优势（控制、信息、集成），同时借助合作伙伴的力量，提供更完整、更先进的解决方案，从而在竞争中占据有利地位。
+                </p>
+            </section>
+
+            <!-- 竞争策略 -->
+            <section id="competitive-strategy" class="section bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
+                    <i class="fas fa-chess mr-3 text-blue-500 section-icon"></i> 竞争策略
+                </h2>
+                <p class="mb-6 text-gray-700 dark:text-gray-300">
+                    面对激烈的市场竞争和快速的技术演进，罗克韦尔自动化采取了多维度的竞争策略，以巩固其市场地位并寻求持续增长。
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <!-- 深化"互联企业"战略 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5 transition-all hover:shadow-lg">
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mr-3">
+                                <i class="fas fa-network-wired text-blue-500"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">深化"互联企业"战略</h3>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            这是其 overarching 战略，旨在通过<strong>整合控制与信息</strong>，打破OT与IT之间的壁垒，为客户提供从设备层到企业层的全面洞察和优化能力。这一战略的核心是其<strong>集成架构和FactoryTalk软件平台</strong>，强调数据的无缝流动和智能化应用。
+                        </p>
+                    </div>
+                    
+                    <!-- 加速软件和服务转型 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5 transition-all hover:shadow-lg">
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mr-3">
+                                <i class="fas fa-code text-purple-500"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">加速软件和服务转型</h3>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            认识到软件和服务的高利润和增长潜力，罗克韦尔正<strong>积极提升软件和服务收入占比</strong>。通过内生研发和战略性收购（如Plex, Fiix），大力发展云原生解决方案、SaaS业务模式和数据分析能力。这不仅增加了经常性收入，也<strong>深化了客户关系</strong>。
+                        </p>
+                    </div>
+                    
+                    <!-- 聚焦高增长垂直行业 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5 transition-all hover:shadow-lg">
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mr-3">
+                                <i class="fas fa-chart-line text-green-500"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">聚焦高增长垂直行业</h3>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            公司重点关注如<strong>生命科学、食品饮料、汽车（特别是电动汽车）、仓储物流</strong>等具有强劲自动化和数字化需求的行业，并提供针对性的解决方案，以获取更高的市场份额。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- 维持硬件技术领先 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5 transition-all hover:shadow-lg">
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900 flex items-center justify-center mr-3">
+                                <i class="fas fa-microchip text-red-500"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">维持硬件技术领先</h3>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            尽管重心向软件倾斜，但罗克韦尔<strong>并未放松在核心硬件（PLC、驱动器、HMI等）上的创新</strong>，确保其产品在性能、可靠性和安全性方面保持领先，这是其赢得客户信任的基础。
+                        </p>
+                    </div>
+                    
+                    <!-- 强化生态系统合作 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5 transition-all hover:shadow-lg">
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 rounded-full bg-yellow-100 dark:bg-yellow-900 flex items-center justify-center mr-3">
+                                <i class="fas fa-handshake text-yellow-500"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">强化生态系统合作</h3>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            继续深化与PTC、微软等技术伙伴以及机器人制造商、系统集成商的合作，<strong>构建强大的生态系统</strong>，共同为客户提供端到端的解决方案。
+                        </p>
+                    </div>
+                </div>
+                
+                <p class="text-gray-700 dark:text-gray-300">
+                    应对未来演变趋势（如AI在工业领域的普及、边缘计算的兴起、对可持续性的更高要求），罗克韦尔的策略是将其新技术融入现有平台，例如在FactoryTalk中嵌入更多AI功能，提供更强大的边缘计算能力，并开发有助于客户实现节能减排目标的解决方案。其<strong>竞争优势的可持续性</strong>主要依赖于：1) <strong>庞大的装机基础和客户粘性</strong>；2) <strong>持续的技术创新和成功整合收购业务</strong>；3) <strong>强大的品牌和渠道网络</strong>；4) <strong>适应市场变化并有效执行转型的能力</strong>。
+                </p>
+            </section>
+
+            <!-- 财务分析 -->
+            <section id="financial-analysis" class="section bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
+                    <i class="fas fa-chart-line mr-3 text-blue-500 section-icon"></i> 财务分析
+                </h2>
+                <p class="mb-6 text-gray-700 dark:text-gray-300">
+                    罗克韦尔自动化的财务表现通常反映了全球工业经济的周期性，但其业务模式正逐渐增强韧性。
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- 收入分析 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-white flex items-center">
+                            <i class="fas fa-money-bill-wave mr-2 text-green-500"></i> 收入分析
+                        </h3>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            近年来，公司总收入保持增长态势，例如2023财年报告收入<strong>超过90亿美元</strong>，显示出市场对其产品和服务的持续需求。增长主要由<strong>软件和服务业务的强劲表现</strong>以及部分硬件产品的稳健销售驱动。收购Plex Systems和Fiix对<strong>年度经常性收入（ARR）</strong>的增长贡献显著，ARR已成为衡量其转型进展的关键指标，预计占比将持续提升。地域上看，北美仍然是其最大的市场，但亚太等新兴市场也展现出增长潜力。
+                        </p>
+                    </div>
+                    
+                    <!-- 利润分析 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-white flex items-center">
+                            <i class="fas fa-percentage mr-2 text-blue-500"></i> 利润分析
+                        </h3>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            公司的<strong>毛利率</strong>保持在较高水平（通常在40%左右），反映了其产品的价值和一定的定价权。<strong>营业利润率</strong>（调整后通常在20%以上）也表现稳健，但可能受到原材料成本、供应链压力以及为推动软件转型而进行的投资影响。软件和服务业务的利润率通常<strong>高于</strong>硬件业务，因此其占比提升有助于<strong>长期利润率的改善</strong>。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="chart-container mb-6">
+                    <canvas id="financialChart" width="1620" height="300" style="display: block; box-sizing: border-box; height: 150px; width: 810px;"></canvas>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- 现金流分析 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-white flex items-center">
+                            <i class="fas fa-exchange-alt mr-2 text-indigo-500"></i> 现金流分析
+                        </h3>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            罗克韦尔通常能产生<strong>强劲的经营现金流</strong>，这为其提供了充足的资金进行研发投入、战略收购、股息支付和股票回购。自由现金流转换率（自由现金流/净利润）是衡量其盈利质量的重要指标。
+                        </p>
+                    </div>
+                    
+                    <!-- 财务预测 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-white flex items-center">
+                            <i class="fas fa-binoculars mr-2 text-purple-500"></i> 财务预测
+                        </h3>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            展望未来，预计罗克韦尔的收入将继续受益于工业自动化和数字化转型的长期趋势，但短期可能受宏观经济不确定性的影响。<strong>软件和服务收入预计将以高于公司平均水平的速度增长</strong>。利润率有望随着高利润业务占比提升而逐步改善，但需关注成本控制和市场竞争带来的压力。公司可能会继续寻求<strong>补强型收购</strong>以加速技术或市场拓展。整体而言，财务前景审慎乐观，但需密切关注全球经济形势和行业竞争动态。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 风险评估 -->
+            <section id="risk-assessment" class="section bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
+                    <i class="fas fa-exclamation-triangle mr-3 text-blue-500 section-icon"></i> 风险评估
+                </h2>
+                <p class="mb-6 text-gray-700 dark:text-gray-300">
+                    罗克韦尔自动化在运营中面临多方面的风险，公司需要有效管理以保持其竞争力和增长势头。
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <!-- 市场风险 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5 border-l-4 border-red-500">
+                        <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white flex items-center">
+                            <i class="fas fa-globe mr-2 text-red-500"></i> 市场风险
+                        </h3>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            公司业务与<strong>全球宏观经济周期和工业资本支出</strong>高度相关。经济衰退或特定行业（如汽车、石油天然气）的需求下滑可能对其订单和收入产生显著负面影响。地缘政治紧张、贸易保护主义也可能扰乱其全球供应链和市场准入。
+                        </p>
+                    </div>
+                    
+                    <!-- 竞争风险 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5 border-l-4 border-orange-500">
+                        <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white flex items-center">
+                            <i class="fas fa-users mr-2 text-orange-500"></i> 竞争风险
+                        </h3>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            工业自动化市场<strong>竞争异常激烈</strong>，来自西门子、ABB等传统巨头以及新兴技术公司的压力持续存在。竞争对手可能在价格、技术创新或市场响应速度方面更具优势，导致市场份额流失或利润率下降。尤其是在快速发展的软件和IIoT领域，<strong>技术迭代速度快</strong>，落后风险较高。
+                        </p>
+                    </div>
+                    
+                    <!-- 技术风险 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5 border-l-4 border-yellow-500">
+                        <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white flex items-center">
+                            <i class="fas fa-microchip mr-2 text-yellow-500"></i> 技术风险
+                        </h3>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            <strong>技术过时风险：</strong> 如果未能及时跟上人工智能、边缘计算、云计算等新兴技术的发展并将其有效融入产品组合，可能失去技术领先地位。<br><br>
+                            <strong>网络安全风险：</strong> 随着"互联企业"战略的推进，其产品和解决方案的互联程度越来越高，面临的<strong>网络攻击威胁也随之增加</strong>。任何严重的安全漏洞都可能损害公司声誉并导致重大损失。<br><br>
+                            <strong>产品集成风险：</strong> 收购（如Plex, Fiix）后的技术和产品整合过程可能面临挑战，若整合不顺畅，可能影响协同效应的发挥。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- 政策风险 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5 border-l-4 border-blue-500">
+                        <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white flex items-center">
+                            <i class="fas fa-gavel mr-2 text-blue-500"></i> 政策风险
+                        </h3>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            各国不断变化的<strong>贸易政策、关税、环保法规、数据隐私法规</strong>等都可能影响罗克韦尔的全球运营成本和市场策略。
+                        </p>
+                    </div>
+                    
+                    <!-- 运营风险 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5 border-l-4 border-green-500">
+                        <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white flex items-center">
+                            <i class="fas fa-cogs mr-2 text-green-500"></i> 运营风险
+                        </h3>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            <strong>供应链中断</strong>（如关键零部件短缺）、<strong>人才吸引与保留</strong>（尤其是在软件和数据科学领域）、<strong>大型项目执行风险</strong>等也可能对公司业绩产生影响。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="bg-blue-50 dark:bg-blue-900 rounded-lg p-5 mb-6">
+                    <h3 class="text-lg font-semibold mb-3 text-blue-700 dark:text-blue-300 flex items-center">
+                        <i class="fas fa-shield-alt mr-2"></i> 风险应对与韧性
+                    </h3>
+                    <p class="text-gray-800 dark:text-gray-200">
+                        罗克韦尔通过<strong>多元化的行业和地域覆盖</strong>来分散市场风险。公司持续投入<strong>大量资源用于研发和网络安全</strong>，以应对技术和安全挑战。其<strong>强大的品牌、庞大的装机基础和完善的渠道网络</strong>提供了一定的竞争缓冲。经验丰富的管理团队和稳健的财务状况也增强了其抵御风险和抓住机遇的能力。然而，持续的警惕和灵活的战略调整对于应对这些复杂风险至关重要。
+                    </p>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="riskHeatmapChart" width="1620" height="300" style="display: block; box-sizing: border-box; height: 150px; width: 810px;"></canvas>
+                </div>
+            </section>
+
+            <!-- 总结展望 -->
+            <section id="conclusion" class="section bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
+                    <i class="fas fa-flag-checkered mr-3 text-blue-500 section-icon"></i> 总结展望
+                </h2>
+                <p class="mb-4 text-gray-700 dark:text-gray-300">
+                    罗克韦尔自动化作为全球工业自动化和信息解决方案的<strong>领军企业</strong>，凭借其深厚的行业积淀、强大的技术实力和广泛的客户基础，在推动全球制造业向智能化、数字化转型中扮演着<strong>关键角色</strong>。公司正积极实施"互联企业"战略，加速向<strong>软件和服务驱动</strong>的业务模式转型，并通过战略收购显著增强了在云MES、CMMS等高增长领域的能力。
+                </p>
+                <p class="mb-4 text-gray-700 dark:text-gray-300">
+                    尽管并非直接的<strong>具身机器人</strong>制造商，罗克ウェル自动化通过其领先的<strong>控制系统、集成软件平台和强大的生态系统合作</strong>，为包括先进机器人在内的复杂自动化系统提供了核心的"大脑"和"神经系统"，是<strong>赋能智能制造和柔性生产</strong>不可或缺的力量。其集成架构和FactoryTalk、Plex等软件平台，为实现设备互联、数据分析和流程优化提供了坚实基础。
+                </p>
+                <p class="mb-4 text-gray-700 dark:text-gray-300">
+                    展望未来，罗克韦尔自动化有望继续受益于工业4.0、智能制造以及供应链本地化等长期趋势。其<strong>持续增长的关键</strong>在于成功执行软件和服务转型战略、保持技术创新领先、有效整合收购业务，并深化与合作伙伴的关系。公司面临的挑战包括激烈的市场竞争、宏观经济的不确定性以及日益严峻的网络安全威胁。
+                </p>
+                
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900 rounded-lg p-6 mt-6">
+                    <h3 class="text-xl font-bold mb-3 text-blue-700 dark:text-blue-300 flex items-center">
+                        <i class="fas fa-lightbulb mr-2"></i> 核心结论
+                    </h3>
+                    <p class="text-gray-800 dark:text-gray-200">
+                        罗克韦尔自动化是一家基本面稳健、战略清晰的工业自动化领导者。其在<strong>赋能包括具身机器人在内的下一代智能制造系统</strong>方面具有独特优势。若能成功驾驭转型挑战并持续创新，有望在未来的智能工业时代继续保持领先地位，为股东和客户创造长期价值。投资者应关注其<strong>软件收入增长、利润率改善以及在新兴技术领域的进展</strong>。
+                    </p>
+                </div>
+            </section>
+
+            <!-- 页脚 -->
+            <footer class="text-center py-6 text-gray-600 dark:text-gray-400 text-sm">
+                <p>版权所有 © <span id="current-year">2025</span> 智绘链图</p>
+                <p>生成时间：<span id="generation-time">2025/4/9 19:07:12</span></p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // 设置当前年份和生成时间
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        document.getElementById('generation-time').textContent = new Date().toLocaleString('zh-CN');
+        
+        // 页面加载完成后移除加载动画
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loader').style.opacity = 0;
+                setTimeout(function() {
+                    document.getElementById('loader').style.display = 'none';
+                }, 500);
+            }, 500);
+            
+            // 初始化所有图表
+            initCharts();
+            
+            // 初始化交互效果
+            initInteractions();
+        });
+        
+        // 深色模式切换
+        const themeToggle = document.getElementById('theme-toggle');
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        // 根据系统设置初始化主题
+        if (prefersDarkScheme.matches) {
+            document.documentElement.classList.add('dark');
+            themeToggle.checked = true;
+        }
+        
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+        
+        // 初始化交互效果
+        function initInteractions() {
+            // 处理目录高亮
+            const sections = document.querySelectorAll('.section');
+            const tocItems = document.querySelectorAll('.toc-item');
+            
+            // 使用 Intersection Observer 监听章节可见性
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.id;
+                        // 移除所有目录项的高亮
+                        tocItems.forEach(item => {
+                            item.classList.remove('active');
+                        });
+                        // 高亮当前章节对应的目录项
+                        const activeItem = document.querySelector(`.toc-item[href="#${id}"]`);
+                        if (activeItem) {
+                            activeItem.classList.add('active');
+                        }
+                        
+                        // 章节可见时添加动画
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.2 });
+            
+            // 监听所有章节
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+            
+            // 保存报告按钮功能
+            document.getElementById('download-btn').addEventListener('click', function() {
+                const htmlContent = document.documentElement.outerHTML;
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                
+                const today = new Date();
+                const dateStr = `${today.getFullYear()}${(today.getMonth()+1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
+                
+                a.href = url;
+                a.download = `罗克韦尔自动化深度研究报告${dateStr}.html`;
+                document.body.appendChild(a);
+                a.click();
+                
+                setTimeout(function() {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                }, 0);
+            });
+        }
+        
+        // 初始化所有图表
+        function initCharts() {
+            // 业务分部占比图表
+            const businessSegmentCtx = document.getElementById('businessSegmentChart').getContext('2d');
+            const businessSegmentChart = new Chart(businessSegmentCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['智能设备（硬件）', '软件', '生命周期服务'],
+                    datasets: [{
+                        data: [65, 20, 15],
+                        backgroundColor: [
+                            '#3B82F6',
+                            '#6366F1',
+                            '#EC4899'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: '罗克韦尔自动化业务分部占比',
+                            color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 市场增长图表
+            const marketGrowthCtx = document.getElementById('marketGrowthChart').getContext('2d');
+            const marketGrowthChart = new Chart(marketGrowthCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['整体工业自动化', '工业软件', '工业物联网', '工业机器人', '智能制造'],
+                    datasets: [{
+                        label: '预计年均增长率 (%)',
+                        data: [8, 12, 15, 18, 14],
+                        backgroundColor: [
+                            '#3B82F6',
+                            '#6366F1',
+                            '#8B5CF6',
+                            '#EC4899',
+                            '#F59E0B'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937'
+                            },
+                            grid: {
+                                color: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937'
+                            },
+                            grid: {
+                                color: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: '工业自动化相关市场预计年均增长率',
+                            color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 收入模型图表
+            const revenueModelCtx = document.getElementById('revenueModelChart').getContext('2d');
+            const revenueModelChart = new Chart(revenueModelCtx, {
+                type: 'line',
+                data: {
+                    labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024E', '2025E'],
+                    datasets: [
+                        {
+                            label: '硬件收入占比',
+                            data: [75, 74, 73, 70, 68, 65, 63, 60],
+                            borderColor: '#3B82F6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                            fill: true,
+                            tension: 0.3
+                        },
+                        {
+                            label: '软件收入占比',
+                            data: [10, 11, 12, 15, 17, 20, 22, 25],
+                            borderColor: '#6366F1',
+                            backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                            fill: true,
+                            tension: 0.3
+                        },
+                        {
+                            label: '服务收入占比',
+                            data: [15, 15, 15, 15, 15, 15, 15, 15],
+                            borderColor: '#EC4899',
+                            backgroundColor: 'rgba(236, 72, 153, 0.2)',
+                            fill: true,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937'
+                            },
+                            grid: {
+                                color: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937'
+                            },
+                            grid: {
+                                color: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: '罗克韦尔自动化收入结构变化趋势',
+                            color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 产品生态系统图
+            const productEcosystemCtx = document.getElementById('productEcosystemChart').getContext('2d');
+            const productEcosystemChart = new Chart(productEcosystemCtx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'PLC',
+                        'HMI',
+                        '变频器',
+                        'MES',
+                        '数据分析',
+                        'IIoT平台',
+                        '数字孪生',
+                        '云服务',
+                        '网络安全'
+                    ],
+                    datasets: [{
+                        label: '罗克韦尔产品能力',
+                        data: [10, 9, 9, 8, 7, 7, 8, 7, 8],
+                        fill: true,
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderColor: '#3B82F6',
+                        pointBackgroundColor: '#3B82F6',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#3B82F6'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            },
+                            grid: {
+                                color: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            },
+                            pointLabels: {
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937'
+                            },
+                            ticks: {
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937',
+                                backdropColor: 'transparent'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: '罗克韦尔自动化产品能力雷达图',
+                            color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 技术雷达图
+            const techRadarCtx = document.getElementById('techRadarChart').getContext('2d');
+            const techRadarChart = new Chart(techRadarCtx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        '控制系统',
+                        '工业网络',
+                        '信息集成',
+                        '云技术',
+                        '数据分析',
+                        '人工智能',
+                        '边缘计算',
+                        '网络安全'
+                    ],
+                    datasets: [{
+                        label: '罗克韦尔',
+                        data: [9, 8, 9, 7, 7, 6, 7, 8],
+                        fill: true,
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderColor: '#3B82F6',
+                        pointBackgroundColor: '#3B82F6',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#3B82F6'
+                    },
+                    {
+                        label: '行业平均',
+                        data: [7, 7, 7, 7, 7, 7, 7, 7],
+                        fill: true,
+                        backgroundColor: 'rgba(156, 163, 175, 0.2)',
+                        borderColor: '#9CA3AF',
+                        pointBackgroundColor: '#9CA3AF',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#9CA3AF'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            },
+                            grid: {
+                                color: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            },
+                            pointLabels: {
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937'
+                            },
+                            ticks: {
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937',
+                                backdropColor: 'transparent'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: '技术能力对比',
+                            color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 客户结构图表
+            const customerStructureCtx = document.getElementById('customerStructureChart').getContext('2d');
+            const customerStructureChart = new Chart(customerStructureCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['离散自动化', '混合与过程自动化', '基础设施', '其他'],
+                    datasets: [{
+                        data: [45, 35, 15, 5],
+                        backgroundColor: [
+                            '#3B82F6',
+                            '#6366F1',
+                            '#8B5CF6',
+                            '#EC4899'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: '按行业划分的客户收入贡献',
+                            color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 财务图表
+            const financialCtx = document.getElementById('financialChart').getContext('2d');
+            const financialChart = new Chart(financialCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['2018', '2019', '2020', '2021', '2022', '2023'],
+                    datasets: [
+                        {
+                            label: '收入(十亿美元)',
+                            data: [6.7, 6.9, 6.3, 7.8, 8.5, 9.1],
+                            backgroundColor: '#3B82F6',
+                            order: 1
+                        },
+                        {
+                            label: '毛利率(%)',
+                            data: [41, 40, 40, 41, 40, 39],
+                            borderColor: '#EC4899',
+                            backgroundColor: '#EC4899',
+                            type: 'line',
+                            yAxisID: 'y1',
+                            order: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937'
+                            },
+                            grid: {
+                                color: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        y1: {
+                            beginAtZero: true,
+                            position: 'right',
+                            min: 30,
+                            max: 50,
+                            ticks: {
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937'
+                            },
+                            grid: {
+                                color: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: '罗克韦尔自动化近年财务表现',
+                            color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 风险热力图
+            const riskHeatmapCtx = document.getElementById('riskHeatmapChart').getContext('2d');
+            const riskHeatmapChart = new Chart(riskHeatmapCtx, {
+                type: 'bubble',
+                data: {
+                    datasets: [
+                        {
+                            label: '市场风险',
+                            data: [{x: 7, y: 8, r: 15}],
+                            backgroundColor: 'rgba(239, 68, 68, 0.7)'
+                        },
+                        {
+                            label: '竞争风险',
+                            data: [{x: 8, y: 7, r: 15}],
+                            backgroundColor: 'rgba(245, 158, 11, 0.7)'
+                        },
+                        {
+                            label: '技术过时风险',
+                            data: [{x: 6, y: 8, r: 15}],
+                            backgroundColor: 'rgba(16, 185, 129, 0.7)'
+                        },
+                        {
+                            label: '网络安全风险',
+                            data: [{x: 7, y: 9, r: 15}],
+                            backgroundColor: 'rgba(59, 130, 246, 0.7)'
+                        },
+                        {
+                            label: '供应链风险',
+                            data: [{x: 6, y: 7, r: 15}],
+                            backgroundColor: 'rgba(139, 92, 246, 0.7)'
+                        },
+                        {
+                            label: '政策风险',
+                            data: [{x: 5, y: 6, r: 15}],
+                            backgroundColor: 'rgba(236, 72, 153, 0.7)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: '影响程度',
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937'
+                            },
+                            ticks: {
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937'
+                            },
+                            grid: {
+                                color: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            min: 0,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: '发生概率',
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937'
+                            },
+                            ticks: {
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937'
+                            },
+                            grid: {
+                                color: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: '主要风险热力图（气泡大小表示风险重要性）',
+                            color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#1F2937',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 监听主题变化，更新图表颜色
+            themeToggle.addEventListener('change', function() {
+                const textColor = this.checked ? '#F9FAFB' : '#1F2937';
+                const gridColor = this.checked ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+                
+                // 更新所有图表的文字和网格颜色
+                updateChartColors(businessSegmentChart, textColor, gridColor);
+                updateChartColors(marketGrowthChart, textColor, gridColor);
+                updateChartColors(revenueModelChart, textColor, gridColor);
+                updateChartColors(productEcosystemChart, textColor, gridColor);
+                updateChartColors(techRadarChart, textColor, gridColor);
+                updateChartColors(customerStructureChart, textColor, gridColor);
+                updateChartColors(financialChart, textColor, gridColor);
+                updateChartColors(riskHeatmapChart, textColor, gridColor);
+            });
+            
+            // 更新图表颜色的辅助函数
+            function updateChartColors(chart, textColor, gridColor) {
+                // 更新标题颜色
+                if (chart.options.plugins && chart.options.plugins.title) {
+                    chart.options.plugins.title.color = textColor;
+                }
+                
+                // 更新图例颜色
+                if (chart.options.plugins && chart.options.plugins.legend) {
+                    chart.options.plugins.legend.labels.color = textColor;
+                }
+                
+                // 更新坐标轴颜色
+                if (chart.options.scales) {
+                    Object.keys(chart.options.scales).forEach(scaleKey => {
+                        const scale = chart.options.scales[scaleKey];
+                        
+                        if (scale.ticks) {
+                            scale.ticks.color = textColor;
+                        }
+                        
+                        if (scale.grid) {
+                            scale.grid.color = gridColor;
+                        }
+                        
+                        if (scale.title) {
+                            scale.title.color = textColor;
+                        }
+                        
+                        if (scaleKey === 'r' && scale.pointLabels) {
+                            scale.pointLabels.color = textColor;
+                        }
+                        
+                        if (scaleKey === 'r' && scale.angleLines) {
+                            scale.angleLines.color = gridColor;
+                        }
+                    });
+                }
+                
+                chart.update();
+            }
+        }
+    </script>
+
+
+</body></html>

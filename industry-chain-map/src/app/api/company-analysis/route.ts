@@ -497,16 +497,21 @@ async function generateCompanyAnalysis(companyName: string, industryName?: strin
               });
 
               // 获取响应内容（无论成功或失败）
+              console.log('尝试读取响应文本...');
               const responseText = await response.text();
+              console.log('成功读取响应文本，长度:', responseText.length);
+              console.log('响应文本前500字符:', responseText.substring(0, 500)); // 记录部分原始响应
+
               let responseData: OpenRouterResponse;
 
               // 尝试解析JSON响应
               try {
+                console.log('尝试解析响应为JSON...');
                 responseData = JSON.parse(responseText) as OpenRouterResponse;
                 console.log('成功解析API响应为JSON');
               } catch (parseError) {
                 console.error('无法解析API响应为JSON:', parseError);
-                console.error('原始响应:', responseText);
+                console.error('原始响应 (前500字符):', responseText.substring(0, 500)); // 在错误时也记录
                 throw new Error(`无法解析API响应: ${responseText.substring(0, 200)}...`);
               }
 
@@ -560,7 +565,9 @@ async function generateCompanyAnalysis(companyName: string, industryName?: strin
               // 记录原始文本的前200个字符，帮助调试
               console.log('分析文本前200个字符:', analysisText.substring(0, 200));
               
+              console.log('开始调用 processAnalysisResult 处理文本...');
               const processedResult = processAnalysisResult(analysisText);
+              console.log('processAnalysisResult 处理完成。');
               console.log('处理完成，sections数量:', processedResult.sections.length);
               
               // 记录提取的章节标题，帮助调试
@@ -610,6 +617,7 @@ async function generateCompanyAnalysis(companyName: string, industryName?: strin
 }
 
 function processAnalysisResult(markdownText: string): AnalysisResult {
+  console.log('进入 processAnalysisResult 函数');
   // 移除可能的大模型生成声明
   const cleanedMarkdown = markdownText
     .replace(/\*\s*本报告由.*?AI.*?模型.*?生成.*?\*/g, '')
@@ -715,6 +723,7 @@ function processAnalysisResult(markdownText: string): AnalysisResult {
     });
   }
   
+  console.log('processAnalysisResult 函数即将返回');
   console.log('最终处理得到章节数量:', sections.length);
   
   return {

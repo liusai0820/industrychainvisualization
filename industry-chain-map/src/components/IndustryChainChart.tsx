@@ -7,6 +7,23 @@ import { calculateOptimalLayout, LayoutConfig } from '@/utils/layoutCalculator';
 import html2canvas from 'html2canvas';
 import CompanyReportModal from './CompanyReportModal';
 
+// Simple Download Icon SVG component
+const DownloadIcon = ({ className }: { className?: string }) => (
+  <svg 
+    className={className}
+    xmlns="http://www.w3.org/2000/svg" 
+    viewBox="0 0 20 20" 
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path 
+      fillRule="evenodd"
+      d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" 
+      clipRule="evenodd" 
+    />
+  </svg>
+);
+
 interface IndustryChainChartProps {
     data: IndustryChainData;
     options?: {
@@ -30,7 +47,7 @@ const MobileHeader = ({ title, onBackClick }: { title: string; onBackClick: () =
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
         </svg>
       </button>
-      <h1 className="text-base font-medium flex-1 truncate pr-4">{title}产业链图谱</h1>
+      <h1 className="text-base font-medium flex-1 truncate pr-4">{title}</h1>
     </div>
   </div>
 );
@@ -392,7 +409,7 @@ export default function IndustryChainChart({ data, options = {} }: IndustryChain
                 backgroundColor: '#ffffff',
                 useCORS: true,
                 logging: false,
-                scale: 2,
+                scale: 3,
                 allowTaint: true,
                 foreignObjectRendering: true,
                 width: wrapper.offsetWidth,
@@ -459,31 +476,32 @@ export default function IndustryChainChart({ data, options = {} }: IndustryChain
                         font-size: 0.8125rem;
                     }
 
-                    /* 隐藏默认的返回导航 */
+                    /* Enhanced: Hide default nav more broadly on mobile */
+                    body > nav,
                     nav[class*="back"],
                     nav[class*="nav"],
+                    header nav,
+                    div > nav,
                     nav {
                         display: none !important;
                     }
                 }
                 
-                /* 原有的导航样式，仅在非移动端显示 */
+                /* Enhanced: More modern and less intrusive nav style for desktop */
                 @media (min-width: 769px) {
                     nav[class*="back"],
                     nav[class*="nav"],
-                    nav {
-                        all: unset !important;
+                    nav { /* Apply to any nav, assuming it's for back/global navigation */
+                        all: unset !important; /* Reset all styles first */
                         position: fixed !important;
-                        top: 12px !important;
-                        left: 12px !important;
-                        height: 40px !important;
-                        width: auto !important;
+                        top: 16px !important; /* Adjusted top position */
+                        left: 16px !important; /* Adjusted left position */
                         display: flex !important;
                         align-items: center !important;
-                        padding: 0 !important;
+                        z-index: 1000 !important; /* Ensure it's above most content */
+                        padding: 0 !important; 
                         margin: 0 !important;
                         background: transparent !important;
-                        z-index: 100 !important;
                     }
 
                     nav > a,
@@ -492,40 +510,43 @@ export default function IndustryChainChart({ data, options = {} }: IndustryChain
                         all: unset !important;
                         display: inline-flex !important;
                         align-items: center !important;
-                        height: 36px !important;
-                        padding: 0 16px !important;
-                        background: #f8fafc !important;
-                        border: 1px solid #e2e8f0 !important;
-                        border-radius: 6px !important;
+                        justify-content: center !important;
+                        height: 36px !important; /* Slightly smaller */
+                        min-width: 36px !important;
+                        padding: 0 12px !important; /* Adjusted padding */
+                        background-color: rgba(255, 255, 255, 0.9) !important; /* Semi-transparent white */
+                        border: 1px solid #e5e7eb !important; /* Light gray border */
+                        border-radius: 18px !important; /* More rounded */
                         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
                         font-size: 13px !important;
                         font-weight: 500 !important;
-                        letter-spacing: -0.01em !important;
-                        color: #64748b !important;
+                        color: #4b5563 !important; /* Darker gray text */
                         cursor: pointer !important;
-                        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+                        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important; /* Softer shadow */
                         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                        text-decoration: none !important;
                         white-space: nowrap !important;
                     }
 
                     nav > a:hover,
                     nav[class*="back"] > a:hover,
                     nav[class*="nav"] > a:hover {
-                        background: #f1f5f9 !important;
-                        border-color: #cbd5e1 !important;
-                        color: #334155 !important;
-                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+                        background-color: #f9fafb !important; /* Lighter hover */
+                        border-color: #d1d5db !important;
+                        color: #1f2937 !important; /* Darker text on hover */
+                        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
                     }
 
+                    /* Optional: Style for a common back arrow, adjust if your icon is different */
                     nav > a::before,
                     nav[class*="back"] > a::before,
                     nav[class*="nav"] > a::before {
                         content: "←" !important;
-                        margin-right: 8px !important;
-                        font-size: 15px !important;
-                        position: relative !important;
-                        top: 0px !important;
+                        margin-right: 6px !important; /* Space between arrow and text (if any) */
+                        font-size: 16px !important;
+                        line-height: 1 !important;
                     }
+                    /* If the link ONLY contains an icon, you might want to remove ::before or adjust padding */
                 }
             `}</style>
 
@@ -546,36 +567,32 @@ export default function IndustryChainChart({ data, options = {} }: IndustryChain
                     <MobileView data={data} />
                 </>
             ) : (
-                <div className="min-h-screen bg-white pt-16">
+                <div className="min-h-screen bg-gray-100 pt-16"> {/* Overall page background */}
                     <div 
                         ref={containerRef} 
                         className="w-full h-full min-h-screen"
                     >
                         {/* 标题区域 */}
-                        <div className="border-b bg-white">
-                            <h1 className="text-2xl font-bold text-center py-4 px-4">
-                                <span
-                                    onClick={downloadChart}
-                                    className="inline-block cursor-pointer text-gray-900 hover:text-blue-600 transition-colors duration-200"
-                                >
+                        <div className="border-b bg-white sticky top-0 z-30 shadow-sm">
+                            <h1 className="text-2xl lg:text-3xl font-bold text-center py-4 md:py-5 px-4 text-blue-700 group cursor-pointer" onClick={downloadChart}>
+                                <span > {/* Removed onClick from here, moved to H1 */}
                                     {data.name}产业链全景图谱
+                                </span>
+                                <span className="text-sm text-gray-500 ml-2 font-normal group-hover:text-gray-700 transition-colors align-middle">
+                                    (点击下载 <DownloadIcon className="inline h-4 w-4 relative -top-px" />)
                                 </span>
                             </h1>
                         </div>
 
-                        {/* 主要内容区域 */}
-                        <div className="flex flex-col lg:flex-row gap-6 p-6 w-full">
+                        {/* 主环节垂直堆叠 */}
+                        <div className="p-3 sm:p-4 md:p-6 lg:p-8 space-y-6 lg:space-y-8 max-w-full mx-auto"> 
                             {data.children?.map((section, index) => (
-                                <MainSectionCard
+                                <NewDesktopMainSection
                                     key={section.name}
                                     section={section}
-                                    index={index}
-                                    className={`${
-                                        index === 0 ? 'bg-indigo-50' :
-                                        index === 1 ? 'bg-green-50' :
-                                        'bg-red-50'
-                                    }`}
+                                    index={index} 
                                     options={options}
+                                    chartName={data.name} 
                                 />
                             ))}
                         </div>
@@ -589,40 +606,82 @@ export default function IndustryChainChart({ data, options = {} }: IndustryChain
     );
 }
 
-interface MainSectionCardProps {
+// --- 完全重构的桌面端组件 --- 
+
+interface NewDesktopMainSectionProps {
     section: MainSection;
-    index: number;
-    className?: string;
+    index: number; 
     options?: IndustryChainChartProps['options'];
+    chartName: string;
 }
 
-function MainSectionCard({ section, index, className = '', options }: MainSectionCardProps) {
-    const borderColor = index === 0 ? 'border-indigo-200' :
-                       index === 1 ? 'border-green-200' :
-                       'border-red-200';
-
-    // 简化宽度计算
-    const style = {
-        width: '33.33%',
-        minWidth: 0,
-        maxWidth: '100%'
-    };
+// 1. 主环节块 (上游/中游/下游)
+function NewDesktopMainSection({ section, index, options, chartName }: NewDesktopMainSectionProps) {
+    const baseColorIndex = index % 3;
     
+    const mainTitleBgClass = 
+        baseColorIndex === 0 ? 'bg-blue-500' :  
+        baseColorIndex === 1 ? 'bg-teal-500' : 
+        'bg-slate-500';    // Explicitly changed: Downstream from red-700 to slate-500
+    
+    const mainTitleTextClass = 'text-white'; 
+    
+    const mainBorderClass = 
+        baseColorIndex === 0 ? 'border-blue-500' :  
+        baseColorIndex === 1 ? 'border-teal-500' : 
+        'border-slate-500';    // Explicitly changed: Downstream from red-700 to slate-500
+
+    const N = section.children?.length || 0;
+    let numColsLg = 1;
+    if (N === 2) {
+        numColsLg = 2;
+    } else if (N === 3) {
+        numColsLg = 3; 
+    } else if (N === 4) {
+        numColsLg = 4;
+    } else if (N === 5) {
+        numColsLg = 5; 
+    } else if (N === 6) {
+        numColsLg = 3; 
+    } else if (N === 7) {
+        numColsLg = 4; 
+    } else if (N >= 8) {
+        const is4ColOrphan = (N % 4 === 1);
+        const is3ColOrphan = (N % 3 === 1);
+        if (!is4ColOrphan) {
+            numColsLg = 4;
+        } else if (!is3ColOrphan) {
+            numColsLg = 3;
+        } else {
+            numColsLg = 4; 
+        }
+    }
+    const gridColsLgClass = N > 1 ? `lg:grid-cols-${numColsLg}` : ''; 
+
+    let subSectionContainerClasses = 'p-3 md:p-4 bg-white items-stretch'; 
+    if (N === 1) {
+        subSectionContainerClasses += ' flex justify-center'; 
+    } else if (N > 1) {
+        subSectionContainerClasses += ` grid grid-cols-1 sm:grid-cols-2 ${gridColsLgClass} gap-x-3 md:gap-x-4 gap-y-3 md:gap-y-4`; // Ensure y-gap too
+    } else {
+        subSectionContainerClasses += ' min-h-[50px]'; 
+    }
+
     return (
-        <section 
-            className={`rounded-lg border ${borderColor} ${className} overflow-hidden min-w-0`}
-            style={style}
-        >
-            <h2 className="text-base font-bold p-2 text-center border-b ${borderColor} truncate">
+        <section className={`rounded-lg border ${mainBorderClass} shadow-lg overflow-hidden bg-white`}>
+            <h2 className={`text-lg md:text-xl font-semibold px-4 py-3 md:px-6 md:py-3 ${mainTitleBgClass} ${mainTitleTextClass} text-left`}>
                 {section.name}
             </h2>
-            <div className="p-2 space-y-2 w-full min-w-0">
-                {section.children?.map(subSection => (
-                    <SubSectionCard 
+            {/* Sub-section columns will sit on this main white background */}
+            <div className={subSectionContainerClasses}>
+                {section.children?.map((subSection, subIndex) => (
+                    <NewDesktopSubSectionColumn 
                         key={subSection.name}
                         subSection={subSection} 
-                        index={index}
+                        baseColorIndex={baseColorIndex}
                         options={options}
+                        chartName={chartName}
+                        isSingleWithinParent={N === 1} // Pass new prop
                     />
                 ))}
             </div>
@@ -630,120 +689,138 @@ function MainSectionCard({ section, index, className = '', options }: MainSectio
     );
 }
 
-interface SubSectionCardProps {
+interface NewDesktopSubSectionColumnProps {
     subSection: SubSection;
-    index: number;
+    baseColorIndex: number;
     options?: IndustryChainChartProps['options'];
+    chartName: string;
+    isSingleWithinParent?: boolean; // New optional prop
 }
 
-function SubSectionCard({ subSection, index, options }: SubSectionCardProps) {
-    const borderColor = index === 0 ? 'border-indigo-200' :
-                       index === 1 ? 'border-green-200' :
-                       'border-red-200';
+// 2. 子环节列 (如"显示面板"列)
+function NewDesktopSubSectionColumn({ subSection, baseColorIndex, options, chartName, isSingleWithinParent = false }: NewDesktopSubSectionColumnProps) {
+    const titleBgClass = 
+        baseColorIndex === 0 ? 'bg-blue-500 text-white' :  
+        baseColorIndex === 1 ? 'bg-teal-500 text-white' : 
+        'bg-slate-500 text-white';    // Explicitly changed: Downstream from red-700 to slate-500
     
-    const bgColor = index === 0 ? 'bg-white hover:bg-indigo-50' :
-                   index === 1 ? 'bg-white hover:bg-green-50' :
-                   'bg-white hover:bg-red-50';
+    // SubSectionColumn itself will NOT have a visible border or distinct background now.
+    // It acts as a container for SubSubSectionEntries on the main white panel.
+    // const columnBorderClass = ... removed ...
 
-    // 简化布局策略
-    const subSections = subSection.children || [];
-    const isCompact = subSections.length <= 3 && subSections.every(sub => 
-        (sub.children?.length || 0) <= 3);
+    const subSubEntryCount = subSection.children?.length || 0;
+    const multiColumnThreshold = 5; 
+    const subSubEntryContainerClasses = [
+        'p-1 md:p-1.5', // Reduced padding for a tighter look within the column
+        'flex-grow',
+        subSubEntryCount > multiColumnThreshold ? 'md:columns-2 md:gap-x-3' : 'space-y-1' // Tighter gap for multi-col and space-y
+    ].join(' ');
 
-    const layoutClass = isCompact ? 'grid grid-cols-3 gap-2' : 'flex flex-wrap gap-2';
-    
+    let columnWidthSpecificClasses = '';
+    if (isSingleWithinParent) { 
+        columnWidthSpecificClasses = 'w-full md:max-w-md lg:max-w-lg'; 
+    } else { 
+        // When in a grid, it should take the grid cell's width.
+        // Adding w-full ensures it tries to fill its cell.
+        columnWidthSpecificClasses = 'w-full'; 
+    }
+
     return (
-        <div className={`rounded-lg border ${borderColor} ${bgColor} transition-colors w-full min-w-0`}>
-            <h3 className="text-sm font-semibold p-2 border-b ${borderColor} truncate">
+        // Removed border, shadow, and explicit bg-white from this div.
+        // It sits on the parent NewDesktopMainSection's white content area.
+        <div className={`flex flex-col min-h-[100px] ${columnWidthSpecificClasses}`}> 
+            <h3 className={`text-sm font-medium p-2 ${titleBgClass} text-center rounded-t-md`}>
                 {subSection.name}
             </h3>
-            <div className={`p-2 ${layoutClass} w-full min-w-0`}>
-                {subSections.map((subSubSection) => (
-                    <SubSubSectionCard 
-                        key={subSubSection.name}
-                        subSubSection={subSubSection} 
-                        isCompact={isCompact}
-                        options={options}
-                    />
-                ))}
+            {/* SubSubSectionEntries are on a white background inherited from parent */}
+            <div className={subSubEntryContainerClasses}>
+                {(subSection.children && subSection.children.length > 0) ? (
+                    subSection.children.map(subSubSection => (
+                        <NewDesktopSubSubSectionEntry
+                            key={subSubSection.name}
+                            subSubSection={subSubSection}
+                            options={options}
+                            chartName={chartName}
+                            // baseColorIndex is not strictly needed here if sub-sub is always neutral
+                        />
+                    ))
+                ) : (
+                    <p className="text-xs text-gray-400 p-2 text-center italic">暂无具体条目</p>
+                )}
             </div>
         </div>
     );
 }
 
-interface SubSubSectionCardProps {
+interface NewDesktopSubSubSectionEntryProps { 
     subSubSection: SubSubSection;
-    isCompact: boolean;
     options?: IndustryChainChartProps['options'];
+    chartName: string;
 }
 
-function SubSubSectionCard({ subSubSection, isCompact, options }: SubSubSectionCardProps) {
+// 3. 子子环节条目 (如"LCD面板" + 公司)
+function NewDesktopSubSubSectionEntry({ subSubSection, options, chartName }: NewDesktopSubSubSectionEntryProps) {
     const companiesCount = subSubSection.children?.length || 0;
-    
-    // 简化卡片样式
-    const cardStyle = {
-        minWidth: isCompact ? '30%' : '200px',
-        flex: isCompact ? '1 1 30%' : '1 1 200px'
-    };
-
-    // 简化网格列数计算
-    const gridCols = companiesCount <= 2 ? 'grid-cols-1' : 'grid-cols-2';
 
     return (
-        <div 
-            className="rounded border border-gray-100 bg-white/50 flex flex-col p-2 min-w-0"
-            style={cardStyle}
-        >
-            <h4 className="text-xs font-medium mb-2 whitespace-normal break-words">
+        <div className="pb-1 mb-1 border-b border-gray-200 last:border-b-0 last:mb-0 last:pb-0 break-inside-avoid">
+            <h4 className="text-xs font-semibold text-gray-700 mb-0.5 flex items-center">
+                <span className="inline-block w-1.5 h-1.5 bg-gray-600 rounded-full mr-1.5"></span> {/* Darker dot */}
                 {subSubSection.name}
             </h4>
-            <div className={`grid ${gridCols} gap-2 h-auto`}>
-                {subSubSection.children?.map(company => (
-                    <CompanyItem 
-                        key={company.name} 
-                        company={company}
-                        isSingle={companiesCount === 1}
-                        options={options}
-                    />
-                ))}
-            </div>
+            {companiesCount > 0 ? (
+                <div className="pl-3 flex flex-wrap gap-x-1.5 gap-y-0.5"> {/* Companies flow horizontally */}
+                    {subSubSection.children?.map(company => (
+                        <CompanyItem 
+                            key={company.name} 
+                            company={company}
+                            options={options}
+                            chartName={chartName}
+                            isSmall={true} // Add a prop to make company item even more compact
+                        />
+                    ))}
+                </div>
+            ) : (
+                <p className="pl-3 text-[10px] text-gray-400 italic">无代表公司</p>
+            )}
         </div>
     );
 }
 
 interface CompanyItemProps {
     company: Company;
-    isSingle?: boolean;
+    isSingle?: boolean; 
     options?: IndustryChainChartProps['options'];
+    chartName: string; 
+    isSmall?: boolean; // New prop for compact version
 }
 
-function CompanyItem({ company, isSingle = false, options }: Omit<CompanyItemProps, 'onCompanyClick'>) {
+function CompanyItem({ company, isSingle = false, options, chartName, isSmall = false }: CompanyItemProps) {
     const showTooltip = options?.tooltip?.show ?? true;
     
-    // 简化点击处理函数
     const handleItemClick = (e: React.MouseEvent) => {
-        // 阻止冒泡
         e.stopPropagation();
-        
-        // 获取当前显示的产业链图谱名称
-        const chartName = window.location.pathname.split('/').pop() || '';
-        
-        // 使用全局处理函数
         safeOpenCompanyModal(company.name, chartName);
     };
     
+    const textSizeClass = isSmall ? 'text-[10px]' : 'text-[11px]';
+    const paddingClass = isSmall ? 'px-1 py-0.5' : 'px-1.5 py-1';
+
     return (
         <div 
             onClick={handleItemClick}
-            className={`text-[11px] text-gray-600 relative h-7 flex items-center
-                     transition-colors duration-200 hover:text-blue-600 group
+            className={`${textSizeClass} text-gray-600 hover:text-blue-700 relative flex items-center
+                     transition-colors duration-150 group
                      ${isSingle ? 'text-center justify-center font-medium' : ''} 
-                     px-1 min-w-0 cursor-pointer hover:bg-blue-50 rounded`}
+                     ${paddingClass} min-w-0 cursor-pointer hover:bg-blue-50 rounded whitespace-nowrap`}
+             title={company.name} 
         >
-            <span className="block leading-none whitespace-normal break-words">{company.name}</span>
-            {showTooltip && (
-                <span className="absolute left-0 top-full mt-1 bg-white shadow-lg px-2 py-1 rounded 
-                             invisible group-hover:visible z-10 whitespace-nowrap">
+            {/* Tooltip visible on hover - keeping existing advanced tooltip */}
+            {/* For extremely compact, could simplify to just rely on native title, but current tooltip is better if space allows hover */}
+            <span className="block leading-tight truncate">{company.name}</span> {/* Ensure truncate works */}
+            {showTooltip && !isSmall && ( // Maybe hide custom tooltip for very small items if it becomes too noisy
+                <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 bg-gray-700 text-white text-xs shadow-md px-1.5 py-0.5 rounded 
+                             invisible group-hover:visible z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
                     {company.name}
                 </span>
             )}
